@@ -1059,6 +1059,7 @@ client’s internal network to the web at large.</p>
      <a href="#implementation-considerations"><span class="secno">4</span> <span class="content">Implementation Considerations</span></a>
      <ul class="toc">
       <li><a href="#file-url"><span class="secno">4.1</span> <span class="content"><code>file</code> URLs</span></a>
+      <li><a href="#too-much-access"><span class="secno">4.2</span> <span class="content">Too Much Access</span></a>
      </ul>
     <li>
      <a href="#security-and-privacy-considerations"><span class="secno">5</span> <span class="content">Security and Privacy Considerations</span></a>
@@ -1067,6 +1068,7 @@ client’s internal network to the web at large.</p>
       <li><a href="#mixed-content"><span class="secno">5.2</span> <span class="content">Mixed Content</span></a>
       <li><a href="#loopback"><span class="secno">5.3</span> <span class="content">Loopback vs Intranet</span></a>
       <li><a href="#dns-rebinding"><span class="secno">5.4</span> <span class="content">DNS Rebinding</span></a>
+      <li><a href="#scope"><span class="secno">5.5</span> <span class="content">Scope of Access</span></a>
      </ul>
     <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
@@ -1241,6 +1243,16 @@ Content-Length: 0
   running locally is somewhat outside of any sane threat model.</p>
     <p>For the moment, let’s err on the side of treating <code>file</code> URLs as <a data-link-type="dfn" href="#private-address">private</a>, as they seem to be just as much a part of the local system
   as anything else on a loopback address.</p>
+    <h3 class="heading settled" data-level="4.2" id="too-much-access"><span class="secno">4.2. </span><span class="content">Too Much Access</span><a class="self-link" href="#too-much-access"></a></h3>
+    <p>Note that the proposed scheme requires <a data-link-type="dfn" href="#private-address">private</a> resources which can be
+  loaded by the <a data-link-type="dfn" href="#public-address">public</a> internet to make themselves CORS-same-origin with
+  the loading origin. That might lead developers to inadvertantly grant too
+  much access if they set a blanket policy for all of a devices resources.
+  Instead, our hope is that developers will carefully consider whether a
+  particular resource actually needs to be exposed to the web before opting it
+  in. That is, developers ought to send CORS headers back <em>only</em> in
+  response to preflight requests for resources which it explicitly intends to
+  make available to the public internet.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="5" id="security-and-privacy-considerations"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
@@ -1273,6 +1285,15 @@ Content-Length: 0
   may otherwise trick the user agent into revealing information it shouldn’t.</p>
     <p>The modifications to the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-cache">CORS-preflight cache</a> are intended to mitigate
   this attack vector.</p>
+    <h3 class="heading settled" data-level="5.5" id="scope"><span class="secno">5.5. </span><span class="content">Scope of Access</span><a class="self-link" href="#scope"></a></h3>
+    <p>The proposal in this document does not allow a device to distinguish between
+  granting an origin access to load its resources from making that origin
+  CORS-same-origin with itself. That matches the intent of a number of use cases
+  (e.g. <code>dropbox.com</code> communicating with the locally-installed Dropbox app, <code>pebble.com</code> communicating with a local watch, etc.) but might not match
+  others.</p>
+    <p>If we decide that building something with a narrower scope is reasonable, then
+  something like an <code>Access-Control-Allow-Public: true</code> HTTP response header
+  might be a reasonable approach.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>

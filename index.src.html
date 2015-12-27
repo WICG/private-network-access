@@ -326,6 +326,18 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   For the moment, let's err on the side of treating `file` URLs as
   <a>private</a>, as they seem to be just as much a part of the local system
   as anything else on a loopback address.
+
+  <h3 id="too-much-access">Too Much Access</h3>
+
+  Note that the proposed scheme requires <a>private</a> resources which can be
+  loaded by the <a>public</a> internet to make themselves CORS-same-origin with
+  the loading origin. That might lead developers to inadvertantly grant too
+  much access if they set a blanket policy for all of a devices resources.
+  Instead, our hope is that developers will carefully consider whether a
+  particular resource actually needs to be exposed to the web before opting it
+  in. That is, developers ought to send CORS headers back <em>only</em> in
+  response to preflight requests for resources which it explicitly intends to
+  make available to the public internet.
 </section>
 
 <section>
@@ -373,6 +385,19 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 
   The modifications to the <a>CORS-preflight cache</a> are intended to mitigate
   this attack vector.
+
+  <h3 id="scope">Scope of Access</h3>
+
+  The proposal in this document does not allow a device to distinguish between
+  granting an origin access to load its resources from making that origin
+  CORS-same-origin with itself. That matches the intent of a number of use cases
+  (e.g. `dropbox.com` communicating with the locally-installed Dropbox app,
+  `pebble.com` communicating with a local watch, etc.) but might not match
+  others.
+
+  If we decide that building something with a narrower scope is reasonable, then
+  something like an `Access-Control-Allow-Public: true` HTTP response header
+  might be a reasonable approach.
 </section>
 
 <section>
