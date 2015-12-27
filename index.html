@@ -1056,13 +1056,19 @@ client’s internal network to the web at large.</p>
       <li><a href="#integration-html"><span class="secno">3.2</span> <span class="content">Integration with HTML</span></a>
      </ul>
     <li>
-     <a href="#security-and-privacy-considerations"><span class="secno">4</span> <span class="content">Security and Privacy Considerations</span></a>
+     <a href="#implementation-considerations"><span class="secno">4</span> <span class="content">Implementation Considerations</span></a>
      <ul class="toc">
-      <li><a href="#user-mediation"><span class="secno">4.1</span> <span class="content">User Mediation</span></a>
-      <li><a href="#mixed-content"><span class="secno">4.2</span> <span class="content">Mixed Content</span></a>
-      <li><a href="#loopback"><span class="secno">4.3</span> <span class="content">Loopback vs Intranet</span></a>
+      <li><a href="#file-url"><span class="secno">4.1</span> <span class="content"><code>file</code> URLs</span></a>
      </ul>
-    <li><a href="#acknowledgements"><span class="secno">5</span> <span class="content">Acknowledgements</span></a>
+    <li>
+     <a href="#security-and-privacy-considerations"><span class="secno">5</span> <span class="content">Security and Privacy Considerations</span></a>
+     <ul class="toc">
+      <li><a href="#user-mediation"><span class="secno">5.1</span> <span class="content">User Mediation</span></a>
+      <li><a href="#mixed-content"><span class="secno">5.2</span> <span class="content">Mixed Content</span></a>
+      <li><a href="#loopback"><span class="secno">5.3</span> <span class="content">Loopback vs Intranet</span></a>
+      <li><a href="#dns-rebinding"><span class="secno">5.4</span> <span class="content">DNS Rebinding</span></a>
+     </ul>
+    <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
@@ -1207,6 +1213,9 @@ Content-Length: 0
   and <var>origin</var> is "<code>*</code>", return failure.</p>
       </ol>
     </ol>
+    <p>Finally, to address the possibility of DNS rebinding attacks (see <a href="#dns-rebinding">§5.4 DNS Rebinding</a>), we need to adjust the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-cache">CORS-preflight cache</a> to
+  distinguish between a <a data-link-type="dfn" href="#public-address">public</a> and a <a data-link-type="dfn" href="#private-address">private</a> origin.</p>
+    <p class="issue" id="issue-1beef013"><a class="self-link" href="#issue-1beef013"></a> Spell the cache modifications out a bit more clearly.</p>
     <p class="issue" id="issue-90019200"><a class="self-link" href="#issue-90019200"></a> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
   Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
@@ -1224,15 +1233,25 @@ Content-Length: 0
     </div>
    </section>
    <section>
-    <h2 class="heading settled" data-level="4" id="security-and-privacy-considerations"><span class="secno">4. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
-    <h3 class="heading settled" data-level="4.1" id="user-mediation"><span class="secno">4.1. </span><span class="content">User Mediation</span><a class="self-link" href="#user-mediation"></a></h3>
+    <h2 class="heading settled" data-level="4" id="implementation-considerations"><span class="secno">4. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation-considerations"></a></h2>
+    <h3 class="heading settled" data-level="4.1" id="file-url"><span class="secno">4.1. </span><span class="content"><code>file</code> URLs</span><a class="self-link" href="#file-url"></a></h3>
+    <p>It isn’t entirely clear how <code>file</code> URLs fit into the public/private scheme
+  outlined above. It would be nice to prevent folks from harming themselves by
+  opening a malicious HTML file locally, on the one hand, but on the other, code
+  running locally is somewhat outside of any sane threat model.</p>
+    <p>For the moment, let’s err on the side of treating <code>file</code> URLs as <a data-link-type="dfn" href="#private-address">private</a>, as they seem to be just as much a part of the local system
+  as anything else on a loopback address.</p>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="5" id="security-and-privacy-considerations"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
+    <h3 class="heading settled" data-level="5.1" id="user-mediation"><span class="secno">5.1. </span><span class="content">User Mediation</span><a class="self-link" href="#user-mediation"></a></h3>
     <p>The proposal in this document only ensures that the device consents to access
   from the public internet. Users agents SHOULD ensure that the <em>user</em> consents to such access as well, as it might be in their interests to deny
   such access, even though the device itself would allow it.</p>
     <p>This mediation could be done via an explicit permission grant, via some sort
   of pairing ceremony a la <a href="https://en.wikipedia.org/wiki/Password-authenticated_key_agreement">PAKE</a>,
   or any other clever interface which the user agent might devise.</p>
-    <h3 class="heading settled" data-level="4.2" id="mixed-content"><span class="secno">4.2. </span><span class="content">Mixed Content</span><a class="self-link" href="#mixed-content"></a></h3>
+    <h3 class="heading settled" data-level="5.2" id="mixed-content"><span class="secno">5.2. </span><span class="content">Mixed Content</span><a class="self-link" href="#mixed-content"></a></h3>
     <p>Note that the CORS restrictions added by the proposal in this document do not
   obviate mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content">[MIXED-CONTENT]</a>. Developers who wish to
   fetch <a data-link-type="dfn" href="#private-address">private</a> resources from <a data-link-type="dfn" href="#public-address">public</a> pages MUST ensure that the
@@ -1240,16 +1259,23 @@ Content-Length: 0
   connection to devices (perhaps the pairing ceremony hinted at above, or one of
   the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In either case,
   consenting to access by sending proper CORS is necessary, but not sufficient.Q</p>
-    <h3 class="heading settled" data-level="4.3" id="loopback"><span class="secno">4.3. </span><span class="content">Loopback vs Intranet</span><a class="self-link" href="#loopback"></a></h3>
+    <h3 class="heading settled" data-level="5.3" id="loopback"><span class="secno">5.3. </span><span class="content">Loopback vs Intranet</span><a class="self-link" href="#loopback"></a></h3>
     <p>Opera Presto apparently had three levels.
   As opposed to this document’s <a data-link-type="dfn" href="#private-address">private</a>/<a data-link-type="dfn" href="#public-address">public</a> distinction, Opera
   Presto <a href="https://code.google.com/p/chromium/issues/detail?id=378566#c6">apparently</a> had three levels: internet, intranet, and localhost. The same restrictions
   were applied from internet to intranet as from intranet to localhost. That
   might be a reasonable hardening measure to consider after we get the first
   pass done.</p>
+    <h3 class="heading settled" data-level="5.4" id="dns-rebinding"><span class="secno">5.4. </span><span class="content">DNS Rebinding</span><a class="self-link" href="#dns-rebinding"></a></h3>
+    <p>The mitigation described here operates upon the IP address which the user
+  agent actually connects to when loading a particular resource. This check
+  MUST be performed for each new connection made, as DNS rebinding attacks
+  may otherwise trick the user agent into revealing information it shouldn’t.</p>
+    <p>The modifications to the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-cache">CORS-preflight cache</a> are intended to mitigate
+  this attack vector.</p>
    </section>
    <section>
-    <h2 class="heading settled" data-level="5" id="acknowledgements"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
+    <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
     <p>Conversations with Ryan Sleevi, Chris Palmer, and Justin Schuh helped flesh
   out the contours of this proposal. Hopefully they won’t hate it too much.
   Mathias Karlsson has the dubious honor of being the <a href="https://twitter.com/avlidienbrunn/status/680736829679755265">straw
@@ -1294,6 +1320,7 @@ Content-Length: 0
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-request-method">access-control-request-method</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-cors-check">cors check</a>
+     <li><a href="https://fetch.spec.whatwg.org/#cors-preflight-cache">cors-preflight cache</a>
      <li><a href="https://fetch.spec.whatwg.org/#cors-preflight-request">cors-preflight request</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>
      <li><a href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a>
@@ -1367,6 +1394,7 @@ Content-Length: 0
   </dl>
   <h2 class="no-num heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
+   <div class="issue"> Spell the cache modifications out a bit more clearly.<a href="#issue-1beef013"> ↵ </a></div>
    <div class="issue"> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
   Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
