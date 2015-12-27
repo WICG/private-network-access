@@ -1060,6 +1060,7 @@ client’s internal network to the web at large.</p>
      <ul class="toc">
       <li><a href="#user-mediation"><span class="secno">4.1</span> <span class="content">User Mediation</span></a>
       <li><a href="#mixed-content"><span class="secno">4.2</span> <span class="content">Mixed Content</span></a>
+      <li><a href="#loopback"><span class="secno">4.3</span> <span class="content">Loopback vs Intranet</span></a>
      </ul>
     <li><a href="#acknowledgements"><span class="secno">5</span> <span class="content">Acknowledgements</span></a>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
@@ -1238,7 +1239,14 @@ Content-Length: 0
   connection is secure. This might involve a solution along the lines of <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>, or we might end up inventing a new way of ensuring a secure
   connection to devices (perhaps the pairing ceremony hinted at above, or one of
   the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In either case,
-  consenting to access by sending proper CORS is necessary, but not sufficient.</p>
+  consenting to access by sending proper CORS is necessary, but not sufficient.Q</p>
+    <h3 class="heading settled" data-level="4.3" id="loopback"><span class="secno">4.3. </span><span class="content">Loopback vs Intranet</span><a class="self-link" href="#loopback"></a></h3>
+    <p>Opera Presto apparently had three levels.
+  As opposed to this document’s <a data-link-type="dfn" href="#private-address">private</a>/<a data-link-type="dfn" href="#public-address">public</a> distinction, Opera
+  Presto <a href="https://code.google.com/p/chromium/issues/detail?id=378566#c6">apparently</a> had three levels: internet, intranet, and localhost. The same restrictions
+  were applied from internet to intranet as from intranet to localhost. That
+  might be a reasonable hardening measure to consider after we get the first
+  pass done.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="5" id="acknowledgements"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>

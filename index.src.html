@@ -330,7 +330,17 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   [[PLEX]], or we might end up inventing a new way of ensuring a secure
   connection to devices (perhaps the pairing ceremony hinted at above, or one of
   the ideas floated in [[SECURE-LOCAL-COMMUNICATION]]?). In either case,
-  consenting to access by sending proper CORS is necessary, but not sufficient.
+  consenting to access by sending proper CORS is necessary, but not sufficient.Q
+
+  <h3 id="loopback">Loopback vs Intranet</h3>
+
+  Opera Presto apparently had three levels.
+  As opposed to this document's <a>private</a>/<a>public</a> distinction, Opera
+  Presto <a href="https://code.google.com/p/chromium/issues/detail?id=378566#c6">apparently</a>
+  had three levels: internet, intranet, and localhost. The same restrictions
+  were applied from internet to intranet as from intranet to localhost. That
+  might be a reasonable hardening measure to consider after we get the first
+  pass done.
 </section>
 
 <section>
