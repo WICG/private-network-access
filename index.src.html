@@ -7,7 +7,7 @@ Level: 1
 Editor: Mike West 56384, Google Inc., mkwst@google.com
 Abstract:
   This document specifies modifications to Fetch which are intended to mitigate
-  the risks associated with unintentional exposure of devices and servers on an
+  the risks associated with unintentional exposure of devices and servers on a
   client's internal network to the web at large.
 Indent: 2
 Boilerplate: omit conformance, omit feedback-header
@@ -148,8 +148,11 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 
     When a website on the public internet makes a request to the router, the
     user agent determines that the requestor is <a>public</a>, and the router
-    is <a>private</a>. This means that requests will trigger a <a>CORS-preflight
-    request</a> as follows:
+    is <a>private</a>. The UA deems the router private because the public web
+    application addresses it with a private IP address (see below), or
+    because the UA resolves the router's name to a private IP address. This
+    means that requests will trigger a <a>CORS-preflight request</a> as
+    follows:
 
     <pre>
       OPTIONS / HTTP/1.1
@@ -221,7 +224,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   This document proposes a number of modifications to other specifications in
   order to implement the mitigations sketched out in the examples above. These
   integrations are outlined here for clarity, but the external documents are the
-  normative references which ought to be consulted.
+  normative references.
 
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
@@ -239,8 +242,9 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
       <a>secure context</a> <em>and</em> a <a>CORS-preflight request</a> to the
       target origin passes a <a>CORS check</a>.
 
-      Note: <a lt="secure context">Non-secure</a> <a>public</a> contexts may not
-      request resources from <a>private addresses</a>, even if the resource
+      Note: UAs must not allow <a lt="secure context">non-secure</a>
+      <a>public</a> contexts to request resources from <a>private
+      addresses</a>, even if the private server
       would opt-in to such a request via a preflight. Making requests to
       <a>private</a> resources presents risks which are mitigated by ensuring
       the integrity of the <a for="request">client</a> which initiates the
@@ -293,6 +297,14 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   algorithm. That might not be a reasonable assumption, in which case we'll
   need to revisit all of this.
 
+  ISSUE: (question from palmer): What about private-to-private requests, when
+  they are mediated by the UA? For example, if the UA has loaded evil JavaScript
+  from evil-printer (192.168.0.100), and is trying to CSRF innocent-router
+  (192.168.0.1) via te browser? Although evil-printer could directly attack
+  innocent-router (e.g. port scan and then SSH password, brute-force), the
+  availability of credentials in the UA might give evil-printer more power than
+  it already has, and the UA should deny it by default. No?
+
   <h3 id="integration-html">Integration with HTML</h3>
 
   To support the checks in [[FETCH]], we store a <dfn>public internet flag</dfn>
@@ -331,7 +343,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 
   Note that the proposed scheme requires <a>private</a> resources which can be
   loaded by the <a>public</a> internet to make themselves CORS-same-origin with
-  the loading origin. That might lead developers to inadvertantly grant too
+  the loading origin. That might lead developers to inadvertently grant too
   much access if they set a blanket policy for all of a devices resources.
   Instead, our hope is that developers will carefully consider whether a
   particular resource actually needs to be exposed to the web before opting it
@@ -398,6 +410,18 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   If we decide that building something with a narrower scope is reasonable, then
   something like an `Access-Control-Allow-Public: true` HTTP response header
   might be a reasonable approach.
+
+  <h3 id="scope">Scope of Mitigation</h3>
+
+  The proposal in this document merely mitigates attacks against private web
+  services, it cannot fully solve them. For example, a router's
+  web-based administration interface must be designed and implemented to defend
+  against CSRF on its own, and should not rely on a UA that behaves as specified
+  in this document. The mitigation this document specifies is necessary given
+  the reality of private web service implementation quality today, but vendors
+  should not consider themselves absolved of responsibility, even if all UAs
+  implement this mitigation.
+
 </section>
 
 <section>
