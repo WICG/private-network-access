@@ -1,0 +1,345 @@
+<h1>CORS and RFC1918</h1>
+<pre class="metadata">
+Status: DREAM
+ED: https://w3c.github.io/webappsec-cors-rfc1918/
+Shortname: CORS-RFC1918
+Level: 1
+Editor: Mike West 56384, Google Inc., mkwst@google.com
+Abstract:
+  This document specifies modifications to Fetch which are intended to mitigate
+  the risks associated with unintentional exposure of devices and servers on an
+  client's internal network to the web at large.
+Indent: 2
+Boilerplate: omit conformance, omit feedback-header
+Markup Shorthands: css off, markdown on
+</pre>
+<pre class="anchors">
+spec: SECURE-CONTEXTS; urlPrefix: https://w3c.github.io/webappsec-secure-contexts/
+  type: dfn
+    text: secure context
+spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
+  type: dfn
+    text: Access-Control-Allow-Credentials; url: http-access-control-allow-credentials
+    text: Access-Control-Allow-Headers; url: http-access-control-allow-headers
+    text: Access-Control-Allow-Origin; url: http-access-control-allow-origin
+    text: Access-Control-Allow-methods; url: http-access-control-allow-methods
+    text: Access-Control-Max-Age; url: http-access-control-max-age
+    text: Access-Control-Request-Method; url: http-access-control-request-method
+    text: Access-Control-Request-Headers; url: http-access-control-request-headers
+    text: CORS check; url: concept-cors-check
+    text: CORS-preflight request; url: cors-preflight-request
+    text: use-CORS-preflight flag
+    text: main fetch
+    text: obtain a connection; url: concept-connection-obtain
+    text: request; url: concept-request
+    text: response; url: concept-response
+    text: header; url: concept-header
+    text: network error; url: concept-network-error
+    for: request
+      text: body; url:concept-request-body
+      text: cache mode; url:concept-request-cache-mode
+      text: client; url: concept-request-client
+      text: credentials mode; url:concept-request-credentials-mode
+      text: current url; url: concept-request-current-url
+      text: destination;  url: concept-request-destination
+      text: global object; url: concept-request-global-object
+      text: header list; url: concept-request-header-list
+      text: initiator; url: concept-request-initiator
+      text: method; url:concept-request-method
+      text: origin; url:concept-request-origin
+      text: redirect mode; url:concept-request-redirect-mode
+      text: target browsing context; url: concept-request-target-browsing-context
+      text: type; url: concept-request-type
+    for: response
+      text: url; url: concept-response-url
+spec: URL; urlPrefix: https://url.spec.whatwg.org/
+  type: dfn
+    text: local scheme
+    text: default port
+    text: IPv6 address; url: concept-ipv6
+    text: percent decode
+    text: URL parser; url: concept-url-parser
+    text: URL serializer; url: concept-url-serializer
+  type: attribute
+    text: host; for: URL; url: concept-url-host
+    text: port; for: URL; url: concept-url-port
+    text: path; for: URL; url: concept-url-path
+    text: origin; for: URL; url: concept-url-origin
+    text: scheme; for: URL; url: concept-url-scheme
+  type: interface;
+    text: URL
+spec: RFC1918; urlPrefix: https://tools.ietf.org/html/rfc1918
+  type: dfn
+    text: private address space; url: section-3
+spec: HTML; urlPrefix: https://html.spec.whatwg.org/
+  type: interface
+    text: Document; url: document
+</pre>
+<pre class="biblio">
+{
+  "CSRF-EXPLOIT-KIT": {
+    "href": "http://malware.dontneedcoffee.com/2015/05/an-exploit-kit-dedicated-to-csrf.html",
+    "title": "An Exploit Kit dedicated to CSRF Pharming",
+    "authors": [ "Kafeine" ]
+  },
+  "DRIVE-BY-PHARMING": {
+    "href": "https://www.symantec.com/avcenter/reference/Driveby_Pharming.pdf",
+    "title": "Drive-By Pharming",
+    "authors": [ "Sid Stamm", "Zulfikar Ramzan", "Markus Jakobsson" ]
+  },
+  "PLEX": {
+    "href": "https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/",
+    "title": "How Plex is doing HTTPS for all its users",
+    "authors": [ "Filippo Valsorda" ]
+  },
+  "SECURE-CONTEXTS": {
+    "href": "https://w3c.github.io/webappsec-secure-contexts/",
+    "title": "Secure Contexts",
+    "authors": [ "Mike West", "Yan Zhu" ]
+  },
+  "SECURE-LOCAL-COMMUNICATION": {
+    "href": "http://www.w3.org/2015/10/28-local-minutes.html",
+    "title": "Minutes from 'Secure communication with local network devices': TPAC, 2015"
+  }
+}
+</pre>
+<style>
+  ul.toc ul ul ul {
+    margin: 0 0 0 2em;
+  }
+  ul.toc ul ul ul span.secno {
+    margin-left: -9em;
+  }
+</style>
+<!--
+████ ██    ██ ████████ ████████   ███████
+ ██  ███   ██    ██    ██     ██ ██     ██
+ ██  ████  ██    ██    ██     ██ ██     ██
+ ██  ██ ██ ██    ██    ████████  ██     ██
+ ██  ██  ████    ██    ██   ██   ██     ██
+ ██  ██   ███    ██    ██    ██  ██     ██
+████ ██    ██    ██    ██     ██  ███████
+-->
+<section>
+  <h2 id="intro">Introduction</h2>
+
+  <em>This section is not normative.</em>
+
+  Although [[RFC1918]] has specified a distinction between "private" and
+  "public" internet addresses for over a decade, user agents haven't made
+  much progress at segregating the one from the other. Websites on the public
+  internet can make requests to internal devices and servers, which enable a
+  number of malicious behaviors, including attacks on users' routers like those
+  documented in [[DRIVE-BY-PHARMING]] (and, more recenly, [[CSRF-EXPLOIT-KIT]]).
+
+  Here, we propose a mitigation against these kinds of attacks that would
+  require internal devices to explicitly opt-in to requests from the public
+  internet.
+
+  <h3 id="examples">Examples</h3>
+
+  <h4 id="example-deny-by-default">Secure by Default</h4>
+
+  <div class="example">
+    MegaCorp Inc's routers don't have any interest in requests from the public
+    internet, and wish to deny them by default. This is trivial, and doesn't
+    require any effort on their part.
+
+    When a website on the public internet makes a request to the router, the
+    user agent determines that the requestor is <a>public</a>, and the router
+    is <a>private</a>. This means that requests will trigger a <a>CORS-preflight
+    request</a> as follows:
+
+    <pre>
+      OPTIONS / HTTP/1.1
+      Host: 192.168.1.1
+      <a>Access-Control-Request-Method</a>: GET
+      ...
+      Origin: https://public.example.com
+    </pre>
+
+    The router can either respond with an error status code, or can refuse to
+    include <a>`Access-Control-Allow-Methods`</a>,
+    <a>`Access-Control-Allow-Headers`</a>,
+    <a>`Access-Control-Allow-Origin`</a>, and
+    <a>`Access-Control-Allow-Credentials`</a>
+    headers in its response. As long as those headers are not present, the
+    response will fail a <a>CORS check</a>, and the request will be blocked.
+  </div>
+
+  <h4 id="example-opt-in">Opting-In</h4>
+
+  <div class="example">
+    Some of MegaCorp Inc's devices actually need to talk to the public internet
+    for various reasons. They can explicitly opt-in to receiving requests from
+    the internet by sending proper CORS headers in response to a
+    <a>CORS-preflight request</a>.
+
+    When a website on the public internet makes a request to the device, the
+    user agent determines that the requestor is <a>public</a>, and the router
+    is <a>private</a>. This means that requests will trigger a <a>CORS-preflight
+    request</a>, just as above.
+
+    The device can explicitly grant access by sending the right headers in its
+    response. For the above request, that might look like:
+
+    <pre>
+      HTTP/1.1 200 OK
+      ...
+      <a>Access-Control-Allow-Origin</a>: https://public.example.com
+      <a>Access-Control-Allow-Methods</a>: GET
+      <a>Access-Control-Max-Age</a>: 86400
+      <a>Access-Control-Allow-Credentials</a>: true
+      Vary: Origin
+      Content-Length: 0
+      ...
+    </pre>
+  </div>
+</section>
+
+<section>
+  <h2 id="framework">Framework</h2>
+
+  An IPv4 address is a <dfn export local-lt="private">private address</dfn> if
+  it matches the <a>private address space</a> defined in Section 3 of
+  [[!RFC1918]], and a <dfn export local-lt="public">public address</dfn>
+  otherwise.
+
+  An IPv6 address is a <a>private address</a> if it matches the "Unique Local
+  Address" prefix (`fc00::/7`) defined in Section 3 of [[!RFC4193]] or the
+  "link-local" prefix (`fe80::/10`) defined in section 2.5.6 of [[!RFC4291]],
+  and a <a>public address</a> otherwise.
+</section>
+
+<!-- Big Text: Integrations -->
+<section>
+  <h2 id="integrations">Integrations</h2>
+
+  <em>This section is non-normative.</em>
+
+  This document proposes a number of modifications to other specifications in
+  order to implement the mitigations sketched out in the examples above. These
+  integrations are outlined here for clarity, but the external documents are the
+  normative references which ought to be consulted.
+
+  <h3 id="integration-fetch">Integration with Fetch</h3>
+
+  This document proposes a few changes to Fetch, with the following
+  implications:
+
+  1.  <a>Requests</a> whose <a for="request">client</a>'s <a>public internet
+      flag</a> is not set are unchanged from status quo. They may continue to
+      make requests to <a>public</a> and <a>private</a> addresses as they do
+      today.
+
+  2.  <a>Requests</a> whose <a for="request">client</a>'s <a>public internet
+      flag</a> is set are allowed to fetch resources from <a>private
+      addresses</a> if and only if the <a for="request">client</a> is a
+      <a>secure context</a> <em>and</em> a <a>CORS-preflight request</a> to the
+      target origin passes a <a>CORS check</a>.
+
+      Note: <a lt="secure context">Non-secure</a> <a>public</a> contexts may not
+      request resources from <a>private addresses</a>, even if the resource
+      would opt-in to such a request via a preflight. Making requests to
+      <a>private</a> resources presents risks which are mitigated by ensuring
+      the integrity of the <a for="request">client</a> which initiates the
+      request. In particular, network attackers should not be able to trivially
+      exploit an endpoint's consent to a non-secure origin.
+
+  To that end, the <a>main fetch</a> algorithm should be adjusted as follows:
+
+  1.  Before the current step 9 (which contains a large switch that directs the
+      request into the proper fetching algorithm), execute the following steps:
+
+      9.  If |request|'s <a for="request">current url</a>'s {{URL/host}} maps to
+          a <a>private address</a>, and |request|'s
+          <a for="request">client</a>'s <a>public internet flag</a> is set:
+
+          1.  If |request|'s <a for="request">client</a> is not a <a>secure
+              context</a>, return a <a>network error</a>.
+
+          2.  Set |request|'s <a>use-CORS-preflight flag</a>.
+
+  Note: This will require a preflight for <em>every</em> request initiated from
+  a <a>public address</a> that targets a <a>private address</a>. This includes
+  navigations.
+
+  Further, the <a>CORS check</a> algorithm should be adjusted to ensure that
+  consent is explicitly granted to the <a>public</a> origin which requested
+  the <a>private</a> preflight:
+
+  1.  After the current step 3 (which verifies that a wildcard
+      <a>`Access-Control-Allow-Origin`</a> grant cannot allow credentials),
+      execute the following step:
+
+      4.  If |response|'s <a for="response">url</a>'s {{URL/host}} maps to
+          a <a>private address</a>, and |request|'s
+          <a for="request">client</a>'s <a>public internet flag</a> is set,
+          and |origin| is "`*`", return failure.
+
+  ISSUE: [[FETCH]] does not yet integrate the details of DNS resolution into the
+  Fetch algorithm, though it does define an <a>obtain a connection</a>
+  algorithm which is a good start. We'll need to think about things like Happy
+  Eyeballs [[RFC6555]] to make sure that we perform the right checks depending
+  on the IP address we actually connect to. For the moment, this document
+  assumes that connection information is available in the <a>main fetch</a>
+  algorithm. That might not be a reasonable assumption, in which case we'll
+  need to revisit all of this.
+
+  <h3 id="integration-html">Integration with HTML</h3>
+
+  To support the checks in [[FETCH]], we store a <dfn>public internet flag</dfn>
+  on both {{Document}} and {{WorkerGlobalScope}} objects, which is set if the
+  {{Document}} or {{Worker}} was initialized via a resource which was delivered
+  from a <a>public address</a>, and unset otherwise.
+
+  <div class="example">
+    Assuming that `example.com` resolves to a <a>public address</a> (say,
+    `123.123.123.123`), then the {{Document}} created when navigating to
+    `https://example.com/document.html` will have its <a>public internet
+    flag</a> set.
+
+    If, on the other hand, `example.com` resolved to a <a>private address</a>
+    (say, `127.0.0.1`), then the {{Document}} created when navigating to
+    `https://example.com/document.html` will not have its <a>public internet
+    flag</a> set.
+  </div>
+</section>
+
+<section>
+  <h2 id="security-and-privacy-considerations">Security and Privacy Considerations</h2>
+
+  <h3 id="user-mediation">User Mediation</h3>
+
+  The proposal in this document only ensures that the device consents to access
+  from the public internet. Users agents SHOULD ensure that the <em>user</em>
+  consents to such access as well, as it might be in their interests to deny
+  such access, even though the device itself would allow it.
+
+  This mediation could be done via an explicit permission grant, via some sort
+  of pairing ceremony a la
+  <a href="https://en.wikipedia.org/wiki/Password-authenticated_key_agreement">PAKE</a>,
+  or any other clever interface which the user agent might devise.
+
+  <h3 id="mixed-content">Mixed Content</h3>
+
+  Note that the CORS restrictions added by the proposal in this document do not
+  obviate mixed content checks [[!MIXED-CONTENT]]. Developers who wish to
+  fetch <a>private</a> resources from <a>public</a> pages MUST ensure that the
+  connection is secure. This might involve a solution along the lines of
+  [[PLEX]], or we might end up inventing a new way of ensuring a secure
+  connection to devices (perhaps the pairing ceremony hinted at above, or one of
+  the ideas floated in [[SECURE-LOCAL-COMMUNICATION]]?). In either case,
+  consenting to access by sending proper CORS is necessary, but not sufficient.
+</section>
+
+<section>
+  <h2 id="acknowledgements">Acknowledgements</h2>
+
+  Conversations with Ryan Sleevi, Chris Palmer, and Justin Schuh helped flesh
+  out the contours of this proposal. Hopefully they won't hate it too much.
+  Mathias Karlsson has the dubious honor of being the
+  <a href="https://twitter.com/avlidienbrunn/status/680736829679755265">straw
+  that broke the camel's back</a>, and Brian Smith's contributions to the
+  resulting thread were useful, as always.
+</section>

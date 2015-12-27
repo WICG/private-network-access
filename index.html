@@ -1,0 +1,1370 @@
+<!doctype html><html lang="en">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <title>CORS and RFC1918</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+<style data-fill-with="stylesheet">/* This section copied from the W3C's ED styles. */
+
+	body {
+		color: black;
+		font-family: sans-serif;
+		margin: 0 auto;
+		max-width: 50em;
+		padding: 2em 1em 2em 70px;
+	}
+	:link { color: #00C; background: transparent }
+	:visited { color: #609; background: transparent }
+	a[href]:active { color: #C00; background: transparent }
+	a[href]:hover { background: #ffa }
+
+	a[href] img { border-style: none }
+
+	h1, h2, h3, h4, h5, h6 { text-align: left }
+	h1, h2, h3 { color: #005A9C; }
+	h1 { font: 170% sans-serif }
+	h2 { font: 140% sans-serif }
+	h3 { font: 120% sans-serif }
+	h4 { font: bold 100% sans-serif }
+	h5 { font: italic 100% sans-serif }
+	h6 { font: small-caps 100% sans-serif }
+
+	.hide { display: none }
+
+	div.head { margin-bottom: 1em }
+	div.head h1 { margin-top: 2em; clear: both }
+	div.head table { margin-left: 2em; margin-top: 2em }
+
+	p.copyright { font-size: small }
+	p.copyright small { font-size: small }
+
+	pre { margin-left: 2em }
+	dt { font-weight: bold }
+
+	ul.toc, ol.toc {
+		list-style: none;
+	}
+
+/* The rest copied from the CSSWG's default.css */
+
+	body {
+		counter-reset: exampleno figure issue;
+		max-width: 50em;
+		margin: 0 auto !important;
+		line-height: 1.5;
+	}
+
+/******************************************************************************/
+/*                                Sectioning                                  */
+/******************************************************************************/
+
+/** Headings ******************************************************************/
+
+	h1, h2, h3, h4, h5, h6, dt {
+		page-break-after: avoid;
+	}
+
+	h2, h3, h5, h6 {
+		margin-top: 3em;
+	}
+	h4 {
+		 margin-top: 4em;
+	}
+
+/** Subheadings ***************************************************************/
+
+	h1 + h2,
+	#subtitle + h2 {
+		/* #subtitle is a subtitle in an H2 under the H1 */
+		margin-top: 0;
+	}
+	h2 + h3,
+	h3 + h4,
+	h4 + h5,
+	h5 + h6 {
+		margin-top: 1.2em; /* = 1 x line-height */
+	}
+
+/** Section divider ***********************************************************/
+	/* <hr> used to separate TMI into the second half of a section              */
+	hr:not([title]) {
+		font-size: 1.5em;
+		text-align: center;
+		margin: 1em auto;
+		height: auto;
+		border: transparent solid 0;
+		background: transparent;
+	}
+	hr:not([title])::before {
+		content: "\1F411\2003\2003\1F411\2003\2003\1F411";
+	}
+	/* note: <hr> with title separates document header from contents */
+
+/******************************************************************************/
+/*                            Paragraphs and Lists                            */
+/******************************************************************************/
+
+	p {
+		margin: 1em 0;
+	}
+	dd     > p:first-child,
+	li     > p:first-child {
+		margin-top: 0;
+	}
+
+	ul, ol {
+		margin-left: 0;
+		padding-left: 2em;
+	}
+	li {
+		margin: 0.25em 2em 0.5em 0;
+		padding-left: 0;
+	}
+
+	dl dd {
+		margin: 0 0 1em 2em;
+	}
+	.head dd {
+		margin-bottom: 0;
+	}
+
+	/* Style for algorithms */
+	ol.algorithm ol {
+	 border-left: 1px solid #90b8de;
+	 margin-left: 1em;
+	}
+	ol.algorithm ol.algorithm {
+	 border-left: none;
+	 margin-left: 0;
+	}
+
+	/* Style for switch/case <dl>s */
+	dl.switch > dd > ol.only {
+	 margin-left: 0;
+	}
+	dl.switch > dd > ol.algorithm {
+	 margin-left: -2em;
+	}
+	dl.switch {
+	 padding-left: 2em;
+	}
+	dl.switch > dt {
+	 text-indent: -1.5em;
+	 margin-top: 1em;
+	}
+	dl.switch > dt + dt {
+	 margin-top: 0;
+	}
+	dl.switch > dt::before {
+	 content: '\21AA';
+	 padding: 0 0.5em 0 0;
+	 display: inline-block;
+	 width: 1em;
+	 text-align: right;
+	 line-height: 0.5em;
+	}
+
+	/* Style for paragraphs I know are in MD-genned lists */
+	[data-md] > :first-child {
+		margin-top: 0;
+	}
+	[data-md] > :last-child {
+		margin-bottom: 0;
+	}
+
+/** Inline Lists **************************************************************/
+	/* This is mostly to make the list inside the CR exit criteria more compact. */
+
+	ol.inline, ol.inline li {
+		display: inline;
+		padding: 0; margin: 0;
+	}
+	ol.inline {
+		counter-reset: list-item;
+	}
+	ol.inline li {
+		counter-increment: list-item;
+	}
+	ol.inline li::before {
+		content: "(" counter(list-item) ") ";
+		font-weight: bold;
+	}
+
+/** Terminology Markup ********************************************************/
+
+
+/******************************************************************************/
+/*                                 Inline Markup                              */
+/******************************************************************************/
+
+/** Terminology Markup ********************************************************/
+	dfn   { /* Defining instance */
+		font-weight: bolder;
+	}
+	a > i { /* Instance of term */
+		font-style: normal;
+	}
+	dt dfn code, code.idl {
+		font-size: inherit;
+	}
+	dfn var {
+		font-style: normal;
+	}
+
+/** Change Marking ************************************************************/
+
+	del { color: red;  text-decoration: line-through; }
+	ins { color: #080; text-decoration: underline;    }
+
+/** Miscellaneous improvements to inline formatting ***************************/
+
+	sup {
+		vertical-align: super;
+		font-size: 80%
+	}
+
+/******************************************************************************/
+/*                                    Code                                    */
+/******************************************************************************/
+
+/** General monospace/pre rules ***********************************************/
+
+	pre, code {
+		font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+		font-size: .9em;
+		page-break-inside: avoid;
+	}
+	pre {
+		margin-top: 1em;
+		margin-bottom: 1em;
+		overflow: auto;
+	}
+
+/** Syntax-Highlighted Code ***************************************************/
+
+	.example pre[class*="language-"],
+	.example [class*="language-"] pre,
+	.example pre[class*="lang-"],
+	.example [class*="lang-"] pre {
+		background: transparent; /* Prism applies a gray background that doesn't work well in the template. */
+	}
+
+/** Example Code **************************************************************/
+
+	div.html, div.xml,
+	pre.html, pre.xml {
+		padding: 0.5em;
+		margin: 1em 0;
+		position: relative;
+		clear: both;
+		color: #600;
+	}
+	pre.example,
+	pre.html,
+	pre.xml {
+		padding-top: 1.5em;
+	}
+
+	pre.illegal, .illegal pre
+	pre.deprecated, .deprecated pre {
+		color: red;
+	}
+
+/** IDL fragments *************************************************************/
+
+	pre.idl {
+		/* Match blue propdef boxes */
+		padding: .5em 1em;
+		background: #DEF;
+		margin: 1.2em 0;
+		border-left: 0.5em solid #8CCBF2;
+	}
+	pre.idl :link, pre.idl :visited {
+		color:inherit;
+		background:transparent;
+	}
+
+/** Inline CSS fragments ******************************************************/
+
+	.css.css, .property.property, .descriptor.descriptor {
+		color: #005a9c;
+		font-size: inherit;
+		font-family: inherit;
+	}
+	.css::before, .property::before, .descriptor::before {
+		content: "‘";
+	}
+	.css::after, .property::after, .descriptor::after {
+		content: "’";
+	}
+	.property, .descriptor {
+		/* Don't wrap property and descriptor names */
+		white-space: nowrap;
+	}
+	.type { /* CSS value <type> */
+	font-style: italic;
+	}
+	pre .property::before, pre .property::after {
+		content: "";
+	}
+
+/** Inline markup fragments ***************************************************/
+
+	code.html, code.xml {
+		color: #660000;
+	}
+
+/** Autolinks produced using Bikeshed *****************************************/
+
+	[data-link-type="property"]::before,
+	[data-link-type="propdesc"]::before,
+	[data-link-type="descriptor"]::before,
+	[data-link-type="value"]::before,
+	[data-link-type="function"]::before,
+	[data-link-type="at-rule"]::before,
+	[data-link-type="selector"]::before,
+	[data-link-type="maybe"]::before {
+		content: "‘";
+	}
+	[data-link-type="property"]::after,
+	[data-link-type="propdesc"]::after,
+	[data-link-type="descriptor"]::after,
+	[data-link-type="value"]::after,
+	[data-link-type="function"]::after,
+	[data-link-type="at-rule"]::after,
+	[data-link-type="selector"]::after,
+	[data-link-type="maybe"]::after {
+		content: "’";
+	}
+
+	[data-link-type].production::before,
+	[data-link-type].production::after,
+	.prod [data-link-type]::before,
+	.prod [data-link-type]::after {
+		content: "";
+	}
+
+	[data-link-type=element]         { font-family: monospace; }
+	[data-link-type=element]::before { content: "<" }
+	[data-link-type=element]::after  { content: ">" }
+
+	[data-link-type=biblio] {
+		white-space: pre;
+	}
+
+
+/******************************************************************************/
+/*                                    Links                                   */
+/******************************************************************************/
+
+/** General Hyperlinks ********************************************************/
+
+	/* We hyperlink a lot, so make it less intrusive */
+	a:link, a:visited {
+		color: inherit;
+		text-decoration: none;
+		border-bottom: 1px solid silver;
+	}
+	@supports (text-decoration-color: silver) {
+		a:link, a:visited {
+			border-bottom: none;
+			text-decoration: underline;
+			text-decoration-color: silver;
+		}
+		a:visited {
+			text-decoration-style: dotted;
+		}
+	}
+
+	a.logo:link, a.logo:visited { /* backout above styling for W3C logo */
+		padding: 0;
+		border: none;
+		text-decoration: none;
+	}
+
+/** Self-Links ****************************************************************/
+	/* Auto-generated links from an element to its own anchor, for usability */
+
+	.heading, .issue, .note, .example, li, dt {
+		position: relative;
+	}
+	a.self-link {
+		position: absolute;
+		top: 0;
+		left: -2.5em;
+		width: 2em;
+		height: 2em;
+		text-align: center;
+		border: none;
+		transition: opacity .2s;
+		opacity: .5;
+	}
+	a.self-link:hover {
+		opacity: 1;
+	}
+	.heading > a.self-link {
+		font-size: 83%;
+	}
+	li > a.self-link {
+		left: -3.5em;
+	}
+	dfn > a.self-link {
+		top: auto;
+		left: auto;
+		opacity: 0;
+		width: 1.5em;
+		height: 1.5em;
+		background: gray;
+		color: white;
+		font-style: normal;
+		transition: opacity .2s, background-color .2s, color .2s;
+	}
+	dfn:hover > a.self-link {
+		opacity: 1;
+	}
+	dfn > a.self-link:hover {
+		color: black;
+	}
+
+	a.self-link::before            { content: "¶"; }
+	.heading > a.self-link::before { content: "§"; }
+	dfn > a.self-link::before      { content: "#"; }
+
+/******************************************************************************/
+/*                                    Images                                  */
+/******************************************************************************/
+
+	img {
+		border-style: none;
+	}
+
+	figure, div.figure, div.sidefigure {
+		page-break-inside: avoid;
+	}
+
+	div.figure, p.figure, div.sidefigure, figure {
+		text-align: center;
+		margin: 2.5em 0;
+	}
+	div.figure pre, div.sidefigure pre, figure pre {
+		text-align: left;
+		display: table;
+		margin: 1em auto;
+	}
+	.figure table, figure table {
+		margin: auto;
+	}
+	div.sidefigure, figure.sidefigure {
+		float: right;
+		width: 50%;
+		margin: 0 0 0.5em 0.5em
+	}
+	div.figure img, div.sidefigure img, figure img,
+	div.figure object, div.sidefigure object, figure object {
+		display: block;
+		margin: auto;
+		max-width: 100%
+	}
+	p.caption, figcaption, caption {
+		text-align: center;
+		font-style: italic;
+		font-size: 90%;
+	}
+	p.caption:not(.no-marker)::before, figcaption:not(.no-marker)::before {
+		content: "Figure " counter(figure) ". ";
+	}
+	p.caption::before, figcaption::before, figcaption > .marker {
+		font-weight: bold;
+	}
+	p.caption, figcaption {
+		counter-increment: figure;
+	}
+
+	/* DL list is indented 2em, but figure inside it is not */
+	dd > div.figure, dd > figure { margin-left: -2em }
+
+	pre.ascii-art {
+		display: table; /* shrinkwrap */
+		margin: 1em auto;
+	}
+
+	/* Displaying the output of text layout, particularly when
+		 line-breaking is being invoked, and thus having a
+		 visible width is good. */
+	pre.output {
+		margin: 1em;
+		border: solid thin silver;
+		padding: 0.25em;
+		display: table;
+	}
+
+/******************************************************************************/
+/*                             Colored Boxes                                  */
+/******************************************************************************/
+
+	.issue, .note, .example, .why, .advisement, blockquote {
+		padding: .5em;
+		border: .5em;
+		border-left-style: solid;
+		page-break-inside: avoid;
+	}
+	span.issue, span.note {
+		padding: .1em .5em .15em;
+		border-right-style: solid;
+	}
+
+	div.issue,
+	div.note,
+	div.example,
+	details.why,
+	blockquote {
+		margin: 1em auto;
+	}
+	.note  > p:first-child,
+	.issue > p:first-child,
+	blockquote > :first-child {
+		margin-top: 0;
+	}
+	blockquote > :last-child {
+		margin-bottom: 0;
+	}
+
+/** Blockquotes ***************************************************************/
+
+	blockquote {
+		border-color: silver;
+	}
+
+/** Open issue ****************************************************************/
+	/* not intended for CR+ publication */
+
+	.issue {
+		border-color: #E05252;
+		background: #FBE9E9;
+		counter-increment: issue;
+		overflow: auto;
+	}
+	.issue:not(.no-marker)::before {
+		content: "ISSUE " counter(issue);
+		padding-right: 1em;
+	}
+	.issue::before, .issue > .marker {
+		color: #AE1E1E;
+	}
+
+/** Example *******************************************************************/
+
+	.example {
+		border-color: #E0CB52;
+		background: #FCFAEE;
+		counter-increment: exampleno;
+		overflow: auto;
+		clear: both;
+	}
+	.example::before, .example > .marker {
+		color: #827017;
+		font-family: sans-serif;
+		min-width: 7.5em;
+		display: block;
+	}
+	.example:not(.no-marker)::before {
+		content: "EXAMPLE";
+		content: "EXAMPLE " counter(exampleno);
+	}
+	.invalid.example::before, .invalid.example > .marker,
+	.illegal.example::before, .illegal.example > .marker {
+		color: red;
+	}
+	.invalid.example:not(.no-marker)::before,
+	.illegal.example:not(.no-marker)::before {
+		content: "INVALID EXAMPLE";
+		content: "INVALID EXAMPLE" counter(exampleno);
+	}
+
+/** Non-normative Note ********************************************************/
+
+	.note, .why {
+		border-color: #52E052;
+		background: #E9FBE9;
+		overflow: auto;
+	}
+	.note::before, .note > .marker {
+		display: block;
+		color: hsl(120, 70%, 30%);
+	}
+
+/** Advisement Box ************************************************************/
+	/*  for attention-grabbing normative statements */
+
+	.advisement {
+		border-color: orange;
+		border-style: none solid;
+		background: #FFEECC;
+		text-align: center;
+	}
+	strong.advisement {
+		display: block;
+	}
+	/*.advisement::before { color: #FF8800; } */
+
+/** ??? ***********************************************************************/
+
+	details.why {
+		border-color: #52E052;
+		background: #E9FBE9;
+		display: block;
+	}
+
+	details.why > summary {
+		font-style: italic;
+		display: block;
+	}
+
+	details.why[open] > summary {
+		border-bottom: 1px silver solid;
+	}
+
+/** Spec Obsoletion Notice ****************************************************/
+	/* obnoxious obsoletion notice for older/abandoned specs. */
+
+	details.annoying-warning {
+		display: block;
+	}
+
+	details.annoying-warning[open] {
+		background: #fdd;
+		color: red;
+		font-weight: bold;
+		text-align: center;
+		padding: .5em;
+		border: thick solid red;
+		border-radius: 1em;
+	}
+@media not print {
+	details.annoying-warning[open] {
+		position: fixed;
+		left: 1em;
+		right: 1em;
+		bottom: 1em;
+		z-index: 1000;
+	}
+}
+
+	details.annoying-warning:not([open]) > summary {
+		background: #fdd;
+		color: red;
+		font-weight: bold;
+		text-align: center;
+		padding: .5em;
+	}
+
+/******************************************************************************/
+/*                                    Tables                                  */
+/******************************************************************************/
+
+/** Property/Descriptor Definition Tables *************************************/
+
+	table.propdef, table.propdef-extra,
+	table.descdef, table.definition-table {
+		page-break-inside: avoid;
+		width: 100%;
+		margin: 1.2em 0;
+		border-left: 0.5em solid #8CCBF2;
+		padding: 0.5em 1em;
+		background: #DEF;
+		border-spacing: 0;
+	}
+
+	table.propdef td, table.propdef-extra td,
+	table.descdef td, table.definition-table td,
+	table.propdef th, table.propdef-extra th,
+	table.descdef th, table.definition-table th {
+		padding: 0.5em;
+		vertical-align: baseline;
+		border-bottom: 1px solid #bbd7e9;
+	}
+	table.propdef > tbody > tr:last-child th,
+	table.propdef-extra > tbody > tr:last-child th,
+	table.descdef > tbody > tr:last-child th,
+	table.definition-table > tbody > tr:last-child th,
+	table.propdef > tbody > tr:last-child td,
+	table.propdef-extra > tbody > tr:last-child td,
+	table.descdef > tbody > tr:last-child td,
+	table.definition-table > tbody > tr:last-child td {
+		border-bottom: 0;
+	}
+
+	table.propdef th,
+	table.propdef-extra th,
+	table.descdef th,
+	table.definition-table th {
+		font-style: italic;
+		font-weight: normal;
+		width: 8.3em;
+		padding-left: 1em;
+	}
+
+	/* For when values are extra-complex and need formatting for readability */
+	table td.pre {
+		white-space: pre-wrap;
+	}
+
+	/* A footnote at the bottom of a propdef */
+	table.propdef td.footnote,
+	table.propdef-extra td.footnote,
+	table.descdef td.footnote,
+	table.definition-table td.footnote {
+		padding-top: 0.6em;
+	}
+	table.propdef td.footnote::before,
+	table.propdef-extra td.footnote::before,
+	table.descdef td.footnote::before,
+	table.definition-table td.footnote::before {
+		content: " ";
+		display: block;
+		height: 0.6em;
+		width: 4em;
+		border-top: thin solid;
+	}
+
+/** Profile Tables ************************************************************/
+	/* table of required features in a CSS profile */
+
+	table.features th {
+		background: #00589f;
+		color: #fff;
+		text-align: left;
+		padding: 0.2em 0.2em 0.2em 0.5em;
+	}
+	table.features td {
+		vertical-align: top;
+		border-bottom: 1px solid #ccc;
+		padding: 0.3em 0.3em 0.3em 0.7em;
+	}
+
+/** Data tables (and properly marked-up proptables) ***************************/
+	/*
+		 <table class="data"> highlights structural relationships in a table
+		 when correct markup is used (e.g. thead/tbody, th vs. td, scope attribute)
+
+		 Use class="complex data" for particularly complicated tables --
+		 (This will draw more lines: busier, but clearer.)
+
+		 Use class="long" on table cells with paragraph-like contents
+		 (This will adjust text alignment accordingly.)
+	*/
+
+	.data, .proptable {
+		margin: 1em auto;
+		border-collapse: collapse;
+		width: 100%;
+		border: hidden;
+	}
+	.data {
+		text-align: center;
+		width: auto;
+	}
+	.data caption {
+		width: 100%;
+	}
+
+	.data td, .data th,
+	.proptable td, .proptable th {
+		padding: 0.5em;
+		border-width: 1px;
+		border-color: silver;
+		border-top-style: solid;
+	}
+
+	.data thead td:empty {
+		padding: 0;
+		border: 0;
+	}
+
+	.data thead th[scope="row"],
+	.proptable thead th[scope="row"] {
+		text-align: right;
+		color: inherit;
+	}
+
+	.data thead,
+	.proptable thead,
+	.data tbody,
+	.proptable tbody {
+		color: inherit;
+		border-bottom: 2px solid;
+	}
+
+	.data colgroup {
+		border-left: 2px solid;
+	}
+
+	.data tbody th:first-child,
+	.proptable tbody th:first-child ,
+	.data tbody td[scope="row"]:first-child,
+	.proptable tbody td[scope="row"]:first-child {
+		text-align: right;
+		color: inherit;
+		border-right: 2px solid;
+		border-top: 1px solid silver;
+		padding-right: 1em;
+	}
+	.data.define td:last-child {
+		text-align: left;
+	}
+
+	.data tbody th[rowspan],
+	.proptable tbody th[rowspan],
+	.data tbody td[rowspan],
+	.proptable tbody td[rowspan]{
+		border-left:  1px solid silver;
+		border-right: 1px solid silver;
+	}
+
+	.complex.data th,
+	.complex.data td {
+		border: 1px solid silver;
+	}
+
+	.data td.long {
+	 vertical-align: baseline;
+	 text-align: left;
+	}
+
+	.data img {
+		vertical-align: middle;
+	}
+
+
+/******************************************************************************/
+/*                                  Indices                                   */
+/******************************************************************************/
+
+
+/** Table of Contents *********************************************************/
+
+	/* ToC not indented, but font style shows hierarchy */
+	ul.toc           { margin: 1em 0;     font-weight: bold; /*text-transform: uppercase;*/ }
+	ul.toc ul        { margin: 0;        font-weight: normal; text-transform: none; }
+	ul.toc ul ul     { margin: 0 0 0 2em; font-style: italic; }
+	ul.toc ul ul ul  { margin: 0; }
+	ul.toc > li      { margin: 1.5em 0; }
+	ul.toc ul.toc li { margin: 0.3em 0 0 0; }
+
+	ul.toc, ul.toc ul, ul.toc li { padding: 0; line-height: 1.3; }
+	ul.toc a { text-decoration: none; border-bottom-style: none; }
+	ul.toc a:hover, ul.toc a:focus  { border-bottom-style: solid; }
+	@supports (text-decoration-style: solid) {
+		ul.toc a:hover, ul.toc a:focus  {
+			border-bottom-style: none;
+			text-decoration-style: solid;
+		}
+	}
+	/*
+	ul.toc li li li, ul.toc li li li ul {margin-left: 0; display: inline}
+	ul.toc li li li ul, ul.toc li li li ul li {margin-left: 0; display: inline}
+	*/
+
+	/* Section numbers in a column of their own */
+	ul.toc {
+		margin-left: 5em
+	}
+	ul.toc span.secno {
+		float: left;
+		width: 4em;
+		margin-left: -5em;
+	}
+	ul.toc ul ul span.secno {
+		margin-left: -7em;
+	}
+	/*ul.toc span.secno {text-align: right}*/
+	ul.toc li {
+		clear: both;
+	}
+	/* If we had 'tab', floats would not be needed here:
+		 ul.toc span.secno {tab: 5em right; margin-right: 1em}
+		 ul.toc li {text-indent: 5em hanging}
+	 The second line in case items wrap
+	*/
+
+/** At-risk List **************************************************************/
+	/* Style for At Risk features (intended as editorial aid, not intended for publishing) */
+
+	.atrisk::before {
+	 float: right;
+	 margin-top: -0.25em;
+	 padding: 0.5em 1em 0.5em 0;
+	 text-indent: -0.9em;
+	 border: 1px solid;
+	 content: '\25C0    Not yet widely implemented';
+	 white-space: pre;
+	 font-size: small;
+	 background-color: white;
+	 color: gray;
+	 text-align: center;
+	}
+
+	.toc .atrisk::before { content:none }
+
+/** Index *********************************************************************/
+
+	/* Index Lists: Layout */
+	ul.indexlist       { margin-left: 0; columns: 15em; -webkit-columns: 15em; text-indent: 1em hanging; }
+	ul.indexlist li    { margin-left: 0; list-style: none; break-inside: avoid; word-break: break-word; }
+	ul.indexlist li li { margin-left: 1em }
+	ul.indexlist dl    { margin-top: 0; }
+	ul.indexlist dt    { margin: .2em 0 .2em 20px;}
+	ul.indexlist dd    { margin: .2em 0 .2em 40px;}
+	/* Index Lists: Typography */
+	ul.indexlist ul,
+	ul.indexlist dl { font-size: smaller; }
+	ul.indexlist li span {
+		white-space: nowrap;
+		position: absolute;
+		color: transparent; }
+	ul.indexlist li a:hover + span,
+	ul.indexlist li a:focus + span {
+		color: gray;
+	}
+	@media print {
+		ul.indexlist li span { color: gray; }
+	}
+
+/** Property Index Tables *****************************************************/
+	/* See also the data table styling section, which this effectively subclasses */
+
+	table.proptable {
+		font-size: small;
+		border-collapse: collapse;
+		border-spacing: 0;
+		text-align: left;
+		margin: 1em 0;
+	}
+
+	table.proptable td,
+	table.proptable th {
+		padding: 0.4em;
+		text-align: center;
+	}
+
+	table.proptable tr:hover td {
+		background: #DEF;
+	}
+	.propdef th {
+		font-style: italic;
+		font-weight: normal;
+		text-align: left;
+		width: 3em;
+	}
+	/* The link in the first column in the property table (formerly a TD) */
+	table.proptable td .property,
+	table.proptable th .property {
+		display: block;
+		text-align: left;
+		font-weight: bold;
+	}
+
+/** Extra-large Elements ******************************************************/
+
+	.big-element-wrapper {
+		max-width: 50em;
+		overflow-x: auto;
+	}
+
+/******************************************************************************/
+/*                                    Print                                   */
+/******************************************************************************/
+
+	@media print {
+		html {
+			margin: 0 !important; }
+		body {
+			font-family: serif; }
+		th, td {
+			font-family: inherit; }
+		a {
+			color: inherit !important; }
+
+		a:link, a:visited {
+			text-decoration: none !important }
+		a:link::after, a:visited::after { /* create a cross-ref "see..." */ }
+		.example::before {
+			font-family: serif !important; }
+	}
+	@page {
+		margin: 1.5cm 1.1cm;
+	}
+
+</style>
+  <meta content="Bikeshed 1.0.0" name="generator">
+<style>
+  ul.toc ul ul ul {
+    margin: 0 0 0 2em;
+  }
+  ul.toc ul ul ul span.secno {
+    margin-left: -9em;
+  }
+</style>
+ </head>
+ <body class="h-entry">
+  <div class="head">
+   <p data-fill-with="logo"></p>
+   <h1 class="p-name no-ref" id="title">CORS and RFC1918</h1>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2015-12-27">27 December 2015</time></span></h2>
+   <div data-fill-with="spec-metadata">
+    <dl>
+     <dt>This version:
+     <dd><a class="u-url" href="https://w3c.github.io/webappsec-cors-rfc1918/">https://w3c.github.io/webappsec-cors-rfc1918/</a>
+     <dt class="editor">Editor:
+     <dd class="editor p-author h-card vcard" data-editor-id="56384"><a class="p-name fn u-email email" href="mailto:mkwst@google.com">Mike West</a> (<span class="p-org org">Google Inc.</span>)
+    </dl>
+   </div>
+   <div data-fill-with="warning"></div>
+   <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
+and related or neighboring rights to this work.
+In addition, as of 27 December 2015,
+the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
+which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
+Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
+   <hr title="Separator for header">
+  </div>
+  <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
+  <div class="p-summary" data-fill-with="abstract">
+   <p>This document specifies modifications to Fetch which are intended to mitigate
+
+the risks associated with unintentional exposure of devices and servers on an
+client’s internal network to the web at large.</p>
+  </div>
+  <div data-fill-with="at-risk"></div>
+  <h2 class="no-num no-toc no-ref heading settled" id="contents"><span class="content">Table of Contents</span></h2>
+  <div data-fill-with="table-of-contents" role="navigation">
+   <ul class="toc" role="directory">
+    <li>
+     <a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
+     <ul class="toc">
+      <li>
+       <a href="#examples"><span class="secno">1.1</span> <span class="content">Examples</span></a>
+       <ul class="toc">
+        <li><a href="#example-deny-by-default"><span class="secno">1.1.1</span> <span class="content">Secure by Default</span></a>
+        <li><a href="#example-opt-in"><span class="secno">1.1.2</span> <span class="content">Opting-In</span></a>
+       </ul>
+     </ul>
+    <li><a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
+    <li>
+     <a href="#integrations"><span class="secno">3</span> <span class="content">Integrations</span></a>
+     <ul class="toc">
+      <li><a href="#integration-fetch"><span class="secno">3.1</span> <span class="content">Integration with Fetch</span></a>
+      <li><a href="#integration-html"><span class="secno">3.2</span> <span class="content">Integration with HTML</span></a>
+     </ul>
+    <li>
+     <a href="#security-and-privacy-considerations"><span class="secno">4</span> <span class="content">Security and Privacy Considerations</span></a>
+     <ul class="toc">
+      <li><a href="#user-mediation"><span class="secno">4.1</span> <span class="content">User Mediation</span></a>
+      <li><a href="#mixed-content"><span class="secno">4.2</span> <span class="content">Mixed Content</span></a>
+     </ul>
+    <li><a href="#acknowledgements"><span class="secno">5</span> <span class="content">Acknowledgements</span></a>
+    <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
+    <li>
+     <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
+     <ul class="toc">
+      <li><a href="#index-defined-here"><span class="secno"></span> <span class="content">Terms defined by this specification</span></a>
+      <li><a href="#index-defined-elsewhere"><span class="secno"></span> <span class="content">Terms defined by reference</span></a>
+     </ul>
+    <li>
+     <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
+     <ul class="toc">
+      <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
+      <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
+     </ul>
+    <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
+   </ul>
+  </div>
+  <main>
+   <section>
+    <h2 class="heading settled" data-level="1" id="intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#intro"></a></h2>
+    <p><em>This section is not normative.</em></p>
+    <p>Although <a data-link-type="biblio" href="#biblio-rfc1918">[RFC1918]</a> has specified a distinction between "private" and
+  "public" internet addresses for over a decade, user agents haven’t made
+  much progress at segregating the one from the other. Websites on the public
+  internet can make requests to internal devices and servers, which enable a
+  number of malicious behaviors, including attacks on users' routers like those
+  documented in <a data-link-type="biblio" href="#biblio-drive-by-pharming">[DRIVE-BY-PHARMING]</a> (and, more recenly, <a data-link-type="biblio" href="#biblio-csrf-exploit-kit">[CSRF-EXPLOIT-KIT]</a>).</p>
+    <p>Here, we propose a mitigation against these kinds of attacks that would
+  require internal devices to explicitly opt-in to requests from the public
+  internet.</p>
+    <h3 class="heading settled" data-level="1.1" id="examples"><span class="secno">1.1. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
+    <h4 class="heading settled" data-level="1.1.1" id="example-deny-by-default"><span class="secno">1.1.1. </span><span class="content">Secure by Default</span><a class="self-link" href="#example-deny-by-default"></a></h4>
+    <div class="example" id="example-495e368a">
+     <a class="self-link" href="#example-495e368a"></a> MegaCorp Inc’s routers don’t have any interest in requests from the public
+    internet, and wish to deny them by default. This is trivial, and doesn’t
+    require any effort on their part. 
+     <p>When a website on the public internet makes a request to the router, the
+    user agent determines that the requestor is <a data-link-type="dfn" href="#public-address">public</a>, and the router
+    is <a data-link-type="dfn" href="#private-address">private</a>. This means that requests will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight
+    request</a> as follows:</p>
+<pre>OPTIONS / HTTP/1.1
+Host: 192.168.1.1
+<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-request-method">Access-Control-Request-Method</a>: GET
+...
+Origin: https://public.example.com
+</pre>
+     <p>The router can either respond with an error status code, or can refuse to
+    include <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods"><code>Access-Control-Allow-Methods</code></a>, <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-headers"><code>Access-Control-Allow-Headers</code></a>, <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin"><code>Access-Control-Allow-Origin</code></a>, and <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials"><code>Access-Control-Allow-Credentials</code></a> headers in its response. As long as those headers are not present, the
+    response will fail a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check">CORS check</a>, and the request will be blocked.</p>
+    </div>
+    <h4 class="heading settled" data-level="1.1.2" id="example-opt-in"><span class="secno">1.1.2. </span><span class="content">Opting-In</span><a class="self-link" href="#example-opt-in"></a></h4>
+    <div class="example" id="example-e70e12d0">
+     <a class="self-link" href="#example-e70e12d0"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
+    for various reasons. They can explicitly opt-in to receiving requests from
+    the internet by sending proper CORS headers in response to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a>. 
+     <p>When a website on the public internet makes a request to the device, the
+    user agent determines that the requestor is <a data-link-type="dfn" href="#public-address">public</a>, and the router
+    is <a data-link-type="dfn" href="#private-address">private</a>. This means that requests will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight
+    request</a>, just as above.</p>
+     <p>The device can explicitly grant access by sending the right headers in its
+    response. For the above request, that might look like:</p>
+<pre>HTTP/1.1 200 OK
+...
+<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">Access-Control-Allow-Origin</a>: https://public.example.com
+<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">Access-Control-Allow-Methods</a>: GET
+<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-max-age">Access-Control-Max-Age</a>: 86400
+<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials">Access-Control-Allow-Credentials</a>: true
+Vary: Origin
+Content-Length: 0
+...
+</pre>
+    </div>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
+    <p>An IPv4 address is a <dfn data-dfn-type="dfn" data-export="" data-local-lt="private" id="private-address">private address<a class="self-link" href="#private-address"></a></dfn> if
+  it matches the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc1918#section-3">private address space</a> defined in Section 3 of <a data-link-type="biblio" href="#biblio-rfc1918">[RFC1918]</a>, and a <dfn data-dfn-type="dfn" data-export="" data-local-lt="public" id="public-address">public address<a class="self-link" href="#public-address"></a></dfn> otherwise.</p>
+    <p>An IPv6 address is a <a data-link-type="dfn" href="#private-address">private address</a> if it matches the "Unique Local
+  Address" prefix (<code>fc00::/7</code>) defined in Section 3 of <a data-link-type="biblio" href="#biblio-rfc4193">[RFC4193]</a> or the
+  "link-local" prefix (<code>fe80::/10</code>) defined in section 2.5.6 of <a data-link-type="biblio" href="#biblio-rfc4291">[RFC4291]</a>,
+  and a <a data-link-type="dfn" href="#public-address">public address</a> otherwise.</p>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="3" id="integrations"><span class="secno">3. </span><span class="content">Integrations</span><a class="self-link" href="#integrations"></a></h2>
+    <p><em>This section is non-normative.</em></p>
+    <p>This document proposes a number of modifications to other specifications in
+  order to implement the mitigations sketched out in the examples above. These
+  integrations are outlined here for clarity, but the external documents are the
+  normative references which ought to be consulted.</p>
+    <h3 class="heading settled" data-level="3.1" id="integration-fetch"><span class="secno">3.1. </span><span class="content">Integration with Fetch</span><a class="self-link" href="#integration-fetch"></a></h3>
+    <p>This document proposes a few changes to Fetch, with the following
+  implications:</p>
+    <ol>
+     <li data-md="">
+      <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#public-internet-flag">public internet
+  flag</a> is not set are unchanged from status quo. They may continue to
+  make requests to <a data-link-type="dfn" href="#public-address">public</a> and <a data-link-type="dfn" href="#private-address">private</a> addresses as they do
+  today.</p>
+     <li data-md="">
+      <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#public-internet-flag">public internet
+  flag</a> is set are allowed to fetch resources from <a data-link-type="dfn" href="#private-address">private
+  addresses</a> if and only if the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a> <em>and</em> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a> to the
+  target origin passes a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check">CORS check</a>.</p>
+      <p class="note" role="note">Note: <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">Non-secure</a> <a data-link-type="dfn" href="#public-address">public</a> contexts may not
+  request resources from <a data-link-type="dfn" href="#private-address">private addresses</a>, even if the resource
+  would opt-in to such a request via a preflight. Making requests to <a data-link-type="dfn" href="#private-address">private</a> resources presents risks which are mitigated by ensuring
+  the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> which initiates the
+  request. In particular, network attackers should not be able to trivially
+  exploit an endpoint’s consent to a non-secure origin.</p>
+    </ol>
+    <p>To that end, the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm should be adjusted as follows:</p>
+    <ol>
+     <li data-md="">
+      <p>Before the current step 9 (which contains a large switch that directs the
+  request into the proper fetching algorithm), execute the following steps:</p>
+      <ol>
+       <li data-md="">
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code> maps to
+  a <a data-link-type="dfn" href="#private-address">private address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#public-internet-flag">public internet flag</a> is set:</p>
+        <ol>
+         <li data-md="">
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> is not a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure
+  context</a>, return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>.</p>
+         <li data-md="">
+          <p>Set <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#use-cors-preflight-flag">use-CORS-preflight flag</a>.</p>
+        </ol>
+      </ol>
+    </ol>
+    <p class="note" role="note">Note: This will require a preflight for <em>every</em> request initiated from
+  a <a data-link-type="dfn" href="#public-address">public address</a> that targets a <a data-link-type="dfn" href="#private-address">private address</a>. This includes
+  navigations.</p>
+    <p>Further, the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check">CORS check</a> algorithm should be adjusted to ensure that
+  consent is explicitly granted to the <a data-link-type="dfn" href="#public-address">public</a> origin which requested
+  the <a data-link-type="dfn" href="#private-address">private</a> preflight:</p>
+    <ol>
+     <li data-md="">
+      <p>After the current step 3 (which verifies that a wildcard <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin"><code>Access-Control-Allow-Origin</code></a> grant cannot allow credentials),
+  execute the following step:</p>
+      <ol>
+       <li data-md="">
+        <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-url">url</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code> maps to
+  a <a data-link-type="dfn" href="#private-address">private address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#public-internet-flag">public internet flag</a> is set,
+  and <var>origin</var> is "<code>*</code>", return failure.</p>
+      </ol>
+    </ol>
+    <p class="issue" id="issue-90019200"><a class="self-link" href="#issue-90019200"></a> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
+  Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
+  Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
+  on the IP address we actually connect to. For the moment, this document
+  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
+  need to revisit all of this.</p>
+    <h3 class="heading settled" data-level="3.2" id="integration-html"><span class="secno">3.2. </span><span class="content">Integration with HTML</span><a class="self-link" href="#integration-html"></a></h3>
+    <p>To support the checks in <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a>, we store a <dfn data-dfn-type="dfn" data-noexport="" id="public-internet-flag">public internet flag<a class="self-link" href="#public-internet-flag"></a></dfn> on both <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">WorkerGlobalScope</a></code> objects, which is set if the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a></code> was initialized via a resource which was delivered
+  from a <a data-link-type="dfn" href="#public-address">public address</a>, and unset otherwise.</p>
+    <div class="example" id="example-eacdfc28">
+     <a class="self-link" href="#example-eacdfc28"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#public-internet-flag">public internet
+    flag</a> set. 
+     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#private-address">private address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will not have its <a data-link-type="dfn" href="#public-internet-flag">public internet
+    flag</a> set.</p>
+    </div>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="4" id="security-and-privacy-considerations"><span class="secno">4. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
+    <h3 class="heading settled" data-level="4.1" id="user-mediation"><span class="secno">4.1. </span><span class="content">User Mediation</span><a class="self-link" href="#user-mediation"></a></h3>
+    <p>The proposal in this document only ensures that the device consents to access
+  from the public internet. Users agents SHOULD ensure that the <em>user</em> consents to such access as well, as it might be in their interests to deny
+  such access, even though the device itself would allow it.</p>
+    <p>This mediation could be done via an explicit permission grant, via some sort
+  of pairing ceremony a la <a href="https://en.wikipedia.org/wiki/Password-authenticated_key_agreement">PAKE</a>,
+  or any other clever interface which the user agent might devise.</p>
+    <h3 class="heading settled" data-level="4.2" id="mixed-content"><span class="secno">4.2. </span><span class="content">Mixed Content</span><a class="self-link" href="#mixed-content"></a></h3>
+    <p>Note that the CORS restrictions added by the proposal in this document do not
+  obviate mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content">[MIXED-CONTENT]</a>. Developers who wish to
+  fetch <a data-link-type="dfn" href="#private-address">private</a> resources from <a data-link-type="dfn" href="#public-address">public</a> pages MUST ensure that the
+  connection is secure. This might involve a solution along the lines of <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>, or we might end up inventing a new way of ensuring a secure
+  connection to devices (perhaps the pairing ceremony hinted at above, or one of
+  the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In either case,
+  consenting to access by sending proper CORS is necessary, but not sufficient.</p>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="5" id="acknowledgements"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
+    <p>Conversations with Ryan Sleevi, Chris Palmer, and Justin Schuh helped flesh
+  out the contours of this proposal. Hopefully they won’t hate it too much.
+  Mathias Karlsson has the dubious honor of being the <a href="https://twitter.com/avlidienbrunn/status/680736829679755265">straw
+  that broke the camel’s back</a>, and Brian Smith’s contributions to the
+  resulting thread were useful, as always.</p>
+   </section>
+  </main>
+  <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
+  <p> Conformance requirements are expressed with a combination of descriptive assertions and RFC 2119 terminology.
+        The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
+        in the normative parts of this document
+        are to be interpreted as described in RFC 2119.
+        However, for readability,
+        these words do not appear in all uppercase letters in this specification. </p>
+  <p> All of the text of this specification is normative
+        except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a> </p>
+  <p> Examples in this specification are introduced with the words “for example”
+        or are set apart from the normative text with <code>class="example"</code>, like this: </p>
+  <div class="example" id="example-ae2b6bc0"><a class="self-link" href="#example-ae2b6bc0"></a> This is an example of an informative example. </div>
+  <p> Informative notes begin with the word “Note”
+        and are set apart from the normative text with <code>class="note"</code>, like this: </p>
+  <p class="note" role="note"> Note, this is an informative note. </p>
+  <h2 class="no-num heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
+  <h3 class="no-num heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
+  <ul class="indexlist">
+   <li><a href="#private-address">private</a><span>, in §2</span>
+   <li><a href="#private-address">private address</a><span>, in §2</span>
+   <li><a href="#public-address">public</a><span>, in §2</span>
+   <li><a href="#public-address">public address</a><span>, in §2</span>
+   <li><a href="#public-internet-flag">public internet flag</a><span>, in §3.2</span>
+  </ul>
+  <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
+  <ul class="indexlist">
+   <li>
+    <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> defines the following terms:
+    <ul>
+     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials">access-control-allow-credentials</a>
+     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-headers">access-control-allow-headers</a>
+     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">access-control-allow-methods</a>
+     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">access-control-allow-origin</a>
+     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-max-age">access-control-max-age</a>
+     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-request-method">access-control-request-method</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-cors-check">cors check</a>
+     <li><a href="https://fetch.spec.whatwg.org/#cors-preflight-request">cors-preflight request</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>
+     <li><a href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request">request</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-response-url">url</a>
+     <li><a href="https://fetch.spec.whatwg.org/#use-cors-preflight-flag">use-cors-preflight flag</a>
+    </ul>
+   <li>
+    <a data-link-type="biblio" href="#biblio-html">[HTML]</a> defines the following terms:
+    <ul>
+     <li><a href="https://html.spec.whatwg.org/#document">Document</a>
+    </ul>
+   <li>
+    <a data-link-type="biblio" href="#biblio-rfc1918">[rfc1918]</a> defines the following terms:
+    <ul>
+     <li><a href="https://tools.ietf.org/html/rfc1918#section-3">private address space</a>
+    </ul>
+   <li>
+    <a data-link-type="biblio" href="#biblio-secure-contexts">[SECURE-CONTEXTS]</a> defines the following terms:
+    <ul>
+     <li><a href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a>
+    </ul>
+   <li>
+    <a data-link-type="biblio" href="#biblio-url">[url]</a> defines the following terms:
+    <ul>
+     <li><a href="https://url.spec.whatwg.org/#concept-url-host">host</a>
+    </ul>
+   <li>
+    <a data-link-type="biblio" href="#biblio-html">[HTML]</a> defines the following terms:
+    <ul>
+     <li><a href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">WorkerGlobalScope</a>
+    </ul>
+  </ul>
+  <h2 class="no-num heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
+  <h3 class="no-num heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
+  <dl>
+   <dt id="biblio-fetch"><a class="self-link" href="#biblio-fetch"></a>[FETCH]
+   <dd>Anne van Kesteren. <a href="https://fetch.spec.whatwg.org/">Fetch Standard</a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>
+   <dt id="biblio-html"><a class="self-link" href="#biblio-html"></a>[HTML]
+   <dd>Ian Hickson. <a href="https://html.spec.whatwg.org/multipage/">HTML Standard</a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
+   <dt id="biblio-secure-contexts"><a class="self-link" href="#biblio-secure-contexts"></a>[SECURE-CONTEXTS]
+   <dd>Mike West; Yan Zhu. <a href="https://w3c.github.io/webappsec-secure-contexts/">Secure Contexts</a>. URL: <a href="https://w3c.github.io/webappsec-secure-contexts/">https://w3c.github.io/webappsec-secure-contexts/</a>
+   <dt id="biblio-mixed-content"><a class="self-link" href="#biblio-mixed-content"></a>[MIXED-CONTENT]
+   <dd>Mike West. <a href="http://www.w3.org/TR/mixed-content/">Mixed Content</a>. 8 October 2015. CR. URL: <a href="http://www.w3.org/TR/mixed-content/">http://www.w3.org/TR/mixed-content/</a>
+   <dt id="biblio-rfc1918"><a class="self-link" href="#biblio-rfc1918"></a>[RFC1918]
+   <dd>Y. Rekhter; et al. <a href="https://tools.ietf.org/html/rfc1918">Address Allocation for Private Internets</a>. February 1996. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc1918">https://tools.ietf.org/html/rfc1918</a>
+   <dt id="biblio-rfc2119"><a class="self-link" href="#biblio-rfc2119"></a>[RFC2119]
+   <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
+   <dt id="biblio-rfc4193"><a class="self-link" href="#biblio-rfc4193"></a>[RFC4193]
+   <dd>R. Hinden; B. Haberman. <a href="https://tools.ietf.org/html/rfc4193">Unique Local IPv6 Unicast Addresses</a>. October 2005. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc4193">https://tools.ietf.org/html/rfc4193</a>
+   <dt id="biblio-rfc4291"><a class="self-link" href="#biblio-rfc4291"></a>[RFC4291]
+   <dd>R. Hinden; S. Deering. <a href="https://tools.ietf.org/html/rfc4291">IP Version 6 Addressing Architecture</a>. February 2006. Draft Standard. URL: <a href="https://tools.ietf.org/html/rfc4291">https://tools.ietf.org/html/rfc4291</a>
+   <dt id="biblio-url"><a class="self-link" href="#biblio-url"></a>[URL]
+   <dd>Anne van Kesteren; Sam Ruby. <a href="http://www.w3.org/TR/url-1/">URL</a>. 9 December 2014. WD. URL: <a href="http://www.w3.org/TR/url-1/">http://www.w3.org/TR/url-1/</a>
+  </dl>
+  <h3 class="no-num heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
+  <dl>
+   <dt id="biblio-csrf-exploit-kit"><a class="self-link" href="#biblio-csrf-exploit-kit"></a>[CSRF-EXPLOIT-KIT]
+   <dd>Kafeine. <a href="http://malware.dontneedcoffee.com/2015/05/an-exploit-kit-dedicated-to-csrf.html">An Exploit Kit dedicated to CSRF Pharming</a>. URL: <a href="http://malware.dontneedcoffee.com/2015/05/an-exploit-kit-dedicated-to-csrf.html">http://malware.dontneedcoffee.com/2015/05/an-exploit-kit-dedicated-to-csrf.html</a>
+   <dt id="biblio-drive-by-pharming"><a class="self-link" href="#biblio-drive-by-pharming"></a>[DRIVE-BY-PHARMING]
+   <dd>Sid Stamm; Zulfikar Ramzan; Markus Jakobsson. <a href="https://www.symantec.com/avcenter/reference/Driveby_Pharming.pdf">Drive-By Pharming</a>. URL: <a href="https://www.symantec.com/avcenter/reference/Driveby_Pharming.pdf">https://www.symantec.com/avcenter/reference/Driveby_Pharming.pdf</a>
+   <dt id="biblio-plex"><a class="self-link" href="#biblio-plex"></a>[PLEX]
+   <dd>Filippo Valsorda. <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">How Plex is doing HTTPS for all its users</a>. URL: <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/</a>
+   <dt id="biblio-secure-local-communication"><a class="self-link" href="#biblio-secure-local-communication"></a>[SECURE-LOCAL-COMMUNICATION]
+   <dd><a href="http://www.w3.org/2015/10/28-local-minutes.html">Minutes from 'Secure communication with local network devices': TPAC, 2015</a>. URL: <a href="http://www.w3.org/2015/10/28-local-minutes.html">http://www.w3.org/2015/10/28-local-minutes.html</a>
+   <dt id="biblio-rfc6555"><a class="self-link" href="#biblio-rfc6555"></a>[RFC6555]
+   <dd>D. Wing; A. Yourtchenko. <a href="https://tools.ietf.org/html/rfc6555">Happy Eyeballs: Success with Dual-Stack Hosts</a>. April 2012. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6555">https://tools.ietf.org/html/rfc6555</a>
+  </dl>
+  <h2 class="no-num heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
+  <div style="counter-reset:issue">
+   <div class="issue"> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
+  Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
+  Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
+  on the IP address we actually connect to. For the moment, this document
+  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
+  need to revisit all of this.<a href="#issue-90019200"> ↵ </a></div>
+  </div>
+ </body>
+</html>
