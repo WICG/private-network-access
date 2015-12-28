@@ -396,7 +396,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   The modifications to the <a>CORS-preflight cache</a> are intended to mitigate
   this attack vector.
 
-  <h3 id="scope">Scope of Access</h3>
+  <h3 id="scope-access">Scope of Access</h3>
 
   The proposal in this document does not allow a device to distinguish between
   granting an origin access to load its resources from making that origin
@@ -409,7 +409,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   something like an `Access-Control-Allow-Public: true` HTTP response header
   might be a reasonable approach.
 
-  <h3 id="scope">Scope of Mitigation</h3>
+  <h3 id="scope-mitigation">Scope of Mitigation</h3>
 
   The proposal in this document merely mitigates attacks against private web
   services, it cannot fully solve them. For example, a router's
@@ -419,7 +419,6 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   the reality of private web service implementation quality today, but vendors
   should not consider themselves absolved of responsibility, even if all UAs
   implement this mitigation.
-
 </section>
 
 <section>

@@ -1009,7 +1009,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">CORS and RFC1918</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2015-12-27">27 December 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2015-12-28">28 December 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1021,7 +1021,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 27 December 2015,
+In addition, as of 28 December 2015,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1031,7 +1031,7 @@ Parts of this work may be from another specification document.  If so, those par
   <div class="p-summary" data-fill-with="abstract">
    <p>This document specifies modifications to Fetch which are intended to mitigate
 
-the risks associated with unintentional exposure of devices and servers on an
+the risks associated with unintentional exposure of devices and servers on a
 client’s internal network to the web at large.</p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -1069,6 +1069,7 @@ client’s internal network to the web at large.</p>
       <li><a href="#loopback"><span class="secno">5.3</span> <span class="content">Loopback vs Intranet</span></a>
       <li><a href="#dns-rebinding"><span class="secno">5.4</span> <span class="content">DNS Rebinding</span></a>
       <li><a href="#scope"><span class="secno">5.5</span> <span class="content">Scope of Access</span></a>
+      <li><a href="#scope0"><span class="secno">5.6</span> <span class="content">Scope of Mitigation</span></a>
      </ul>
     <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
@@ -1102,14 +1103,17 @@ client’s internal network to the web at large.</p>
   internet.</p>
     <h3 class="heading settled" data-level="1.1" id="examples"><span class="secno">1.1. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
     <h4 class="heading settled" data-level="1.1.1" id="example-deny-by-default"><span class="secno">1.1.1. </span><span class="content">Secure by Default</span><a class="self-link" href="#example-deny-by-default"></a></h4>
-    <div class="example" id="example-495e368a">
-     <a class="self-link" href="#example-495e368a"></a> MegaCorp Inc’s routers don’t have any interest in requests from the public
+    <div class="example" id="example-1e6ad447">
+     <a class="self-link" href="#example-1e6ad447"></a> MegaCorp Inc’s routers don’t have any interest in requests from the public
     internet, and wish to deny them by default. This is trivial, and doesn’t
     require any effort on their part. 
      <p>When a website on the public internet makes a request to the router, the
     user agent determines that the requestor is <a data-link-type="dfn" href="#public-address">public</a>, and the router
-    is <a data-link-type="dfn" href="#private-address">private</a>. This means that requests will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight
-    request</a> as follows:</p>
+    is <a data-link-type="dfn" href="#private-address">private</a>. The UA deems the router private because the public web
+    application addresses it with a private IP address (see below), or
+    because the UA resolves the router’s name to a private IP address. This
+    means that requests will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a> as
+    follows:</p>
 <pre>OPTIONS / HTTP/1.1
 Host: 192.168.1.1
 <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-request-method">Access-Control-Request-Method</a>: GET
@@ -1158,7 +1162,7 @@ Content-Length: 0
     <p>This document proposes a number of modifications to other specifications in
   order to implement the mitigations sketched out in the examples above. These
   integrations are outlined here for clarity, but the external documents are the
-  normative references which ought to be consulted.</p>
+  normative references.</p>
     <h3 class="heading settled" data-level="3.1" id="integration-fetch"><span class="secno">3.1. </span><span class="content">Integration with Fetch</span><a class="self-link" href="#integration-fetch"></a></h3>
     <p>This document proposes a few changes to Fetch, with the following
   implications:</p>
@@ -1173,8 +1177,8 @@ Content-Length: 0
   flag</a> is set are allowed to fetch resources from <a data-link-type="dfn" href="#private-address">private
   addresses</a> if and only if the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a> <em>and</em> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a> to the
   target origin passes a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check">CORS check</a>.</p>
-      <p class="note" role="note">Note: <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">Non-secure</a> <a data-link-type="dfn" href="#public-address">public</a> contexts may not
-  request resources from <a data-link-type="dfn" href="#private-address">private addresses</a>, even if the resource
+      <p class="note" role="note">Note: UAs must not allow <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">non-secure</a> <a data-link-type="dfn" href="#public-address">public</a> contexts to request resources from <a data-link-type="dfn" href="#private-address">private
+  addresses</a>, even if the private server
   would opt-in to such a request via a preflight. Making requests to <a data-link-type="dfn" href="#private-address">private</a> resources presents risks which are mitigated by ensuring
   the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> which initiates the
   request. In particular, network attackers should not be able to trivially
@@ -1224,6 +1228,11 @@ Content-Length: 0
   on the IP address we actually connect to. For the moment, this document
   assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
   need to revisit all of this.</p>
+    <p class="issue" id="issue-ec5ddc7a"><a class="self-link" href="#issue-ec5ddc7a"></a> Chris Palmer suggests that we might want to
+  change the proposal such that private services must always opt-in to being
+  contacted by anyone other than themselves. That is, we’d drop implication
+  #1 above in favor of forcing a preflight for all requests to private servers,
+  whether they come from public addresses, or private addresses. <a href="https://github.com/mikewest/cors-rfc1918/issues/1">&lt;https://github.com/mikewest/cors-rfc1918/issues/1></a></p>
     <h3 class="heading settled" data-level="3.2" id="integration-html"><span class="secno">3.2. </span><span class="content">Integration with HTML</span><a class="self-link" href="#integration-html"></a></h3>
     <p>To support the checks in <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a>, we store a <dfn data-dfn-type="dfn" data-noexport="" id="public-internet-flag">public internet flag<a class="self-link" href="#public-internet-flag"></a></dfn> on both <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">WorkerGlobalScope</a></code> objects, which is set if the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a></code> was initialized via a resource which was delivered
   from a <a data-link-type="dfn" href="#public-address">public address</a>, and unset otherwise.</p>
@@ -1246,7 +1255,7 @@ Content-Length: 0
     <h3 class="heading settled" data-level="4.2" id="too-much-access"><span class="secno">4.2. </span><span class="content">Too Much Access</span><a class="self-link" href="#too-much-access"></a></h3>
     <p>Note that the proposed scheme requires <a data-link-type="dfn" href="#private-address">private</a> resources which can be
   loaded by the <a data-link-type="dfn" href="#public-address">public</a> internet to make themselves CORS-same-origin with
-  the loading origin. That might lead developers to inadvertantly grant too
+  the loading origin. That might lead developers to inadvertently grant too
   much access if they set a blanket policy for all of a devices resources.
   Instead, our hope is that developers will carefully consider whether a
   particular resource actually needs to be exposed to the web before opting it
@@ -1294,6 +1303,15 @@ Content-Length: 0
     <p>If we decide that building something with a narrower scope is reasonable, then
   something like an <code>Access-Control-Allow-Public: true</code> HTTP response header
   might be a reasonable approach.</p>
+    <h3 class="heading settled" data-level="5.6" id="scope0"><span class="secno">5.6. </span><span class="content">Scope of Mitigation</span><a class="self-link" href="#scope0"></a></h3>
+    <p>The proposal in this document merely mitigates attacks against private web
+  services, it cannot fully solve them. For example, a router’s
+  web-based administration interface must be designed and implemented to defend
+  against CSRF on its own, and should not rely on a UA that behaves as specified
+  in this document. The mitigation this document specifies is necessary given
+  the reality of private web service implementation quality today, but vendors
+  should not consider themselves absolved of responsibility, even if all UAs
+  implement this mitigation.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
@@ -1422,6 +1440,11 @@ Content-Length: 0
   on the IP address we actually connect to. For the moment, this document
   assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
   need to revisit all of this.<a href="#issue-90019200"> ↵ </a></div>
+   <div class="issue"> Chris Palmer suggests that we might want to
+  change the proposal such that private services must always opt-in to being
+  contacted by anyone other than themselves. That is, we’d drop implication
+  #1 above in favor of forcing a preflight for all requests to private servers,
+  whether they come from public addresses, or private addresses. <a href="https://github.com/mikewest/cors-rfc1918/issues/1">&lt;https://github.com/mikewest/cors-rfc1918/issues/1></a><a href="#issue-ec5ddc7a"> ↵ </a></div>
   </div>
  </body>
 </html>
