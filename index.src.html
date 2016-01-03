@@ -367,13 +367,11 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 
       3.  If |request| is an <a>external request</a>:
 
-          1.  If |origin| is "`*`", return failure.
-
-          2.  Let |network| be the result of <a for="header list">parsing</a>
+          1.  Let |network| be the result of <a for="header list">parsing</a>
               "<a>`Access-Control-Allow-Network`</a>" in |response|'s
               <a>header list</a>.
 
-          3.  If |network| is not "`public`", return failure.
+          2.  If |network| is not "`public`", return failure.
 
               ISSUE(mikewest/cors-rfc1918#3): When we support more than
               "`public`" and "`private`", this will need to change accordingly.

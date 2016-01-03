@@ -1271,8 +1271,6 @@ Content-Length: 0
         <p>If <var>request</var> is an <a data-link-type="dfn" href="#external-request">external request</a>:</p>
         <ol>
          <li data-md="">
-          <p>If <var>origin</var> is "<code>*</code>", return failure.</p>
-         <li data-md="">
           <p>Let <var>network</var> be the result of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-parse">parsing</a> "<a data-link-type="dfn" href="#access-control-allow-network"><code>Access-Control-Allow-Network</code></a>" in <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list">header list</a>.</p>
          <li data-md="">
           <p>If <var>network</var> is not "<code>public</code>", return failure.</p>
