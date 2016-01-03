@@ -198,7 +198,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
       OPTIONS /set_dns?... HTTP/1.1
       Host: router.local
       <a>Access-Control-Request-Method</a>: GET
-      <a>Access-Control-Request-Network</a>: public
+      <a>Access-Control-Request-External</a>: true
       ...
       Origin: https://csrf.attack
     </pre>
@@ -211,7 +211,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
         be issued.
 
     *   If it does understand `OPTIONS`, it can neglect to include an
-        <a>`Access-Control-Allow-Network`</a> header in its response. This will
+        <a>`Access-Control-Allow-External`</a> header in its response. This will
         cause the preflight to fail, and the actual `GET` will never be issued.
 
     *   It can crash. Crashing is fairly safe, if inelegant.
@@ -240,11 +240,77 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
       <a>Access-Control-Allow-Origin</a>: https://public.example.com
       <a>Access-Control-Allow-Methods</a>: GET
       <a>Access-Control-Allow-Credentials</a>: true
-      <a>Access-Control-Allow-Network</a>: public
+      <a>Access-Control-Allow-External</a>: true
       Vary: Origin
       Content-Length: 0
       ...
     </pre>
+  </div>
+
+  <h4 id="shortlinks">Navigation</h4>
+
+  <div class="example">
+    MegaCorp Inc. runs an internal link shortening service at `https://go/`, and
+    its employees often email such links to each other. The email server is
+    hosted at a <a>public address</a> in order to ensure that employees can work
+    even when they're not at the office. How considerate!
+
+    Clicking `http://go/*` links from `https://mail.mega.corp/` will trigger a
+    <a>CORS-preflight request</a>, as it is a request from a <a>public
+    address</a> to a <a>private address</a>:
+
+    <pre>
+      OPTIONS /short-links-are-short-after-shortening HTTP/1.1
+      Host: go
+      <a>Access-Control-Request-Method</a>: GET
+      <a>Access-Control-Request-External</a>: true
+      ...
+      Origin: https://mail.mega.corp
+    </pre>
+
+    In order to ensure that employees can continue to navigate such links as
+    expected, MegaCorp chooses to allow external requests:
+
+    <pre>
+      HTTP/1.1 200 OK
+      ...
+      <a>Access-Control-Allow-Origin</a>: https://mail.mega.corp
+      <a>Access-Control-Allow-Methods</a>: GET
+      <a>Access-Control-Allow-Credentials</a>: true
+      <a>Access-Control-Allow-External</a>: true
+      Vary: Origin
+      Content-Length: 0
+      ...
+    </pre>
+
+    MegaCorp's leak-prevention department is worried, though, that this access
+    will allow external folks to read the location of any redirect that the
+    shortener would return. They're more or less resigned to the fact that
+    `https://go/shortlink` will leak, but would be sad indeed if the target
+    (`https://sekrits/super-sekrit-project-with-super-sekrit-partner`) leaked
+    as well.
+
+    MegaCorp's shortlink engineers are careful to avoid this potential failure
+    by returning CORS headers <em>only</em> for the preflight. The "real"
+    navigation doesn't require CORS headers, and they don't actually want to
+    support cross-origin requests as being CORS-same-origin:
+
+    <pre>
+      // Request:
+      GET /short-links-are-short-after-shortening HTTP/1.1
+      Host: go
+      <a>Access-Control-Request-External</a>: true
+      ...
+      Origin: https://mail.mega.corp
+
+      // Response:
+      HTTP/1.1 301 Moved Permanently
+      ...
+      Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
+    </pre>
+
+    The navigation will proceed normally, but `mail.mega.corp` won't be
+    considered CORS-same-origin with the response.
   </div>
 </section>
 
@@ -268,15 +334,16 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   A <a>request</a> (|request|) is an <dfn export>external request</dfn> if
   |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
   <a>private address</a>, and |request|'s <a for="request">client</a>'s
-  <a>public internet flag</a> is set.
+  <a>public internet flag</a> is set, and an <dfn export>internal request</dfn>
+  otherwise.
 
   <h3 id="headers">Additional CORS Headers</h3>
 
-  The <dfn export>`Access-Control-Request-Network`</dfn> indicates the network
-  type from which a <a>request</a> is made: "`public`" or "`private`".
+  The <dfn export>`Access-Control-Request-External`</dfn> indicates that the
+  <a>request</a> is an <a>external request</a>.
 
-  The <dfn export>`Access-Control-Allow-Network`</dfn> indicates that a resource
-  can be safely shared with the given network type: "`public`" or "`private`".
+  The <dfn export>`Access-Control-Allow-External`</dfn> indicates that a resource
+  can be safely shared with external networks.
 </section>
 
 <!-- Big Text: Integrations -->
@@ -299,6 +366,12 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
       flag</a> is not set are unchanged from status quo. They may continue to
       make requests to <a>public</a> and <a>private</a> addresses as they do
       today.
+
+      ISSUE(mikewest/cors-rfc1918#1): Chris Palmer suggests that we might want
+      to change the proposal such that private services must always opt-in to
+      being contacted by anyone other than themselves. That is, we'd force a
+      preflight for all cross-origin requests to private servers, whether they
+      come from public addresses, or private addresses.
 
   2.  <a>Requests</a> whose <a for="request">client</a>'s <a>public internet
       flag</a> is set are allowed to fetch resources from <a>private
@@ -339,9 +412,9 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
       includes navigations.
 
   2.  The <a>CORS-preflight fetch</a> algorithm should be adjusted to append
-      an <a>`Access-Control-Request-Network`</a> header for preflights triggered
-      by <a>external requests</a>. For instance, the following could be executed
-      after the current step 5:
+      an <a>`Access-Control-Request-External`</a> header for preflights
+      triggered by <a>external requests</a>. For instance, the following could
+      be executed after the current step 5:
 
       6.  If |request| is an <a>external request</a>:
 
@@ -352,31 +425,21 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
               will be denied.
 
           2.  <a for="header list">Set</a>
-              "<a>`Access-Control-Request-Network`</a>" to "`public`" in
+              "<a>`Access-Control-Request-External`</a>" to "`true`" in
               |preflight|'s <a>header list</a>.
-
-          ISSUE(mikewest/cors-rfc1918#3): When we support more than "`public`"
-          and "`private`", this will need to change accordingly. For the moment,
-          "`public`" requests are the only ones which can be "<a>external
-          requests</a>", so we can keep it simple.
 
   3.  The <a>CORS check</a> algorithm should be adjusted to ensure that consent
       is explicitly granted via an appropriate
-      "<a>`Access-Control-Allow-Network`</a>" header in the response. For
+      "<a>`Access-Control-Allow-External`</a>" header in the response. For
       instance, the following could be executed before the current step 3:
 
       3.  If |request| is an <a>external request</a>:
 
-          1.  Let |network| be the result of <a for="header list">parsing</a>
-              "<a>`Access-Control-Allow-Network`</a>" in |response|'s
+          1.  Let |external| be the result of <a for="header list">parsing</a>
+              "<a>`Access-Control-Allow-External`</a>" in |response|'s
               <a>header list</a>.
 
-          2.  If |network| is not "`public`", return failure.
-
-              ISSUE(mikewest/cors-rfc1918#3): When we support more than
-              "`public`" and "`private`", this will need to change accordingly.
-              For the moment, "`public`" requests are the only ones which can be
-              "<a>external requests</a>", so we can keep it simple.
+          2.  If |external| is not "`true`", return failure.
 
   4.  Finally, to mitigate the impact of DNS rebinding attacks (see
       [[#dns-rebinding]]), the <a>CORS-preflight cache</a> should be adjusted to
@@ -400,12 +463,6 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   assumes that connection information is available in the <a>basic fetch</a>
   algorithm. That might not be a reasonable assumption, in which case we'll
   need to revisit all of this.
-
-  ISSUE(mikewest/cors-rfc1918#1): Chris Palmer suggests that we might want to
-  change the proposal such that private services must always opt-in to being
-  contacted by anyone other than themselves. That is, we'd drop implication
-  #1 above in favor of forcing a preflight for all requests to private servers,
-  whether they come from public addresses, or private addresses.
 
   <h3 id="integration-html">Integration with HTML</h3>
 
