@@ -1009,7 +1009,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">CORS and RFC1918</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2015-12-28">28 December 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2016-01-03">3 January 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1021,7 +1021,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 28 December 2015,
+In addition, as of 3 January 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1041,14 +1041,19 @@ client’s internal network to the web at large.</p>
     <li>
      <a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
      <ul class="toc">
+      <li><a href="#goals"><span class="secno">1.1</span> <span class="content">Goals</span></a>
       <li>
-       <a href="#examples"><span class="secno">1.1</span> <span class="content">Examples</span></a>
+       <a href="#examples"><span class="secno">1.2</span> <span class="content">Examples</span></a>
        <ul class="toc">
-        <li><a href="#example-deny-by-default"><span class="secno">1.1.1</span> <span class="content">Secure by Default</span></a>
-        <li><a href="#example-opt-in"><span class="secno">1.1.2</span> <span class="content">Opting-In</span></a>
+        <li><a href="#example-deny-by-default"><span class="secno">1.2.1</span> <span class="content">Secure by Default</span></a>
+        <li><a href="#example-opt-in"><span class="secno">1.2.2</span> <span class="content">Opting-In</span></a>
        </ul>
      </ul>
-    <li><a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
+    <li>
+     <a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
+     <ul class="toc">
+      <li><a href="#headers"><span class="secno">2.1</span> <span class="content">Additional CORS Headers</span></a>
+     </ul>
     <li>
      <a href="#integrations"><span class="secno">3</span> <span class="content">Integrations</span></a>
      <ul class="toc">
@@ -1059,17 +1064,14 @@ client’s internal network to the web at large.</p>
      <a href="#implementation-considerations"><span class="secno">4</span> <span class="content">Implementation Considerations</span></a>
      <ul class="toc">
       <li><a href="#file-url"><span class="secno">4.1</span> <span class="content"><code>file</code> URLs</span></a>
-      <li><a href="#too-much-access"><span class="secno">4.2</span> <span class="content">Too Much Access</span></a>
      </ul>
     <li>
      <a href="#security-and-privacy-considerations"><span class="secno">5</span> <span class="content">Security and Privacy Considerations</span></a>
      <ul class="toc">
       <li><a href="#user-mediation"><span class="secno">5.1</span> <span class="content">User Mediation</span></a>
       <li><a href="#mixed-content"><span class="secno">5.2</span> <span class="content">Mixed Content</span></a>
-      <li><a href="#loopback"><span class="secno">5.3</span> <span class="content">Loopback vs Intranet</span></a>
-      <li><a href="#dns-rebinding"><span class="secno">5.4</span> <span class="content">DNS Rebinding</span></a>
-      <li><a href="#scope-access"><span class="secno">5.5</span> <span class="content">Scope of Access</span></a>
-      <li><a href="#scope-mitigation"><span class="secno">5.6</span> <span class="content">Scope of Mitigation</span></a>
+      <li><a href="#dns-rebinding"><span class="secno">5.3</span> <span class="content">DNS Rebinding</span></a>
+      <li><a href="#scope-mitigation"><span class="secno">5.4</span> <span class="content">Scope of Mitigation</span></a>
      </ul>
     <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
@@ -1097,36 +1099,61 @@ client’s internal network to the web at large.</p>
   much progress at segregating the one from the other. Websites on the public
   internet can make requests to internal devices and servers, which enable a
   number of malicious behaviors, including attacks on users' routers like those
-  documented in <a data-link-type="biblio" href="#biblio-drive-by-pharming">[DRIVE-BY-PHARMING]</a> (and, more recenly, <a data-link-type="biblio" href="#biblio-csrf-exploit-kit">[CSRF-EXPLOIT-KIT]</a>).</p>
+  documented in <a data-link-type="biblio" href="#biblio-drive-by-pharming">[DRIVE-BY-PHARMING]</a> (and, more recenly, <a data-link-type="biblio" href="#biblio-soho-pharming">[SOHO-PHARMING]</a> and <a data-link-type="biblio" href="#biblio-csrf-exploit-kit">[CSRF-EXPLOIT-KIT]</a>).</p>
     <p>Here, we propose a mitigation against these kinds of attacks that would
   require internal devices to explicitly opt-in to requests from the public
   internet.</p>
-    <h3 class="heading settled" data-level="1.1" id="examples"><span class="secno">1.1. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
-    <h4 class="heading settled" data-level="1.1.1" id="example-deny-by-default"><span class="secno">1.1.1. </span><span class="content">Secure by Default</span><a class="self-link" href="#example-deny-by-default"></a></h4>
-    <div class="example" id="example-1e6ad447">
-     <a class="self-link" href="#example-1e6ad447"></a> MegaCorp Inc’s routers don’t have any interest in requests from the public
-    internet, and wish to deny them by default. This is trivial, and doesn’t
-    require any effort on their part. 
-     <p>When a website on the public internet makes a request to the router, the
-    user agent determines that the requestor is <a data-link-type="dfn" href="#public-address">public</a>, and the router
-    is <a data-link-type="dfn" href="#private-address">private</a>. The UA deems the router private because the public web
-    application addresses it with a private IP address (see below), or
-    because the UA resolves the router’s name to a private IP address. This
-    means that requests will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a> as
-    follows:</p>
-<pre>OPTIONS / HTTP/1.1
-Host: 192.168.1.1
-<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-request-method">Access-Control-Request-Method</a>: GET
-...
-Origin: https://public.example.com
+    <h3 class="heading settled" data-level="1.1" id="goals"><span class="secno">1.1. </span><span class="content">Goals</span><a class="self-link" href="#goals"></a></h3>
+    <p>The overarching goal is to prevent the user agent from inadvertantly enabling
+  attacks on devices running on a user’s local intranet, or services running on
+  the user’s machine directly.</p>
+    <p>In particular, we wish to mitigate the attacks on routers outlined in <a data-link-type="biblio" href="#biblio-soho-pharming">[SOHO-PHARMING]</a>, which exploit the fact that user agents don’t currently
+  place restrictions on access from the internet to the intranet. Note that
+  CORS in the status quo doesn’t protect against these kinds of attacks, as
+  they’re straightforward CSRF, relying only on <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#simple-method">simple methods</a> and <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#simple-header">simple headers</a>. No preflight is triggered, and the attacker doesn’t
+  actually care about reading the response.</p>
+    <h3 class="heading settled" data-level="1.2" id="examples"><span class="secno">1.2. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
+    <h4 class="heading settled" data-level="1.2.1" id="example-deny-by-default"><span class="secno">1.2.1. </span><span class="content">Secure by Default</span><a class="self-link" href="#example-deny-by-default"></a></h4>
+    <div class="example" id="example-5170f6bc">
+     <a class="self-link" href="#example-5170f6bc"></a> MegaCorp Inc’s routers have a fairly serious CSRF vulnerability which allows
+    their DNS settings to be altered by navigating to <code>http://admin:admin@router.local/set_dns</code> and passing in various GET
+    parameters. Oh noes! 
+     <p>Happily, MegaCorp Inc’s routers don’t have any interest in requests from the
+    public internet, and didn’t take any special effort to enable them. This
+    greatly mitigates the scope of the vulnerability, as malicious requests will
+    generate a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a>, which the router ignores. Let’s
+    take a closer look:</p>
+     <p>Given <code>https://csrf.attack/</code> that contains the following HTML:</p>
+<pre>&lt;iframe href="https://admin:admin@router.local/set_dns?server1=123.123.123.123">
+&lt;/iframe>
 </pre>
-     <p>The router can either respond with an error status code, or can refuse to
-    include <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods"><code>Access-Control-Allow-Methods</code></a>, <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-headers"><code>Access-Control-Allow-Headers</code></a>, <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin"><code>Access-Control-Allow-Origin</code></a>, and <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials"><code>Access-Control-Allow-Credentials</code></a> headers in its response. As long as those headers are not present, the
-    response will fail a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check">CORS check</a>, and the request will be blocked.</p>
+     <p><code>router.local</code> will be resolved to the router’s address via the magic of
+    multicast DNS <a data-link-type="biblio" href="#biblio-rfc6762">[RFC6762]</a>, and the user agent will note it as <a data-link-type="dfn" href="#private-address">private</a>. Since <code>csrf.attack</code> resolved to a <a data-link-type="dfn" href="#public-address">public address</a>, the
+    request will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a>:</p>
+<pre>OPTIONS /set_dns?... HTTP/1.1
+Host: router.local
+<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-request-method">Access-Control-Request-Method</a>: GET
+<a data-link-type="dfn" href="#access-control-request-network">Access-Control-Request-Network</a>: public
+...
+Origin: https://csrf.attack
+</pre>
+     <p>The router will receive this <code>OPTIONS</code> request, and has a number of possible
+    safe responses:</p>
+     <ul>
+      <li data-md="">
+       <p>If it doesn’t understand <code>OPTIONS</code> at all, it can return a <code>50X</code> error.
+  This will cause the preflight to fail, and the actual <code>GET</code> will never
+  be issued.</p>
+      <li data-md="">
+       <p>If it does understand <code>OPTIONS</code>, it can neglect to include an <a data-link-type="dfn" href="#access-control-allow-network"><code>Access-Control-Allow-Network</code></a> header in its response. This will
+  cause the preflight to fail, and the actual <code>GET</code> will never be issued.</p>
+      <li data-md="">
+       <p>It can crash. Crashing is fairly safe, if inelegant.</p>
+     </ul>
     </div>
-    <h4 class="heading settled" data-level="1.1.2" id="example-opt-in"><span class="secno">1.1.2. </span><span class="content">Opting-In</span><a class="self-link" href="#example-opt-in"></a></h4>
-    <div class="example" id="example-e70e12d0">
-     <a class="self-link" href="#example-e70e12d0"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
+    <h4 class="heading settled" data-level="1.2.2" id="example-opt-in"><span class="secno">1.2.2. </span><span class="content">Opting-In</span><a class="self-link" href="#example-opt-in"></a></h4>
+    <div class="example" id="example-a1022bbf">
+     <a class="self-link" href="#example-a1022bbf"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
     for various reasons. They can explicitly opt-in to receiving requests from
     the internet by sending proper CORS headers in response to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a>. 
      <p>When a website on the public internet makes a request to the device, the
@@ -1134,13 +1161,14 @@ Origin: https://public.example.com
     is <a data-link-type="dfn" href="#private-address">private</a>. This means that requests will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight
     request</a>, just as above.</p>
      <p>The device can explicitly grant access by sending the right headers in its
-    response. For the above request, that might look like:</p>
+    response to the preflight request. For the above request, that might look
+    like:</p>
 <pre>HTTP/1.1 200 OK
 ...
 <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">Access-Control-Allow-Origin</a>: https://public.example.com
 <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">Access-Control-Allow-Methods</a>: GET
-<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-max-age">Access-Control-Max-Age</a>: 86400
 <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials">Access-Control-Allow-Credentials</a>: true
+<a data-link-type="dfn" href="#access-control-allow-network">Access-Control-Allow-Network</a>: public
 Vary: Origin
 Content-Length: 0
 ...
@@ -1155,6 +1183,14 @@ Content-Length: 0
   Address" prefix (<code>fc00::/7</code>) defined in Section 3 of <a data-link-type="biblio" href="#biblio-rfc4193">[RFC4193]</a> or the
   "link-local" prefix (<code>fe80::/10</code>) defined in section 2.5.6 of <a data-link-type="biblio" href="#biblio-rfc4291">[RFC4291]</a>,
   and a <a data-link-type="dfn" href="#public-address">public address</a> otherwise.</p>
+    <p class="issue" id="issue-69ad818f"><a class="self-link" href="#issue-69ad818f"></a> We should have a <code>local</code> category here, and
+  enforce the same restrictions from <code>private</code> to <code>local</code> that we do from <code>public</code> to <code>private</code>. <a href="https://github.com/mikewest/cors-rfc1918/issues/3">&lt;https://github.com/mikewest/cors-rfc1918/issues/3></a></p>
+    <p>A <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> (<var>request</var>) is an <dfn data-dfn-type="dfn" data-export="" id="external-request">external request<a class="self-link" href="#external-request"></a></dfn> if <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code> maps to a <a data-link-type="dfn" href="#private-address">private address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#public-internet-flag">public internet flag</a> is set.</p>
+    <h3 class="heading settled" data-level="2.1" id="headers"><span class="secno">2.1. </span><span class="content">Additional CORS Headers</span><a class="self-link" href="#headers"></a></h3>
+    <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-request-network"><code>Access-Control-Request-Network</code><a class="self-link" href="#access-control-request-network"></a></dfn> indicates the network
+  type from which a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> is made: "<code>public</code>" or "<code>private</code>".</p>
+    <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-allow-network"><code>Access-Control-Allow-Network</code><a class="self-link" href="#access-control-allow-network"></a></dfn> indicates that a resource
+  can be safely shared with the given network type: "<code>public</code>" or "<code>private</code>".</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="3" id="integrations"><span class="secno">3. </span><span class="content">Integrations</span><a class="self-link" href="#integrations"></a></h2>
@@ -1184,49 +1220,88 @@ Content-Length: 0
   request. In particular, network attackers should not be able to trivially
   exploit an endpoint’s consent to a non-secure origin.</p>
     </ol>
-    <p>To that end, the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm should be adjusted as follows:</p>
+    <p>To those ends:</p>
     <ol>
      <li data-md="">
-      <p>Before the current step 9 (which contains a large switch that directs the
-  request into the proper fetching algorithm), execute the following steps:</p>
+      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#basic-fetch">basic fetch</a> algorithm should be adjusted to ensure that a
+  preflight is triggered for all <a data-link-type="dfn" href="#external-request">external requests</a>. This might
+  be as simple as changing the current "<code>http</code>"/"<code>https</code>" block of the
+  switch statement to the following:</p>
       <ol>
        <li data-md="">
-        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code> maps to
-  a <a data-link-type="dfn" href="#private-address">private address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#public-internet-flag">public internet flag</a> is set:</p>
+        <p>If <var>request</var> is an <a data-link-type="dfn" href="#external-request">external request</a>, return the result of
+  performing an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-fetch">HTTP fetch</a> using <var>request</var> with the <var>CORS-preflight flag</var> set.</p>
+        <p>Otherwise, return the result of performing an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-fetch">HTTP fetch</a> using <var>request</var> with the <var>CORS-preflight flag</var> unset.</p>
+      </ol>
+      <p class="note" role="note">Note: We do not set the <var>CORS flag</var> in this case, as we’re dealing with
+  either a same-origin request that has been tainted by something like a <a href="#dns-rebinding">§5.3 DNS Rebinding</a> attack, a navigation, or a <code>no-cors</code> request. The
+  preflight alone should be enough to mitigate the risks of such requests.</p>
+      <p class="note" role="note">Note: This will require a preflight for <em>every</em> request initiated
+  from a <a data-link-type="dfn" href="#public-address">public address</a> that targets a <a data-link-type="dfn" href="#private-address">private address</a>. This
+  includes navigations.</p>
+     <li data-md="">
+      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch">CORS-preflight fetch</a> algorithm should be adjusted to append
+  an <a data-link-type="dfn" href="#access-control-request-network"><code>Access-Control-Request-Network</code></a> header for preflights triggered
+  by <a data-link-type="dfn" href="#external-request">external requests</a>. For instance, the following could be executed
+  after the current step 5:</p>
+      <ol>
+       <li data-md="">
+        <p>If <var>request</var> is an <a data-link-type="dfn" href="#external-request">external request</a>:</p>
         <ol>
          <li data-md="">
           <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> is not a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure
   context</a>, return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>.</p>
+          <p class="note" role="note">Note: We don’t need to touch the network to know that this request
+  will be denied.</p>
          <li data-md="">
-          <p>Set <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#use-cors-preflight-flag">use-CORS-preflight flag</a>.</p>
+          <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-set">Set</a> "<a data-link-type="dfn" href="#access-control-request-network"><code>Access-Control-Request-Network</code></a>" to "<code>public</code>" in <var>preflight</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list">header list</a>.</p>
         </ol>
+        <p class="issue" id="issue-576460f3"><a class="self-link" href="#issue-576460f3"></a> When we support more than "<code>public</code>"
+  and "<code>private</code>", this will need to change accordingly. For the moment,
+  "<code>public</code>" requests are the only ones which can be "<a data-link-type="dfn" href="#external-request">external
+  requests</a>", so we can keep it simple. <a href="https://github.com/mikewest/cors-rfc1918/issues/3">&lt;https://github.com/mikewest/cors-rfc1918/issues/3></a></p>
       </ol>
-    </ol>
-    <p class="note" role="note">Note: This will require a preflight for <em>every</em> request initiated from
-  a <a data-link-type="dfn" href="#public-address">public address</a> that targets a <a data-link-type="dfn" href="#private-address">private address</a>. This includes
-  navigations.</p>
-    <p>Further, the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check">CORS check</a> algorithm should be adjusted to ensure that
-  consent is explicitly granted to the <a data-link-type="dfn" href="#public-address">public</a> origin which requested
-  the <a data-link-type="dfn" href="#private-address">private</a> preflight:</p>
-    <ol>
      <li data-md="">
-      <p>After the current step 3 (which verifies that a wildcard <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin"><code>Access-Control-Allow-Origin</code></a> grant cannot allow credentials),
-  execute the following step:</p>
+      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check">CORS check</a> algorithm should be adjusted to ensure that consent
+  is explicitly granted via an appropriate
+  "<a data-link-type="dfn" href="#access-control-allow-network"><code>Access-Control-Allow-Network</code></a>" header in the response. For
+  instance, the following could be executed before the current step 3:</p>
       <ol>
        <li data-md="">
-        <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-url">url</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code> maps to
-  a <a data-link-type="dfn" href="#private-address">private address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#public-internet-flag">public internet flag</a> is set,
-  and <var>origin</var> is "<code>*</code>", return failure.</p>
+        <p>If <var>request</var> is an <a data-link-type="dfn" href="#external-request">external request</a>:</p>
+        <ol>
+         <li data-md="">
+          <p>If <var>origin</var> is "<code>*</code>", return failure.</p>
+         <li data-md="">
+          <p>Let <var>network</var> be the result of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-parse">parsing</a> "<a data-link-type="dfn" href="#access-control-allow-network"><code>Access-Control-Allow-Network</code></a>" in <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list">header list</a>.</p>
+         <li data-md="">
+          <p>If <var>network</var> is not "<code>public</code>", return failure.</p>
+          <p class="issue" id="issue-5cf4de42"><a class="self-link" href="#issue-5cf4de42"></a> When we support more than
+  "<code>public</code>" and "<code>private</code>", this will need to change accordingly.
+  For the moment, "<code>public</code>" requests are the only ones which can be
+  "<a data-link-type="dfn" href="#external-request">external requests</a>", so we can keep it simple. <a href="https://github.com/mikewest/cors-rfc1918/issues/3">&lt;https://github.com/mikewest/cors-rfc1918/issues/3></a></p>
+        </ol>
+      </ol>
+     <li data-md="">
+      <p>Finally, to mitigate the impact of DNS rebinding attacks (see <a href="#dns-rebinding">§5.3 DNS Rebinding</a>), the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-cache">CORS-preflight cache</a> should be adjusted to
+  distinguish between request types. For example, we could:</p>
+      <ol>
+       <li data-md="">
+        <p>Add "<dfn data-dfn-for="cache" data-dfn-type="dfn" data-export="" id="request-network-type">request network type<a class="self-link" href="#request-network-type"></a></dfn>" to each cache
+  entry, and change the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-match">cache match</a> algorithm to take it into
+  account.</p>
+       <li data-md="">
+        <p>Populate <a data-link-type="dfn" href="#request-network-type">request network type</a> according to the nature of <var>request</var> in steps 7.12 and 7.14 of the current <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch">CORS-preflight
+  fetch</a> algorithm.</p>
+       <li data-md="">
+        <p>Change the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-match">cache match</a> algorithm to take</p>
       </ol>
     </ol>
-    <p>Finally, to address the possibility of DNS rebinding attacks (see <a href="#dns-rebinding">§5.4 DNS Rebinding</a>), we need to adjust the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-cache">CORS-preflight cache</a> to
-  distinguish between a <a data-link-type="dfn" href="#public-address">public</a> and a <a data-link-type="dfn" href="#private-address">private</a> origin.</p>
-    <p class="issue" id="issue-1beef013"><a class="self-link" href="#issue-1beef013"></a> Spell the cache modifications out a bit more clearly.</p>
-    <p class="issue" id="issue-90019200"><a class="self-link" href="#issue-90019200"></a> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
+    <p class="issue" id="issue-fe5c3119"><a class="self-link" href="#issue-fe5c3119"></a> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
   Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
   on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
+  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#basic-fetch">basic fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
   need to revisit all of this.</p>
     <p class="issue" id="issue-ec5ddc7a"><a class="self-link" href="#issue-ec5ddc7a"></a> Chris Palmer suggests that we might want to
   change the proposal such that private services must always opt-in to being
@@ -1252,16 +1327,6 @@ Content-Length: 0
   running locally is somewhat outside of any sane threat model.</p>
     <p>For the moment, let’s err on the side of treating <code>file</code> URLs as <a data-link-type="dfn" href="#private-address">private</a>, as they seem to be just as much a part of the local system
   as anything else on a loopback address.</p>
-    <h3 class="heading settled" data-level="4.2" id="too-much-access"><span class="secno">4.2. </span><span class="content">Too Much Access</span><a class="self-link" href="#too-much-access"></a></h3>
-    <p>Note that the proposed scheme requires <a data-link-type="dfn" href="#private-address">private</a> resources which can be
-  loaded by the <a data-link-type="dfn" href="#public-address">public</a> internet to make themselves CORS-same-origin with
-  the loading origin. That might lead developers to inadvertently grant too
-  much access if they set a blanket policy for all of a devices resources.
-  Instead, our hope is that developers will carefully consider whether a
-  particular resource actually needs to be exposed to the web before opting it
-  in. That is, developers ought to send CORS headers back <em>only</em> in
-  response to preflight requests for resources which it explicitly intends to
-  make available to the public internet.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="5" id="security-and-privacy-considerations"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
@@ -1279,31 +1344,15 @@ Content-Length: 0
   connection is secure. This might involve a solution along the lines of <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>, or we might end up inventing a new way of ensuring a secure
   connection to devices (perhaps the pairing ceremony hinted at above, or one of
   the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In either case,
-  consenting to access by sending proper CORS is necessary, but not sufficient.Q</p>
-    <h3 class="heading settled" data-level="5.3" id="loopback"><span class="secno">5.3. </span><span class="content">Loopback vs Intranet</span><a class="self-link" href="#loopback"></a></h3>
-    <p>Opera Presto apparently had three levels.
-  As opposed to this document’s <a data-link-type="dfn" href="#private-address">private</a>/<a data-link-type="dfn" href="#public-address">public</a> distinction, Opera
-  Presto <a href="https://code.google.com/p/chromium/issues/detail?id=378566#c6">apparently</a> had three levels: internet, intranet, and localhost. The same restrictions
-  were applied from internet to intranet as from intranet to localhost. That
-  might be a reasonable hardening measure to consider after we get the first
-  pass done.</p>
-    <h3 class="heading settled" data-level="5.4" id="dns-rebinding"><span class="secno">5.4. </span><span class="content">DNS Rebinding</span><a class="self-link" href="#dns-rebinding"></a></h3>
+  consenting to access by sending proper CORS is necessary, but not sufficient.</p>
+    <h3 class="heading settled" data-level="5.3" id="dns-rebinding"><span class="secno">5.3. </span><span class="content">DNS Rebinding</span><a class="self-link" href="#dns-rebinding"></a></h3>
     <p>The mitigation described here operates upon the IP address which the user
   agent actually connects to when loading a particular resource. This check
   MUST be performed for each new connection made, as DNS rebinding attacks
   may otherwise trick the user agent into revealing information it shouldn’t.</p>
     <p>The modifications to the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-cache">CORS-preflight cache</a> are intended to mitigate
   this attack vector.</p>
-    <h3 class="heading settled" data-level="5.5" id="scope-access"><span class="secno">5.5. </span><span class="content">Scope of Access</span><a class="self-link" href="#scope-access"></a></h3>
-    <p>The proposal in this document does not allow a device to distinguish between
-  granting an origin access to load its resources from making that origin
-  CORS-same-origin with itself. That matches the intent of a number of use cases
-  (e.g. <code>dropbox.com</code> communicating with the locally-installed Dropbox app, <code>pebble.com</code> communicating with a local watch, etc.) but might not match
-  others.</p>
-    <p>If we decide that building something with a narrower scope is reasonable, then
-  something like an <code>Access-Control-Allow-Public: true</code> HTTP response header
-  might be a reasonable approach.</p>
-    <h3 class="heading settled" data-level="5.6" id="scope-mitigation"><span class="secno">5.6. </span><span class="content">Scope of Mitigation</span><a class="self-link" href="#scope-mitigation"></a></h3>
+    <h3 class="heading settled" data-level="5.4" id="scope-mitigation"><span class="secno">5.4. </span><span class="content">Scope of Mitigation</span><a class="self-link" href="#scope-mitigation"></a></h3>
     <p>The proposal in this document merely mitigates attacks against private web
   services, it cannot fully solve them. For example, a router’s
   web-based administration interface must be designed and implemented to defend
@@ -1340,11 +1389,15 @@ Content-Length: 0
   <h2 class="no-num heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="indexlist">
+   <li><a href="#access-control-allow-network">Access-Control-Allow-Network</a><span>, in §2.1</span>
+   <li><a href="#access-control-request-network">Access-Control-Request-Network</a><span>, in §2.1</span>
+   <li><a href="#external-request">external request</a><span>, in §2</span>
    <li><a href="#private-address">private</a><span>, in §2</span>
    <li><a href="#private-address">private address</a><span>, in §2</span>
    <li><a href="#public-address">public</a><span>, in §2</span>
    <li><a href="#public-address">public address</a><span>, in §2</span>
    <li><a href="#public-internet-flag">public internet flag</a><span>, in §3.2</span>
+   <li><a href="#request-network-type">request network type</a><span>, in §3.1</span>
   </ul>
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="indexlist">
@@ -1352,22 +1405,26 @@ Content-Length: 0
     <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> defines the following terms:
     <ul>
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials">access-control-allow-credentials</a>
-     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-headers">access-control-allow-headers</a>
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">access-control-allow-methods</a>
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">access-control-allow-origin</a>
-     <li><a href="https://fetch.spec.whatwg.org/#http-access-control-max-age">access-control-max-age</a>
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-request-method">access-control-request-method</a>
+     <li><a href="https://fetch.spec.whatwg.org/#basic-fetch">basic fetch</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-cache-match">cache match</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-cors-check">cors check</a>
      <li><a href="https://fetch.spec.whatwg.org/#cors-preflight-cache">cors-preflight cache</a>
+     <li><a href="https://fetch.spec.whatwg.org/#cors-preflight-fetch">cors-preflight fetch</a>
      <li><a href="https://fetch.spec.whatwg.org/#cors-preflight-request">cors-preflight request</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>
-     <li><a href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-header-list">header list</a>
+     <li><a href="https://fetch.spec.whatwg.org/#http-fetch">http fetch</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-header-parse">parsing</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request">request</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-response-url">url</a>
-     <li><a href="https://fetch.spec.whatwg.org/#use-cors-preflight-flag">use-cors-preflight flag</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-header-list-set">set</a>
+     <li><a href="https://fetch.spec.whatwg.org/#simple-header">simple header</a>
+     <li><a href="https://fetch.spec.whatwg.org/#simple-method">simple method</a>
     </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-html">[HTML]</a> defines the following terms:
@@ -1428,18 +1485,31 @@ Content-Length: 0
    <dd>Filippo Valsorda. <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">How Plex is doing HTTPS for all its users</a>. URL: <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/</a>
    <dt id="biblio-secure-local-communication"><a class="self-link" href="#biblio-secure-local-communication"></a>[SECURE-LOCAL-COMMUNICATION]
    <dd><a href="http://www.w3.org/2015/10/28-local-minutes.html">Minutes from 'Secure communication with local network devices': TPAC, 2015</a>. URL: <a href="http://www.w3.org/2015/10/28-local-minutes.html">http://www.w3.org/2015/10/28-local-minutes.html</a>
+   <dt id="biblio-soho-pharming"><a class="self-link" href="#biblio-soho-pharming"></a>[SOHO-PHARMING]
+   <dd>Team Cymru. <a href="https://www.team-cymru.com/ReadingRoom/Whitepapers/2013/TeamCymruSOHOPharming.pdf">SOHO Pharming</a>. URL: <a href="https://www.team-cymru.com/ReadingRoom/Whitepapers/2013/TeamCymruSOHOPharming.pdf">https://www.team-cymru.com/ReadingRoom/Whitepapers/2013/TeamCymruSOHOPharming.pdf</a>
    <dt id="biblio-rfc6555"><a class="self-link" href="#biblio-rfc6555"></a>[RFC6555]
    <dd>D. Wing; A. Yourtchenko. <a href="https://tools.ietf.org/html/rfc6555">Happy Eyeballs: Success with Dual-Stack Hosts</a>. April 2012. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6555">https://tools.ietf.org/html/rfc6555</a>
+   <dt id="biblio-rfc6762"><a class="self-link" href="#biblio-rfc6762"></a>[RFC6762]
+   <dd>S. Cheshire; M. Krochmal. <a href="https://tools.ietf.org/html/rfc6762">Multicast DNS</a>. February 2013. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6762">https://tools.ietf.org/html/rfc6762</a>
   </dl>
   <h2 class="no-num heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> Spell the cache modifications out a bit more clearly.<a href="#issue-1beef013"> ↵ </a></div>
+   <div class="issue"> We should have a <code>local</code> category here, and
+  enforce the same restrictions from <code>private</code> to <code>local</code> that we do from <code>public</code> to <code>private</code>. <a href="https://github.com/mikewest/cors-rfc1918/issues/3">&lt;https://github.com/mikewest/cors-rfc1918/issues/3></a><a href="#issue-69ad818f"> ↵ </a></div>
+   <div class="issue"> When we support more than "<code>public</code>"
+  and "<code>private</code>", this will need to change accordingly. For the moment,
+  "<code>public</code>" requests are the only ones which can be "<a data-link-type="dfn" href="#external-request">external
+  requests</a>", so we can keep it simple. <a href="https://github.com/mikewest/cors-rfc1918/issues/3">&lt;https://github.com/mikewest/cors-rfc1918/issues/3></a><a href="#issue-576460f3"> ↵ </a></div>
+   <div class="issue"> When we support more than
+  "<code>public</code>" and "<code>private</code>", this will need to change accordingly.
+  For the moment, "<code>public</code>" requests are the only ones which can be
+  "<a data-link-type="dfn" href="#external-request">external requests</a>", so we can keep it simple. <a href="https://github.com/mikewest/cors-rfc1918/issues/3">&lt;https://github.com/mikewest/cors-rfc1918/issues/3></a><a href="#issue-5cf4de42"> ↵ </a></div>
    <div class="issue"> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
   Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
   on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#main-fetch">main fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
-  need to revisit all of this.<a href="#issue-90019200"> ↵ </a></div>
+  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#basic-fetch">basic fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
+  need to revisit all of this.<a href="#issue-fe5c3119"> ↵ </a></div>
    <div class="issue"> Chris Palmer suggests that we might want to
   change the proposal such that private services must always opt-in to being
   contacted by anyone other than themselves. That is, we’d drop implication

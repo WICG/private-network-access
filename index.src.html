@@ -29,13 +29,18 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: CORS check; url: concept-cors-check
     text: CORS-preflight cache; url: cors-preflight-cache
     text: CORS-preflight request; url: cors-preflight-request
+    text: CORS-preflight fetch; url: cors-preflight-fetch
     text: use-CORS-preflight flag
-    text: main fetch
+    text: http fetch
     text: obtain a connection; url: concept-connection-obtain
     text: request; url: concept-request
     text: response; url: concept-response
     text: header; url: concept-header
     text: network error; url: concept-network-error
+    text: simple method
+    text: simple header
+    text: basic fetch
+    text: cache match; url: concept-cache-match
     for: request
       text: body; url:concept-request-body
       text: cache mode; url:concept-request-cache-mode
@@ -53,6 +58,9 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
       text: type; url: concept-request-type
     for: response
       text: url; url: concept-response-url
+    for: header list
+      text: set; url: concept-header-list-set
+      text: parsing; url: concept-header-parse
 spec: URL; urlPrefix: https://url.spec.whatwg.org/
   type: dfn
     text: local scheme
@@ -101,6 +109,11 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   "SECURE-LOCAL-COMMUNICATION": {
     "href": "http://www.w3.org/2015/10/28-local-minutes.html",
     "title": "Minutes from 'Secure communication with local network devices': TPAC, 2015"
+  },
+  "SOHO-PHARMING": {
+    "href": "https://www.team-cymru.com/ReadingRoom/Whitepapers/2013/TeamCymruSOHOPharming.pdf",
+    "title": "SOHO Pharming",
+    "authors": [ "Team Cymru" ]
   }
 }
 </pre>
@@ -131,44 +144,77 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   much progress at segregating the one from the other. Websites on the public
   internet can make requests to internal devices and servers, which enable a
   number of malicious behaviors, including attacks on users' routers like those
-  documented in [[DRIVE-BY-PHARMING]] (and, more recenly, [[CSRF-EXPLOIT-KIT]]).
+  documented in [[DRIVE-BY-PHARMING]] (and, more recenly, [[SOHO-PHARMING]] and
+  [[CSRF-EXPLOIT-KIT]]).
 
   Here, we propose a mitigation against these kinds of attacks that would
   require internal devices to explicitly opt-in to requests from the public
   internet.
+
+  <h3 id="goals">Goals</h3>
+
+  The overarching goal is to prevent the user agent from inadvertantly enabling
+  attacks on devices running on a user's local intranet, or services running on
+  the user's machine directly.
+
+  In particular, we wish to mitigate the attacks on routers outlined in
+  [[SOHO-PHARMING]], which exploit the fact that user agents don't currently
+  place restrictions on access from the internet to the intranet. Note that
+  CORS in the status quo doesn't protect against these kinds of attacks, as
+  they're straightforward CSRF, relying only on <a>simple methods</a> and
+  <a>simple headers</a>. No preflight is triggered, and the attacker doesn't
+  actually care about reading the response.
 
   <h3 id="examples">Examples</h3>
 
   <h4 id="example-deny-by-default">Secure by Default</h4>
 
   <div class="example">
-    MegaCorp Inc's routers don't have any interest in requests from the public
-    internet, and wish to deny them by default. This is trivial, and doesn't
-    require any effort on their part.
+    MegaCorp Inc's routers have a fairly serious CSRF vulnerability which allows
+    their DNS settings to be altered by navigating to
+    `http://admin:admin@router.local/set_dns` and passing in various GET
+    parameters. Oh noes!
 
-    When a website on the public internet makes a request to the router, the
-    user agent determines that the requestor is <a>public</a>, and the router
-    is <a>private</a>. The UA deems the router private because the public web
-    application addresses it with a private IP address (see below), or
-    because the UA resolves the router's name to a private IP address. This
-    means that requests will trigger a <a>CORS-preflight request</a> as
-    follows:
+    Happily, MegaCorp Inc's routers don't have any interest in requests from the
+    public internet, and didn't take any special effort to enable them. This
+    greatly mitigates the scope of the vulnerability, as malicious requests will
+    generate a <a>CORS-preflight request</a>, which the router ignores. Let's
+    take a closer look:
+
+    Given `https://csrf.attack/` that contains the following HTML:
 
     <pre>
-      OPTIONS / HTTP/1.1
-      Host: 192.168.1.1
-      <a>Access-Control-Request-Method</a>: GET
-      ...
-      Origin: https://public.example.com
+      &lt;iframe href="https://admin:admin@router.local/set_dns?server1=123.123.123.123"&gt;
+      &lt;/iframe&gt;
     </pre>
 
-    The router can either respond with an error status code, or can refuse to
-    include <a>`Access-Control-Allow-Methods`</a>,
-    <a>`Access-Control-Allow-Headers`</a>,
-    <a>`Access-Control-Allow-Origin`</a>, and
-    <a>`Access-Control-Allow-Credentials`</a>
-    headers in its response. As long as those headers are not present, the
-    response will fail a <a>CORS check</a>, and the request will be blocked.
+    `router.local` will be resolved to the router's address via the magic of
+    multicast DNS [[RFC6762]], and the user agent will note it as
+    <a>private</a>. Since `csrf.attack` resolved to a <a>public address</a>, the
+    request will trigger a <a>CORS-preflight request</a>:
+
+
+    <pre>
+      OPTIONS /set_dns?... HTTP/1.1
+      Host: router.local
+      <a>Access-Control-Request-Method</a>: GET
+      <a>Access-Control-Request-Network</a>: public
+      ...
+      Origin: https://csrf.attack
+    </pre>
+
+    The router will receive this `OPTIONS` request, and has a number of possible
+    safe responses:
+
+    *   If it doesn't understand `OPTIONS` at all, it can return a `50X` error.
+        This will cause the preflight to fail, and the actual `GET` will never
+        be issued.
+
+    *   If it does understand `OPTIONS`, it can neglect to include an
+        <a>`Access-Control-Allow-Network`</a> header in its response. This will
+        cause the preflight to fail, and the actual `GET` will never be issued.
+
+    *   It can crash. Crashing is fairly safe, if inelegant.
   </div>
 
   <h4 id="example-opt-in">Opting-In</h4>
@@ -185,15 +231,16 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
     request</a>, just as above.
 
     The device can explicitly grant access by sending the right headers in its
-    response. For the above request, that might look like:
+    response to the preflight request. For the above request, that might look
+    like:
 
     <pre>
       HTTP/1.1 200 OK
       ...
       <a>Access-Control-Allow-Origin</a>: https://public.example.com
       <a>Access-Control-Allow-Methods</a>: GET
-      <a>Access-Control-Max-Age</a>: 86400
       <a>Access-Control-Allow-Credentials</a>: true
+      <a>Access-Control-Allow-Network</a>: public
       Vary: Origin
       Content-Length: 0
       ...
@@ -213,6 +260,23 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   Address" prefix (`fc00::/7`) defined in Section 3 of [[!RFC4193]] or the
   "link-local" prefix (`fe80::/10`) defined in section 2.5.6 of [[!RFC4291]],
   and a <a>public address</a> otherwise.
+
+  ISSUE(mikewest/cors-rfc1918#3): We should have a `local` category here, and
+  enforce the same restrictions from `private` to `local` that we do from
+  `public` to `private`.
+
+  A <a>request</a> (|request|) is an <dfn export>external request</dfn> if
+  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
+  <a>private address</a>, and |request|'s <a for="request">client</a>'s
+  <a>public internet flag</a> is set.
+
+  <h3 id="headers">Additional CORS Headers</h3>
+
+  The <dfn export>`Access-Control-Request-Network`</dfn> indicates the network
+  type from which a <a>request</a> is made: "`public`" or "`private`".
+
+  The <dfn export>`Access-Control-Allow-Network`</dfn> indicates that a resource
+  can be safely shared with the given network type: "`public`" or "`private`".
 </section>
 
 <!-- Big Text: Integrations -->
@@ -251,51 +315,91 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
       request. In particular, network attackers should not be able to trivially
       exploit an endpoint's consent to a non-secure origin.
 
-  To that end, the <a>main fetch</a> algorithm should be adjusted as follows:
+  To those ends:
 
-  1.  Before the current step 9 (which contains a large switch that directs the
-      request into the proper fetching algorithm), execute the following steps:
+  1.  The <a>basic fetch</a> algorithm should be adjusted to ensure that a
+      preflight is triggered for all <a>external requests</a>. This might
+      be as simple as changing the current "`http`"/"`https`" block of the
+      switch statement to the following:
 
-      9.  If |request|'s <a for="request">current url</a>'s {{URL/host}} maps to
-          a <a>private address</a>, and |request|'s
-          <a for="request">client</a>'s <a>public internet flag</a> is set:
+      1.  If |request| is an <a>external request</a>, return the result of
+          performing an <a>HTTP fetch</a> using |request| with the
+          |CORS-preflight flag| set.
+
+          Otherwise, return the result of performing an <a>HTTP fetch</a> using
+          |request| with the |CORS-preflight flag| unset.
+
+      Note: We do not set the |CORS flag| in this case, as we're dealing with
+      either a same-origin request that has been tainted by something like a
+      [[#dns-rebinding]] attack, a navigation, or a `no-cors` request. The
+      preflight alone should be enough to mitigate the risks of such requests.
+
+      Note: This will require a preflight for <em>every</em> request initiated
+      from a <a>public address</a> that targets a <a>private address</a>. This
+      includes navigations.
+
+  2.  The <a>CORS-preflight fetch</a> algorithm should be adjusted to append
+      an <a>`Access-Control-Request-Network`</a> header for preflights triggered
+      by <a>external requests</a>. For instance, the following could be executed
+      after the current step 5:
+
+      6.  If |request| is an <a>external request</a>:
 
           1.  If |request|'s <a for="request">client</a> is not a <a>secure
               context</a>, return a <a>network error</a>.
 
-          2.  Set |request|'s <a>use-CORS-preflight flag</a>.
+              Note: We don't need to touch the network to know that this request
+              will be denied.
 
-          3.  Set |request|'s <a for="request">mode</a> to "`cors`".
+          2.  <a for="header list">Set</a>
+              "<a>`Access-Control-Request-Network`</a>" to "`public`" in
+              |preflight|'s <a>header list</a>.
 
-  Note: This will require a preflight for <em>every</em> request initiated from
-  a <a>public address</a> that targets a <a>private address</a>. This includes
-  navigations.
+          ISSUE(mikewest/cors-rfc1918#3): When we support more than "`public`"
+          and "`private`", this will need to change accordingly. For the moment,
+          "`public`" requests are the only ones which can be "<a>external
+          requests</a>", so we can keep it simple.
 
-  Further, the <a>CORS check</a> algorithm should be adjusted to ensure that
-  consent is explicitly granted to the <a>public</a> origin which requested
-  the <a>private</a> preflight:
+  3.  The <a>CORS check</a> algorithm should be adjusted to ensure that consent
+      is explicitly granted via an appropriate
+      "<a>`Access-Control-Allow-Network`</a>" header in the response. For
+      instance, the following could be executed before the current step 3:
 
-  1.  After the current step 3 (which verifies that a wildcard
-      <a>`Access-Control-Allow-Origin`</a> grant cannot allow credentials),
-      execute the following step:
+      3.  If |request| is an <a>external request</a>:
 
-      4.  If |response|'s <a for="response">url</a>'s {{URL/host}} maps to
-          a <a>private address</a>, and |request|'s
-          <a for="request">client</a>'s <a>public internet flag</a> is set,
-          and |origin| is "`*`", return failure.
+          1.  If |origin| is "`*`", return failure.
 
-  Finally, to address the possibility of DNS rebinding attacks (see
-  [[#dns-rebinding]]), we need to adjust the <a>CORS-preflight cache</a> to
-  distinguish between a <a>public</a> and a <a>private</a> origin.
+          2.  Let |network| be the result of <a for="header list">parsing</a>
+              "<a>`Access-Control-Allow-Network`</a>" in |response|'s
+              <a>header list</a>.
 
-  ISSUE: Spell the cache modifications out a bit more clearly.
+          3.  If |network| is not "`public`", return failure.
+
+              ISSUE(mikewest/cors-rfc1918#3): When we support more than
+              "`public`" and "`private`", this will need to change accordingly.
+              For the moment, "`public`" requests are the only ones which can be
+              "<a>external requests</a>", so we can keep it simple.
+
+  4.  Finally, to mitigate the impact of DNS rebinding attacks (see
+      [[#dns-rebinding]]), the <a>CORS-preflight cache</a> should be adjusted to
+      distinguish between request types. For example, we could:
+
+      1.  Add "<dfn export for="cache">request network type</dfn>" to each cache
+          entry, and change the <a>cache match</a> algorithm to take it into
+          account.
+
+      2.  Populate <a>request network type</a> according to the nature of
+          |request| in steps 7.12 and 7.14 of the current <a>CORS-preflight
+          fetch</a> algorithm.
+
+      3.  Change the <a>cache match</a> algorithm to take
 
   ISSUE: [[FETCH]] does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a>obtain a connection</a>
   algorithm which is a good start. We'll need to think about things like Happy
   Eyeballs [[RFC6555]] to make sure that we perform the right checks depending
   on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a>main fetch</a>
+  assumes that connection information is available in the <a>basic fetch</a>
   algorithm. That might not be a reasonable assumption, in which case we'll
   need to revisit all of this.
 
@@ -338,18 +442,6 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   For the moment, let's err on the side of treating `file` URLs as
   <a>private</a>, as they seem to be just as much a part of the local system
   as anything else on a loopback address.
-
-  <h3 id="too-much-access">Too Much Access</h3>
-
-  Note that the proposed scheme requires <a>private</a> resources which can be
-  loaded by the <a>public</a> internet to make themselves CORS-same-origin with
-  the loading origin. That might lead developers to inadvertently grant too
-  much access if they set a blanket policy for all of a devices resources.
-  Instead, our hope is that developers will carefully consider whether a
-  particular resource actually needs to be exposed to the web before opting it
-  in. That is, developers ought to send CORS headers back <em>only</em> in
-  response to preflight requests for resources which it explicitly intends to
-  make available to the public internet.
 </section>
 
 <section>
@@ -376,17 +468,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   [[PLEX]], or we might end up inventing a new way of ensuring a secure
   connection to devices (perhaps the pairing ceremony hinted at above, or one of
   the ideas floated in [[SECURE-LOCAL-COMMUNICATION]]?). In either case,
-  consenting to access by sending proper CORS is necessary, but not sufficient.Q
-
-  <h3 id="loopback">Loopback vs Intranet</h3>
-
-  Opera Presto apparently had three levels.
-  As opposed to this document's <a>private</a>/<a>public</a> distinction, Opera
-  Presto <a href="https://code.google.com/p/chromium/issues/detail?id=378566#c6">apparently</a>
-  had three levels: internet, intranet, and localhost. The same restrictions
-  were applied from internet to intranet as from intranet to localhost. That
-  might be a reasonable hardening measure to consider after we get the first
-  pass done.
+  consenting to access by sending proper CORS is necessary, but not sufficient.
 
   <h3 id="dns-rebinding">DNS Rebinding</h3>
 
@@ -397,19 +479,6 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 
   The modifications to the <a>CORS-preflight cache</a> are intended to mitigate
   this attack vector.
-
-  <h3 id="scope-access">Scope of Access</h3>
-
-  The proposal in this document does not allow a device to distinguish between
-  granting an origin access to load its resources from making that origin
-  CORS-same-origin with itself. That matches the intent of a number of use cases
-  (e.g. `dropbox.com` communicating with the locally-installed Dropbox app,
-  `pebble.com` communicating with a local watch, etc.) but might not match
-  others.
-
-  If we decide that building something with a narrower scope is reasonable, then
-  something like an `Access-Control-Allow-Public: true` HTTP response header
-  might be a reasonable approach.
 
   <h3 id="scope-mitigation">Scope of Mitigation</h3>
 
