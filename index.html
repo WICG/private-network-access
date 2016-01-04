@@ -1392,6 +1392,12 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
   connection to devices (perhaps the pairing ceremony hinted at above, or one of
   the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In either case,
   consenting to access by sending proper CORS is necessary, but not sufficient.</p>
+    <p class="note" role="note">Note: Doing something like the proposal here would make me more comfortable
+  with relaxing the mixed content restrictions that prohibit unencrypted
+  connections to loopback addresses. Right now, those aren’t really subject to
+  the kinds of concerns that drive most of <a data-link-type="biblio" href="#biblio-mixed-content">[MIXED-CONTENT]</a>'s decisions, but
+  I’m reluctant to change Chrome’s implementation without some protection for
+  the local server and user.</p>
     <h3 class="heading settled" data-level="5.3" id="dns-rebinding"><span class="secno">5.3. </span><span class="content">DNS Rebinding</span><a class="self-link" href="#dns-rebinding"></a></h3>
     <p>The mitigation described here operates upon the IP address which the user
   agent actually connects to when loading a particular resource. This check

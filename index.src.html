@@ -532,6 +532,13 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   the ideas floated in [[SECURE-LOCAL-COMMUNICATION]]?). In either case,
   consenting to access by sending proper CORS is necessary, but not sufficient.
 
+  Note: Doing something like the proposal here would make me more comfortable
+  with relaxing the mixed content restrictions that prohibit unencrypted
+  connections to loopback addresses. Right now, those aren't really subject to
+  the kinds of concerns that drive most of [[MIXED-CONTENT]]'s decisions, but
+  I'm reluctant to change Chrome's implementation without some protection for
+  the local server and user.
+
   <h3 id="dns-rebinding">DNS Rebinding</h3>
 
   The mitigation described here operates upon the IP address which the user
