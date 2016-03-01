@@ -1291,6 +1291,7 @@ client’s internal network to the web at large.</p>
      <a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
      <ol class="toc">
       <li><a href="#headers"><span class="secno">2.1</span> <span class="content">Additional CORS Headers</span></a>
+      <li><a href="#csp"><span class="secno">2.2</span> <span class="content">The <code>force-external</code> Content Security Policy Directive</span></a>
      </ol>
     <li>
      <a href="#integrations"><span class="secno">3</span> <span class="content">Integrations</span></a>
@@ -1486,6 +1487,25 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-request-external"><code>Access-Control-Request-External</code><a class="self-link" href="#access-control-request-external"></a></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> is an <a data-link-type="dfn" href="#external-request">external request</a>.</p>
     <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-allow-external"><code>Access-Control-Allow-External</code><a class="self-link" href="#access-control-allow-external"></a></dfn> indicates that a resource
   can be safely shared with external networks.</p>
+    <h3 class="heading settled" data-level="2.2" id="csp"><span class="secno">2.2. </span><span class="content">The <code>force-external</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
+    <p>The <dfn data-dfn-type="dfn" data-noexport="" id="force-external">force-external<a class="self-link" href="#force-external"></a></dfn> directive instructs the user agent to treat a
+  document as though it was served from a <a data-link-type="dfn" href="#public-address">public address</a>, even if it was
+  actually served from a <a data-link-type="dfn" href="#private-address">private address</a>. That is, it is a mechanism by
+  which private documents may drop the privilege to contact other private
+  documents without a preflight.</p>
+    <p>The directive’s syntax is described by the following ABNF grammar:</p>
+<pre>directive-name  = "force-external-requests"
+directive-value = ""
+</pre>
+    <p>This directive has no reporting requirements; it will be ignored entirely when
+  delivered in a <code>Content-Security-Policy-Report-Only</code> header, or within
+  a <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/semantics.html#meta">meta</a></code> element.</p>
+    <p>This directive’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#directive-initialization">initialization</a> algorithm is as follows. Given a <code>Document</code> or <code>global object</code> (<var>context</var>), a <code>Response</code> (<var>response</var>), and
+  a <code>policy</code> (<var>policy</var>):</p>
+    <ol>
+     <li data-md="">
+      <p>Set <var>context</var>’s <a data-link-type="dfn" href="#public-internet-flag">public internet flag</a> if <var>policy</var>’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#policy-disposition">disposition</a> is "<code>enforce</code>".</p>
+    </ol>
    </section>
    <section>
     <h2 class="heading settled" data-level="3" id="integrations"><span class="secno">3. </span><span class="content">Integrations</span><a class="self-link" href="#integrations"></a></h2>
@@ -1673,6 +1693,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
    <li><a href="#access-control-allow-external">Access-Control-Allow-External</a><span>, in §2.1</span>
    <li><a href="#access-control-request-external">Access-Control-Request-External</a><span>, in §2.1</span>
    <li><a href="#external-request">external request</a><span>, in §2</span>
+   <li><a href="#force-external">force-external</a><span>, in §2.2</span>
    <li><a href="#internal-request">internal request</a><span>, in §2</span>
    <li><a href="#private-address">private</a><span>, in §2</span>
    <li><a href="#private-address">private address</a><span>, in §2</span>
@@ -1683,6 +1704,12 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
   </ul>
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
+   <li>
+    <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> defines the following terms:
+    <ul>
+     <li><a href="https://w3c.github.io/webappsec-csp/#policy-disposition">disposition</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#directive-initialization">initialization</a>
+    </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> defines the following terms:
     <ul>
@@ -1733,11 +1760,14 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <ul>
      <li><a href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a>
      <li><a href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">WorkerGlobalScope</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/semantics.html#meta">meta</a>
     </ul>
   </ul>
   <h2 class="no-num heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
+   <dt id="biblio-csp"><a class="self-link" href="#biblio-csp"></a>[CSP]
+   <dd>Brandon Sterne; Adam Barth. <a href="http://www.w3.org/TR/CSP1/">Content Security Policy 1.0</a>. 19 February 2015. NOTE. URL: <a href="http://www.w3.org/TR/CSP1/">http://www.w3.org/TR/CSP1/</a>
    <dt id="biblio-fetch"><a class="self-link" href="#biblio-fetch"></a>[FETCH]
    <dd>Anne van Kesteren. <a href="https://fetch.spec.whatwg.org/">Fetch Standard</a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>
    <dt id="biblio-html"><a class="self-link" href="#biblio-html"></a>[HTML]

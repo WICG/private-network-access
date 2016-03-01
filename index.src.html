@@ -83,6 +83,10 @@ spec: RFC1918; urlPrefix: https://tools.ietf.org/html/rfc1918
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   type: interface
     text: Document; url: document
+spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
+  type: dfn
+    text: initialization; url: directive-initialization
+    text: disposition; url: policy-disposition
 </pre>
 <pre class="biblio">
 {
@@ -356,6 +360,32 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 
   The <dfn export>`Access-Control-Allow-External`</dfn> indicates that a resource
   can be safely shared with external networks.
+
+  <h3 id="csp">The `force-external` Content Security Policy Directive</h3>
+
+  The <dfn>force-external</dfn> directive instructs the user agent to treat a
+  document as though it was served from a <a>public address</a>, even if it was
+  actually served from a <a>private address</a>. That is, it is a mechanism by
+  which private documents may drop the privilege to contact other private
+  documents without a preflight.
+
+  The directive's syntax is described by the following ABNF grammar:
+
+  <pre dfn-type="grammar" link-type="grammar">
+    directive-name  = "force-external-requests"
+    directive-value = ""
+  </pre>
+
+  This directive has no reporting requirements; it will be ignored entirely when
+  delivered in a `Content-Security-Policy-Report-Only` header, or within
+  a <{meta}> element.
+
+  This directive's <a>initialization</a> algorithm is as follows. Given a
+  `Document` or `global object` (|context|), a `Response` (|response|), and
+  a `policy` (|policy|):
+
+  1.  Set |context|'s <a>public internet flag</a> if |policy|'s
+      <a>disposition</a> is "`enforce`".
 </section>
 
 <!-- Big Text: Integrations -->
