@@ -114,6 +114,15 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
     "href": "https://www.team-cymru.com/ReadingRoom/Whitepapers/2013/TeamCymruSOHOPharming.pdf",
     "title": "SOHO Pharming",
     "authors": [ "Team Cymru" ]
+  },
+
+  "AVASTIUM": {
+    "href": "https://code.google.com/p/google-security-research/issues/detail?id=679",
+    "title": "Avast: A web-accessible RPC endpoint can launch 'SafeZone' (also called Avastium), a Chromium fork with critical security checks removed."
+  },
+  "TREND-MICRO": {
+    "href": "https://code.google.com/p/google-security-research/issues/detail?id=693",
+    "title": "TrendMicro node.js HTTP server listening on localhost can execute commands"
   }
 }
 </pre>
@@ -155,15 +164,18 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 
   The overarching goal is to prevent the user agent from inadvertantly enabling
   attacks on devices running on a user's local intranet, or services running on
-  the user's machine directly.
+  the user's machine directly. For example, we wish to mitigate attacks on:
 
-  In particular, we wish to mitigate the attacks on routers outlined in
-  [[SOHO-PHARMING]], which exploit the fact that user agents don't currently
-  place restrictions on access from the internet to the intranet. Note that
-  CORS in the status quo doesn't protect against these kinds of attacks, as
-  they're straightforward CSRF, relying only on <a>simple methods</a> and
-  <a>simple headers</a>. No preflight is triggered, and the attacker doesn't
-  actually care about reading the response.
+  *   Users' routers, as outlined in [[SOHO-PHARMING]]. Note that status quo
+      CORS protections don't protect against the kinds of attacks discussed here
+      as they rely only on <a>simple methods</a> and <a>simple headers</a>. No
+      preflight is triggered, and the attacker doesn't actually care about
+      reading the response, as the request itself is the CSRF attack.
+
+  *   Software running a web interface on a user's loopback address. For better
+      or worse, this is becoming a common deployment mechanism for all manner of
+      applications, and often assumes protections that simply don't exist (see
+      [[AVASTIUM]] and [[TREND-MICRO]] for recent examples).
 
   <h3 id="examples">Examples</h3>
 
