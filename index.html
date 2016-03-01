@@ -1291,7 +1291,7 @@ client’s internal network to the web at large.</p>
      <a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
      <ol class="toc">
       <li><a href="#headers"><span class="secno">2.1</span> <span class="content">Additional CORS Headers</span></a>
-      <li><a href="#csp"><span class="secno">2.2</span> <span class="content">The <code>force-external</code> Content Security Policy Directive</span></a>
+      <li><a href="#csp"><span class="secno">2.2</span> <span class="content">The <code>force-external-requests</code> Content Security Policy Directive</span></a>
      </ol>
     <li>
      <a href="#integrations"><span class="secno">3</span> <span class="content">Integrations</span></a>
@@ -1313,7 +1313,8 @@ client’s internal network to the web at large.</p>
       <li><a href="#dns-rebinding"><span class="secno">5.3</span> <span class="content">DNS Rebinding</span></a>
       <li><a href="#scope-mitigation"><span class="secno">5.4</span> <span class="content">Scope of Mitigation</span></a>
      </ol>
-    <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
+    <li><a href="#iana-considerations"><span class="secno">6</span> <span class="content">IANA Considerations</span></a>
+    <li><a href="#acknowledgements"><span class="secno">7</span> <span class="content">Acknowledgements</span></a>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
      <ol class="toc">
@@ -1487,12 +1488,12 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-request-external"><code>Access-Control-Request-External</code><a class="self-link" href="#access-control-request-external"></a></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> is an <a data-link-type="dfn" href="#external-request">external request</a>.</p>
     <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-allow-external"><code>Access-Control-Allow-External</code><a class="self-link" href="#access-control-allow-external"></a></dfn> indicates that a resource
   can be safely shared with external networks.</p>
-    <h3 class="heading settled" data-level="2.2" id="csp"><span class="secno">2.2. </span><span class="content">The <code>force-external</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
-    <p>The <dfn data-dfn-type="dfn" data-noexport="" id="force-external">force-external<a class="self-link" href="#force-external"></a></dfn> directive instructs the user agent to treat a
-  document as though it was served from a <a data-link-type="dfn" href="#public-address">public address</a>, even if it was
-  actually served from a <a data-link-type="dfn" href="#private-address">private address</a>. That is, it is a mechanism by
-  which private documents may drop the privilege to contact other private
-  documents without a preflight.</p>
+    <h3 class="heading settled" data-level="2.2" id="csp"><span class="secno">2.2. </span><span class="content">The <code>force-external-requests</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
+    <p>The <dfn data-dfn-type="dfn" data-noexport="" id="force-external-requests">force-external-requests<a class="self-link" href="#force-external-requests"></a></dfn> directive instructs the user agent to
+  treat a document as though it was served from a <a data-link-type="dfn" href="#public-address">public address</a>, even if
+  it was actually served from a <a data-link-type="dfn" href="#private-address">private address</a>. That is, it is a
+  mechanism by which private documents may drop the privilege to contact other
+  private documents without a preflight.</p>
     <p>The directive’s syntax is described by the following ABNF grammar:</p>
 <pre>directive-name  = "force-external-requests"
 directive-value = ""
@@ -1679,7 +1680,18 @@ directive-value = ""
   implement this mitigation.</p>
    </section>
    <section>
-    <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
+    <h2 class="heading settled" data-level="6" id="iana-considerations"><span class="secno">6. </span><span class="content">IANA Considerations</span><a class="self-link" href="#iana-considerations"></a></h2>
+    <p>The Content Security Policy Directive registry should be updated with the
+  following directives and references <a data-link-type="biblio" href="#biblio-rfc7762">[RFC7762]</a>:</p>
+    <dl>
+     <dt data-md="">
+      <p><a data-link-type="dfn" href="#force-external-requests"><code>force-external-requests</code></a></p>
+     <dd data-md="">
+      <p>This document (see <a href="#csp">§2.2 The force-external-requests Content Security Policy Directive</a>)</p>
+    </dl>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="7" id="acknowledgements"><span class="secno">7. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
     <p>Conversations with Ryan Sleevi, Chris Palmer, and Justin Schuh helped flesh
   out the contours of this proposal. Hopefully they won’t hate it too much.
   Mathias Karlsson has the dubious honor of being the <a href="https://twitter.com/avlidienbrunn/status/680736829679755265">straw
@@ -1693,7 +1705,7 @@ directive-value = ""
    <li><a href="#access-control-allow-external">Access-Control-Allow-External</a><span>, in §2.1</span>
    <li><a href="#access-control-request-external">Access-Control-Request-External</a><span>, in §2.1</span>
    <li><a href="#external-request">external request</a><span>, in §2</span>
-   <li><a href="#force-external">force-external</a><span>, in §2.2</span>
+   <li><a href="#force-external-requests">force-external-requests</a><span>, in §2.2</span>
    <li><a href="#internal-request">internal request</a><span>, in §2</span>
    <li><a href="#private-address">private</a><span>, in §2</span>
    <li><a href="#private-address">private address</a><span>, in §2</span>
@@ -1782,6 +1794,8 @@ directive-value = ""
    <dd>R. Hinden; B. Haberman. <a href="https://tools.ietf.org/html/rfc4193">Unique Local IPv6 Unicast Addresses</a>. October 2005. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc4193">https://tools.ietf.org/html/rfc4193</a>
    <dt id="biblio-rfc4291"><a class="self-link" href="#biblio-rfc4291"></a>[RFC4291]
    <dd>R. Hinden; S. Deering. <a href="https://tools.ietf.org/html/rfc4291">IP Version 6 Addressing Architecture</a>. February 2006. Draft Standard. URL: <a href="https://tools.ietf.org/html/rfc4291">https://tools.ietf.org/html/rfc4291</a>
+   <dt id="biblio-rfc7762"><a class="self-link" href="#biblio-rfc7762"></a>[RFC7762]
+   <dd>M. West. <a href="https://tools.ietf.org/html/rfc7762">Initial Assignment for the Content Security Policy Directives Registry</a>. January 2016. Informational. URL: <a href="https://tools.ietf.org/html/rfc7762">https://tools.ietf.org/html/rfc7762</a>
    <dt id="biblio-url"><a class="self-link" href="#biblio-url"></a>[URL]
    <dd>Anne van Kesteren; Sam Ruby. <a href="http://www.w3.org/TR/url-1/">URL</a>. 9 December 2014. WD. URL: <a href="http://www.w3.org/TR/url-1/">http://www.w3.org/TR/url-1/</a>
   </dl>
