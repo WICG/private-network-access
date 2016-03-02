@@ -1246,7 +1246,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">CORS and RFC1918</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2016-03-01">1 March 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2016-03-02">2 March 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1258,7 +1258,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 1 March 2016,
+In addition, as of 2 March 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1291,7 +1291,7 @@ client’s internal network to the web at large.</p>
      <a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
      <ol class="toc">
       <li><a href="#headers"><span class="secno">2.1</span> <span class="content">Additional CORS Headers</span></a>
-      <li><a href="#csp"><span class="secno">2.2</span> <span class="content">The <code>force-external-requests</code> Content Security Policy Directive</span></a>
+      <li><a href="#csp"><span class="secno">2.2</span> <span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span></a>
      </ol>
     <li>
      <a href="#integrations"><span class="secno">3</span> <span class="content">Integrations</span></a>
@@ -1488,14 +1488,14 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-request-external"><code>Access-Control-Request-External</code><a class="self-link" href="#access-control-request-external"></a></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> is an <a data-link-type="dfn" href="#external-request">external request</a>.</p>
     <p>The <dfn data-dfn-type="dfn" data-export="" id="access-control-allow-external"><code>Access-Control-Allow-External</code><a class="self-link" href="#access-control-allow-external"></a></dfn> indicates that a resource
   can be safely shared with external networks.</p>
-    <h3 class="heading settled" data-level="2.2" id="csp"><span class="secno">2.2. </span><span class="content">The <code>force-external-requests</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
-    <p>The <dfn data-dfn-type="dfn" data-noexport="" id="force-external-requests">force-external-requests<a class="self-link" href="#force-external-requests"></a></dfn> directive instructs the user agent to
+    <h3 class="heading settled" data-level="2.2" id="csp"><span class="secno">2.2. </span><span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
+    <p>The <dfn data-dfn-type="dfn" data-noexport="" id="treat-as-public-address">treat-as-public-address<a class="self-link" href="#treat-as-public-address"></a></dfn> directive instructs the user agent to
   treat a document as though it was served from a <a data-link-type="dfn" href="#public-address">public address</a>, even if
   it was actually served from a <a data-link-type="dfn" href="#private-address">private address</a>. That is, it is a
   mechanism by which private documents may drop the privilege to contact other
   private documents without a preflight.</p>
     <p>The directive’s syntax is described by the following ABNF grammar:</p>
-<pre>directive-name  = "force-external-requests"
+<pre>directive-name  = "treat-as-public-address"
 directive-value = ""
 </pre>
     <p>This directive has no reporting requirements; it will be ignored entirely when
@@ -1685,9 +1685,9 @@ directive-value = ""
   following directives and references <a data-link-type="biblio" href="#biblio-rfc7762">[RFC7762]</a>:</p>
     <dl>
      <dt data-md="">
-      <p><a data-link-type="dfn" href="#force-external-requests"><code>force-external-requests</code></a></p>
+      <p><a data-link-type="dfn" href="#treat-as-public-address"><code>treat-as-public-address</code></a></p>
      <dd data-md="">
-      <p>This document (see <a href="#csp">§2.2 The force-external-requests Content Security Policy Directive</a>)</p>
+      <p>This document (see <a href="#csp">§2.2 The treat-as-public-address Content Security Policy Directive</a>)</p>
     </dl>
    </section>
    <section>
@@ -1705,7 +1705,6 @@ directive-value = ""
    <li><a href="#access-control-allow-external">Access-Control-Allow-External</a><span>, in §2.1</span>
    <li><a href="#access-control-request-external">Access-Control-Request-External</a><span>, in §2.1</span>
    <li><a href="#external-request">external request</a><span>, in §2</span>
-   <li><a href="#force-external-requests">force-external-requests</a><span>, in §2.2</span>
    <li><a href="#internal-request">internal request</a><span>, in §2</span>
    <li><a href="#private-address">private</a><span>, in §2</span>
    <li><a href="#private-address">private address</a><span>, in §2</span>
@@ -1713,6 +1712,7 @@ directive-value = ""
    <li><a href="#public-address">public address</a><span>, in §2</span>
    <li><a href="#public-internet-flag">public internet flag</a><span>, in §3.3</span>
    <li><a href="#cache-request-network-type">request network type</a><span>, in §3.1</span>
+   <li><a href="#treat-as-public-address">treat-as-public-address</a><span>, in §2.2</span>
   </ul>
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">

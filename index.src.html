@@ -361,9 +361,9 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   The <dfn export>`Access-Control-Allow-External`</dfn> indicates that a resource
   can be safely shared with external networks.
 
-  <h3 id="csp">The `force-external-requests` Content Security Policy Directive</h3>
+  <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
-  The <dfn>force-external-requests</dfn> directive instructs the user agent to
+  The <dfn>treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a <a>public address</a>, even if
   it was actually served from a <a>private address</a>. That is, it is a
   mechanism by which private documents may drop the privilege to contact other
@@ -372,7 +372,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   The directive's syntax is described by the following ABNF grammar:
 
   <pre dfn-type="grammar" link-type="grammar">
-    directive-name  = "force-external-requests"
+    directive-name  = "treat-as-public-address"
     directive-value = ""
   </pre>
 
@@ -609,7 +609,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   The Content Security Policy Directive registry should be updated with the
   following directives and references [[!RFC7762]]:
 
-  :   <a>`force-external-requests`</a>
+  :   <a>`treat-as-public-address`</a>
   ::  This document (see [[#csp]])
 </section>
 
