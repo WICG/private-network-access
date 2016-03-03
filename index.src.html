@@ -398,12 +398,12 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   <h3 id="feature-detect">Feature Detection</h3>
   
   To determine the address space in which a context finds itself, a simple enum
-  value is added to the global object:
+  value is added to {{Document}} and {{WorkerGlobalScope}}:
 
   <pre class="idl">
     enum AddressSpace { "local", "private", "public" };
 
-    partial interface Window {
+    partial interface Document {
       readonly attribute AddressSpace addressSpace;
     };
 
@@ -412,10 +412,8 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
     };
   </pre>
 
-  Both {{Window}}'s {{Window/addressSpace}} and {{WorkerGlobalScope}}'s
-  {{WorkerGlobalScope/addressSpace}} attributes' getters return the value
-  of the corresponding {{Document}} or {{WorkerGlobalScope}}'s <a>address
-  space</a> property.
+  Both attributes' getters return the value of the corresponding {{Document}} or
+  {{WorkerGlobalScope}}'s <a>address space</a> property.
 </section>
 
 <!-- Big Text: Integrations -->
