@@ -335,23 +335,31 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
 
   An IPv4 address is a <dfn export local-lt="private">private address</dfn> if
   it matches the <a>private address space</a> defined in Section 3 of
-  [[!RFC1918]], and a <dfn export local-lt="public">public address</dfn>
+  [[!RFC1918]], a <dfn export local-lt="local">local address</dfn> if it matches
+  the "loopback" space (`127.0.0.0/8`) defined in section 3.2.1.3 of
+  [[!RFC1122]] or the "link-local" space (`169.254.0.0/16`) defined in
+  [[!RFC3927]], and a <dfn export local-lt="public">public address</dfn>
   otherwise.
 
-  An IPv6 address is a <a>private address</a> if it matches the "Unique Local
+  An IPv6 address is a <a>local address</a> if it matches the "Unique Local
   Address" prefix (`fc00::/7`) defined in Section 3 of [[!RFC4193]] or the
   "link-local" prefix (`fe80::/10`) defined in section 2.5.6 of [[!RFC4291]],
   and a <a>public address</a> otherwise.
 
-  ISSUE(mikewest/cors-rfc1918#3): We should have a `local` category here, and
-  enforce the same restrictions from `private` to `local` that we do from
-  `public` to `private`.
+  ISSUE(mikewest/cors-rfc1918#3): What does "private" mean in the context of
+  IPv6?
 
   A <a>request</a> (|request|) is an <dfn export>external request</dfn> if
-  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
-  <a>private address</a>, and |request|'s <a for="request">client</a>'s
-  <a>public internet flag</a> is set, and an <dfn export>internal request</dfn>
-  otherwise.
+  any of the following are true, and an <dfn export>internal request</dfn>
+  otherwise:
+
+  1.  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
+      <a>private address</a>, and |request|'s <a for="request">client</a>'s
+      <a>address space</a> is "`public`".
+      
+  1.  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
+      <a>local address</a>, and |request|'s <a for="request">client</a>'s
+      <a>address space</a> is either "`public`" or "`private`".
 
   <h3 id="headers">Additional CORS Headers</h3>
 
@@ -384,8 +392,30 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   `Document` or `global object` (|context|), a `Response` (|response|), and
   a `policy` (|policy|):
 
-  1.  Set |context|'s <a>public internet flag</a> if |policy|'s
+  1.  Set |context|'s <a>address space</a> to "`public`" if |policy|'s
       <a>disposition</a> is "`enforce`".
+
+  <h3 id="feature-detect">Feature Detection</h3>
+  
+  To determine the address space in which a context finds itself, a simple enum
+  value is added to the global object:
+
+  <pre class="idl">
+    enum AddressSpace { "local", "private", "public" };
+
+    partial interface Window {
+      readonly attribute AddressSpace addressSpace;
+    };
+
+    partial interface WorkerGlobalScope {
+      readonly attribute AddressSpace addressSpace;
+    };
+  </pre>
+
+  Both {{Window}}'s {{Window/addressSpace}} and {{WorkerGlobalScope}}'s
+  {{WorkerGlobalScope/addressSpace}} attributes' getters return the value
+  of the corresponding {{Document}} or {{WorkerGlobalScope}}'s <a>address
+  space</a> property.
 </section>
 
 <!-- Big Text: Integrations -->
@@ -404,10 +434,10 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   This document proposes a few changes to Fetch, with the following
   implications:
 
-  1.  <a>Requests</a> whose <a for="request">client</a>'s <a>public internet
-      flag</a> is not set are unchanged from status quo. They may continue to
-      make requests to <a>public</a> and <a>private</a> addresses as they do
-      today.
+  1.  <a>Requests</a> whose <a for="request">client</a>'s <a>address space</a>
+      is "`local`" are unchanged from status quo. They may continue to make
+      requests to <a>public</a>, <a>private</a>, and <a>local</a> addresses as
+      they do today.
 
       ISSUE(mikewest/cors-rfc1918#1): Chris Palmer suggests that we might want
       to change the proposal such that private services must always opt-in to
@@ -415,20 +445,27 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
       preflight for all cross-origin requests to private servers, whether they
       come from public addresses, or private addresses.
 
-  2.  <a>Requests</a> whose <a for="request">client</a>'s <a>public internet
-      flag</a> is set are allowed to fetch resources from <a>private
-      addresses</a> if and only if the <a for="request">client</a> is a
+  2.  <a>Requests</a> whose <a for="request">client</a>'s <a>address space</a>
+      is "`private`" are allowed to fetch resources from <a>private</a> and
+      <a>public</a> addresses as they do today, but may only request
+      <a>local</a> resources if their <a for="request">client</a> is a
       <a>secure context</a> <em>and</em> a <a>CORS-preflight request</a> to the
       target origin passes a <a>CORS check</a>.
 
-      Note: UAs must not allow <a lt="secure context">non-secure</a>
-      <a>public</a> contexts to request resources from <a>private
-      addresses</a>, even if the private server
-      would opt-in to such a request via a preflight. Making requests to
-      <a>private</a> resources presents risks which are mitigated by ensuring
-      the integrity of the <a for="request">client</a> which initiates the
-      request. In particular, network attackers should not be able to trivially
-      exploit an endpoint's consent to a non-secure origin.
+  3.  <a>Requests</a> whose <a for="request">client</a>'s <a>address space</a>
+      is "`public`" are allowed to fetch resources from <a>public</a> addresses
+      as they do today, but may only request <a>private</a> and <a>local</a>
+      resources if their <a for="request">client</a> is a <a>secure context</a>
+      <em>and</em> a <a>CORS-preflight request</a> to the target origin passes
+      a <a>CORS check</a>.
+
+  Note: UAs must not allow <a lt="secure context">non-secure</a>
+  <a>public</a> contexts to request resources from <a>private
+  addresses</a>, even if the private server would opt-in to such a request via
+  a preflight. Making requests to <a>private</a> resources presents risks which
+  are mitigated by ensuring the integrity of the <a for="request">client</a>
+  which initiates the request. In particular, network attackers should not be
+  able to trivially exploit an endpoint's consent to a non-secure origin.
 
   To those ends:
 
@@ -515,7 +552,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
 
   <h3 id="integration-html">Integration with HTML</h3>
 
-  To support the checks in [[FETCH]], we store a <dfn>public internet flag</dfn>
+  To support the checks in [[FETCH]], we store an <dfn>address space</dfn>
   on both {{Document}} and {{WorkerGlobalScope}} objects, which is set if the
   {{Document}} or {{Worker}} was initialized via a resource which was delivered
   from a <a>public address</a>, and unset otherwise.
@@ -523,13 +560,13 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   <div class="example">
     Assuming that `example.com` resolves to a <a>public address</a> (say,
     `123.123.123.123`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its <a>public internet
-    flag</a> set.
+    `https://example.com/document.html` will have its <a>address space</a>
+    set to "`public`".
 
-    If, on the other hand, `example.com` resolved to a <a>private address</a>
+    If, on the other hand, `example.com` resolved to a <a>local address</a>
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will not have its <a>public internet
-    flag</a> set.
+    `https://example.com/document.html` will have its <a>address space</a>
+    set to "`local`".
   </div>
 </section>
 
