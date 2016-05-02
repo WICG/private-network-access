@@ -551,9 +551,21 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   <h3 id="integration-html">Integration with HTML</h3>
 
   To support the checks in [[FETCH]], we store an <dfn>address space</dfn>
-  on both {{Document}} and {{WorkerGlobalScope}} objects, which is set if the
-  {{Document}} or {{Worker}} was initialized via a resource which was delivered
-  from a <a>public address</a>, and unset otherwise.
+  on both {{Document}} and {{WorkerGlobalScope}} objects, which is set as
+  follows during {{Document}} and {{Worker}} initialization:
+  
+  1.  Set the <a>address space</a> to "`local`" if the the resource used
+      to instantiate the {{Document}} or {{Worker}} was was delivered
+      from a <a>local address</a>, or from a URL whose <a for="url">scheme</a>
+      is "`file`" (see [[#file-url]]).
+
+  2.  Set the <a>address space</a> to "`private`" if the the resource used
+      to instantiate the {{Document}} or {{Worker}} was was delivered
+      from a <a>private address</a>.
+
+  3.  Set the <a>address space</a> to "`public`" if the the resource used
+      to instantiate the {{Document}} or {{Worker}} was was delivered
+      from a <a>public address</a>.
 
   <div class="example">
     Assuming that `example.com` resolves to a <a>public address</a> (say,
@@ -571,16 +583,18 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
 <section>
   <h2 id="implementation-considerations">Implementation Considerations</h2>
 
-  <h3 id="file-url">`file` URLs</h3>
+  <h3 id="file-url">Where do `file` URLs fit?</h3>
 
   It isn't entirely clear how `file` URLs fit into the public/private scheme
   outlined above. It would be nice to prevent folks from harming themselves by
   opening a malicious HTML file locally, on the one hand, but on the other, code
   running locally is somewhat outside of any sane threat model.
 
-  For the moment, let's err on the side of treating `file` URLs as
-  <a>private</a>, as they seem to be just as much a part of the local system
-  as anything else on a loopback address.
+  For the moment, let's err on the side of treating `file` URLs as <a>local</a>,
+  as they seem to be just as much a part of the local system as anything else on
+  a loopback address.
+
+  ISSUE: Reevaluate this after implementation experience.
 </section>
 
 <section>
