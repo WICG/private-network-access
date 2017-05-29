@@ -39,7 +39,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: network error; url: concept-network-error
     text: simple method
     text: simple header
-    text: basic fetch
+    text: scheme fetch
     text: cache match; url: concept-cache-match
     for: request
       text: body; url:concept-request-body
@@ -467,9 +467,9 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
 
   To those ends:
 
-  1.  The <a>basic fetch</a> algorithm should be adjusted to ensure that a
+  1.  The <a>scheme fetch</a> algorithm should be adjusted to ensure that a
       preflight is triggered for all <a>external requests</a>. This might
-      be as simple as changing the current "`http`"/"`https`" block of the
+      be as simple as changing the current "HTTP(S) scheme" block of the
       switch statement to the following:
 
       1.  If |request| is an <a>external request</a>, return the result of
@@ -537,7 +537,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   algorithm which is a good start. We'll need to think about things like Happy
   Eyeballs [[RFC6555]] to make sure that we perform the right checks depending
   on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a>basic fetch</a>
+  assumes that connection information is available in the <a>scheme fetch</a>
   algorithm. That might not be a reasonable assumption, in which case we'll
   need to revisit all of this.
 
