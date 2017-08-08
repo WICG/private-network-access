@@ -14,79 +14,18 @@ Boilerplate: omit conformance, omit feedback-header
 Markup Shorthands: css off, markdown on
 </pre>
 <pre class="anchors">
-spec: SECURE-CONTEXTS; urlPrefix: https://w3c.github.io/webappsec-secure-contexts/
-  type: dfn
-    text: secure context
-spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
-  type: dfn
-    text: Access-Control-Allow-Credentials; url: http-access-control-allow-credentials
-    text: Access-Control-Allow-Headers; url: http-access-control-allow-headers
-    text: Access-Control-Allow-Origin; url: http-access-control-allow-origin
-    text: Access-Control-Allow-methods; url: http-access-control-allow-methods
-    text: Access-Control-Max-Age; url: http-access-control-max-age
-    text: Access-Control-Request-Method; url: http-access-control-request-method
-    text: Access-Control-Request-Headers; url: http-access-control-request-headers
-    text: CORS check; url: concept-cors-check
-    text: CORS-preflight cache; url: cors-preflight-cache
-    text: CORS-preflight request; url: cors-preflight-request
-    text: CORS-preflight fetch; url: cors-preflight-fetch
-    text: use-CORS-preflight flag
-    text: http fetch
-    text: obtain a connection; url: concept-connection-obtain
-    text: request; url: concept-request
-    text: response; url: concept-response
-    text: header; url: concept-header
-    text: network error; url: concept-network-error
-    text: simple method
-    text: simple header
-    text: scheme fetch
-    text: cache match; url: concept-cache-match
-    for: request
-      text: body; url:concept-request-body
-      text: cache mode; url:concept-request-cache-mode
-      text: client; url: concept-request-client
-      text: credentials mode; url:concept-request-credentials-mode
-      text: current url; url: concept-request-current-url
-      text: destination;  url: concept-request-destination
-      text: global object; url: concept-request-global-object
-      text: header list; url: concept-request-header-list
-      text: initiator; url: concept-request-initiator
-      text: method; url:concept-request-method
-      text: origin; url:concept-request-origin
-      text: redirect mode; url:concept-request-redirect-mode
-      text: target browsing context; url: concept-request-target-browsing-context
-      text: type; url: concept-request-type
-    for: response
-      text: url; url: concept-response-url
-    for: header list
-      text: set; url: concept-header-list-set
-      text: parsing; url: concept-header-parse
-spec: URL; urlPrefix: https://url.spec.whatwg.org/
-  type: dfn
-    text: local scheme
-    text: default port
-    text: IPv6 address; url: concept-ipv6
-    text: percent decode
-    text: URL parser; url: concept-url-parser
-    text: URL serializer; url: concept-url-serializer
-  type: attribute
-    text: host; for: URL; url: concept-url-host
-    text: port; for: URL; url: concept-url-port
-    text: path; for: URL; url: concept-url-path
-    text: origin; for: URL; url: concept-url-origin
-    text: scheme; for: URL; url: concept-url-scheme
-  type: interface;
-    text: URL
 spec: RFC1918; urlPrefix: https://tools.ietf.org/html/rfc1918
   type: dfn
     text: private address space; url: section-3
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   type: interface
-    text: Document; url: document
-spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
-  type: dfn
-    text: initialization; url: directive-initialization
-    text: disposition; url: policy-disposition
+    text: Document; url: document;
+</pre>
+<pre class="link-defaults">
+spec:fetch; type:dfn; for:/; text:request
+spec:fetch; type:dfn; for:/; text:cors-preflight fetch
+spec:fetch; type:dfn; for:/; text:cors-preflight cache
+spec:fetch; type:dfn; for:cache; text:cache match
 </pre>
 <pre class="biblio">
 {
@@ -172,7 +111,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
 
   *   Users' routers, as outlined in [[SOHO-PHARMING]]. Note that status quo
       CORS protections don't protect against the kinds of attacks discussed here
-      as they rely only on <a>simple methods</a> and <a>simple headers</a>. No
+      as they rely only on <a>CORS-safelisted methods</a> and <a>CORS-safelisted request-headers</a>. No
       preflight is triggered, and the attacker doesn't actually care about
       reading the response, as the request itself is the CSRF attack.
 
@@ -213,8 +152,8 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
     <pre>
       OPTIONS /set_dns?... HTTP/1.1
       Host: router.local
-      <a>Access-Control-Request-Method</a>: GET
-      <a>Access-Control-Request-External</a>: true
+      <a http-header>Access-Control-Request-Method</a>: GET
+      <a http-header>Access-Control-Request-External</a>: true
       ...
       Origin: https://csrf.attack
     </pre>
@@ -227,7 +166,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
         be issued.
 
     *   If it does understand `OPTIONS`, it can neglect to include an
-        <a>`Access-Control-Allow-External`</a> header in its response. This will
+        <a http-header>`Access-Control-Allow-External`</a> header in its response. This will
         cause the preflight to fail, and the actual `GET` will never be issued.
 
     *   It can crash. Crashing is fairly safe, if inelegant.
@@ -253,10 +192,10 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
     <pre>
       HTTP/1.1 200 OK
       ...
-      <a>Access-Control-Allow-Origin</a>: https://public.example.com
-      <a>Access-Control-Allow-Methods</a>: GET
-      <a>Access-Control-Allow-Credentials</a>: true
-      <a>Access-Control-Allow-External</a>: true
+      <a http-header>Access-Control-Allow-Origin</a>: https://public.example.com
+      <a http-header>Access-Control-Allow-Methods</a>: GET
+      <a http-header>Access-Control-Allow-Credentials</a>: true
+      <a http-header>Access-Control-Allow-External</a>: true
       Vary: Origin
       Content-Length: 0
       ...
@@ -278,8 +217,8 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
     <pre>
       OPTIONS /short-links-are-short-after-shortening HTTP/1.1
       Host: go
-      <a>Access-Control-Request-Method</a>: GET
-      <a>Access-Control-Request-External</a>: true
+      <a http-header>Access-Control-Request-Method</a>: GET
+      <a http-header>Access-Control-Request-External</a>: true
       ...
       Origin: https://mail.mega.corp
     </pre>
@@ -290,10 +229,10 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
     <pre>
       HTTP/1.1 200 OK
       ...
-      <a>Access-Control-Allow-Origin</a>: https://mail.mega.corp
-      <a>Access-Control-Allow-Methods</a>: GET
-      <a>Access-Control-Allow-Credentials</a>: true
-      <a>Access-Control-Allow-External</a>: true
+      <a http-header>Access-Control-Allow-Origin</a>: https://mail.mega.corp
+      <a http-header>Access-Control-Allow-Methods</a>: GET
+      <a http-header>Access-Control-Allow-Credentials</a>: true
+      <a http-header>Access-Control-Allow-External</a>: true
       Vary: Origin
       Content-Length: 0
       ...
@@ -315,7 +254,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
       // Request:
       GET /short-links-are-short-after-shortening HTTP/1.1
       Host: go
-      <a>Access-Control-Request-External</a>: true
+      <a http-header>Access-Control-Request-External</a>: true
       ...
       Origin: https://mail.mega.corp
 
@@ -363,10 +302,10 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
 
   <h3 id="headers">Additional CORS Headers</h3>
 
-  The <dfn export>`Access-Control-Request-External`</dfn> indicates that the
+  The <dfn export http-header>`Access-Control-Request-External`</dfn> indicates that the
   <a>request</a> is an <a>external request</a>.
 
-  The <dfn export>`Access-Control-Allow-External`</dfn> indicates that a resource
+  The <dfn export http-header>`Access-Control-Allow-External`</dfn> indicates that a resource
   can be safely shared with external networks.
 
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
@@ -393,7 +332,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   a `policy` (|policy|):
 
   1.  Set |context|'s <a>address space</a> to "`public`" if |policy|'s
-      <a>disposition</a> is "`enforce`".
+      <a for="policy">disposition</a> is "`enforce`".
 
   <h3 id="feature-detect">Feature Detection</h3>
   
@@ -448,14 +387,13 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
       <a>public</a> addresses as they do today, but may only request
       <a>local</a> resources if their <a for="request">client</a> is a
       <a>secure context</a> <em>and</em> a <a>CORS-preflight request</a> to the
-      target origin passes a <a>CORS check</a>.
+      target origin is successful.
 
   3.  <a>Requests</a> whose <a for="request">client</a>'s <a>address space</a>
       is "`public`" are allowed to fetch resources from <a>public</a> addresses
       as they do today, but may only request <a>private</a> and <a>local</a>
       resources if their <a for="request">client</a> is a <a>secure context</a>
-      <em>and</em> a <a>CORS-preflight request</a> to the target origin passes
-      a <a>CORS check</a>.
+      <em>and</em> a <a>CORS-preflight request</a> to the target origin is successful.
 
   Note: UAs must not allow <a lt="secure context">non-secure</a>
   <a>public</a> contexts to request resources from <a>private
@@ -467,7 +405,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
 
   To those ends:
 
-  1.  The <a>scheme fetch</a> algorithm should be adjusted to ensure that a
+  1.  The <a>HTTP fetch</a> algorithm should be adjusted to ensure that a
       preflight is triggered for all <a>external requests</a>. This might
       be as simple as changing the current "HTTP(S) scheme" block of the
       switch statement to the following:
@@ -489,7 +427,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
       includes navigations.
 
   2.  The <a>CORS-preflight fetch</a> algorithm should be adjusted to append
-      an <a>`Access-Control-Request-External`</a> header for preflights
+      an <a http-header>`Access-Control-Request-External`</a> header for preflights
       triggered by <a>external requests</a>. For instance, the following could
       be executed after the current step 5:
 
@@ -502,21 +440,21 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
               will be denied.
 
           2.  <a for="header list">Set</a>
-              "<a>`Access-Control-Request-External`</a>" to "`true`" in
-              |preflight|'s <a>header list</a>.
+              "<a http-header>`Access-Control-Request-External`</a>" to "`true`" in
+              |preflight|'s <a for="request">header list</a>.
 
-  3.  The <a>CORS check</a> algorithm should be adjusted to ensure that consent
-      is explicitly granted via an appropriate
-      "<a>`Access-Control-Allow-External`</a>" header in the response. For
-      instance, the following could be executed before the current step 3:
+  3.  The <a>CORS-preflight fetch</a> algorithm should be further adjusted to ensure that consent
+      is explicitly granted via an appropriate "<a http-header>`Access-Control-Allow-External`</a>"
+      header in the response. For instance, the following could be executed before the current step
+      10:
 
-      3.  If |request| is an <a>external request</a>:
+      10. If |request| is an <a>external request</a>:
 
-          1.  Let |external| be the result of <a for="header list">parsing</a>
-              "<a>`Access-Control-Allow-External`</a>" in |response|'s
-              <a>header list</a>.
+          1.  Let |external| be the result of <a>extracting header list values</a> given
+              "<a http-header>`Access-Control-Allow-External`</a>" and |response|'s
+              <a for="response">header list</a>.
 
-          2.  If |external| is not "`true`", return failure.
+          2.  If |external| is not "`true`", return a <a>network error</a>.
 
   4.  Finally, to mitigate the impact of DNS rebinding attacks (see
       [[#dns-rebinding]]), the <a>CORS-preflight cache</a> should be adjusted to
@@ -537,7 +475,7 @@ spec: CSP; urlPrefix: https://w3c.github.io/webappsec-csp/
   algorithm which is a good start. We'll need to think about things like Happy
   Eyeballs [[RFC6555]] to make sure that we perform the right checks depending
   on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a>scheme fetch</a>
+  assumes that connection information is available in the <a>HTTP fetch</a>
   algorithm. That might not be a reasonable assumption, in which case we'll
   need to revisit all of this.
 
