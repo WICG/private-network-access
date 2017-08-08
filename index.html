@@ -1737,7 +1737,7 @@ directive-value = ""
   to change the proposal such that private services must always opt-in to
   being contacted by anyone other than themselves. That is, we’d force a
   preflight for all cross-origin requests to private servers, whether they
-  come from public addresses, or private addresses. <a href="https://github.com/mikewest/cors-rfc1918/issues/1">&lt;https://github.com/mikewest/cors-rfc1918/issues/1></a></p>
+  come from public addresses, or private addresses. <a href="https://github.com/wicg/cors-rfc1918/issues/1">&lt;https://github.com/wicg/cors-rfc1918/issues/1></a></p>
      <li data-md="">
       <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <a data-link-type="dfn" href="#address-space" id="ref-for-address-space-6">address space</a> is "<code>private</code>" are allowed to fetch resources from <a data-link-type="dfn" href="#private-address" id="ref-for-private-address-7">private</a> and <a data-link-type="dfn" href="#public-address" id="ref-for-public-address-8">public</a> addresses as they do today, but may only request <a data-link-type="dfn" href="#local-address" id="ref-for-local-address-4">local</a> resources if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a> <em>and</em> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request">CORS-preflight request</a> to the
   target origin is successful.</p>
@@ -1825,10 +1825,34 @@ directive-value = ""
   assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch">HTTP fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
   need to revisit all of this.</p>
     <h3 class="heading settled" data-level="3.2" id="integration-websockets"><span class="secno">3.2. </span><span class="content">Integration with WebSockets</span><a class="self-link" href="#integration-websockets"></a></h3>
-    <p class="issue" id="issue-e2fde832"><a class="self-link" href="#issue-e2fde832"></a> Look into this. Probably want to add the new headers to the handshake,
-  at a minimum, but we might need to go beyond that and require a preflight. Not
-  sure what the capabilities of the GET are, and how much control the caller
-  has.</p>
+    <p>This document proposes a few changes to WebSockets, with similar implications to the above.</p>
+    <ol>
+     <li data-md="">
+      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-websocket-establish">establish a WebSocket connection</a> algorithm should be adjusted to ensure that the
+  endpoint is warned about <a data-link-type="dfn" href="#external-request" id="ref-for-external-request-7">external requests</a>. For instance, the following could be
+  executed after the current step 7:</p>
+      <ol start="8">
+       <li data-md="">
+        <p>If <var>request</var> is an <a data-link-type="dfn" href="#external-request" id="ref-for-external-request-8">external request</a>, then <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-append">append</a> <a data-link-type="http-header" href="#http-headerdef-access-control-request-external" id="ref-for-http-headerdef-access-control-request-external-6"><code>Access-Control-Request-External</code></a>/"<code>true</code>" to <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list">header list</a>.</p>
+      </ol>
+     <li data-md="">
+      <p>Further, the same algorithm should be adjusted to check the response for an opt-in. For
+  instance, the following could be executed after the current step 12:</p>
+      <ol start="13">
+       <li data-md="">
+        <p>If <var>request</var> is an <a data-link-type="dfn" href="#external-request" id="ref-for-external-request-9">external request</a>, then:</p>
+        <ol>
+         <li data-md="">
+          <p>Let <var>external</var> be the result of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#extract-header-list-values">extracting header list values</a> given
+  "<a data-link-type="http-header" href="#http-headerdef-access-control-allow-external" id="ref-for-http-headerdef-access-control-allow-external-6"><code>Access-Control-Allow-External</code></a>" and <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list">header list</a>.</p>
+         <li data-md="">
+          <p>If <var>external</var> is not "<code>true</code>", return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>.</p>
+        </ol>
+      </ol>
+    </ol>
+    <p class="issue" id="issue-2b4facad"><a class="self-link" href="#issue-2b4facad"></a> Look into this. Adding headers to the handshake seems reasonable, but we might need to go
+  beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
+  control the caller has.</p>
     <h3 class="heading settled" data-level="3.3" id="integration-html"><span class="secno">3.3. </span><span class="content">Integration with HTML</span><a class="self-link" href="#integration-html"></a></h3>
     <p>To support the checks in <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a>, we store an <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="address-space">address space</dfn> on both <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">WorkerGlobalScope</a></code> objects, which is set as
   follows during <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a></code> initialization:</p>
@@ -2108,6 +2132,7 @@ directive-value = ""
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">access-control-allow-methods</a>
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">access-control-allow-origin</a>
      <li><a href="https://fetch.spec.whatwg.org/#http-access-control-request-method">access-control-request-method</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-header-list-append">append</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-cache-match">cache match</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-cache">cors-preflight cache</a>
@@ -2116,6 +2141,7 @@ directive-value = ""
      <li><a href="https://fetch.spec.whatwg.org/#cors-safelisted-method">cors-safelisted method</a>
      <li><a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header">cors-safelisted request-header</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-websocket-establish">establish a websocket connection</a>
      <li><a href="https://fetch.spec.whatwg.org/#extract-header-list-values">extracting header list values</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-header-list">header list <small>(for request)</small></a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-response-header-list">header list <small>(for response)</small></a>
@@ -2219,17 +2245,16 @@ directive-value = ""
   to change the proposal such that private services must always opt-in to
   being contacted by anyone other than themselves. That is, we’d force a
   preflight for all cross-origin requests to private servers, whether they
-  come from public addresses, or private addresses. <a href="https://github.com/mikewest/cors-rfc1918/issues/1">&lt;https://github.com/mikewest/cors-rfc1918/issues/1></a><a href="#issue-bf6d4d94"> ↵ </a></div>
+  come from public addresses, or private addresses. <a href="https://github.com/wicg/cors-rfc1918/issues/1">&lt;https://github.com/wicg/cors-rfc1918/issues/1></a><a href="#issue-bf6d4d94"> ↵ </a></div>
    <div class="issue"> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
   Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
   on the IP address we actually connect to. For the moment, this document
   assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch">HTTP fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
   need to revisit all of this.<a href="#issue-36ac6cb6"> ↵ </a></div>
-   <div class="issue"> Look into this. Probably want to add the new headers to the handshake,
-  at a minimum, but we might need to go beyond that and require a preflight. Not
-  sure what the capabilities of the GET are, and how much control the caller
-  has.<a href="#issue-e2fde832"> ↵ </a></div>
+   <div class="issue"> Look into this. Adding headers to the handshake seems reasonable, but we might need to go
+  beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
+  control the caller has.<a href="#issue-2b4facad"> ↵ </a></div>
    <div class="issue"> Reevaluate this after implementation experience.<a href="#issue-5f05c8e3"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="private-address">
@@ -2272,6 +2297,7 @@ directive-value = ""
    <ul>
     <li><a href="#ref-for-external-request-1">2.1. Additional CORS Headers</a>
     <li><a href="#ref-for-external-request-2">3.1. Integration with Fetch</a> <a href="#ref-for-external-request-3">(2)</a> <a href="#ref-for-external-request-4">(3)</a> <a href="#ref-for-external-request-5">(4)</a> <a href="#ref-for-external-request-6">(5)</a>
+    <li><a href="#ref-for-external-request-7">3.2. Integration with WebSockets</a> <a href="#ref-for-external-request-8">(2)</a> <a href="#ref-for-external-request-9">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-headerdef-access-control-request-external">
@@ -2280,6 +2306,7 @@ directive-value = ""
     <li><a href="#ref-for-http-headerdef-access-control-request-external-1">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-http-headerdef-access-control-request-external-2">1.2.3. Navigation</a> <a href="#ref-for-http-headerdef-access-control-request-external-3">(2)</a>
     <li><a href="#ref-for-http-headerdef-access-control-request-external-4">3.1. Integration with Fetch</a> <a href="#ref-for-http-headerdef-access-control-request-external-5">(2)</a>
+    <li><a href="#ref-for-http-headerdef-access-control-request-external-6">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-headerdef-access-control-allow-external">
@@ -2289,6 +2316,7 @@ directive-value = ""
     <li><a href="#ref-for-http-headerdef-access-control-allow-external-2">1.2.2. Opting-In</a>
     <li><a href="#ref-for-http-headerdef-access-control-allow-external-3">1.2.3. Navigation</a>
     <li><a href="#ref-for-http-headerdef-access-control-allow-external-4">3.1. Integration with Fetch</a> <a href="#ref-for-http-headerdef-access-control-allow-external-5">(2)</a>
+    <li><a href="#ref-for-http-headerdef-access-control-allow-external-6">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="treat-as-public-address">

@@ -25,6 +25,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dfn; for:/; text:cors-preflight fetch
 spec:fetch; type:dfn; for:/; text:cors-preflight cache
+spec:fetch; type:dfn; for:/; text:establish a websocket connection
 spec:fetch; type:dfn; for:cache; text:cache match
 </pre>
 <pre class="biblio">
@@ -376,7 +377,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       requests to <a>public</a>, <a>private</a>, and <a>local</a> addresses as
       they do today.
 
-      ISSUE(mikewest/cors-rfc1918#1): Chris Palmer suggests that we might want
+      ISSUE(wicg/cors-rfc1918#1): Chris Palmer suggests that we might want
       to change the proposal such that private services must always opt-in to
       being contacted by anyone other than themselves. That is, we'd force a
       preflight for all cross-origin requests to private servers, whether they
@@ -481,10 +482,30 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="integration-websockets">Integration with WebSockets</h3>
 
-  ISSUE: Look into this. Probably want to add the new headers to the handshake,
-  at a minimum, but we might need to go beyond that and require a preflight. Not
-  sure what the capabilities of the GET are, and how much control the caller
-  has.
+  This document proposes a few changes to WebSockets, with similar implications to the above.
+
+  1.  The <a>establish a WebSocket connection</a> algorithm should be adjusted to ensure that the
+      endpoint is warned about <a>external requests</a>. For instance, the following could be
+      executed after the current step 7:
+
+      8.  If |request| is an <a>external request</a>, then <a for="header list">append</a>
+          <a http-header>`Access-Control-Request-External`</a>/"`true`" to |request|'s
+          <a for="request">header list</a>.
+
+  2.  Further, the same algorithm should be adjusted to check the response for an opt-in. For
+      instance, the following could be executed after the current step 12:
+
+      13. If |request| is an <a>external request</a>, then:
+
+          1.  Let |external| be the result of <a>extracting header list values</a> given
+              "<a http-header>`Access-Control-Allow-External`</a>" and |response|'s
+              <a for="response">header list</a>.
+
+          2.  If |external| is not "`true`", return a <a>network error</a>.
+
+  ISSUE: Look into this. Adding headers to the handshake seems reasonable, but we might need to go
+  beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
+  control the caller has.
 
   <h3 id="integration-html">Integration with HTML</h3>
 
