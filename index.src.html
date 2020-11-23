@@ -69,6 +69,15 @@ spec:fetch; type:dfn; for:cache; text:cache match
   "TREND-MICRO": {
     "href": "https://code.google.com/p/google-security-research/issues/detail?id=693",
     "title": "TrendMicro node.js HTTP server listening on localhost can execute commands"
+  },
+
+  "IPV4-REGISTRY": {
+    "href": "https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml",
+    "title": "IANA IPv4 Special-Purpose Address Registry"
+  },
+  "IPV6-REGISTRY": {
+    "href": "https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml",
+    "title": "IANA IPv6 Special-Purpose Address Registry"
   }
 }
 </pre>
@@ -276,32 +285,58 @@ spec:fetch; type:dfn; for:cache; text:cache match
 <section>
   <h2 id="framework">Framework</h2>
 
-  An IPv4 address is a <dfn export local-lt="private">private address</dfn> if
-  it matches the <a>private address space</a> defined in Section 3 of
-  [[!RFC1918]], a <dfn export local-lt="local">local address</dfn> if it matches
-  the "loopback" space (`127.0.0.0/8`) defined in section 3.2.1.3 of
-  [[!RFC1122]] or the "link-local" space (`169.254.0.0/16`) defined in
-  [[!RFC3927]], and a <dfn export local-lt="public">public address</dfn>
-  otherwise.
+  <h3 id="address-space-heading">Address Space</h3>
 
-  An IPv6 address is a <a>local address</a> if it matches the "Unique Local
-  Address" prefix (`fc00::/7`) defined in Section 3 of [[!RFC4193]] or the
-  "link-local" prefix (`fe80::/10`) defined in section 2.5.6 of [[!RFC4291]],
-  and a <a>public address</a> otherwise.
+  Every IP address belongs to an IP <dfn export>address space</dfn>, which can
+  be one of three different values:
 
-  ISSUE(mikewest/cors-rfc1918#3): What does "private" mean in the context of
-  IPv6?
+  1.  <dfn export>local</dfn>: contains the local host only. In other words,
+      addresses whose target differs for every device.
+  1.  <dfn>private</dfn>: contains addresses that have meaning only within the
+      current network. In other words, addresses whose target differs based on
+      network position.
+  1.  <dfn>public</dfn>: contains all other addresses. In other words, addresses
+      whose target is the same for all devices globally on the IP network.
+
+  The <a>address space</a> of a given IP address (|address|) is determined
+  in accordance with the IANA Special-Purpose Address Registries
+  ([[IPV4-REGISTRY]] and [[IPV6-REGISTRY]]):
+
+  1.  If |address| is an IPv4 address in the "Loopback" address block
+      (`127.0.0.1/8` at time of writing), then its <a>address space</a> is
+      <a>local</a>.
+  1.  If |address| is an IPv6 address in the "Loopback Address" address block
+      (`::1/128` at time of writing), then its <a>address space</a> is
+      <a>local</a>.
+  1.  If |address| is an IPv6 address in the "IPv4-mapped Address" address block
+      (`::ffff:0:0/96` at time of writing), then its <a>address space</a> is
+      that of its embedded IPv4 address.
+  1.  If |address| belongs to an address block for which the
+      `Globally Reachable` is set to `False` in the relevant IANA registry, then
+      its <a>address space</a> is <a>private</a>.
+  1.  Otherwise the <a>address space</a> of |address| is <a>public</a>.
+
+  For convenience, we additionally define the following terms:
+
+  1.  A <dfn export>local address</dfn> is an address whose <a>address space</a>
+      is <a>local</a>.
+  1.  A <dfn export>private address</dfn> is an address whose
+      <a>address space</a> is <a>private</a>.
+  1.  A <dfn export>public address</dfn> is an address whose
+      <a>address space</a> is <a>public</a>.
+
+  <h3 id="private-network-request-heading">Private Network Request</h3>
 
   A <a>request</a> (|request|) is a <dfn export>private network request</dfn>
   if any of the following are true:
 
   1.  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
       <a>private address</a>, and |request|'s <a for="request">client</a>'s
-      <a>address space</a> is "`public`".
+      <a>address space</a> is <a>public</a>.
       
   1.  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
       <a>local address</a>, and |request|'s <a for="request">client</a>'s
-      <a>address space</a> is either "`public`" or "`private`".
+      <a>address space</a> is either <a>public</a> or <a>private</a>.
 
   <h3 id="headers">Additional CORS Headers</h3>
 
@@ -519,33 +554,34 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="integration-html">Integration with HTML</h3>
 
-  To support the checks in [[FETCH]], we store an <dfn>address space</dfn>
-  on both {{Document}} and {{WorkerGlobalScope}} objects, which is set as
-  follows during {{Document}} and {{Worker}} initialization:
+  To support the checks in [[FETCH]], we store an
+  <dfn>address space property</dfn> on both {{Document}} and
+  {{WorkerGlobalScope}} objects, which is set as follows during {{Document}} and
+  {{Worker}} initialization:
   
-  1.  Set the <a>address space</a> to "`local`" if the the resource used
-      to instantiate the {{Document}} or {{Worker}} was was delivered
+  1.  Set the <a>address space property</a> to "`local`" if the the resource
+      used to instantiate the {{Document}} or {{Worker}} was was delivered
       from a <a>local address</a>, or from a URL whose <a for="url">scheme</a>
       is "`file`" (see [[#file-url]]).
 
-  2.  Set the <a>address space</a> to "`private`" if the the resource used
-      to instantiate the {{Document}} or {{Worker}} was was delivered
+  2.  Set the <a>address space property</a> to "`private`" if the the resource
+      used to instantiate the {{Document}} or {{Worker}} was was delivered
       from a <a>private address</a>.
 
-  3.  Set the <a>address space</a> to "`public`" if the the resource used
-      to instantiate the {{Document}} or {{Worker}} was was delivered
+  3.  Set the <a>address space property</a> to "`public`" if the the resource
+      used to instantiate the {{Document}} or {{Worker}} was was delivered
       from a <a>public address</a>.
 
   <div class="example">
     Assuming that `example.com` resolves to a <a>public address</a> (say,
     `123.123.123.123`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its <a>address space</a>
-    set to "`public`".
+    `https://example.com/document.html` will have its
+    <a>address space property</a> set to "`public`".
 
     If, on the other hand, `example.com` resolved to a <a>local address</a>
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its <a>address space</a>
-    set to "`local`".
+    `https://example.com/document.html` will have its
+    <a>address space property</a> set to "`local`".
   </div>
 </section>
 
