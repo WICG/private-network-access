@@ -299,23 +299,22 @@ spec:fetch; type:dfn; for:cache; text:cache match
       addresses. In other words, addresses whose target is the same for all
       devices globally on the IP network.
 
-  The <a>address space</a> of a given IP address (|address|) is determined
-  in accordance with the IANA Special-Purpose Address Registries
-  ([[IPV4-REGISTRY]] and [[IPV6-REGISTRY]]):
+  The contents of each [=address space=] are determined in accordance with the
+  IANA Special-Purpose Address Registries ([[IPV4-REGISTRY]] and
+  [[IPV6-REGISTRY]]). To determine the [=address space=] of a given IP address
+  (|address|), run the following steps:
 
-  1.  If |address| is an IPv4 address in the "Loopback" address block
-      (`127.0.0.1/8` at time of writing), then its <a>address space</a> is
-      <a>local</a>.
-  1.  If |address| is an IPv6 address in the "Loopback Address" address block
-      (`::1/128` at time of writing), then its <a>address space</a> is
-      <a>local</a>.
+  1.  If |address| is an [=IPv4 address=] in the "Loopback" address block
+      (`127.0.0.1/8` at time of writing), then return [=address space/local=].
+  1.  If |address| is an [=IPv6 address=] in the "Loopback Address" address
+      block (`::1/128` at time of writing), then return [=address space/local=].
   1.  If |address| is an IPv6 address in the "IPv4-mapped Address" address block
-      (`::ffff:0:0/96` at time of writing), then its <a>address space</a> is
-      that of its embedded IPv4 address.
+      (`::ffff:0:0/96` at time of writing), return the [=address space=] of its
+      embedded IPv4 address.
   1.  If |address| belongs to an address block for which the
-      `Globally Reachable` is set to `False` in the relevant IANA registry, then
-      its <a>address space</a> is <a>private</a>.
-  1.  Otherwise the <a>address space</a> of |address| is <a>public</a>.
+      `Globally Reachable` bit is set to `False` in the relevant IANA registry,
+      then return [=address space/private=].
+  1.  Otherwise return [=address space/public=].
 
   For convenience, we additionally define the following terms:
 
