@@ -316,6 +316,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
       then return [=address space/private=].
   1.  Otherwise return [=address space/public=].
 
+  Note: Link-local IP addresses such as `169.254.0.0/16` are considered
+  [=address space/private=], since they can be shared among multiple devices on
+  a network link. A previous version of this specification considered them to be
+  [=address space/local=] instead.
+
   For convenience, we additionally define the following terms:
 
   1.  A <dfn>local address</dfn> is an address whose [=address space=] is
