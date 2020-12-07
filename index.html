@@ -1324,7 +1324,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 89ebb6ab, updated Fri Oct 9 15:32:07 2020 -0700" name="generator">
   <link href="https://wicg.github.io/cors-rfc1918/" rel="canonical">
-  <meta content="016bce8a81e20825c2b48e1e9e543487101fba64" name="document-revision">
+  <meta content="a7b442de07045f21a289f5702c0630f9c0b0c4ac" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -2367,24 +2367,23 @@ directive-value = ""
   beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
   control the caller has.</p>
     <h3 class="heading settled" data-level="3.3" id="integration-html"><span class="secno">3.3. </span><span class="content">Integration with HTML</span><a class="self-link" href="#integration-html"></a></h3>
-    <p>To support the checks in <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a>, we store an <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="address-space-property">address space property</dfn> on both <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope③">WorkerGlobalScope</a></code> objects, which is set as follows during <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker">Worker</a></code> initialization:</p>
+    <p>To support the checks in <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a>, we store an <dfn class="dfn-paneled idl-code" data-dfn-for="Document" data-dfn-type="attribute" data-export id="dom-document-address-space"><code>address space</code></dfn> property on <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> objects and a similar <dfn class="idl-code" data-dfn-for="WorkerGlobalScope" data-dfn-type="attribute" data-export id="dom-workerglobalscope-address-space"><code>address space</code><a class="self-link" href="#dom-workerglobalscope-address-space"></a></dfn> on <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope③">WorkerGlobalScope</a></code> objects, which is set as follows during <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker">Worker</a></code> initialization:</p>
     <ol>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#address-space-property" id="ref-for-address-space-property">address space property</a> to "<code>local</code>" if the the resource
-  used to instantiate the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker①">Worker</a></code> was was delivered
-  from a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a>, or from a URL whose <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme">scheme</a> is "<code>file</code>" (see <a href="#file-url">§ 4.1 Where do file URLs fit?</a>).</p>
+      <p>Set <code class="idl"><a data-link-type="idl" href="#dom-document-address-space" id="ref-for-dom-document-address-space">address space</a></code> to "<code>local</code>" if the resource used to
+  instantiate the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker①">Worker</a></code> was delivered from a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a>, or from a URL whose <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme">scheme</a> is "<code>file</code>" (see <a href="#file-url">§ 4.1 Where do file URLs fit?</a>).</p>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#address-space-property" id="ref-for-address-space-property①">address space property</a> to "<code>private</code>" if the the resource
-  used to instantiate the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker②">Worker</a></code> was was delivered
+      <p>Set <code class="idl"><a data-link-type="idl" href="#dom-document-address-space" id="ref-for-dom-document-address-space①">address space</a></code> to "<code>private</code>" if the resource
+  used to instantiate the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker②">Worker</a></code> was delivered
   from a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑤">private address</a>.</p>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#address-space-property" id="ref-for-address-space-property②">address space property</a> to "<code>public</code>" if the the resource
-  used to instantiate the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker③">Worker</a></code> was was delivered
+      <p>Set <code class="idl"><a data-link-type="idl" href="#dom-document-address-space" id="ref-for-dom-document-address-space②">address space</a></code> to "<code>public</code>" if the resource
+  used to instantiate the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker③">Worker</a></code> was delivered
   from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑤">public address</a>.</p>
     </ol>
     <div class="example" id="example-58683bdd">
-     <a class="self-link" href="#example-58683bdd"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑧">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#address-space-property" id="ref-for-address-space-property③">address space property</a> set to "<code>public</code>". 
-     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address②">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑨">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#address-space-property" id="ref-for-address-space-property④">address space property</a> set to "<code>local</code>".</p>
+     <a class="self-link" href="#example-58683bdd"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑧">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <code class="idl"><a data-link-type="idl" href="#dom-document-address-space" id="ref-for-dom-document-address-space③">address space</a></code> property set to "<code>public</code>". 
+     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address②">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑨">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <code class="idl"><a data-link-type="idl" href="#dom-document-address-space" id="ref-for-dom-document-address-space④">address space</a></code> property set to "<code>local</code>".</p>
     </div>
    </section>
    <section>
@@ -2592,7 +2591,13 @@ directive-value = ""
   <ul class="index">
    <li><a href="#http-headerdef-access-control-allow-private-network">Access-Control-Allow-Private-Network</a><span>, in §2.3</span>
    <li><a href="#http-headerdef-access-control-request-private-network">Access-Control-Request-Private-Network</a><span>, in §2.3</span>
-   <li><a href="#address-space">address space</a><span>, in §2.1</span>
+   <li>
+    address space
+    <ul>
+     <li><a href="#dom-document-address-space">attribute for Document</a><span>, in §3.3</span>
+     <li><a href="#dom-workerglobalscope-address-space">attribute for WorkerGlobalScope</a><span>, in §3.3</span>
+     <li><a href="#address-space">definition of</a><span>, in §2.1</span>
+    </ul>
    <li><a href="#enumdef-addressspace">AddressSpace</a><span>, in §2.5</span>
    <li>
     addressSpace
@@ -2600,7 +2605,6 @@ directive-value = ""
      <li><a href="#dom-document-addressspace">attribute for Document</a><span>, in §2.5</span>
      <li><a href="#dom-workerglobalscope-addressspace">attribute for WorkerGlobalScope</a><span>, in §2.5</span>
     </ul>
-   <li><a href="#address-space-property">address space property</a><span>, in §3.3</span>
    <li><a href="#dom-addressspace-local">"local"</a><span>, in §2.5</span>
    <li><a href="#address-space-local">local</a><span>, in §2.1</span>
    <li><a href="#local-address">local address</a><span>, in §2.1</span>
@@ -3050,10 +3054,10 @@ directive-value = ""
     <li><a href="#ref-for-cache-request-network-type">3.1. Integration with Fetch</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="address-space-property">
-   <b><a href="#address-space-property">#address-space-property</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="dom-document-address-space">
+   <b><a href="#dom-document-address-space">#dom-document-address-space</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-address-space-property">3.3. Integration with HTML</a> <a href="#ref-for-address-space-property①">(2)</a> <a href="#ref-for-address-space-property②">(3)</a> <a href="#ref-for-address-space-property③">(4)</a> <a href="#ref-for-address-space-property④">(5)</a>
+    <li><a href="#ref-for-dom-document-address-space">3.3. Integration with HTML</a> <a href="#ref-for-dom-document-address-space①">(2)</a> <a href="#ref-for-dom-document-address-space②">(3)</a> <a href="#ref-for-dom-document-address-space③">(4)</a> <a href="#ref-for-dom-document-address-space④">(5)</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */

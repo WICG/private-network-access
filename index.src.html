@@ -555,33 +555,35 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <h3 id="integration-html">Integration with HTML</h3>
 
   To support the checks in [[FETCH]], we store an
-  <dfn>address space property</dfn> on both {{Document}} and
+  <dfn attribute for="Document">address space</dfn> property on
+  {{Document}} objects and a similar
+  <dfn attribute for="WorkerGlobalScope">address space</dfn> on
   {{WorkerGlobalScope}} objects, which is set as follows during {{Document}} and
   {{Worker}} initialization:
   
-  1.  Set the <a>address space property</a> to "`local`" if the the resource
-      used to instantiate the {{Document}} or {{Worker}} was was delivered
-      from a <a>local address</a>, or from a URL whose <a for="url">scheme</a>
-      is "`file`" (see [[#file-url]]).
+  1.  Set {{Document/address space}} to "`local`" if the resource used to
+      instantiate the {{Document}} or {{Worker}} was delivered from a
+      [=local address=], or from a URL whose [=url/scheme=] is "`file`" (see
+      [[#file-url]]).
 
-  2.  Set the <a>address space property</a> to "`private`" if the the resource
-      used to instantiate the {{Document}} or {{Worker}} was was delivered
-      from a <a>private address</a>.
+  2.  Set {{Document/address space}} to "`private`" if the resource
+      used to instantiate the {{Document}} or {{Worker}} was delivered
+      from a [=private address=].
 
-  3.  Set the <a>address space property</a> to "`public`" if the the resource
-      used to instantiate the {{Document}} or {{Worker}} was was delivered
-      from a <a>public address</a>.
+  3.  Set {{Document/address space}} to "`public`" if the resource
+      used to instantiate the {{Document}} or {{Worker}} was delivered
+      from a [=public address=].
 
   <div class="example">
     Assuming that `example.com` resolves to a <a>public address</a> (say,
     `123.123.123.123`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its
-    <a>address space property</a> set to "`public`".
+    `https://example.com/document.html` will have its {{Document/address space}}
+    property set to "`public`".
 
     If, on the other hand, `example.com` resolved to a <a>local address</a>
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its
-    <a>address space property</a> set to "`local`".
+    `https://example.com/document.html` will have its {{Document/address space}}
+    property set to "`local`".
   </div>
 </section>
 
