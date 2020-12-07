@@ -290,13 +290,14 @@ spec:fetch; type:dfn; for:cache; text:cache match
   Every IP address belongs to an IP <dfn export>address space</dfn>, which can
   be one of three different values:
 
-  1.  <dfn export>local</dfn>: contains the local host only. In other words,
-      addresses whose target differs for every device.
-  1.  <dfn>private</dfn>: contains addresses that have meaning only within the
-      current network. In other words, addresses whose target differs based on
-      network position.
-  1.  <dfn>public</dfn>: contains all other addresses. In other words, addresses
-      whose target is the same for all devices globally on the IP network.
+  1.  <dfn for="address space" export>local</dfn>: contains the local host only.
+      In other words, addresses whose target differs for every device.
+  1.  <dfn for="address space" export>private</dfn>: contains addresses that
+      have meaning only within the current network. In other words, addresses
+      whose target differs based on network position.
+  1.  <dfn for="address space" export>public</dfn>: contains all other
+      addresses. In other words, addresses whose target is the same for all
+      devices globally on the IP network.
 
   The <a>address space</a> of a given IP address (|address|) is determined
   in accordance with the IANA Special-Purpose Address Registries
