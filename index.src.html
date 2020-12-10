@@ -312,10 +312,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
       other addresses. In other words, addresses whose target is the same for
       all devices globally on the IP network.
 
-  The contents of each [=IP address space=] are determined in accordance with
+  The contents of each [=/IP address space=] are determined in accordance with
   the IANA Special-Purpose Address Registries ([[IPV4-REGISTRY]] and
-  [[IPV6-REGISTRY]]). To determine the [=/address space=] of a given IP address
-  (|address|), run the following steps:
+  [[IPV6-REGISTRY]]). To determine the [=/IP address space=] of a given IP
+  address (|address|), run the following steps:
 
   1.  If |address| is an [=IPv4 address=] in the "Loopback" address block
       (`127.0.0.1/8` at time of writing), then return
@@ -324,7 +324,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       block (`::1/128` at time of writing), then return
       [=IP address space/local=].
   1.  If |address| is an IPv6 address in the "IPv4-mapped Address" address block
-      (`::ffff:0:0/96` at time of writing), return the [=IP address space=] of
+      (`::ffff:0:0/96` at time of writing), return the [=/IP address space=] of
       its embedded IPv4 address.
   1.  If |address| belongs to an address block for which the
       `Globally Reachable` bit is set to `False` in the relevant IANA registry,
@@ -341,12 +341,12 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   For convenience, we additionally define the following terms:
 
-  1.  A <dfn>local address</dfn> is an IP address whose [=/address space=] is
+  1.  A <dfn>local address</dfn> is an IP address whose [=/IP address space=] is
       [=IP address space/local=].
-  1.  A <dfn>private address</dfn> is an IP address whose [=/address space=] is
-      [=IP address space/private=].
-  1.  A <dfn>public address</dfn> is an IP address whose [=/address space=] is
-      [=IP address space/public=].
+  1.  A <dfn>private address</dfn> is an IP address whose [=/IP address space=]
+      is [=IP address space/private=].
+  1.  A <dfn>public address</dfn> is an IP address whose [=/IP address space=]
+      is [=IP address space/public=].
 
   <h3 id="private-network-request-heading">Private Network Request</h3>
 
@@ -355,12 +355,12 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
       [=private address=], and |request|'s [=request/client=]'s
-      [=environment settings object/address space=] is
+      [=environment settings object/IP address space=] is
       [=IP address space/public=].
       
   1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
       [=local address=], and |request|'s [=request/client=]'s
-      [=environment settings object/address space=] is either
+      [=environment settings object/IP address space=] is either
       [=IP address space/public=] or [=IP address space/private=].
 
   <h3 id="headers">Additional CORS Headers</h3>
@@ -394,7 +394,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   [=environment settings object=] (|context|), a `Response` (|response|), and
   a `policy` (|policy|):
 
-  1.  Set |context|'s [=environment settings object/address space=] to
+  1.  Set |context|'s [=environment settings object/IP address space=] to
       [=IP address space/public=] if |policy|'s [=policy/disposition=] is
       "`enforce`".
 
@@ -416,8 +416,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
   </pre>
 
   Both attributes' getters return the value of the corresponding {{Document}}'s
-  [=Document/address space=] or {{WorkerGlobalScope}}'s
-  [=WorkerGlobalScope/address space=] property.
+  [=Document/IP address space=] or {{WorkerGlobalScope}}'s
+  [=WorkerGlobalScope/IP address space=] property.
 </section>
 
 <!-- Big Text: Integrations -->
@@ -436,9 +436,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
   This document proposes a few changes to Fetch, with the following
   implications:
 
-  1.  [=Requests=] whose [=request/client=]'s [=/address space=]
-      is [=IP address space/local=] are unchanged from status quo. They may
-      continue to make requests to IP addresses in any [=/address space=] as
+  1.  [=Requests=] whose [=request/client=]'s
+      [=environment settings object/IP address space=] is
+      [=IP address space/local=] are unchanged from status quo. They may
+      continue to make requests to IP addresses in any [=/IP address space=] as
       they do today.
 
       ISSUE(wicg/cors-rfc1918#1): Chris Palmer suggests that we might want
@@ -447,15 +448,16 @@ spec:fetch; type:dfn; for:cache; text:cache match
       preflight for all cross-origin requests to private servers, whether they
       come from public addresses, or private addresses.
 
-  2.  [=Requests=] whose [=request/client=]'s [=/address space=] is
+  2.  [=Requests=] whose [=request/client=]'s [=/IP address space=] is
       [=IP address space/private=] are allowed to fetch resources from
       [=IP address space/private=] and [=IP address space/public=] addresses as
       they do today, but may only request [=IP address space/local=] resources
       if their [=request/client=] is a [=secure context=] **and** a
       [=CORS-preflight request=] to the target origin is successful.
 
-  3.  [=Requests=] whose [=request/client=]'s [=/address space=]
-      is [=IP address space/public=] are allowed to fetch resources from
+  3.  [=Requests=] whose [=request/client=]'s
+      [=environment settings object/IP address space=] is
+      [=IP address space/public=] are allowed to fetch resources from
       [=IP address space/public=] addresses as they do today, but may only
       request [=IP address space/private=] and [=IP address space/local=]
       resources if their [=request/client=] is a [=secure context=] <em>and</em>
@@ -473,19 +475,19 @@ spec:fetch; type:dfn; for:cache; text:cache match
   To those ends:
 
   1.  [=Connection=] objects are given a new
-      <dfn export for="connection">address space</dfn>, whose value is the
-      [=IP address space=] to which the connection's remote endpoint belongs.
+      <dfn export for="connection">IP address space</dfn>, whose value is the
+      [=/IP address space=] to which the connection's remote endpoint belongs.
       This applies to WebSocket connections too.
 
   1.  [=Response=] objects are given a new
-      <dfn export for="response">address space</dfn> property, whose value is
-      an [=IP address space=], initially null.
+      <dfn export for="response">IP address space</dfn> property, whose value is
+      an [=/IP address space=], initially null.
 
   1.  The [$HTTP-network fetch$] algorithm is amended to add a new step in
       between steps 7.1 and 7.2, after successfully obtaining a connection:
 
-      > 7.2. Set <var ignore>response</var>'s [=response/address space=] to
-      >      <var ignore>connection</var>'s [=connection/address space=].
+      > 7.2. Set <var ignore>response</var>'s [=response/IP address space=] to
+      >      <var ignore>connection</var>'s [=connection/IP address space=].
 
   1.  The <a>HTTP fetch</a> algorithm should be adjusted to ensure that a
       preflight is triggered for all <a>private network requests</a>. This might
@@ -598,44 +600,45 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <h3 id="integration-html">Integration with HTML</h3>
 
   To support the checks in [[FETCH]], user agents must remember the source
-  [=/address space=] of contexts in which network requests are made. To this
+  [=/IP address space=] of contexts in which network requests are made. To this
   effect, the [[HTML]] specification is patched as follows:
 
-  1.  An [=/address space=] property is persisted on a number of objects:
+  1.  An [=/IP address space=] property is persisted on a number of objects:
 
       1.  {{Document}} objects are given an
-          <dfn export for="Document">address space</dfn> property, whose value
-          is an [=IP address space=].
+          <dfn export for="Document">IP address space</dfn> property, whose
+          value is an [=/IP address space=].
 
       1.  {{WorkerGlobalScope}} objects are given an
-          <dfn export for="WorkerGlobalScope">address space</dfn> property,
-          whose value is an [=IP address space=].
+          <dfn export for="WorkerGlobalScope">IP address space</dfn> property,
+          whose value is an [=/IP address space=].
 
-      1.  [[Environment settings objects]] are given an
-          <dfn export for="environment settings object">address space</dfn>
+      1.  [=Environment settings objects=] are given an
+          <dfn export for="environment settings object">IP address space</dfn>
           accessor, which has the following implementations:
 
-          1.  For {{Window}} objects: return the [=Document/address space=] of
-              <var ignore>window</var>'s [=associated Document=].
+          1.  For {{Window}} objects: return the [=Document/IP address space=]
+              of <var ignore>window</var>'s [=associated Document=].
 
           1.  For {{WorkerGlobalScope}} objects: return
               <var ignore>worker global scope</var>'s
-              [=WorkerGlobalScope/address space=].
+              [=WorkerGlobalScope/IP address space=].
 
   1.  The [$create a new browsing context$] algorithm is amended with an extra
       step in between the existing steps 19 and 20. Thus the initial
-      `about:blank` document inherits its creator's [=Document/address space=]:
+      `about:blank` document inherits its creator's
+      [=Document/IP address space=]:
 
       > 20.  If |creator| is non-null, then set <var ignore>document</var>'s
-      >      [=Document/address space=] to to |creator|'s
-      >      [=Document/address space=].
+      >      [=Document/IP address space=] to to |creator|'s
+      >      [=Document/IP address space=].
 
   1.  The [$initialize the Document object$] algorithm is amended with an extra
       step in between the existing steps 10 and 11, before the new
       {{Document}}'s [=Document/CSP list=] is initialized:
 
-      > 12.  Set <var ignore>document</var>'s [=Document/address space=] to
-      >      <var ignore>response</var>'s [=response/address space=].
+      > 12.  Set <var ignore>document</var>'s [=Document/IP address space=] to
+      >      <var ignore>response</var>'s [=response/IP address space=].
 
   1.  The [$run a worker$] algorithm is amended with two extra steps in between
       the existing steps 14.4 and 14.5, after the new {{WorkerGlobalScope}}'s
@@ -643,11 +646,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
       > 14.5. If |response|'s [=response/url=]'s [=url/scheme=] is a
       >       [=local scheme=], then set |worker global scope|'s
-      >       [=WorkerGlobalScope/address space=] to <var ignore>owner</var>'s
-      >       [=WorkerGlobalScope/address space=].
+      >       [=WorkerGlobalScope/IP address space=] to
+      >       <var ignore>owner</var>'s [=WorkerGlobalScope/IP address space=].
       > 14.5. Otherwise, set |worker global scope|'s
-      >       [=WorkerGlobalScope/address space=] to |response|'s
-      >       [=response/address space=].
+      >       [=WorkerGlobalScope/IP address space=] to |response|'s
+      >       [=response/IP address space=].
 
   ISSUE(WICG/cors-rfc1918#27): Find a place to insert address space inheritance
   from the navigation initiator for `data:` URLs.
@@ -659,17 +662,17 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <div class="example">
     Assuming that `example.com` resolves to a [=public address=] (say,
     `123.123.123.123`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its [=Document/address space=]
-    property set to [=IP address space/public=].
+    `https://example.com/document.html` will have its
+    [=Document/IP address space=] property set to [=IP address space/public=].
 
     If this {{Document}} then embeds an `about:srcdoc` iframe, then the child
-    frame's {{Document}} will have its [=Document/address space=] property set
-    to [=IP address space/public=].
+    frame's {{Document}} will have its [=Document/IP address space=] property
+    set to [=IP address space/public=].
 
     If, on the other hand, `example.com` resolved to a [=local address=]
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its [=Document/address space=]
-    property set to "`local`".
+    `https://example.com/document.html` will have its
+    [=Document/IP address space=] property set to [=IP address space/local=].
   </div>
 
 </section>
