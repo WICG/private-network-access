@@ -23,12 +23,21 @@ spec: RFC1918; urlPrefix: https://tools.ietf.org/html/rfc1918
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/
   type: interface
     text: Document; url: document;
+  type: abstract-op
+    text: create a new browsing context; url: multipage/browsers.html#creating-a-new-browsing-context
+    text: initialize the Document object; url: multipage/browsing-the-web.html#initialise-the-document-object
+    text: run a worker; url: multipage/workers.html#run-a-worker
+spec: HTML; urlPrefix: https://fetch.spec.whatwg.org/
+  type: abstract-op
+    text: HTTP-network fetch; url: #concept-http-network-fetch
 </pre>
 <pre class="link-defaults">
 spec:fetch; type:dfn; for:/; text:request
+spec:fetch; type:dfn; for:/; text:response
 spec:fetch; type:dfn; for:/; text:cors-preflight fetch
 spec:fetch; type:dfn; for:/; text:cors-preflight cache
 spec:fetch; type:dfn; for:/; text:establish a websocket connection
+spec:fetch; type:dfn; for:/; text:obtain a connection
 spec:fetch; type:dfn; for:cache; text:cache match
 </pre>
 <pre class="biblio">
@@ -124,9 +133,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   *   Users' routers, as outlined in [[SOHO-PHARMING]]. Note that status quo
       CORS protections don't protect against the kinds of attacks discussed here
-      as they rely only on <a>CORS-safelisted methods</a> and <a>CORS-safelisted request-headers</a>. No
-      preflight is triggered, and the attacker doesn't actually care about
-      reading the response, as the request itself is the CSRF attack.
+      as they rely only on [=CORS-safelisted methods=] and
+      [=CORS-safelisted request-headers=]. No preflight is triggered, and the
+      attacker doesn't actually care about reading the response, as the request
+      itself is the CSRF attack.
 
   *   Software running a web interface on a user's loopback address. For better
       or worse, this is becoming a common deployment mechanism for all manner of
@@ -158,8 +168,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
     `router.local` will be resolved to the router's address via the magic of
     multicast DNS [[RFC6762]], and the user agent will note it as
-    <a>private</a>. Since `csrf.attack` resolved to a <a>public address</a>, the
-    request will trigger a <a>CORS-preflight request</a>:
+    [=IP address space/private=]. Since `csrf.attack` resolved to a
+    [=public address=], the request will trigger a [=CORS-preflight request=]:
 
 
     <pre>
@@ -195,9 +205,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
     <a>CORS-preflight request</a>.
 
     When a website on the public internet makes a request to the device, the
-    user agent determines that the requestor is <a>public</a>, and the router
-    is <a>private</a>. This means that requests will trigger a <a>CORS-preflight
-    request</a>, just as above.
+    user agent determines that the requestor is [=IP address space/public=], and
+    the router is [=IP address space/private=]. This means that requests will
+    trigger a [=CORS-preflight request=], just as above.
 
     The device can explicitly grant access by sending the right headers in its
     response to the preflight request. For the above request, that might look
@@ -286,66 +296,72 @@ spec:fetch; type:dfn; for:cache; text:cache match
 <section>
   <h2 id="framework">Framework</h2>
 
-  <h3 id="address-space-heading">Address Space</h3>
+  <h3 id="ip-address-space-heading">IP Address Space</h3>
 
-  Every IP address belongs to an IP <dfn export>address space</dfn>, which can
-  be one of three different values:
+  Every IP address belongs to an
+  <dfn export local-lt="address space">IP address space</dfn>, which can be one
+  of three different values:
 
-  1.  <dfn for="address space" export>local</dfn>: contains the local host only.
-      In other words, addresses whose target differs for every device.
-  1.  <dfn for="address space" export>private</dfn>: contains addresses that
-      have meaning only within the current network. In other words, addresses
-      whose target differs based on network position.
-  1.  <dfn for="address space" export>public</dfn>: contains all other
-      addresses. In other words, addresses whose target is the same for all
-      devices globally on the IP network.
+  1.  <dfn for="IP address space" export>local</dfn>: contains the local
+      host only. In other words, addresses whose target differs for every
+      device.
+  1.  <dfn for="IP address space" export>private</dfn>: contains
+      addresses that have meaning only within the current network. In other
+      words, addresses whose target differs based on network position.
+  1.  <dfn for="IP address space" export>public</dfn>: contains all
+      other addresses. In other words, addresses whose target is the same for
+      all devices globally on the IP network.
 
-  The contents of each [=address space=] are determined in accordance with the
-  IANA Special-Purpose Address Registries ([[IPV4-REGISTRY]] and
-  [[IPV6-REGISTRY]]). To determine the [=address space=] of a given IP address
-  (|address|), run the following steps:
+  The contents of each [=/IP address space=] are determined in accordance with
+  the IANA Special-Purpose Address Registries ([[IPV4-REGISTRY]] and
+  [[IPV6-REGISTRY]]). To determine the [=/IP address space=] of a given IP
+  address (|address|), run the following steps:
 
   1.  If |address| is an [=IPv4 address=] in the "Loopback" address block
-      (`127.0.0.1/8` at time of writing), then return [=address space/local=].
+      (`127.0.0.1/8` at time of writing), then return
+      [=IP address space/local=].
   1.  If |address| is an [=IPv6 address=] in the "Loopback Address" address
-      block (`::1/128` at time of writing), then return [=address space/local=].
+      block (`::1/128` at time of writing), then return
+      [=IP address space/local=].
   1.  If |address| is an IPv6 address in the "IPv4-mapped Address" address block
-      (`::ffff:0:0/96` at time of writing), return the [=address space=] of its
-      embedded IPv4 address.
+      (`::ffff:0:0/96` at time of writing), return the [=/IP address space=] of
+      its embedded IPv4 address.
   1.  If |address| belongs to an address block for which the
       `Globally Reachable` bit is set to `False` in the relevant IANA registry,
-      then return [=address space/private=].
-  1.  Otherwise return [=address space/public=].
+      then return [=IP address space/private=].
+  1.  Otherwise return [=IP address space/public=].
 
   Note: Link-local IP addresses such as `169.254.0.0/16` are considered
-  [=address space/private=], since they can be shared among multiple devices on
-  a network link. A previous version of this specification considered them to be
-  [=address space/local=] instead.
+  [=IP address space/private=], since such addresses can identify the same
+  target for all devices on a network link. A previous version of this
+  specification considered them to be [=IP address space/local=] instead.
 
   ISSUE(wicg/cors-rfc1918#36): Remove the special case for IPv4-mapped IPv6
   addresses once access to these addresses is blocked entirely.
 
   For convenience, we additionally define the following terms:
 
-  1.  A <dfn>local address</dfn> is an address whose [=address space=] is
-      [=address space/local=].
-  1.  A <dfn>private address</dfn> is an address whose [=address space=] is
-      [=address space/private=].
-  1.  A <dfn>public address</dfn> is an address whose [=address space=] is
-      [=address space/public=].
+  1.  A <dfn>local address</dfn> is an IP address whose [=/IP address space=] is
+      [=IP address space/local=].
+  1.  A <dfn>private address</dfn> is an IP address whose [=/IP address space=]
+      is [=IP address space/private=].
+  1.  A <dfn>public address</dfn> is an IP address whose [=/IP address space=]
+      is [=IP address space/public=].
 
   <h3 id="private-network-request-heading">Private Network Request</h3>
 
-  A <a>request</a> (|request|) is a <dfn export>private network request</dfn>
+  A [=request=] (|request|) is a <dfn export>private network request</dfn>
   if any of the following are true:
 
-  1.  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
-      <a>private address</a>, and |request|'s <a for="request">client</a>'s
-      <a>address space</a> is <a>public</a>.
+  1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
+      [=private address=], and |request|'s [=request/client=]'s
+      [=environment settings object/IP address space=] is
+      [=IP address space/public=].
       
-  1.  |request|'s <a for="request">current url</a>'s {{URL/host}} maps to a
-      <a>local address</a>, and |request|'s <a for="request">client</a>'s
-      <a>address space</a> is either <a>public</a> or <a>private</a>.
+  1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
+      [=local address=], and |request|'s [=request/client=]'s
+      [=environment settings object/IP address space=] is either
+      [=IP address space/public=] or [=IP address space/private=].
 
   <h3 id="headers">Additional CORS Headers</h3>
 
@@ -374,12 +390,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
   delivered in a `Content-Security-Policy-Report-Only` header, or within
   a <{meta}> element.
 
-  This directive's <a>initialization</a> algorithm is as follows. Given a
-  `Document` or `global object` (|context|), a `Response` (|response|), and
+  This directive's [=initialization=] algorithm is as follows. Given an
+  [=environment settings object=] (|context|), a `Response` (|response|), and
   a `policy` (|policy|):
 
-  1.  Set |context|'s <a>address space</a> to "`public`" if |policy|'s
-      <a for="policy">disposition</a> is "`enforce`".
+  1.  Set |context|'s [=environment settings object/IP address space=] to
+      [=IP address space/public=] if |policy|'s [=policy/disposition=] is
+      "`enforce`".
 
   <h3 id="feature-detect">Feature Detection</h3>
   
@@ -398,8 +415,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
     };
   </pre>
 
-  Both attributes' getters return the value of the corresponding {{Document}} or
-  {{WorkerGlobalScope}}'s <a>address space</a> property.
+  Both attributes' getters return the value of the corresponding {{Document}}'s
+  [=Document/IP address space=] or {{WorkerGlobalScope}}'s
+  [=WorkerGlobalScope/IP address space=] property.
 </section>
 
 <!-- Big Text: Integrations -->
@@ -418,9 +436,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
   This document proposes a few changes to Fetch, with the following
   implications:
 
-  1.  <a>Requests</a> whose <a for="request">client</a>'s <a>address space</a>
-      is "`local`" are unchanged from status quo. They may continue to make
-      requests to <a>public</a>, <a>private</a>, and <a>local</a> addresses as
+  1.  [=Requests=] whose [=request/client=]'s
+      [=environment settings object/IP address space=] is
+      [=IP address space/local=] are unchanged from status quo. They may
+      continue to make requests to IP addresses in any [=/IP address space=] as
       they do today.
 
       ISSUE(wicg/cors-rfc1918#1): Chris Palmer suggests that we might want
@@ -429,29 +448,46 @@ spec:fetch; type:dfn; for:cache; text:cache match
       preflight for all cross-origin requests to private servers, whether they
       come from public addresses, or private addresses.
 
-  2.  <a>Requests</a> whose <a for="request">client</a>'s <a>address space</a>
-      is "`private`" are allowed to fetch resources from <a>private</a> and
-      <a>public</a> addresses as they do today, but may only request
-      <a>local</a> resources if their <a for="request">client</a> is a
-      <a>secure context</a> <em>and</em> a <a>CORS-preflight request</a> to the
-      target origin is successful.
+  2.  [=Requests=] whose [=request/client=]'s [=/IP address space=] is
+      [=IP address space/private=] are allowed to fetch resources from
+      [=IP address space/private=] and [=IP address space/public=] addresses as
+      they do today, but may only request [=IP address space/local=] resources
+      if their [=request/client=] is a [=secure context=] **and** a
+      [=CORS-preflight request=] to the target origin is successful.
 
-  3.  <a>Requests</a> whose <a for="request">client</a>'s <a>address space</a>
-      is "`public`" are allowed to fetch resources from <a>public</a> addresses
-      as they do today, but may only request <a>private</a> and <a>local</a>
-      resources if their <a for="request">client</a> is a <a>secure context</a>
-      <em>and</em> a <a>CORS-preflight request</a> to the target origin is
-      successful.
+  3.  [=Requests=] whose [=request/client=]'s
+      [=environment settings object/IP address space=] is
+      [=IP address space/public=] are allowed to fetch resources from
+      [=IP address space/public=] addresses as they do today, but may only
+      request [=IP address space/private=] and [=IP address space/local=]
+      resources if their [=request/client=] is a [=secure context=] <em>and</em>
+      a [=CORS-preflight request=] to the target origin is successful.
 
   Note: UAs must not allow <a lt="secure context">non-secure</a>
-  <a>public</a> contexts to request resources from <a>private
-  addresses</a>, even if the private server would opt-in to such a request via
-  a preflight. Making requests to <a>private</a> resources presents risks which
-  are mitigated by ensuring the integrity of the <a for="request">client</a>
-  which initiates the request. In particular, network attackers should not be
-  able to trivially exploit an endpoint's consent to a non-secure origin.
+  [=IP address space/public=] contexts to request resources from
+  [=private addresses=], even if the private server would opt-in to such a
+  request via a preflight. Making requests to [=IP address space/private=]
+  resources presents risks which are mitigated by ensuring the integrity of the
+  [=request/client=] which initiates the request. In particular, network
+  attackers should not be able to trivially exploit an endpoint's consent to a
+  non-secure origin.
 
   To those ends:
+
+  1.  [=Connection=] objects are given a new
+      <dfn export for="connection">IP address space</dfn>, whose value is the
+      [=/IP address space=] to which the connection's remote endpoint belongs.
+      This applies to WebSocket connections too.
+
+  1.  [=Response=] objects are given a new
+      <dfn export for="response">IP address space</dfn> property, whose value is
+      an [=/IP address space=], initially null.
+
+  1.  The [$HTTP-network fetch$] algorithm is amended to add a new step in
+      between steps 7.1 and 7.2, after successfully obtaining a connection:
+
+      > 7.2. Set <var ignore>response</var>'s [=response/IP address space=] to
+      >      <var ignore>connection</var>'s [=connection/IP address space=].
 
   1.  The <a>HTTP fetch</a> algorithm should be adjusted to ensure that a
       preflight is triggered for all <a>private network requests</a>. This might
@@ -474,7 +510,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       from a <a>public address</a> that targets a <a>private address</a>. This
       includes navigations.
 
-  2.  The <a>CORS-preflight fetch</a> algorithm should be adjusted to append
+  1.  The <a>CORS-preflight fetch</a> algorithm should be adjusted to append
       an <a http-header>`Access-Control-Request-Private-Network`</a> header for
       preflights triggered by <a>private network requests</a>. For instance, the
       following could be executed after the current step 5:
@@ -491,7 +527,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
               "<a http-header>`Access-Control-Request-Private-Network`</a>" to
               "`true`" in |preflight|'s <a for="request">header list</a>.
 
-  3.  The <a>CORS-preflight fetch</a> algorithm should be further adjusted to
+  1.  The <a>CORS-preflight fetch</a> algorithm should be further adjusted to
       ensure that consent is explicitly granted via an appropriate
       "<a http-header>`Access-Control-Allow-Private-Network`</a>" header in the
       response. For instance, the following could be executed before the current
@@ -506,7 +542,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
           2.  If |allow| is not "`true`", return a <a>network error</a>.
 
-  4.  Finally, to mitigate the impact of DNS rebinding attacks (see
+  1.  Finally, to mitigate the impact of DNS rebinding attacks (see
       [[#dns-rebinding]]), the <a>CORS-preflight cache</a> should be adjusted to
       distinguish between request types. For example, we could:
 
@@ -563,37 +599,82 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="integration-html">Integration with HTML</h3>
 
-  To support the checks in [[FETCH]], we store an
-  <dfn attribute for="Document">address space</dfn> property on
-  {{Document}} objects and a similar
-  <dfn attribute for="WorkerGlobalScope">address space</dfn> on
-  {{WorkerGlobalScope}} objects, which is set as follows during {{Document}} and
-  {{Worker}} initialization:
-  
-  1.  Set {{Document/address space}} to "`local`" if the resource used to
-      instantiate the {{Document}} or {{Worker}} was delivered from a
-      [=local address=], or from a URL whose [=url/scheme=] is "`file`" (see
-      [[#file-url]]).
+  To support the checks in [[FETCH]], user agents must remember the source
+  [=/IP address space=] of contexts in which network requests are made. To this
+  effect, the [[HTML]] specification is patched as follows:
 
-  2.  Set {{Document/address space}} to "`private`" if the resource
-      used to instantiate the {{Document}} or {{Worker}} was delivered
-      from a [=private address=].
+  1.  An [=/IP address space=] property is persisted on a number of objects:
 
-  3.  Set {{Document/address space}} to "`public`" if the resource
-      used to instantiate the {{Document}} or {{Worker}} was delivered
-      from a [=public address=].
+      1.  {{Document}} objects are given an
+          <dfn export for="Document">IP address space</dfn> property, whose
+          value is an [=/IP address space=].
+
+      1.  {{WorkerGlobalScope}} objects are given an
+          <dfn export for="WorkerGlobalScope">IP address space</dfn> property,
+          whose value is an [=/IP address space=].
+
+      1.  [=Environment settings objects=] are given an
+          <dfn export for="environment settings object">IP address space</dfn>
+          accessor, which has the following implementations:
+
+          1.  For {{Window}} objects: return the [=Document/IP address space=]
+              of <var ignore>window</var>'s [=associated Document=].
+
+          1.  For {{WorkerGlobalScope}} objects: return
+              <var ignore>worker global scope</var>'s
+              [=WorkerGlobalScope/IP address space=].
+
+  1.  The [$create a new browsing context$] algorithm is amended with an extra
+      step in between the existing steps 19 and 20. Thus the initial
+      `about:blank` document inherits its creator's
+      [=Document/IP address space=]:
+
+      > 20.  If |creator| is non-null, then set <var ignore>document</var>'s
+      >      [=Document/IP address space=] to to |creator|'s
+      >      [=Document/IP address space=].
+
+  1.  The [$initialize the Document object$] algorithm is amended with an extra
+      step in between the existing steps 10 and 11, before the new
+      {{Document}}'s [=Document/CSP list=] is initialized:
+
+      > 12.  Set <var ignore>document</var>'s [=Document/IP address space=] to
+      >      <var ignore>response</var>'s [=response/IP address space=].
+
+  1.  The [$run a worker$] algorithm is amended with two extra steps in between
+      the existing steps 14.4 and 14.5, after the new {{WorkerGlobalScope}}'s
+      referrer policy is set:
+
+      > 14.5. If |response|'s [=response/url=]'s [=url/scheme=] is a
+      >       [=local scheme=], then set |worker global scope|'s
+      >       [=WorkerGlobalScope/IP address space=] to
+      >       <var ignore>owner</var>'s [=WorkerGlobalScope/IP address space=].
+      > 14.5. Otherwise, set |worker global scope|'s
+      >       [=WorkerGlobalScope/IP address space=] to |response|'s
+      >       [=response/IP address space=].
+
+  ISSUE(WICG/cors-rfc1918#27): Find a place to insert address space inheritance
+  from the navigation initiator for `data:` URLs.
+
+  ISSUE(WICG/cors-rfc1918#18): Capture the address space of the URL creator
+  when `createObjectUrl()` is called on a blob, and inherit that when loading
+  a document from the resulting URL.
 
   <div class="example">
-    Assuming that `example.com` resolves to a <a>public address</a> (say,
+    Assuming that `example.com` resolves to a [=public address=] (say,
     `123.123.123.123`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its {{Document/address space}}
-    property set to "`public`".
+    `https://example.com/document.html` will have its
+    [=Document/IP address space=] property set to [=IP address space/public=].
 
-    If, on the other hand, `example.com` resolved to a <a>local address</a>
+    If this {{Document}} then embeds an `about:srcdoc` iframe, then the child
+    frame's {{Document}} will have its [=Document/IP address space=] property
+    set to [=IP address space/public=].
+
+    If, on the other hand, `example.com` resolved to a [=local address=]
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
-    `https://example.com/document.html` will have its {{Document/address space}}
-    property set to "`local`".
+    `https://example.com/document.html` will have its
+    [=Document/IP address space=] property set to [=IP address space/local=].
   </div>
+
 </section>
 
 <section>
@@ -606,9 +687,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
   opening a malicious HTML file locally, on the one hand, but on the other, code
   running locally is somewhat outside of any sane threat model.
 
-  For the moment, let's err on the side of treating `file` URLs as <a>local</a>,
-  as they seem to be just as much a part of the local system as anything else on
-  a loopback address.
+  For the moment, let's err on the side of treating `file` URLs as
+  [=IP address space/local=], as they seem to be just as much a part of the local
+  system as anything else on a loopback address.
 
   ISSUE: Reevaluate this after implementation experience.
 </section>
@@ -632,12 +713,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   Note that the CORS restrictions added by the proposal in this document do not
   obviate mixed content checks [[!MIXED-CONTENT]]. Developers who wish to
-  fetch <a>private</a> resources from <a>public</a> pages MUST ensure that the
-  connection is secure. This might involve a solution along the lines of
-  [[PLEX]], or we might end up inventing a new way of ensuring a secure
-  connection to devices (perhaps the pairing ceremony hinted at above, or one of
-  the ideas floated in [[SECURE-LOCAL-COMMUNICATION]]?). In either case,
-  consenting to access by sending proper CORS is necessary, but not sufficient.
+  fetch [=IP address space/private=] resources from [=IP address space/public=]
+  pages MUST ensure that the connection is secure. This might involve a solution
+  along the lines of [[PLEX]], or we might end up inventing a new way of
+  ensuring a secure connection to devices (perhaps the pairing ceremony hinted
+  at above, or one of the ideas floated in [[SECURE-LOCAL-COMMUNICATION]]?). In
+  either case, consenting to access by sending proper CORS is necessary, but not
+  sufficient.
 
   Note: Doing something like the proposal here would make me more comfortable
   with relaxing the mixed content restrictions that prohibit unencrypted
