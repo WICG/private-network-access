@@ -1,16 +1,16 @@
-# Explainer: CORS-RFC1918
+# Explainer: Private Network Access
 
 ## Quick links
 
-- [Specification](https://wicg.github.io/cors-rfc1918)
-- [Repository](https://github.com/WICG/cors-rfc1918)
-- [Issue tracker](https://github.com/WICG/cors-rfc1918/issues)
+- [Specification](https://wicg.github.io/private-network-access)
+- [Repository](https://github.com/WICG/private-network-access)
+- [Issue tracker](https://github.com/WICG/private-network-access/issues)
 
 ## Introduction
 
-CORS-RFC1918 is a web specification which aims to protect websites accessed
-over the private network (either on localhost or a private IP address) from
-malicious cross-origin requests.
+Private Network Access is a web specification which aims to protect websites
+accessed over the private network (either on localhost or a private IP address)
+from malicious cross-origin requests.
 
 Say you visit evil.com, we want to prevent it from using your browser as a
 springboard to hack your printer. Perhaps surprisingly, evil.com can easily
@@ -54,7 +54,7 @@ Provide a secure mechanism for initiating HTTPS connections to services
 running on the local network or the user’s machine. This piece is missing to
 allow secure public websites to embed non-public resources without running into
 mixed content violations. While a useful goal, and maybe even a necessary one in
-order to deploy CORS-RFC1918 more widely, it is out of scope of this
+order to deploy Private Network Access more widely, it is out of scope of this
 specification.
 
 ## Proposed design
@@ -78,12 +78,13 @@ and
 [IPv6](https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml)
 special-purpose address registries. Globally-routable IP addresses are `public`.
 Details about the `private` vs. `local` distinction are under
-[discussion](https://github.com/WICG/cors-rfc1918/issues/15).
+[discussion](https://github.com/WICG/private-network-access/issues/15).
 
 It might also be useful to consider web origins when determining address spaces.
 For example, the `.local.` top-level DNS domain (see
 [RFC 6762](https://tools.ietf.org/html/rfc6762)) might be always be considered
-`private`. See this [discussion](https://github.com/WICG/cors-rfc1918/issues/4).
+`private`. See this
+[discussion](https://github.com/WICG/private-network-access/issues/4).
 
 ### Private network requests
 
@@ -144,7 +145,7 @@ partial interface WorkerGlobalScope {
 
 It indicates the address space of the current context, and allows for feature
 detection. It is not clear whether this is useful, and it might be harmful.
-See discussion [here](https://github.com/WICG/cors-rfc1918/issues/21).
+See discussion [here](https://github.com/WICG/private-network-access/issues/21).
 
 ### Integration with WebSockets
 
@@ -176,4 +177,4 @@ This makes testing the specification through WPTs harder than
 we can only observe the changes to request behavior. On the other hand its
 presence might leak some information about users to websites?
 
-See discussion [here](https://github.com/WICG/cors-rfc1918/issues/21).
+See discussion [here](https://github.com/WICG/private-network-access/issues/21).
