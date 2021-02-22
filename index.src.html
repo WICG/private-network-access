@@ -1,9 +1,11 @@
-<h1>CORS and RFC1918</h1>
+<h1>Private Network Access</h1>
 <pre class="metadata">
 Status: CG-DRAFT
 Group: WICG
-ED: https://wicg.github.io/cors-rfc1918/
-Shortname: CORS-RFC1918
+ED: https://wicg.github.io/private-network-access/
+Repository: wicg/private-network-access
+Shortname: private-network-access
+Previous Version: https://wicg.github.io/cors-rfc1918/
 Level: 1
 Editor: Titouan Rigoudy 124486, Google, titouan@google.com
 Editor: Mike West 56384, Google, mkwst@google.com
@@ -12,9 +14,8 @@ Abstract:
   the risks associated with unintentional exposure of devices and servers on a
   client's internal network to the web at large.
 Indent: 2
-Boilerplate: omit conformance, omit feedback-header
+Boilerplate: omit conformance
 Markup Shorthands: css off, markdown on
-!Participate: <a href="https://github.com/wicg/cors-rfc1918">GitHub WICG/cors-rfc1918</a> (<a href="https://github.com/wicg/cors-rfc1918/issues">issues</a>)
 </pre>
 <pre class="anchors">
 spec: RFC1918; urlPrefix: https://tools.ietf.org/html/rfc1918
@@ -336,8 +337,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
   target for all devices on a network link. A previous version of this
   specification considered them to be [=IP address space/local=] instead.
 
-  ISSUE(wicg/cors-rfc1918#36): Remove the special case for IPv4-mapped IPv6
-  addresses once access to these addresses is blocked entirely.
+  ISSUE(36): Remove the special case for IPv4-mapped IPv6 addresses once access
+  to these addresses is blocked entirely.
 
   For convenience, we additionally define the following terms:
 
@@ -442,11 +443,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
       continue to make requests to IP addresses in any [=/IP address space=] as
       they do today.
 
-      ISSUE(wicg/cors-rfc1918#1): Chris Palmer suggests that we might want
-      to change the proposal such that private services must always opt-in to
-      being contacted by anyone other than themselves. That is, we'd force a
-      preflight for all cross-origin requests to private servers, whether they
-      come from public addresses, or private addresses.
+      ISSUE(1): Chris Palmer suggests that we might want to change the proposal
+      such that private services must always opt-in to being contacted by anyone
+      other than themselves. That is, we'd force a preflight for all
+      cross-origin requests to private servers, whether they come from public
+      addresses, or private addresses.
 
   2.  [=Requests=] whose [=request/client=]'s [=/IP address space=] is
       [=IP address space/private=] are allowed to fetch resources from
@@ -652,12 +653,12 @@ spec:fetch; type:dfn; for:cache; text:cache match
       >       [=WorkerGlobalScope/IP address space=] to |response|'s
       >       [=response/IP address space=].
 
-  ISSUE(WICG/cors-rfc1918#27): Find a place to insert address space inheritance
-  from the navigation initiator for `data:` URLs.
+  ISSUE(27): Find a place to insert address space inheritance from the
+  navigation initiator for `data:` URLs.
 
-  ISSUE(WICG/cors-rfc1918#18): Capture the address space of the URL creator
-  when `createObjectUrl()` is called on a blob, and inherit that when loading
-  a document from the resulting URL.
+  ISSUE(18): Capture the address space of the URL creator when
+  `createObjectUrl()` is called on a blob, and inherit that when loading a
+  document from the resulting URL.
 
   <div class="example">
     Assuming that `example.com` resolves to a [=public address=] (say,

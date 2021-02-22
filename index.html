@@ -1,7 +1,7 @@
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <title>CORS and RFC1918</title>
+  <title>Private Network Access</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 <style data-fill-with="stylesheet">/******************************************************************************
  *                   Style sheet for the W3C specifications                   *
@@ -1323,8 +1323,8 @@ Possible extra rowspan handling
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 89ebb6ab, updated Fri Oct 9 15:32:07 2020 -0700" name="generator">
-  <link href="https://wicg.github.io/cors-rfc1918/" rel="canonical">
-  <meta content="b930d98ad75be7c8608007bca60e0125893af10b" name="document-revision">
+  <link href="https://wicg.github.io/private-network-access/" rel="canonical">
+  <meta content="fdb2bce6ee733b6769aaa960ec4cf58bed80712a" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -1890,21 +1890,24 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
-   <h1>CORS and RFC1918</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-12-10">10 December 2020</time></span></h2>
+   <h1>Private Network Access</h1>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-02-22">22 February 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
-     <dd><a class="u-url" href="https://wicg.github.io/cors-rfc1918/">https://wicg.github.io/cors-rfc1918/</a>
+     <dd><a class="u-url" href="https://wicg.github.io/private-network-access/">https://wicg.github.io/private-network-access/</a>
+     <dt>Previous Versions:
+     <dd><a href="https://wicg.github.io/cors-rfc1918/" rel="prev">https://wicg.github.io/cors-rfc1918/</a>
+     <dt>Issue Tracking:
+     <dd><a href="https://github.com/wicg/private-network-access/issues/">GitHub</a>
+     <dd><a href="#issues-index">Inline In Spec</a>
      <dt class="editor">Editors:
      <dd class="editor p-author h-card vcard" data-editor-id="124486"><a class="p-name fn u-email email" href="mailto:titouan@google.com">Titouan Rigoudy</a> (<span class="p-org org">Google</span>)
      <dd class="editor p-author h-card vcard" data-editor-id="56384"><a class="p-name fn u-email email" href="mailto:mkwst@google.com">Mike West</a> (<span class="p-org org">Google</span>)
-     <dt>Participate:
-     <dd><a href="https://github.com/wicg/cors-rfc1918">GitHub WICG/cors-rfc1918</a> (<a href="https://github.com/wicg/cors-rfc1918/issues">issues</a>)
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2020 the Contributors to the CORS and RFC1918 Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2021 the Contributors to the Private Network Access Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -2173,8 +2176,8 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p class="note" role="note"><span>Note:</span> Link-local IP addresses such as <code>169.254.0.0/16</code> are considered <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private③">private</a>, since such addresses can identify the same
   target for all devices on a network link. A previous version of this
   specification considered them to be <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local②">local</a> instead.</p>
-    <p class="issue" id="issue-1456f875"><a class="self-link" href="#issue-1456f875"></a> Remove the special case for IPv4-mapped IPv6
-  addresses once access to these addresses is blocked entirely. <a href="https://github.com/wicg/cors-rfc1918/issues/36">&lt;https://github.com/wicg/cors-rfc1918/issues/36></a></p>
+    <p class="issue" id="issue-1456f875"><a class="self-link" href="#issue-1456f875"></a> Remove the special case for IPv4-mapped IPv6 addresses once access
+  to these addresses is blocked entirely. <a href="https://github.com/wicg/private-network-access/issues/36">&lt;https://github.com/wicg/private-network-access/issues/36></a></p>
     <p>For convenience, we additionally define the following terms:</p>
     <ol>
      <li data-md>
@@ -2245,11 +2248,11 @@ directive-value = ""
       <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request②">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client②">client</a>'s <a data-link-type="dfn" href="#environment-settings-object-ip-address-space" id="ref-for-environment-settings-object-ip-address-space③">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local④">local</a> are unchanged from status quo. They may
   continue to make requests to IP addresses in any <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑥">IP address space</a> as
   they do today.</p>
-      <p class="issue" id="issue-207ba0b9"><a class="self-link" href="#issue-207ba0b9"></a> Chris Palmer suggests that we might want
-  to change the proposal such that private services must always opt-in to
-  being contacted by anyone other than themselves. That is, we’d force a
-  preflight for all cross-origin requests to private servers, whether they
-  come from public addresses, or private addresses. <a href="https://github.com/wicg/cors-rfc1918/issues/1">&lt;https://github.com/wicg/cors-rfc1918/issues/1></a></p>
+      <p class="issue" id="issue-207ba0b9"><a class="self-link" href="#issue-207ba0b9"></a> Chris Palmer suggests that we might want to change the proposal
+  such that private services must always opt-in to being contacted by anyone
+  other than themselves. That is, we’d force a preflight for all
+  cross-origin requests to private servers, whether they come from public
+  addresses, or private addresses. <a href="https://github.com/wicg/private-network-access/issues/1">&lt;https://github.com/wicg/private-network-access/issues/1></a></p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request③">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a>'s <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑦">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑥">private</a> are allowed to fetch resources from <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑦">private</a> and <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑥">public</a> addresses as
   they do today, but may only request <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑤">local</a> resources
@@ -2433,11 +2436,10 @@ directive-value = ""
 14.5. Otherwise, set <var>worker global scope</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space④">IP address space</a> to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space②">IP address space</a>.</p>
       </blockquote>
     </ol>
-    <p class="issue" id="issue-4a460a34"><a class="self-link" href="#issue-4a460a34"></a> Find a place to insert address space inheritance
-  from the navigation initiator for <code>data:</code> URLs. <a href="https://github.com/WICG/cors-rfc1918/issues/27">&lt;https://github.com/WICG/cors-rfc1918/issues/27></a></p>
-    <p class="issue" id="issue-a7434e9a"><a class="self-link" href="#issue-a7434e9a"></a> Capture the address space of the URL creator
-  when <code>createObjectUrl()</code> is called on a blob, and inherit that when loading
-  a document from the resulting URL. <a href="https://github.com/WICG/cors-rfc1918/issues/27">&lt;https://github.com/WICG/cors-rfc1918/issues/27></a></p>
+    <p class="issue" id="issue-4a460a34"><a class="self-link" href="#issue-4a460a34"></a> Find a place to insert address space inheritance from the
+  navigation initiator for <code>data:</code> URLs. <a href="https://github.com/wicg/private-network-access/issues/27">&lt;https://github.com/wicg/private-network-access/issues/27></a></p>
+    <p class="issue" id="issue-a7434e9a"><a class="self-link" href="#issue-a7434e9a"></a> Capture the address space of the URL creator when <code>createObjectUrl()</code> is called on a blob, and inherit that when loading a
+  document from the resulting URL. <a href="https://github.com/wicg/private-network-access/issues/18">&lt;https://github.com/wicg/private-network-access/issues/18></a></p>
     <div class="example" id="example-6214f0f4">
      <a class="self-link" href="#example-6214f0f4"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑤">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑥">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①⓪">public</a>. 
      <p>If this <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code> then embeds an <code>about:srcdoc</code> iframe, then the child
@@ -3069,13 +3071,13 @@ directive-value = ""
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> Remove the special case for IPv4-mapped IPv6
-  addresses once access to these addresses is blocked entirely. <a href="https://github.com/wicg/cors-rfc1918/issues/36">&lt;https://github.com/wicg/cors-rfc1918/issues/36></a><a href="#issue-1456f875"> ↵ </a></div>
-   <div class="issue"> Chris Palmer suggests that we might want
-  to change the proposal such that private services must always opt-in to
-  being contacted by anyone other than themselves. That is, we’d force a
-  preflight for all cross-origin requests to private servers, whether they
-  come from public addresses, or private addresses. <a href="https://github.com/wicg/cors-rfc1918/issues/1">&lt;https://github.com/wicg/cors-rfc1918/issues/1></a><a href="#issue-207ba0b9"> ↵ </a></div>
+   <div class="issue"> Remove the special case for IPv4-mapped IPv6 addresses once access
+  to these addresses is blocked entirely. <a href="https://github.com/wicg/private-network-access/issues/36">&lt;https://github.com/wicg/private-network-access/issues/36></a><a href="#issue-1456f875"> ↵ </a></div>
+   <div class="issue"> Chris Palmer suggests that we might want to change the proposal
+  such that private services must always opt-in to being contacted by anyone
+  other than themselves. That is, we’d force a preflight for all
+  cross-origin requests to private servers, whether they come from public
+  addresses, or private addresses. <a href="https://github.com/wicg/private-network-access/issues/1">&lt;https://github.com/wicg/private-network-access/issues/1></a><a href="#issue-207ba0b9"> ↵ </a></div>
    <div class="issue"> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
   Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
@@ -3085,11 +3087,10 @@ directive-value = ""
    <div class="issue"> Look into this. Adding headers to the handshake seems reasonable, but we might need to go
   beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
   control the caller has.<a href="#issue-28debeec"> ↵ </a></div>
-   <div class="issue"> Find a place to insert address space inheritance
-  from the navigation initiator for <code>data:</code> URLs. <a href="https://github.com/WICG/cors-rfc1918/issues/27">&lt;https://github.com/WICG/cors-rfc1918/issues/27></a><a href="#issue-4a460a34"> ↵ </a></div>
-   <div class="issue"> Capture the address space of the URL creator
-  when <code>createObjectUrl()</code> is called on a blob, and inherit that when loading
-  a document from the resulting URL. <a href="https://github.com/WICG/cors-rfc1918/issues/27">&lt;https://github.com/WICG/cors-rfc1918/issues/27></a><a href="#issue-a7434e9a"> ↵ </a></div>
+   <div class="issue"> Find a place to insert address space inheritance from the
+  navigation initiator for <code>data:</code> URLs. <a href="https://github.com/wicg/private-network-access/issues/27">&lt;https://github.com/wicg/private-network-access/issues/27></a><a href="#issue-4a460a34"> ↵ </a></div>
+   <div class="issue"> Capture the address space of the URL creator when <code>createObjectUrl()</code> is called on a blob, and inherit that when loading a
+  document from the resulting URL. <a href="https://github.com/wicg/private-network-access/issues/18">&lt;https://github.com/wicg/private-network-access/issues/18></a><a href="#issue-a7434e9a"> ↵ </a></div>
    <div class="issue"> Reevaluate this after implementation experience.<a href="#issue-5f05c8e3"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="ip-address-space">
