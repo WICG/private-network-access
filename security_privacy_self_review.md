@@ -1,4 +1,4 @@
-# Security and Privacy Self-Review: CORS-RFC1918
+# Security and Privacy Self-Review: Private Network Access
 
 Based on the W3C TAG's
 [questionnaire](https://www.w3.org/TR/security-privacy-questionnaire/).
@@ -9,7 +9,7 @@ As currently specified, `document.addressSpace` can reveal some details
 about the IP address from which a document was loaded. Its purpose
 is twofold: feature detection and easier testability. Its removal is under
 active consideration: see
-[issue #21](https://github.com/WICG/cors-rfc1918/issues/21).
+[issue #21](https://github.com/WICG/private-network-access/issues/21).
 
 ## 2. Is this specification exposing the minimum amount of information necessary to power the feature?
 
@@ -70,8 +70,8 @@ None.
 
 Third-party iframes are treated distinctly from the first party embedder: even
 if the first party is served from non-public address space, only the third
-party's address space is considered when applying CORS-RFC1918 checks to
-requests made by the third-party iframe.
+party's address space is considered when applying private network request checks
+to requests made by the third-party iframe.
 
 Third-party scripts are not treated distinctly. In the case of
 `document.addressSpace`, this could reveal some information about network
@@ -80,9 +80,9 @@ third party scripts differently when checking outgoing requests, however.
 
 One area of discussion is
 whether or not to treat sandboxed iframes as `public`:
-https://github.com/WICG/cors-rfc1918/issues/26. It seems a good idea to do so,
-enabling web developers to include third-party content on non-public websites
-without allowing it to poke at non-public resources.
+https://github.com/WICG/private-network-access/issues/26. It seems a good idea
+to do so, enabling web developers to include third-party content on non-public
+websites without allowing it to poke at non-public resources.
 
 ## 14. How does this specification work in the context of a user agent’s Private Browsing or "incognito" mode?
 
