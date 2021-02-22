@@ -1,5 +1,11 @@
 
-# Specification 'cors-rfc1918'
+# Private Network Access
 
-This is the repository for cors-rfc1918. You're welcome to contribute! Let's make the Web rock our socks
-off!
+This is the repository for the Private Network Access specification. You're
+welcome to contribute! Let's make the Web rock our socks off!
+
+You may be interested in reading:
+
+ - the specification: https://wicg.github.io/private-network-access/
+ - the explainer: ./explainer.md
+ - the security & privacy self-review: ./security_privacy_self_review.md
