@@ -7,5 +7,7 @@ welcome to contribute! Let's make the Web rock our socks off!
 You may be interested in reading:
 
  - the specification: https://wicg.github.io/private-network-access/
- - the explainer: ./explainer.md
- - the security & privacy self-review: ./security_privacy_self_review.md
+ - the explainer:
+   [`./explainer.md`](https://github.com/WICG/private-network-access/blob/master/explainer.md)
+ - the security & privacy self-review:
+   [`./security_privacy_self_review.md`](https://github.com/WICG/private-network-access/blob/master/security_privacy_self_review.md)
