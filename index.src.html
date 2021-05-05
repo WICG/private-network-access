@@ -448,6 +448,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
       [=environment settings object/IP address space=] is either
       [=IP address space/public=] or [=IP address space/private=].
 
+  ISSUE(39): This definition could be expanded to cover all cross-origin
+  requests for which the [=request/current url=]'s {{URL/host}} maps to an IP
+  address whose [=/IP address space=] is not [=IP address space/public=]. This
+  would prevent a malicious server on the private network from attacking other
+  servers. The effort require to ship such a change is not deemed worth the
+  payoff yet.
+
   <h3 id="headers">Additional CORS Headers</h3>
 
   The <dfn export http-header>`Access-Control-Request-Private-Network`</dfn>
@@ -518,35 +525,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
-  This document proposes a few changes to Fetch, with the following
-  implications:
-
-  1.  [=Requests=] whose [=request/client=]'s
-      [=environment settings object/IP address space=] is
-      [=IP address space/local=] are unchanged from status quo. They may
-      continue to make requests to IP addresses in any [=/IP address space=] as
-      they do today.
-
-      ISSUE(1): Chris Palmer suggests that we might want to change the proposal
-      such that private services must always opt-in to being contacted by anyone
-      other than themselves. That is, we'd force a preflight for all
-      cross-origin requests to private servers, whether they come from public
-      addresses, or private addresses.
-
-  2.  [=Requests=] whose [=request/client=]'s [=/IP address space=] is
-      [=IP address space/private=] are allowed to fetch resources from
-      [=IP address space/private=] and [=IP address space/public=] addresses as
-      they do today, but may only request [=IP address space/local=] resources
-      if their [=request/client=] is a [=secure context=] **and** a
-      [=CORS-preflight request=] to the target origin is successful.
-
-  3.  [=Requests=] whose [=request/client=]'s
-      [=environment settings object/IP address space=] is
-      [=IP address space/public=] are allowed to fetch resources from
-      [=IP address space/public=] addresses as they do today, but may only
-      request [=IP address space/private=] and [=IP address space/local=]
-      resources if their [=request/client=] is a [=secure context=] <em>and</em>
-      a [=CORS-preflight request=] to the target origin is successful.
+  This document proposes a few changes to Fetch, with the following implication:
+  [=private network requests=] are only allowed if their [=request/client=] is
+  a [=secure context=] **and** a [=CORS-preflight request=] to the target origin
+  is successful.
 
   Note: UAs must not allow <a lt="secure context">non-secure</a>
   [=IP address space/public=] contexts to request resources from
