@@ -492,24 +492,14 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="feature-detect">Feature Detection</h3>
   
-  To determine the address space in which a context finds itself, a simple enum
-  value is added to {{Document}} and {{WorkerGlobalScope}}:
+  A previous version of this specification proposed adding an `addressSpace`
+  enum property to {{Document}} and {{WorkerGlobalScope}}, but it was removed
+  due to fingerprinting concerns (see
+  [issue #21](https://github.com/WICG/private-network-access/issues/21)).
 
-  <pre class="idl">
-    enum AddressSpace { "local", "private", "public" };
+  Documents should not behave differently or not based on whether the UA
+  implements this specification or not - all documents should assume it does.
 
-    partial interface Document {
-      readonly attribute AddressSpace addressSpace;
-    };
-
-    partial interface WorkerGlobalScope {
-      readonly attribute AddressSpace addressSpace;
-    };
-  </pre>
-
-  Both attributes' getters return the value of the corresponding {{Document}}'s
-  [=Document/IP address space=] or {{WorkerGlobalScope}}'s
-  [=WorkerGlobalScope/IP address space=] property.
 </section>
 
 <!-- Big Text: Integrations -->

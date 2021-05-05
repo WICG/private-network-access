@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version c6f50773a, updated Fri Apr 16 16:45:47 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="64a50cbec42c8666e7287b0acd05bbd744f6f84d" name="document-revision">
+  <meta content="308d68184ce9abf15a58095b10f64ed8f416d77d" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -338,69 +338,6 @@ a.self-link::before            { content: "¶"; }
 .heading > a.self-link::before { content: "§"; }
 dfn > a.self-link::before      { content: "#"; }
 </style>
-<style>/* style-syntax-highlighting */
-
-            pre.idl.highlight {
-                background: var(--borderedblock-bg, var(--def-bg));
-            }
-            
-code.highlight { padding: .1em; border-radius: .3em; }
-pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
-
-.highlight:not(.idl) { background: rgba(0, 0, 0, .03); }
-c-[a] { color: #990055 } /* Keyword.Declaration */
-c-[b] { color: #990055 } /* Keyword.Type */
-c-[c] { color: #708090 } /* Comment */
-c-[d] { color: #708090 } /* Comment.Multiline */
-c-[e] { color: #0077aa } /* Name.Attribute */
-c-[f] { color: #669900 } /* Name.Tag */
-c-[g] { color: #222222 } /* Name.Variable */
-c-[k] { color: #990055 } /* Keyword */
-c-[l] { color: #000000 } /* Literal */
-c-[m] { color: #000000 } /* Literal.Number */
-c-[n] { color: #0077aa } /* Name */
-c-[o] { color: #999999 } /* Operator */
-c-[p] { color: #999999 } /* Punctuation */
-c-[s] { color: #a67f59 } /* Literal.String */
-c-[t] { color: #a67f59 } /* Literal.String.Single */
-c-[u] { color: #a67f59 } /* Literal.String.Double */
-c-[cp] { color: #708090 } /* Comment.Preproc */
-c-[c1] { color: #708090 } /* Comment.Single */
-c-[cs] { color: #708090 } /* Comment.Special */
-c-[kc] { color: #990055 } /* Keyword.Constant */
-c-[kn] { color: #990055 } /* Keyword.Namespace */
-c-[kp] { color: #990055 } /* Keyword.Pseudo */
-c-[kr] { color: #990055 } /* Keyword.Reserved */
-c-[ld] { color: #000000 } /* Literal.Date */
-c-[nc] { color: #0077aa } /* Name.Class */
-c-[no] { color: #0077aa } /* Name.Constant */
-c-[nd] { color: #0077aa } /* Name.Decorator */
-c-[ni] { color: #0077aa } /* Name.Entity */
-c-[ne] { color: #0077aa } /* Name.Exception */
-c-[nf] { color: #0077aa } /* Name.Function */
-c-[nl] { color: #0077aa } /* Name.Label */
-c-[nn] { color: #0077aa } /* Name.Namespace */
-c-[py] { color: #0077aa } /* Name.Property */
-c-[ow] { color: #999999 } /* Operator.Word */
-c-[mb] { color: #000000 } /* Literal.Number.Bin */
-c-[mf] { color: #000000 } /* Literal.Number.Float */
-c-[mh] { color: #000000 } /* Literal.Number.Hex */
-c-[mi] { color: #000000 } /* Literal.Number.Integer */
-c-[mo] { color: #000000 } /* Literal.Number.Oct */
-c-[sb] { color: #a67f59 } /* Literal.String.Backtick */
-c-[sc] { color: #a67f59 } /* Literal.String.Char */
-c-[sd] { color: #a67f59 } /* Literal.String.Doc */
-c-[se] { color: #a67f59 } /* Literal.String.Escape */
-c-[sh] { color: #a67f59 } /* Literal.String.Heredoc */
-c-[si] { color: #a67f59 } /* Literal.String.Interpol */
-c-[sx] { color: #a67f59 } /* Literal.String.Other */
-c-[sr] { color: #a67f59 } /* Literal.String.Regex */
-c-[ss] { color: #a67f59 } /* Literal.String.Symbol */
-c-[vc] { color: #0077aa } /* Name.Variable.Class */
-c-[vg] { color: #0077aa } /* Name.Variable.Global */
-c-[vi] { color: #0077aa } /* Name.Variable.Instance */
-c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
-</style>
 <style>/* style-darkmode */
 
 @media (prefers-color-scheme: dark) {
@@ -527,70 +464,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
         --dfnpanel-bg: #222;
         --dfnpanel-text: var(--text);
     }
-}
-@media (prefers-color-scheme: dark) {
-    .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
-
-    c-[a] { color: #d33682 } /* Keyword.Declaration */
-    c-[b] { color: #d33682 } /* Keyword.Type */
-    c-[c] { color: #2aa198 } /* Comment */
-    c-[d] { color: #2aa198 } /* Comment.Multiline */
-    c-[e] { color: #268bd2 } /* Name.Attribute */
-    c-[f] { color: #b58900 } /* Name.Tag */
-    c-[g] { color: #cb4b16 } /* Name.Variable */
-    c-[k] { color: #d33682 } /* Keyword */
-    c-[l] { color: #657b83 } /* Literal */
-    c-[m] { color: #657b83 } /* Literal.Number */
-    c-[n] { color: #268bd2 } /* Name */
-    c-[o] { color: #657b83 } /* Operator */
-    c-[p] { color: #657b83 } /* Punctuation */
-    c-[s] { color: #6c71c4 } /* Literal.String */
-    c-[t] { color: #6c71c4 } /* Literal.String.Single */
-    c-[u] { color: #6c71c4 } /* Literal.String.Double */
-    c-[ch] { color: #2aa198 } /* Comment.Hashbang */
-    c-[cp] { color: #2aa198 } /* Comment.Preproc */
-    c-[cpf] { color: #2aa198 } /* Comment.PreprocFile */
-    c-[c1] { color: #2aa198 } /* Comment.Single */
-    c-[cs] { color: #2aa198 } /* Comment.Special */
-    c-[kc] { color: #d33682 } /* Keyword.Constant */
-    c-[kn] { color: #d33682 } /* Keyword.Namespace */
-    c-[kp] { color: #d33682 } /* Keyword.Pseudo */
-    c-[kr] { color: #d33682 } /* Keyword.Reserved */
-    c-[ld] { color: #657b83 } /* Literal.Date */
-    c-[nc] { color: #268bd2 } /* Name.Class */
-    c-[no] { color: #268bd2 } /* Name.Constant */
-    c-[nd] { color: #268bd2 } /* Name.Decorator */
-    c-[ni] { color: #268bd2 } /* Name.Entity */
-    c-[ne] { color: #268bd2 } /* Name.Exception */
-    c-[nf] { color: #268bd2 } /* Name.Function */
-    c-[nl] { color: #268bd2 } /* Name.Label */
-    c-[nn] { color: #268bd2 } /* Name.Namespace */
-    c-[py] { color: #268bd2 } /* Name.Property */
-    c-[ow] { color: #657b83 } /* Operator.Word */
-    c-[mb] { color: #657b83 } /* Literal.Number.Bin */
-    c-[mf] { color: #657b83 } /* Literal.Number.Float */
-    c-[mh] { color: #657b83 } /* Literal.Number.Hex */
-    c-[mi] { color: #657b83 } /* Literal.Number.Integer */
-    c-[mo] { color: #657b83 } /* Literal.Number.Oct */
-    c-[sa] { color: #6c71c4 } /* Literal.String.Affix */
-    c-[sb] { color: #6c71c4 } /* Literal.String.Backtick */
-    c-[sc] { color: #6c71c4 } /* Literal.String.Char */
-    c-[dl] { color: #6c71c4 } /* Literal.String.Delimiter */
-    c-[sd] { color: #6c71c4 } /* Literal.String.Doc */
-    c-[se] { color: #6c71c4 } /* Literal.String.Escape */
-    c-[sh] { color: #6c71c4 } /* Literal.String.Heredoc */
-    c-[si] { color: #6c71c4 } /* Literal.String.Interpol */
-    c-[sx] { color: #6c71c4 } /* Literal.String.Other */
-    c-[sr] { color: #6c71c4 } /* Literal.String.Regex */
-    c-[ss] { color: #6c71c4 } /* Literal.String.Symbol */
-    c-[fm] { color: #268bd2 } /* Name.Function.Magic */
-    c-[vc] { color: #cb4b16 } /* Name.Variable.Class */
-    c-[vg] { color: #cb4b16 } /* Name.Variable.Global */
-    c-[vi] { color: #cb4b16 } /* Name.Variable.Instance */
-    c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
-    c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
-}
-</style>
+}</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
@@ -692,7 +566,6 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
       <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
      </ol>
-    <li><a href="#idl-index"><span class="secno"></span> <span class="content">IDL Index</span></a>
     <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
    </ol>
   </nav>
@@ -986,19 +859,10 @@ directive-value = ""
   "<code>enforce</code>".</p>
     </ol>
     <h3 class="heading settled" data-level="2.5" id="feature-detect"><span class="secno">2.5. </span><span class="content">Feature Detection</span><a class="self-link" href="#feature-detect"></a></h3>
-    <p>To determine the address space in which a context finds itself, a simple enum
-  value is added to <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope">WorkerGlobalScope</a></code>:</p>
-<pre class="idl highlight def"><c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-addressspace"><code><c- g>AddressSpace</c-></code></dfn> { <dfn class="idl-code" data-dfn-for="AddressSpace" data-dfn-type="enum-value" data-export id="dom-addressspace-local"><code><c- s>"local"</c-></code><a class="self-link" href="#dom-addressspace-local"></a></dfn>, <dfn class="idl-code" data-dfn-for="AddressSpace" data-dfn-type="enum-value" data-export id="dom-addressspace-private"><code><c- s>"private"</c-></code><a class="self-link" href="#dom-addressspace-private"></a></dfn>, <dfn class="idl-code" data-dfn-for="AddressSpace" data-dfn-type="enum-value" data-export id="dom-addressspace-public"><code><c- s>"public"</c-></code><a class="self-link" href="#dom-addressspace-public"></a></dfn> };
-
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/#document" id="ref-for-document①"><c- g>Document</c-></a> {
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-addressspace" id="ref-for-enumdef-addressspace"><c- n>AddressSpace</c-></a> <dfn class="idl-code" data-dfn-for="Document" data-dfn-type="attribute" data-export data-readonly data-type="AddressSpace" id="dom-document-addressspace"><code><c- g>addressSpace</c-></code><a class="self-link" href="#dom-document-addressspace"></a></dfn>;
-};
-
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope①"><c- g>WorkerGlobalScope</c-></a> {
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-addressspace" id="ref-for-enumdef-addressspace①"><c- n>AddressSpace</c-></a> <dfn class="idl-code" data-dfn-for="WorkerGlobalScope" data-dfn-type="attribute" data-export data-readonly data-type="AddressSpace" id="dom-workerglobalscope-addressspace"><code><c- g>addressSpace</c-></code><a class="self-link" href="#dom-workerglobalscope-addressspace"></a></dfn>;
-};
-</pre>
-    <p>Both attributes' getters return the value of the corresponding <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code>'s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space">IP address space</a> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope②">WorkerGlobalScope</a></code>'s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space">IP address space</a> property.</p>
+    <p>A previous version of this specification proposed adding an <code>addressSpace</code> enum property to <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope">WorkerGlobalScope</a></code>, but it was removed
+  due to fingerprinting concerns (see <a href="https://github.com/WICG/private-network-access/issues/21">issue #21</a>).</p>
+    <p>Documents should not behave differently or not based on whether the UA
+  implements this specification or not - all documents should assume it does.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="3" id="integrations"><span class="secno">3. </span><span class="content">Integrations</span><a class="self-link" href="#integrations"></a></h2>
@@ -1145,45 +1009,45 @@ directive-value = ""
       <p>An <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⓪">IP address space</a> property is persisted on a number of objects:</p>
       <ol>
        <li data-md>
-        <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> objects are given an <dfn class="dfn-paneled" data-dfn-for="Document" data-dfn-type="dfn" data-export id="document-ip-address-space">IP address space</dfn> property, whose
+        <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code> objects are given an <dfn class="dfn-paneled" data-dfn-for="Document" data-dfn-type="dfn" data-export id="document-ip-address-space">IP address space</dfn> property, whose
   value is an <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①①">IP address space</a>.</p>
        <li data-md>
-        <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope③">WorkerGlobalScope</a></code> objects are given an <dfn class="dfn-paneled" data-dfn-for="WorkerGlobalScope" data-dfn-type="dfn" data-export id="workerglobalscope-ip-address-space">IP address space</dfn> property,
+        <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope①">WorkerGlobalScope</a></code> objects are given an <dfn class="dfn-paneled" data-dfn-for="WorkerGlobalScope" data-dfn-type="dfn" data-export id="workerglobalscope-ip-address-space">IP address space</dfn> property,
   whose value is an <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①②">IP address space</a>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">Environment settings objects</a> are given an <dfn class="dfn-paneled" data-dfn-for="environment settings object" data-dfn-type="dfn" data-export id="environment-settings-object-ip-address-space">IP address space</dfn> accessor, which has the following implementations:</p>
         <ol>
          <li data-md>
-          <p>For <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> objects: return the <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space①">IP address space</a> of <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window">associated Document</a>.</p>
+          <p>For <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> objects: return the <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space">IP address space</a> of <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window">associated Document</a>.</p>
          <li data-md>
-          <p>For <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope④">WorkerGlobalScope</a></code> objects: return <var>worker global scope</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space①">IP address space</a>.</p>
+          <p>For <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope②">WorkerGlobalScope</a></code> objects: return <var>worker global scope</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space">IP address space</a>.</p>
         </ol>
       </ol>
      <li data-md>
       <p>The <a data-link-type="abstract-op" href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-browsing-context" id="ref-for-creating-a-new-browsing-context">create a new browsing context</a> algorithm is amended with an extra
-  step in between the existing steps 19 and 20. Thus the initial <code>about:blank</code> document inherits its creator’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space②">IP address space</a>:</p>
+  step in between the existing steps 19 and 20. Thus the initial <code>about:blank</code> document inherits its creator’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space①">IP address space</a>:</p>
       <blockquote>
        <ol start="20">
         <li data-md>
-         <p>If <var>creator</var> is non-null, then set <var>document</var>’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space③">IP address space</a> to to <var>creator</var>’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space④">IP address space</a>.</p>
+         <p>If <var>creator</var> is non-null, then set <var>document</var>’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space②">IP address space</a> to to <var>creator</var>’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space③">IP address space</a>.</p>
        </ol>
       </blockquote>
      <li data-md>
       <p>The <a data-link-type="abstract-op" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#initialise-the-document-object" id="ref-for-initialise-the-document-object">initialize the Document object</a> algorithm is amended with an extra
-  step in between the existing steps 10 and 11, before the new <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-csp-list" id="ref-for-concept-document-csp-list">CSP list</a> is initialized:</p>
+  step in between the existing steps 10 and 11, before the new <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-csp-list" id="ref-for-concept-document-csp-list">CSP list</a> is initialized:</p>
       <blockquote>
        <ol start="12">
         <li data-md>
-         <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑤">IP address space</a> to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space①">IP address space</a>.</p>
+         <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space④">IP address space</a> to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space①">IP address space</a>.</p>
        </ol>
       </blockquote>
      <li data-md>
       <p>The <a data-link-type="abstract-op" href="https://html.spec.whatwg.org/multipage/workers.html#run-a-worker" id="ref-for-run-a-worker">run a worker</a> algorithm is amended with two extra steps in between
-  the existing steps 14.4 and 14.5, after the new <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope⑤">WorkerGlobalScope</a></code>'s
+  the existing steps 14.4 and 14.5, after the new <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope③">WorkerGlobalScope</a></code>'s
   referrer policy is set:</p>
       <blockquote>
-       <p>14.5. If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-url" id="ref-for-concept-response-url">url</a>'s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme">scheme</a> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#local-scheme" id="ref-for-local-scheme">local scheme</a>, then set <var>worker global scope</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space②">IP address space</a> to <var>owner</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space③">IP address space</a>.
-14.5. Otherwise, set <var>worker global scope</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space④">IP address space</a> to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space②">IP address space</a>.</p>
+       <p>14.5. If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-url" id="ref-for-concept-response-url">url</a>'s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme">scheme</a> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#local-scheme" id="ref-for-local-scheme">local scheme</a>, then set <var>worker global scope</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space①">IP address space</a> to <var>owner</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space②">IP address space</a>.
+14.5. Otherwise, set <var>worker global scope</var>’s <a data-link-type="dfn" href="#workerglobalscope-ip-address-space" id="ref-for-workerglobalscope-ip-address-space③">IP address space</a> to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space②">IP address space</a>.</p>
       </blockquote>
     </ol>
     <p class="issue" id="issue-4a460a34"><a class="self-link" href="#issue-4a460a34"></a> Find a place to insert address space inheritance from the
@@ -1191,11 +1055,11 @@ directive-value = ""
     <p class="issue" id="issue-a7434e9a"><a class="self-link" href="#issue-a7434e9a"></a> Capture the address space of the URL creator when <code>createObjectUrl()</code> is called on a blob, and inherit that when loading a
   document from the resulting URL. <a href="https://github.com/wicg/private-network-access/issues/18">&lt;https://github.com/wicg/private-network-access/issues/18></a></p>
     <div class="example" id="example-6214f0f4">
-     <a class="self-link" href="#example-6214f0f4"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑤">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑥">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑧">public</a>. 
-     <p>If this <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code> then embeds an <code>about:srcdoc</code> iframe, then the child
-    frame’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> will have its <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑦">IP address space</a> property
+     <a class="self-link" href="#example-6214f0f4"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑤">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑤">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑧">public</a>. 
+     <p>If this <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> then embeds an <code>about:srcdoc</code> iframe, then the child
+    frame’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> will have its <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑥">IP address space</a> property
     set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑨">public</a>.</p>
-     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑧">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑧">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local④">local</a>.</p>
+     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑦">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local④">local</a>.</p>
     </div>
    </section>
    <section>
@@ -1276,13 +1140,6 @@ directive-value = ""
    <li><a href="#http-headerdef-access-control-allow-private-network">Access-Control-Allow-Private-Network</a><span>, in §2.3</span>
    <li><a href="#http-headerdef-access-control-request-private-network">Access-Control-Request-Private-Network</a><span>, in §2.3</span>
    <li><a href="#ip-address-space">address space</a><span>, in §2.1</span>
-   <li><a href="#enumdef-addressspace">AddressSpace</a><span>, in §2.5</span>
-   <li>
-    addressSpace
-    <ul>
-     <li><a href="#dom-document-addressspace">attribute for Document</a><span>, in §2.5</span>
-     <li><a href="#dom-workerglobalscope-addressspace">attribute for WorkerGlobalScope</a><span>, in §2.5</span>
-    </ul>
    <li>
     IP address space
     <ul>
@@ -1293,14 +1150,11 @@ directive-value = ""
      <li><a href="#environment-settings-object-ip-address-space">dfn for environment settings object</a><span>, in §3.3</span>
      <li><a href="#response-ip-address-space">dfn for response</a><span>, in §3.1</span>
     </ul>
-   <li><a href="#dom-addressspace-local">"local"</a><span>, in §2.5</span>
    <li><a href="#ip-address-space-local">local</a><span>, in §2.1</span>
    <li><a href="#local-address">local address</a><span>, in §2.1</span>
-   <li><a href="#dom-addressspace-private">"private"</a><span>, in §2.5</span>
    <li><a href="#ip-address-space-private">private</a><span>, in §2.1</span>
    <li><a href="#private-address">private address</a><span>, in §2.1</span>
    <li><a href="#private-network-request">private network request</a><span>, in §2.2</span>
-   <li><a href="#dom-addressspace-public">"public"</a><span>, in §2.5</span>
    <li><a href="#ip-address-space-public">public</a><span>, in §2.1</span>
    <li><a href="#public-address">public address</a><span>, in §2.1</span>
    <li><a href="#cache-request-network-type">request network type</a><span>, in §3.1</span>
@@ -1478,8 +1332,8 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-document">
    <a href="https://html.spec.whatwg.org/#document">https://html.spec.whatwg.org/#document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-document">2.5. Feature Detection</a> <a href="#ref-for-document①">(2)</a> <a href="#ref-for-document②">(3)</a>
-    <li><a href="#ref-for-document③">3.3. Integration with HTML</a> <a href="#ref-for-document④">(2)</a> <a href="#ref-for-document⑤">(3)</a> <a href="#ref-for-document⑥">(4)</a> <a href="#ref-for-document⑦">(5)</a> <a href="#ref-for-document⑧">(6)</a>
+    <li><a href="#ref-for-document">2.5. Feature Detection</a>
+    <li><a href="#ref-for-document①">3.3. Integration with HTML</a> <a href="#ref-for-document②">(2)</a> <a href="#ref-for-document③">(3)</a> <a href="#ref-for-document④">(4)</a> <a href="#ref-for-document⑤">(5)</a> <a href="#ref-for-document⑥">(6)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-http-network-fetch">
@@ -1497,8 +1351,8 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-workerglobalscope">
    <a href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-workerglobalscope">2.5. Feature Detection</a> <a href="#ref-for-workerglobalscope①">(2)</a> <a href="#ref-for-workerglobalscope②">(3)</a>
-    <li><a href="#ref-for-workerglobalscope③">3.3. Integration with HTML</a> <a href="#ref-for-workerglobalscope④">(2)</a> <a href="#ref-for-workerglobalscope⑤">(3)</a>
+    <li><a href="#ref-for-workerglobalscope">2.5. Feature Detection</a>
+    <li><a href="#ref-for-workerglobalscope①">3.3. Integration with HTML</a> <a href="#ref-for-workerglobalscope②">(2)</a> <a href="#ref-for-workerglobalscope③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-window">
@@ -1674,18 +1528,6 @@ directive-value = ""
    <dt id="biblio-trend-micro">[TREND-MICRO]
    <dd><a href="https://code.google.com/p/google-security-research/issues/detail?id=693">TrendMicro node.js HTTP server listening on localhost can execute commands</a>. URL: <a href="https://code.google.com/p/google-security-research/issues/detail?id=693">https://code.google.com/p/google-security-research/issues/detail?id=693</a>
   </dl>
-  <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
-<pre class="idl highlight def"><c- b>enum</c-> <a href="#enumdef-addressspace"><code><c- g>AddressSpace</c-></code></a> { <a href="#dom-addressspace-local"><code><c- s>"local"</c-></code></a>, <a href="#dom-addressspace-private"><code><c- s>"private"</c-></code></a>, <a href="#dom-addressspace-public"><code><c- s>"public"</c-></code></a> };
-
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/#document"><c- g>Document</c-></a> {
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-addressspace"><c- n>AddressSpace</c-></a> <a data-readonly data-type="AddressSpace" href="#dom-document-addressspace"><code><c- g>addressSpace</c-></code></a>;
-};
-
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope"><c- g>WorkerGlobalScope</c-></a> {
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-addressspace"><c- n>AddressSpace</c-></a> <a data-readonly data-type="AddressSpace" href="#dom-workerglobalscope-addressspace"><code><c- g>addressSpace</c-></code></a>;
-};
-
-</pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Remove the special case for IPv4-mapped IPv6 addresses once access
@@ -1810,12 +1652,6 @@ directive-value = ""
     <li><a href="#ref-for-treat-as-public-address">6. IANA Considerations</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="enumdef-addressspace">
-   <b><a href="#enumdef-addressspace">#enumdef-addressspace</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-enumdef-addressspace">2.5. Feature Detection</a> <a href="#ref-for-enumdef-addressspace①">(2)</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="connection-ip-address-space">
    <b><a href="#connection-ip-address-space">#connection-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
@@ -1838,15 +1674,13 @@ directive-value = ""
   <aside class="dfn-panel" data-for="document-ip-address-space">
    <b><a href="#document-ip-address-space">#document-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-document-ip-address-space">2.5. Feature Detection</a>
-    <li><a href="#ref-for-document-ip-address-space①">3.3. Integration with HTML</a> <a href="#ref-for-document-ip-address-space②">(2)</a> <a href="#ref-for-document-ip-address-space③">(3)</a> <a href="#ref-for-document-ip-address-space④">(4)</a> <a href="#ref-for-document-ip-address-space⑤">(5)</a> <a href="#ref-for-document-ip-address-space⑥">(6)</a> <a href="#ref-for-document-ip-address-space⑦">(7)</a> <a href="#ref-for-document-ip-address-space⑧">(8)</a>
+    <li><a href="#ref-for-document-ip-address-space">3.3. Integration with HTML</a> <a href="#ref-for-document-ip-address-space①">(2)</a> <a href="#ref-for-document-ip-address-space②">(3)</a> <a href="#ref-for-document-ip-address-space③">(4)</a> <a href="#ref-for-document-ip-address-space④">(5)</a> <a href="#ref-for-document-ip-address-space⑤">(6)</a> <a href="#ref-for-document-ip-address-space⑥">(7)</a> <a href="#ref-for-document-ip-address-space⑦">(8)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="workerglobalscope-ip-address-space">
    <b><a href="#workerglobalscope-ip-address-space">#workerglobalscope-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-workerglobalscope-ip-address-space">2.5. Feature Detection</a>
-    <li><a href="#ref-for-workerglobalscope-ip-address-space①">3.3. Integration with HTML</a> <a href="#ref-for-workerglobalscope-ip-address-space②">(2)</a> <a href="#ref-for-workerglobalscope-ip-address-space③">(3)</a> <a href="#ref-for-workerglobalscope-ip-address-space④">(4)</a>
+    <li><a href="#ref-for-workerglobalscope-ip-address-space">3.3. Integration with HTML</a> <a href="#ref-for-workerglobalscope-ip-address-space①">(2)</a> <a href="#ref-for-workerglobalscope-ip-address-space②">(3)</a> <a href="#ref-for-workerglobalscope-ip-address-space③">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="environment-settings-object-ip-address-space">
