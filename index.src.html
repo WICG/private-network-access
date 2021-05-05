@@ -99,6 +99,26 @@ spec:fetch; type:dfn; for:cache; text:cache match
   ul.toc ul ul ul span.secno {
     margin-left: -9em;
   }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    caption-side: bottom;
+  }
+  table caption {
+    padding: 5px;
+  }
+  th, td {
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px 10px;
+  }
+  th {
+    background-color: lightblue;
+    border-color: black;
+  }
+  td {
+    border-color: grey;
+  }
 </style>
 <!--
 ████ ██    ██ ████████ ████████   ███████
@@ -313,33 +333,6 @@ spec:fetch; type:dfn; for:cache; text:cache match
       other addresses. In other words, addresses whose target is the same for
       all devices globally on the IP network.
 
-  The contents of each [=/IP address space=] are determined in accordance with
-  the IANA Special-Purpose Address Registries ([[IPV4-REGISTRY]] and
-  [[IPV6-REGISTRY]]). To determine the [=/IP address space=] of a given IP
-  address (|address|), run the following steps:
-
-  1.  If |address| is an [=IPv4 address=] in the "Loopback" address block
-      (`127.0.0.1/8` at time of writing), then return
-      [=IP address space/local=].
-  1.  If |address| is an [=IPv6 address=] in the "Loopback Address" address
-      block (`::1/128` at time of writing), then return
-      [=IP address space/local=].
-  1.  If |address| is an IPv6 address in the "IPv4-mapped Address" address block
-      (`::ffff:0:0/96` at time of writing), return the [=/IP address space=] of
-      its embedded IPv4 address.
-  1.  If |address| belongs to an address block for which the
-      `Globally Reachable` bit is set to `False` in the relevant IANA registry,
-      then return [=IP address space/private=].
-  1.  Otherwise return [=IP address space/public=].
-
-  Note: Link-local IP addresses such as `169.254.0.0/16` are considered
-  [=IP address space/private=], since such addresses can identify the same
-  target for all devices on a network link. A previous version of this
-  specification considered them to be [=IP address space/local=] instead.
-
-  ISSUE(36): Remove the special case for IPv4-mapped IPv6 addresses once access
-  to these addresses is blocked entirely.
-
   For convenience, we additionally define the following terms:
 
   1.  A <dfn>local address</dfn> is an IP address whose [=/IP address space=] is
@@ -348,6 +341,102 @@ spec:fetch; type:dfn; for:cache; text:cache match
       is [=IP address space/private=].
   1.  A <dfn>public address</dfn> is an IP address whose [=/IP address space=]
       is [=IP address space/public=].
+
+  To determine the [=/IP address space=] of a given IP address (|address|),
+  run the following steps:
+
+  1.  If |address| belongs to the `::ffff:0:0/96` "IPv4-mapped Address"
+      address block, then return the [=/IP address space=] of
+      its embedded IPv4 address.
+  1.  For each |row| in the
+      <a href="#non-public-ip-address-blocks">Non-public IP address blocks"</a>
+      table:
+      1.   If |address| belongs to |row|'s address block, return |row|'s
+           address space.
+  1.  Return [=IP address space/public=].
+
+  <table id="non-public-ip-address-blocks">
+    <caption>Non-public IP address blocks</caption>
+    <thead>
+      <tr>
+        <th>Address block</th>
+        <th>Name</th>
+        <th>Reference</th>
+        <th>Address space</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`127.0.0.0/8`</td>
+        <td>IPv4 Loopback</td>
+        <td>[[RFC1122]]</td>
+        <td>[=IP address space/local=]</td>
+      </tr>
+      <tr>
+        <td>`10.0.0.0/8`</td>
+        <td>Private Use</td>
+        <td>[[RFC1918]]</td>
+        <td>[=IP address space/private=]</td>
+      </tr>
+      <tr>
+        <td>`172.16.0.0/12`</td>
+        <td>Private Use</td>
+        <td>[[RFC1918]]</td>
+        <td>[=IP address space/private=]</td>
+      </tr>
+      <tr>
+        <td>`192.168.0.0/16`</td>
+        <td>Private Use</td>
+        <td>[[RFC1918]]</td>
+        <td>[=IP address space/private=]</td>
+      </tr>
+      <tr>
+        <td>`169.254.0.0/16`</td>
+        <td>Link Local</td>
+        <td>[[RFC3927]]</td>
+        <td>[=IP address space/private=]</td>
+      </tr>
+      <tr>
+        <td>`::1/128`</td>
+        <td>IPv6 Loopback</td>
+        <td>[[RFC4291]]</td>
+        <td>[=IP address space/local=]</td>
+      </tr>
+      <tr>
+        <td>`fc00::/7`</td>
+        <td>Unique Local</td>
+        <td>[[RFC4193]]</td>
+        <td>[=IP address space/private=]</td>
+      </tr>
+      <tr>
+        <td>`fe80::/10`</td>
+        <td>Link-Local Unicast</td>
+        <td>[[RFC4291]]</td>
+        <td>[=IP address space/private=]</td>
+      </tr>
+      <tr>
+        <td>`::ffff:0:0/96`</td>
+        <td>IPv4-mapped</td>
+        <td>[[RFC4291]]</td>
+        <td>see mapped IPv4 address</td>
+      </tr>
+    </tbody>
+  </table>
+
+  Note: Link-local IP addresses such as `169.254.0.0/16` are considered
+  [=IP address space/private=], since such addresses can identify the same
+  target for all devices on a network link. A previous version of this
+  specification considered them to be [=IP address space/local=] instead.
+
+  Note: The contents of each [=/IP address space=] were at one point determined
+  in accordance with the IANA Special-Purpose Address Registries
+  ([[IPV4-REGISTRY]] and [[IPV6-REGISTRY]]) and the `Globally Reachable` bit
+  defined therein. This turned out to be an inaccurate signal for our uses, as
+  described in
+  [spec issue #50](https://github.com/WICG/private-network-access/issues/50).
+
+  ISSUE(36): Remove the special case for IPv4-mapped IPv6 addresses once access
+  to these addresses is blocked entirely.
 
   <h3 id="private-network-request-heading">Private Network Request</h3>
 

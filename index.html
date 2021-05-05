@@ -4,15 +4,35 @@
   <title>Private Network Access</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version b9f8371cc, updated Fri Mar 5 18:35:23 2021 -0800" name="generator">
+  <meta content="Bikeshed version c6f50773a, updated Fri Apr 16 16:45:47 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="67b2450ef27d15aa763d4624572555c3d38bf1a1" name="document-revision">
+  <meta content="144f8fc3ce62f1fbaedf2e96a0a1d2832e57f7e7" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
   }
   ul.toc ul ul ul span.secno {
     margin-left: -9em;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    caption-side: bottom;
+  }
+  table caption {
+    padding: 5px;
+  }
+  th, td {
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px 10px;
+  }
+  th {
+    background-color: lightblue;
+    border-color: black;
+  }
+  td {
+    border-color: grey;
   }
 </style>
 <style>/* style-autolinks */
@@ -121,9 +141,9 @@ pre .property::before, pre .property::after {
     --ins-bg: transparent;
 
     --a-normal-text: #034575;
-    --a-normal-underline: #707070;
+    --a-normal-underline: #bbb;
     --a-visited-text: var(--a-normal-text);
-    --a-visited-underline: #bbb;
+    --a-visited-underline: #707070;
     --a-hover-bg: rgba(75%, 75%, 75%, .25);
     --a-active-text: #c00;
     --a-active-underline: #c00;
@@ -575,7 +595,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-03-08">8 March 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-05-05">5 May 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -837,47 +857,104 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
   other addresses. In other words, addresses whose target is the same for
   all devices globally on the IP network.</p>
     </ol>
-    <p>The contents of each <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space">IP address space</a> are determined in accordance with
-  the IANA Special-Purpose Address Registries (<a data-link-type="biblio" href="#biblio-ipv4-registry">[IPV4-REGISTRY]</a> and <a data-link-type="biblio" href="#biblio-ipv6-registry">[IPV6-REGISTRY]</a>). To determine the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①">IP address space</a> of a given IP
-  address (<var>address</var>), run the following steps:</p>
-    <ol>
-     <li data-md>
-      <p>If <var>address</var> is an <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-ipv4" id="ref-for-concept-ipv4">IPv4 address</a> in the "Loopback" address block
-  (<code>127.0.0.1/8</code> at time of writing), then return <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local">local</a>.</p>
-     <li data-md>
-      <p>If <var>address</var> is an <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-ipv6" id="ref-for-concept-ipv6">IPv6 address</a> in the "Loopback Address" address
-  block (<code>::1/128</code> at time of writing), then return <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①">local</a>.</p>
-     <li data-md>
-      <p>If <var>address</var> is an IPv6 address in the "IPv4-mapped Address" address block
-  (<code>::ffff:0:0/96</code> at time of writing), return the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space②">IP address space</a> of
-  its embedded IPv4 address.</p>
-     <li data-md>
-      <p>If <var>address</var> belongs to an address block for which the <code>Globally Reachable</code> bit is set to <code>False</code> in the relevant IANA registry,
-  then return <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private②">private</a>.</p>
-     <li data-md>
-      <p>Otherwise return <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①">public</a>.</p>
-    </ol>
-    <p class="note" role="note"><span>Note:</span> Link-local IP addresses such as <code>169.254.0.0/16</code> are considered <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private③">private</a>, since such addresses can identify the same
-  target for all devices on a network link. A previous version of this
-  specification considered them to be <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local②">local</a> instead.</p>
-    <p class="issue" id="issue-1456f875"><a class="self-link" href="#issue-1456f875"></a> Remove the special case for IPv4-mapped IPv6 addresses once access
-  to these addresses is blocked entirely. <a href="https://github.com/wicg/private-network-access/issues/36">&lt;https://github.com/wicg/private-network-access/issues/36></a></p>
     <p>For convenience, we additionally define the following terms:</p>
     <ol>
      <li data-md>
-      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="local-address">local address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space③">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local③">local</a>.</p>
+      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="local-address">local address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local">local</a>.</p>
      <li data-md>
-      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="private-address">private address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space④">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private④">private</a>.</p>
+      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="private-address">private address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private②">private</a>.</p>
      <li data-md>
-      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="public-address">public address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑤">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public②">public</a>.</p>
+      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="public-address">public address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space②">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①">public</a>.</p>
     </ol>
+    <p>To determine the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space③">IP address space</a> of a given IP address (<var>address</var>),
+  run the following steps:</p>
+    <ol>
+     <li data-md>
+      <p>If <var>address</var> belongs to the <code>::ffff:0:0/96</code> "IPv4-mapped Address"
+  address block, then return the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space④">IP address space</a> of
+  its embedded IPv4 address.</p>
+     <li data-md>
+      <p>For each <var>row</var> in the <a href="#non-public-ip-address-blocks">Non-public IP address blocks"</a> table:</p>
+      <ol>
+       <li data-md>
+        <p>If <var>address</var> belongs to <var>row</var>’s address block, return <var>row</var>’s
+   address space.</p>
+      </ol>
+     <li data-md>
+      <p>Return <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public②">public</a>.</p>
+    </ol>
+    <table id="non-public-ip-address-blocks">
+     <caption>Non-public IP address blocks</caption>
+     <thead>
+      <tr>
+       <th>Address block
+       <th>Name
+       <th>Reference
+       <th>Address space
+     <tbody>
+      <tr>
+       <td><code>127.0.0.0/8</code>
+       <td>IPv4 Loopback
+       <td><a data-link-type="biblio" href="#biblio-rfc1122">[RFC1122]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①">local</a>
+      <tr>
+       <td><code>10.0.0.0/8</code>
+       <td>Private Use
+       <td><a data-link-type="biblio" href="#biblio-rfc1918">[RFC1918]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private③">private</a>
+      <tr>
+       <td><code>172.16.0.0/12</code>
+       <td>Private Use
+       <td><a data-link-type="biblio" href="#biblio-rfc1918">[RFC1918]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private④">private</a>
+      <tr>
+       <td><code>192.168.0.0/16</code>
+       <td>Private Use
+       <td><a data-link-type="biblio" href="#biblio-rfc1918">[RFC1918]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑤">private</a>
+      <tr>
+       <td><code>169.254.0.0/16</code>
+       <td>Link Local
+       <td><a data-link-type="biblio" href="#biblio-rfc3927">[RFC3927]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑥">private</a>
+      <tr>
+       <td><code>::1/128</code>
+       <td>IPv6 Loopback
+       <td><a data-link-type="biblio" href="#biblio-rfc4291">[RFC4291]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local②">local</a>
+      <tr>
+       <td><code>fc00::/7</code>
+       <td>Unique Local
+       <td><a data-link-type="biblio" href="#biblio-rfc4193">[RFC4193]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑦">private</a>
+      <tr>
+       <td><code>fe80::/10</code>
+       <td>Link-Local Unicast
+       <td><a data-link-type="biblio" href="#biblio-rfc4291">[RFC4291]</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑧">private</a>
+      <tr>
+       <td><code>::ffff:0:0/96</code>
+       <td>IPv4-mapped
+       <td><a data-link-type="biblio" href="#biblio-rfc4291">[RFC4291]</a>
+       <td>see mapped IPv4 address
+    </table>
+    <p class="note" role="note"><span>Note:</span> Link-local IP addresses such as <code>169.254.0.0/16</code> are considered <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑨">private</a>, since such addresses can identify the same
+  target for all devices on a network link. A previous version of this
+  specification considered them to be <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local③">local</a> instead.</p>
+    <p class="note" role="note"><span>Note:</span> The contents of each <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑤">IP address space</a> were at one point determined
+  in accordance with the IANA Special-Purpose Address Registries
+  (<a data-link-type="biblio" href="#biblio-ipv4-registry">[IPV4-REGISTRY]</a> and <a data-link-type="biblio" href="#biblio-ipv6-registry">[IPV6-REGISTRY]</a>) and the <code>Globally Reachable</code> bit
+  defined therein. This turned out to be an inaccurate signal for our uses, as
+  described in <a href="https://github.com/WICG/private-network-access/issues/50">spec issue #50</a>.</p>
+    <p class="issue" id="issue-1456f875"><a class="self-link" href="#issue-1456f875"></a> Remove the special case for IPv4-mapped IPv6 addresses once access
+  to these addresses is blocked entirely. <a href="https://github.com/wicg/private-network-access/issues/36">&lt;https://github.com/wicg/private-network-access/issues/36></a></p>
     <h3 class="heading settled" data-level="2.2" id="private-network-request-heading"><span class="secno">2.2. </span><span class="content">Private Network Request</span><a class="self-link" href="#private-network-request-heading"></a></h3>
     <p>A <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request">request</a> (<var>request</var>) is a <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="private-network-request">private network request</dfn> if any of the following are true:</p>
     <ol>
      <li data-md>
       <p><var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host" id="ref-for-dom-url-host">host</a></code> maps to a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address①">private address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client">client</a>'s <a data-link-type="dfn" href="#environment-settings-object-ip-address-space" id="ref-for-environment-settings-object-ip-address-space">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public③">public</a>.</p>
      <li data-md>
-      <p><var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url①">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host" id="ref-for-dom-url-host①">host</a></code> maps to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address">local address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①">client</a>'s <a data-link-type="dfn" href="#environment-settings-object-ip-address-space" id="ref-for-environment-settings-object-ip-address-space①">IP address space</a> is either <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public④">public</a> or <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑤">private</a>.</p>
+      <p><var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url①">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host" id="ref-for-dom-url-host①">host</a></code> maps to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address">local address</a>, and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①">client</a>'s <a data-link-type="dfn" href="#environment-settings-object-ip-address-space" id="ref-for-environment-settings-object-ip-address-space①">IP address space</a> is either <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public④">public</a> or <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⓪">private</a>.</p>
     </ol>
     <h3 class="heading settled" data-level="2.3" id="headers"><span class="secno">2.3. </span><span class="content">Additional CORS Headers</span><a class="self-link" href="#headers"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-request-private-network"><code>Access-Control-Request-Private-Network</code></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request①">request</a> is a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request">private network request</a>.</p>
@@ -938,15 +1015,15 @@ directive-value = ""
   cross-origin requests to private servers, whether they come from public
   addresses, or private addresses. <a href="https://github.com/wicg/private-network-access/issues/1">&lt;https://github.com/wicg/private-network-access/issues/1></a></p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request③">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a>'s <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑦">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑥">private</a> are allowed to fetch resources from <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑦">private</a> and <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑥">public</a> addresses as
+      <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request③">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a>'s <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑦">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①①">private</a> are allowed to fetch resources from <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①②">private</a> and <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑥">public</a> addresses as
   they do today, but may only request <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑤">local</a> resources
   if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client④">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context">secure context</a> <strong>and</strong> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request⑤">CORS-preflight request</a> to the target origin is successful.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request④">Requests</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">client</a>'s <a data-link-type="dfn" href="#environment-settings-object-ip-address-space" id="ref-for-environment-settings-object-ip-address-space④">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑦">public</a> are allowed to fetch resources from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑧">public</a> addresses as they do today, but may only
-  request <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑧">private</a> and <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑥">local</a> resources if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context①">secure context</a> <em>and</em> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request⑥">CORS-preflight request</a> to the target origin is successful.</p>
+  request <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①③">private</a> and <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑥">local</a> resources if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context①">secure context</a> <em>and</em> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request⑥">CORS-preflight request</a> to the target origin is successful.</p>
     </ol>
     <p class="note" role="note"><span>Note:</span> UAs must not allow <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context②">non-secure</a> <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑨">public</a> contexts to request resources from <a data-link-type="dfn" href="#private-address" id="ref-for-private-address③">private addresses</a>, even if the private server would opt-in to such a
-  request via a preflight. Making requests to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑨">private</a> resources presents risks which are mitigated by ensuring the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑦">client</a> which initiates the request. In particular, network
+  request via a preflight. Making requests to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①④">private</a> resources presents risks which are mitigated by ensuring the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑦">client</a> which initiates the request. In particular, network
   attackers should not be able to trivially exploit an endpoint’s consent to a
   non-secure origin.</p>
     <p>To those ends:</p>
@@ -1155,7 +1232,7 @@ directive-value = ""
     <h3 class="heading settled" data-level="5.2" id="mixed-content"><span class="secno">5.2. </span><span class="content">Mixed Content</span><a class="self-link" href="#mixed-content"></a></h3>
     <p>Note that the CORS restrictions added by the proposal in this document do not
   obviate mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content">[MIXED-CONTENT]</a>. Developers who wish to
-  fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⓪">private</a> resources from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①②">public</a> pages MUST ensure that the connection is secure. This might involve a solution
+  fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a> resources from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①②">public</a> pages MUST ensure that the connection is secure. This might involve a solution
   along the lines of <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>, or we might end up inventing a new way of
   ensuring a secure connection to devices (perhaps the pairing ceremony hinted
   at above, or one of the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In
@@ -1491,18 +1568,6 @@ directive-value = ""
     <li><a href="#ref-for-dom-url-host">2.2. Private Network Request</a> <a href="#ref-for-dom-url-host①">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-ipv4">
-   <a href="https://url.spec.whatwg.org/#concept-ipv4">https://url.spec.whatwg.org/#concept-ipv4</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-ipv4">2.1. IP Address Space</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-ipv6">
-   <a href="https://url.spec.whatwg.org/#concept-ipv6">https://url.spec.whatwg.org/#concept-ipv6</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-ipv6">2.1. IP Address Space</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url-scheme">
    <a href="https://url.spec.whatwg.org/#concept-url-scheme">https://url.spec.whatwg.org/#concept-url-scheme</a><b>Referenced in:</b>
    <ul>
@@ -1565,8 +1630,6 @@ directive-value = ""
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-dom-url-host">host</span>
-     <li><span class="dfn-paneled" id="term-for-concept-ipv4">ipv4 address</span>
-     <li><span class="dfn-paneled" id="term-for-concept-ipv6">ipv6 address</span>
      <li><span class="dfn-paneled" id="term-for-concept-url-scheme">scheme</span>
     </ul>
   </ul>
@@ -1574,7 +1637,7 @@ directive-value = ""
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-csp3">[CSP3]
-   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. 15 October 2018. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. 24 March 2021. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
    <dt id="biblio-fetch">[FETCH]
    <dd>Anne van Kesteren. <a href="https://fetch.spec.whatwg.org/">Fetch Standard</a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>
    <dt id="biblio-html">[HTML]
@@ -1582,7 +1645,7 @@ directive-value = ""
    <dt id="biblio-mixed-content">[MIXED-CONTENT]
    <dd>Mike West. <a href="https://www.w3.org/TR/mixed-content/">Mixed Content</a>. 2 August 2016. CR. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
    <dt id="biblio-rfc7762">[RFC7762]
-   <dd>M. West. <a href="https://tools.ietf.org/html/rfc7762">Initial Assignment for the Content Security Policy Directives Registry</a>. January 2016. Informational. URL: <a href="https://tools.ietf.org/html/rfc7762">https://tools.ietf.org/html/rfc7762</a>
+   <dd>M. West. <a href="https://datatracker.ietf.org/doc/html/rfc7762">Initial Assignment for the Content Security Policy Directives Registry</a>. January 2016. Informational. URL: <a href="https://datatracker.ietf.org/doc/html/rfc7762">https://datatracker.ietf.org/doc/html/rfc7762</a>
    <dt id="biblio-url">[URL]
    <dd>Anne van Kesteren. <a href="https://url.spec.whatwg.org/">URL Standard</a>. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a>
   </dl>
@@ -1600,12 +1663,20 @@ directive-value = ""
    <dd><a href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml">IANA IPv6 Special-Purpose Address Registry</a>. URL: <a href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml">https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml</a>
    <dt id="biblio-plex">[PLEX]
    <dd>Filippo Valsorda. <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">How Plex is doing HTTPS for all its users</a>. URL: <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/</a>
+   <dt id="biblio-rfc1122">[RFC1122]
+   <dd>R. Braden, Ed.. <a href="https://datatracker.ietf.org/doc/html/rfc1122">Requirements for Internet Hosts - Communication Layers</a>. October 1989. Internet Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc1122">https://datatracker.ietf.org/doc/html/rfc1122</a>
    <dt id="biblio-rfc1918">[RFC1918]
-   <dd>Y. Rekhter; et al. <a href="https://tools.ietf.org/html/rfc1918">Address Allocation for Private Internets</a>. February 1996. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc1918">https://tools.ietf.org/html/rfc1918</a>
+   <dd>Y. Rekhter; et al. <a href="https://datatracker.ietf.org/doc/html/rfc1918">Address Allocation for Private Internets</a>. February 1996. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc1918">https://datatracker.ietf.org/doc/html/rfc1918</a>
+   <dt id="biblio-rfc3927">[RFC3927]
+   <dd>S. Cheshire; B. Aboba; E. Guttman. <a href="https://datatracker.ietf.org/doc/html/rfc3927">Dynamic Configuration of IPv4 Link-Local Addresses</a>. May 2005. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc3927">https://datatracker.ietf.org/doc/html/rfc3927</a>
+   <dt id="biblio-rfc4193">[RFC4193]
+   <dd>R. Hinden; B. Haberman. <a href="https://datatracker.ietf.org/doc/html/rfc4193">Unique Local IPv6 Unicast Addresses</a>. October 2005. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc4193">https://datatracker.ietf.org/doc/html/rfc4193</a>
+   <dt id="biblio-rfc4291">[RFC4291]
+   <dd>R. Hinden; S. Deering. <a href="https://datatracker.ietf.org/doc/html/rfc4291">IP Version 6 Addressing Architecture</a>. February 2006. Draft Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc4291">https://datatracker.ietf.org/doc/html/rfc4291</a>
    <dt id="biblio-rfc6555">[RFC6555]
-   <dd>D. Schinazi; T. Pauly. <a href="https://tools.ietf.org/html/rfc8305">Happy Eyeballs Version 2: Better Connectivity Using Concurrency</a>. December 2017. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc8305">https://tools.ietf.org/html/rfc8305</a>
+   <dd>D. Schinazi; T. Pauly. <a href="https://datatracker.ietf.org/doc/html/rfc8305">Happy Eyeballs Version 2: Better Connectivity Using Concurrency</a>. December 2017. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc8305">https://datatracker.ietf.org/doc/html/rfc8305</a>
    <dt id="biblio-rfc6762">[RFC6762]
-   <dd>S. Cheshire; M. Krochmal. <a href="https://tools.ietf.org/html/rfc6762">Multicast DNS</a>. February 2013. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6762">https://tools.ietf.org/html/rfc6762</a>
+   <dd>S. Cheshire; M. Krochmal. <a href="https://datatracker.ietf.org/doc/html/rfc6762">Multicast DNS</a>. February 2013. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc6762">https://datatracker.ietf.org/doc/html/rfc6762</a>
    <dt id="biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]
    <dd><a href="http://www.w3.org/2015/10/28-local-minutes.html">Minutes from 'Secure communication with local network devices': TPAC, 2015</a>. URL: <a href="http://www.w3.org/2015/10/28-local-minutes.html">http://www.w3.org/2015/10/28-local-minutes.html</a>
    <dt id="biblio-soho-pharming">[SOHO-PHARMING]
@@ -1671,10 +1742,10 @@ directive-value = ""
    <ul>
     <li><a href="#ref-for-ip-address-space-private">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-ip-address-space-private①">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-ip-address-space-private②">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-private③">(2)</a> <a href="#ref-for-ip-address-space-private④">(3)</a>
-    <li><a href="#ref-for-ip-address-space-private⑤">2.2. Private Network Request</a>
-    <li><a href="#ref-for-ip-address-space-private⑥">3.1. Integration with Fetch</a> <a href="#ref-for-ip-address-space-private⑦">(2)</a> <a href="#ref-for-ip-address-space-private⑧">(3)</a> <a href="#ref-for-ip-address-space-private⑨">(4)</a>
-    <li><a href="#ref-for-ip-address-space-private①⓪">5.2. Mixed Content</a>
+    <li><a href="#ref-for-ip-address-space-private②">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-private③">(2)</a> <a href="#ref-for-ip-address-space-private④">(3)</a> <a href="#ref-for-ip-address-space-private⑤">(4)</a> <a href="#ref-for-ip-address-space-private⑥">(5)</a> <a href="#ref-for-ip-address-space-private⑦">(6)</a> <a href="#ref-for-ip-address-space-private⑧">(7)</a> <a href="#ref-for-ip-address-space-private⑨">(8)</a>
+    <li><a href="#ref-for-ip-address-space-private①⓪">2.2. Private Network Request</a>
+    <li><a href="#ref-for-ip-address-space-private①①">3.1. Integration with Fetch</a> <a href="#ref-for-ip-address-space-private①②">(2)</a> <a href="#ref-for-ip-address-space-private①③">(3)</a> <a href="#ref-for-ip-address-space-private①④">(4)</a>
+    <li><a href="#ref-for-ip-address-space-private①⑤">5.2. Mixed Content</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-public">
