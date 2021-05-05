@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version c6f50773a, updated Fri Apr 16 16:45:47 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="75d9362e4c782240975bee3cb7a6ff6a635f8be9" name="document-revision">
+  <meta content="6c74e29a4f41df8822a6e3cf3fea57c4be19f0c3" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -1108,12 +1108,12 @@ directive-value = ""
         <p>Change the <a data-link-type="dfn">cache match</a> algorithm to take</p>
       </ol>
     </ol>
-    <p class="issue" id="issue-0f2be0b1"><a class="self-link" href="#issue-0f2be0b1"></a> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
+    <p class="issue" id="issue-7fdef220"><a class="self-link" href="#issue-7fdef220"></a> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
-  Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
-  on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch" id="ref-for-concept-http-fetch③">HTTP fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
-  need to revisit all of this.</p>
+  Eyeballs (<a data-biblio-obsolete data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a>, <a data-link-type="biblio" href="#biblio-rfc8305">[RFC8305]</a>) to make sure that we perform the
+  right checks depending on the IP address we actually connect to. For the
+  moment, this document assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch" id="ref-for-concept-http-fetch③">HTTP fetch</a> algorithm. That might not be a reasonable assumption, in
+  which case we’ll need to revisit all of this.</p>
     <h3 class="heading settled" data-level="3.2" id="integration-websockets"><span class="secno">3.2. </span><span class="content">Integration with WebSockets</span><a class="self-link" href="#integration-websockets"></a></h3>
     <p>This document proposes a few changes to WebSockets, with similar implications
   to the above.</p>
@@ -1674,9 +1674,11 @@ directive-value = ""
    <dt id="biblio-rfc4291">[RFC4291]
    <dd>R. Hinden; S. Deering. <a href="https://datatracker.ietf.org/doc/html/rfc4291">IP Version 6 Addressing Architecture</a>. February 2006. Draft Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc4291">https://datatracker.ietf.org/doc/html/rfc4291</a>
    <dt id="biblio-rfc6555">[RFC6555]
-   <dd>D. Schinazi; T. Pauly. <a href="https://datatracker.ietf.org/doc/html/rfc8305">Happy Eyeballs Version 2: Better Connectivity Using Concurrency</a>. December 2017. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc8305">https://datatracker.ietf.org/doc/html/rfc8305</a>
+   <dd>D. Wing; A. Yourtchenko. <a href="https://datatracker.ietf.org/doc/html/rfc6555">Happy Eyeballs: Success with Dual-Stack Hosts</a>. April 2012. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc6555">https://datatracker.ietf.org/doc/html/rfc6555</a>
    <dt id="biblio-rfc6762">[RFC6762]
    <dd>S. Cheshire; M. Krochmal. <a href="https://datatracker.ietf.org/doc/html/rfc6762">Multicast DNS</a>. February 2013. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc6762">https://datatracker.ietf.org/doc/html/rfc6762</a>
+   <dt id="biblio-rfc8305">[RFC8305]
+   <dd>D. Schinazi; T. Pauly. <a href="https://datatracker.ietf.org/doc/html/rfc8305">Happy Eyeballs Version 2: Better Connectivity Using Concurrency</a>. December 2017. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc8305">https://datatracker.ietf.org/doc/html/rfc8305</a>
    <dt id="biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]
    <dd><a href="http://www.w3.org/2015/10/28-local-minutes.html">Minutes from 'Secure communication with local network devices': TPAC, 2015</a>. URL: <a href="http://www.w3.org/2015/10/28-local-minutes.html">http://www.w3.org/2015/10/28-local-minutes.html</a>
    <dt id="biblio-soho-pharming">[SOHO-PHARMING]
@@ -1707,10 +1709,10 @@ directive-value = ""
   addresses, or private addresses. <a href="https://github.com/wicg/private-network-access/issues/1">&lt;https://github.com/wicg/private-network-access/issues/1></a><a href="#issue-207ba0b9"> ↵ </a></div>
    <div class="issue"> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain">obtain a connection</a> algorithm which is a good start. We’ll need to think about things like Happy
-  Eyeballs <a data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a> to make sure that we perform the right checks depending
-  on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch">HTTP fetch</a> algorithm. That might not be a reasonable assumption, in which case we’ll
-  need to revisit all of this.<a href="#issue-0f2be0b1"> ↵ </a></div>
+  Eyeballs (<a data-biblio-obsolete data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a>, <a data-link-type="biblio" href="#biblio-rfc8305">[RFC8305]</a>) to make sure that we perform the
+  right checks depending on the IP address we actually connect to. For the
+  moment, this document assumes that connection information is available in the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch">HTTP fetch</a> algorithm. That might not be a reasonable assumption, in
+  which case we’ll need to revisit all of this.<a href="#issue-7fdef220"> ↵ </a></div>
    <div class="issue"> Look into this. Adding headers to the handshake seems reasonable, but we might need to go
   beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
   control the caller has.<a href="#issue-28debeec"> ↵ </a></div>

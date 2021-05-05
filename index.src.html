@@ -644,11 +644,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
   ISSUE: [[FETCH]] does not yet integrate the details of DNS resolution into the
   Fetch algorithm, though it does define an <a>obtain a connection</a>
   algorithm which is a good start. We'll need to think about things like Happy
-  Eyeballs [[RFC6555]] to make sure that we perform the right checks depending
-  on the IP address we actually connect to. For the moment, this document
-  assumes that connection information is available in the <a>HTTP fetch</a>
-  algorithm. That might not be a reasonable assumption, in which case we'll
-  need to revisit all of this.
+  Eyeballs ([[RFC6555 obsolete]], [[RFC8305]]) to make sure that we perform the
+  right checks depending on the IP address we actually connect to. For the
+  moment, this document assumes that connection information is available in the
+  <a>HTTP fetch</a> algorithm. That might not be a reasonable assumption, in
+  which case we'll need to revisit all of this.
 
   <h3 id="integration-websockets">Integration with WebSockets</h3>
 
