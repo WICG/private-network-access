@@ -126,23 +126,9 @@ A new directive is introduced to
 `treat-as-public-address`. If a document or worker's CSP list includes this
 directive, then its address space is set to `public` unconditionally.
 
-A new attribute is added to `Document` and `WorkerGlobalScope`:
-
-```idl
-enum AddressSpace { "local", "private", "public" };
-
-partial interface Document {
-  readonly attribute AddressSpace addressSpace;
-};
-
-partial interface WorkerGlobalScope {
-  readonly attribute AddressSpace addressSpace;
-};
-```
-
-It indicates the address space of the current context, and allows for feature
-detection. It is not clear whether this is useful, and it might be harmful.
-See discussion [here](https://github.com/WICG/private-network-access/issues/21).
+A previous version of this specification introduced a new `addressSpace`
+attribute to `Document` and `WorkerGlobalScope` to allow for introspection from
+Javascript. This was removed over security and privacy concerns, see #21.
 
 ### Integration with WebSockets
 
@@ -165,13 +151,3 @@ This definition is strictly broader than the one we are currently working
 with. It seems likely to cause more widespread breakage in the web ecosystem.
 We would like to first launch the current version and consider this instead
 as an interesting avenue for future work.
-
-### Remove addressSpace IDL
-
-Remove the `addressSpace` attribute from `Documents` and `WorkerGlobalScopes`.
-This makes testing the specification through WPTs harder than
-[it already is](https://github.com/web-platform-tests/wpt/issues/26166), since
-we can only observe the changes to request behavior. On the other hand its
-presence might leak some information about users to websites?
-
-See discussion [here](https://github.com/WICG/private-network-access/issues/21).
