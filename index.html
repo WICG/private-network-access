@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="fa458e4dba1d496777353bcdc6465f47a13dd18b" name="document-revision">
+  <meta content="02fb9e83e719698a04cb98dde87d9c83bbbe3b38" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -469,7 +469,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-06-01">1 June 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-06-02">2 June 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1139,10 +1139,14 @@ directive-value = ""
   influence the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑥">address space</a> of resources they proxy. Specifically,
   resources fetched via proxies are considered to have been fetched from the
   proxy’s IP address itself.</p>
-    <div class="example" id="example-25373bd8">
-     <a class="self-link" href="#example-25373bd8"></a> If a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> served by <code>foo.example</code> on a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> is fetched
+    <div class="example" id="example-5a89567e">
+     <a class="self-link" href="#example-5a89567e"></a> If a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> served by <code>foo.example</code> on a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> is fetched
     by the user agent via a proxy on a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address④">private address</a>, then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container③">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①⓪">IP address space</a> is set to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a>. 
-     <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> will in turn be allowed to make requests to other <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑤">private addresses</a> accessible to the browser.</p>
+     <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> will in turn be allowed to make requests to other <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑤">private addresses</a> accessible to the browser. This can allow <code>foo.example</code> to learn that it was proxied by observing that it is allowed
+    to make requests to <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑥">private addresses</a>, which is a privacy information
+    leak. Note however that this requires correctly guessing the URL of a
+    resource on the private network such as an image, or some other
+    non-totally-opaque resource.</p>
     </div>
     <p>This is expected to be relatively rare and not warrant more mitigations. After
   all, in the status quo all websites can make requests to all IP addresses with
@@ -1743,7 +1747,7 @@ directive-value = ""
     <li><a href="#ref-for-private-address①">2.2. Private Network Request</a>
     <li><a href="#ref-for-private-address②">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-private-address③">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-private-address④">4.2. Proxies</a> <a href="#ref-for-private-address⑤">(2)</a>
+    <li><a href="#ref-for-private-address④">4.2. Proxies</a> <a href="#ref-for-private-address⑤">(2)</a> <a href="#ref-for-private-address⑥">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="public-address">
