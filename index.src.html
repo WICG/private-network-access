@@ -448,12 +448,33 @@ spec:fetch; type:dfn; for:cache; text:cache match
       [=environment settings object/IP address space=] is either
       [=IP address space/public=] or [=IP address space/private=].
 
-  ISSUE(39): This definition could be expanded to cover all cross-origin
-  requests for which the [=request/current url=]'s {{URL/host}} maps to an IP
-  address whose [=/IP address space=] is not [=IP address space/public=]. This
-  would prevent a malicious server on the private network from attacking other
-  servers. The effort require to ship such a change is not deemed worth the
-  payoff yet.
+  The classification of IP addresses into three broad [=address spaces=] is an
+  imperfect and theoretically-unsound approach. It is a proxy used to determine
+  whether two network endpoints should be allowed to communicate freely or not,
+  in other words whether endpoint A is reachable from endpoint B without
+  pivoting through the user agent on endpoint C.
+
+  This approach has some flaws:
+
+  - false positives: an intranet server with a [=public address=] might be able
+    to directy issue requests to another server on the same intranet with a
+    [=private address=].
+  - false negatives: a client connected to two different
+    [=IP address space/private=] networks, say a home network and a VPN, might
+    allow a website served from the VPN to access devices on the home network.
+    See also the issue below.
+
+  Even so, this specification aims to offer a pragmatic solution to a security
+  issue that broadly affects most users of the Web whose network configurations
+  are not so complex.
+
+  ISSUE(39): The definition of [=private network requests=] could be expanded to
+  cover all cross-origin requests for which the [=request/current url=]'s
+  {{URL/host}} maps to an IP address whose [=/IP address space=] is not
+  [=IP address space/public=]. This would prevent a malicious server on the
+  private network from attacking other servers. The effort require to ship such
+  a change is not deemed worth the payoff for now. This can be shipped as an
+  incremental improvement later on.
 
   <h3 id="headers">Additional CORS Headers</h3>
 
