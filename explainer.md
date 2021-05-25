@@ -73,7 +73,8 @@ which we organize from most to least private:
 We call these layers **address spaces**: `local`, `private`, and `public`.
 
 The mapping from IP address to address space is defined [in the specification](
-https://wicg.github.io/private-network-access/#ip-address-space).
+https://wicg.github.io/private-network-access/#ip-address-space), and may be
+overridden by user agents through user or administrator configuration.
 
 It might also be useful to consider web origins when determining address spaces.
 For example, the `.local.` top-level DNS domain (see

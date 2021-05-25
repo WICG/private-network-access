@@ -418,6 +418,12 @@ spec:fetch; type:dfn; for:cache; text:cache match
     </tbody>
   </table>
 
+  User Agents MAY allow certain IP address blocks' [=address space=] to be
+  overridden through administrator or user configuration. This could prove
+  useful to protect e.g. IPv6 intranets where most IP addresses are considered
+  [=IP address space/public=] per the algorithm above, by instead configuring
+  user agents to treat the intranet as [=IP address space/private=].
+
   Note: Link-local IP addresses such as `169.254.0.0/16` are considered
   [=IP address space/private=], since such addresses can identify the same
   target for all devices on a network link. A previous version of this
