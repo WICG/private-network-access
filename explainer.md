@@ -17,7 +17,7 @@ springboard to hack your printer. Perhaps surprisingly, evil.com can easily
 accomplish that in most browsers today (given a web-accessible printer
 exploit).
 
-This specification takes its name from
+This specification used to be named "CORS-RFC1918" , after
 [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), which
 provides a mechanism for securing websites against cross-origin requests,
 and [RFC 1918](https://tools.ietf.org/html/rfc1918), which describes IPv4
