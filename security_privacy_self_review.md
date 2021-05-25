@@ -5,11 +5,23 @@ Based on the W3C TAG's
 
 ## 1. What information might this feature expose to Web sites or other parties, and for what purposes is that exposure necessary?
 
-As currently specified, `document.addressSpace` can reveal some details
-about the IP address from which a document was loaded. Its purpose
-is twofold: feature detection and easier testability. Its removal is under
-active consideration: see
-[issue #21](https://github.com/WICG/private-network-access/issues/21).
+Documents might be able to infer whether they were loaded from `public`,
+`private` or `local` IP address by observing whether they can successfully load
+a well-known subresource from the private network or localhost. This is largely
+unavoidable by design: this specification aims to alter user agent behavior
+differentially based on the IP address which served the main resource.
+
+This can also arise when a client loaded a resource over a non-public proxy,
+such as:
+
+* an ssh tunnel
+* a network inspection tool such as [Fiddler](https://telerik.com/fiddler)
+* a corporate proxy
+
+Timing attacks might also be possible, though no concrete scenario has yet been
+laid out.
+
+See #41 for a discussion of these points.
 
 ## 2. Is this specification exposing the minimum amount of information necessary to power the feature?
 
@@ -29,17 +41,7 @@ Yes, in the form of new entries in the CORS pre-flight cache.
 
 ## 6. What information from the underlying platform, e.g. configuration data, is exposed by this specification to an origin?
 
-`document.addressSpace` can reveal some details about network configuration,
-though it should really only ever be interesting to intranet websites:
-knowing that example.org is `public` in the eyes of a client is not particularly
-interesting.
-
-It might be a problem if it reveals that a client loaded a
-particular website over a non-public proxy, such as:
-
-* an ssh tunnel
-* a network inspection tool such as [Fiddler](https://telerik.com/fiddler)
-* a corporate proxy
+See question 1.
 
 ## 7. Does this specification allow an origin access to sensors on a user’s device?
 
@@ -47,8 +49,7 @@ No.
 
 ## 8. What data does this specification expose to an origin? Please also document what data is identical to data exposed by other features, in the same or different contexts.
 
-`document.addressSpace`, as explained in the responses to questions 1 and 6,
-exposes some amount of information about network configuration to origins.
+See question 1.
 
 ## 9. Does this specification enable new script execution/loading mechanisms?
 
@@ -79,10 +80,12 @@ configuration to third parties. There seems to be no particular reason to treat
 third party scripts differently when checking outgoing requests, however.
 
 One area of discussion is
-whether or not to treat sandboxed iframes as `public`:
-https://github.com/WICG/private-network-access/issues/26. It seems a good idea
-to do so, enabling web developers to include third-party content on non-public
-websites without allowing it to poke at non-public resources.
+whether or not to treat sandboxed iframes as `public`: see #26. It seems a good
+idea to do so, enabling web developers to include third-party content on
+non-public websites without allowing it to poke at non-public resources. On the
+other hand, this might help malicious websites trying to determine which IP
+address they are being accessed from by providing them with a baseline against
+which to compare their own capabilities.
 
 ## 14. How does this specification work in the context of a user agent’s Private Browsing or "incognito" mode?
 
