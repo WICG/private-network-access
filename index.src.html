@@ -446,12 +446,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
       [=private address=], and |request|'s [=request/client=]'s
-      [=environment settings object/IP address space=] is
-      [=IP address space/public=].
+      [=environment settings object/policy container=]'s
+      [=policy container/IP address space=] is [=IP address space/public=].
       
   1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
       [=local address=], and |request|'s [=request/client=]'s
-      [=environment settings object/IP address space=] is either
+      [=environment settings object/policy container=]'s
+      [=policy container/IP address space=] is either
       [=IP address space/public=] or [=IP address space/private=].
 
   The classification of IP addresses into three broad [=address spaces=] is an
@@ -513,9 +514,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
   [=environment settings object=] (|context|), a `Response` (|response|), and
   a `policy` (|policy|):
 
-  1.  Set |context|'s [=environment settings object/IP address space=] to
-      [=IP address space/public=] if |policy|'s [=policy/disposition=] is
-      "`enforce`".
+  1.  Set |context|'s [=environment settings object/policy container=]'s
+      [=policy container/IP address space=] to [=IP address space/public=] if
+      |policy|'s [=policy/disposition=] is "`enforce`".
 
   <h3 id="feature-detect">Feature Detection</h3>
   
@@ -687,76 +688,41 @@ spec:fetch; type:dfn; for:cache; text:cache match
   [=/IP address space=] of contexts in which network requests are made. To this
   effect, the [[HTML]] specification is patched as follows:
 
-  1.  An [=/IP address space=] property is persisted on a number of objects:
+  1.  A new <dfn export for="policy container">IP address space</dfn> property
+      is added to the [=/policy container=] [=struct=].
 
-      1.  {{Document}} objects are given an
-          <dfn export for="Document">IP address space</dfn> property, whose
-          value is an [=/IP address space=].
+      1.  It is initially [=IP address space/public=].
 
-      1.  {{WorkerGlobalScope}} objects are given an
-          <dfn export for="WorkerGlobalScope">IP address space</dfn> property,
-          whose value is an [=/IP address space=].
+  1.  An additional step is added to the [=clone a policy container=]
+      algorithm:
 
-      1.  [=Environment settings objects=] are given an
-          <dfn export for="environment settings object">IP address space</dfn>
-          accessor, which has the following implementations:
+      1.  Set <var ignore>clone</var>'s [=policy container/IP address space=] to
+          <var ignore>policyContainer</var>'s
+          [=policy container/IP address space=].
 
-          1.  For {{Window}} objects: return the [=Document/IP address space=]
-              of <var ignore>window</var>'s [=associated Document=].
+  1.  An additional step is added to the [=create a policy container from a
+      fetch response=] algorithm:
 
-          1.  For {{WorkerGlobalScope}} objects: return
-              <var ignore>worker global scope</var>'s
-              [=WorkerGlobalScope/IP address space=].
-
-  1.  The [$create a new browsing context$] algorithm is amended with an extra
-      step in between the existing steps 19 and 20. Thus the initial
-      `about:blank` document inherits its creator's
-      [=Document/IP address space=]:
-
-      > 20.  If |creator| is non-null, then set <var ignore>document</var>'s
-      >      [=Document/IP address space=] to |creator|'s
-      >      [=Document/IP address space=].
-
-  1.  The [$initialize the Document object$] algorithm is amended with an extra
-      step in between the existing steps 10 and 11, before the new
-      {{Document}}'s [=Document/CSP list=] is initialized:
-
-      > 12.  Set <var ignore>document</var>'s [=Document/IP address space=] to
-      >      <var ignore>response</var>'s [=response/IP address space=].
-
-  1.  The [$run a worker$] algorithm is amended with two extra steps in between
-      the existing steps 14.4 and 14.5, after the new {{WorkerGlobalScope}}'s
-      referrer policy is set:
-
-      > 14.5. If |response|'s [=response/url=]'s [=url/scheme=] is a
-      >       [=local scheme=], then set |worker global scope|'s
-      >       [=WorkerGlobalScope/IP address space=] to
-      >       <var ignore>owner</var>'s [=WorkerGlobalScope/IP address space=].
-      > 14.5. Otherwise, set |worker global scope|'s
-      >       [=WorkerGlobalScope/IP address space=] to |response|'s
-      >       [=response/IP address space=].
-
-  ISSUE(27): Find a place to insert address space inheritance from the
-  navigation initiator for `data:` URLs.
-
-  ISSUE(18): Capture the address space of the URL creator when
-  `createObjectUrl()` is called on a blob, and inherit that when loading a
-  document from the resulting URL.
+      1.  Set <var ignore>result</var>'s [=policy container/IP address space=]
+          to <var ignore>response</var>'s [=response/IP address space=].
 
   <div class="example">
     Assuming that `example.com` resolves to a [=public address=] (say,
     `123.123.123.123`), then the {{Document}} created when navigating to
     `https://example.com/document.html` will have its
-    [=Document/IP address space=] property set to [=IP address space/public=].
+    [=Document/policy container=]'s [=policy container/IP address space=]
+    property set to [=IP address space/public=].
 
     If this {{Document}} then embeds an `about:srcdoc` iframe, then the child
-    frame's {{Document}} will have its [=Document/IP address space=] property
-    set to [=IP address space/public=].
+    frame's {{Document}} will have its [=Document/policy container=]'s
+    [=policy container/IP address space=] property set to
+    [=IP address space/public=].
 
     If, on the other hand, `example.com` resolved to a [=local address=]
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
     `https://example.com/document.html` will have its
-    [=Document/IP address space=] property set to [=IP address space/local=].
+    [=Document/policy container=]'s [=policy container/IP address space=]
+    property set to [=IP address space/local=].
   </div>
 
 </section>
@@ -787,7 +753,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <div class="example">
     If a {{Document}} served by `foo.example` on a [=public address=] is fetched
     by the user agent via a proxy on a [=private address=], then the
-    {{Document}}'s [=Document/IP address space=] is set to
+    {{Document}}'s [=Document/policy container=]'s
+    [=policy container/IP address space=] is set to
     [=IP address space/private=].
 
     The {{Document}} will in turn be allowed to make requests to other
