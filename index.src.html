@@ -776,6 +776,34 @@ spec:fetch; type:dfn; for:cache; text:cache match
   system as anything else on a loopback address.
 
   ISSUE: Reevaluate this after implementation experience.
+
+  <h3 id="proxies">Proxies</h3>
+
+  In the current implementation of this specification in Chromium, proxies
+  influence the [=address space=] of resources they proxy. Specifically,
+  resources fetched via proxies are considered to have been fetched from the
+  proxy's IP address itself.
+
+  <div class="example">
+    If a {{Document}} served by `foo.example` on a [=public address=] is fetched
+    by the user agent via a proxy on a [=private address=], then the
+    {{Document}}'s [=Document/IP address space=] is set to
+    [=IP address space/private=].
+
+    The {{Document}} will in turn be allowed to make requests to other
+    [=private addresses=] accessible to the browser.
+  </div>
+
+  This is expected to be relatively rare and not warrant more mitigations. After
+  all, in the status quo all websites can make requests to all IP addresses with
+  no restrictions whatsoever.
+
+  It would be interesting to explore a mechanism by which proxies could tell the
+  browser "please treat this resource as public/private anyway", thereby passing
+  on some information about the IP address behing the proxy. This might take the
+  form of the <a href="#csp">CSP directive</a> discussed above, with some minor
+  modifications.
+
 </section>
 
 <section>

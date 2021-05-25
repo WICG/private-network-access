@@ -82,6 +82,23 @@ For example, the `.local.` top-level DNS domain (see
 `private`. See this
 [discussion](https://github.com/WICG/private-network-access/issues/4).
 
+#### Proxies
+
+Proxies influence the address space of resources they proxy. If `foo.example`,
+served on a public IP address, is accessed by a browser via a proxy on a private
+IP address (e.g. `192.168.1.123`), then the resource will be considered to have
+been fetched from a private IP address. The resource will in turn be allowed to
+make requests to other private IP addresses accessible to the browser.
+
+This is expected to be relatively rare and not warrant more mitigations. After
+all, in the status quo all websites can make requests to all IP addresses with
+no restrictions whatsoever.
+
+It would be interesting to explore a mechanism by which proxies could tell the
+browser "please treat this resource as public/private anyway", thereby passing
+on some information about the IP address behing the proxy. This might take the
+form of the CSP directive discussed below, with some minor modifications.
+
 ### Private network requests
 
 The address space concept and accompanying model of IP address privacy lets us

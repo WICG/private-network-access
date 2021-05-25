@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version c6f50773a, updated Fri Apr 16 16:45:47 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="4f6f5b3afd98e56e6a386f929cdb190c406eea19" name="document-revision">
+  <meta content="d0b5afc1dc63250eb9b8146b41ecb0cba1d7c49b" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -543,6 +543,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <a href="#implementation-considerations"><span class="secno">4</span> <span class="content">Implementation Considerations</span></a>
      <ol class="toc">
       <li><a href="#file-url"><span class="secno">4.1</span> <span class="content">Where do <code>file</code> URLs fit?</span></a>
+      <li><a href="#proxies"><span class="secno">4.2</span> <span class="content">Proxies</span></a>
      </ol>
     <li>
      <a href="#security-and-privacy-considerations"><span class="secno">5</span> <span class="content">Security and Privacy Considerations</span></a>
@@ -1093,6 +1094,24 @@ directive-value = ""
     <p>For the moment, let’s err on the side of treating <code>file</code> URLs as <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑤">local</a>, as they seem to be just as much a part of the local
   system as anything else on a loopback address.</p>
     <p class="issue" id="issue-5f05c8e3"><a class="self-link" href="#issue-5f05c8e3"></a> Reevaluate this after implementation experience.</p>
+    <h3 class="heading settled" data-level="4.2" id="proxies"><span class="secno">4.2. </span><span class="content">Proxies</span><a class="self-link" href="#proxies"></a></h3>
+    <p>In the current implementation of this specification in Chromium, proxies
+  influence the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑤">address space</a> of resources they proxy. Specifically,
+  resources fetched via proxies are considered to have been fetched from the
+  proxy’s IP address itself.</p>
+    <div class="example" id="example-e1f9c7d9">
+     <a class="self-link" href="#example-e1f9c7d9"></a> If a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> served by <code>foo.example</code> on a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑦">public address</a> is fetched
+    by the user agent via a proxy on a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑥">private address</a>, then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑧">Document</a></code>'s <a data-link-type="dfn" href="#document-ip-address-space" id="ref-for-document-ip-address-space⑧">IP address space</a> is set to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①④">private</a>. 
+     <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑨">Document</a></code> will in turn be allowed to make requests to other <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑦">private addresses</a> accessible to the browser.</p>
+    </div>
+    <p>This is expected to be relatively rare and not warrant more mitigations. After
+  all, in the status quo all websites can make requests to all IP addresses with
+  no restrictions whatsoever.</p>
+    <p>It would be interesting to explore a mechanism by which proxies could tell the
+  browser "please treat this resource as public/private anyway", thereby passing
+  on some information about the IP address behing the proxy. This might take the
+  form of the <a href="#csp">CSP directive</a> discussed above, with some minor
+  modifications.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="5" id="security-and-privacy-considerations"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
@@ -1106,7 +1125,7 @@ directive-value = ""
     <h3 class="heading settled" data-level="5.2" id="mixed-content"><span class="secno">5.2. </span><span class="content">Mixed Content</span><a class="self-link" href="#mixed-content"></a></h3>
     <p>Note that the CORS restrictions added by the proposal in this document do not
   obviate mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content">[MIXED-CONTENT]</a>. Developers who wish to
-  fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①④">private</a> resources from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①①">public</a> pages MUST ensure that the connection is secure. This might involve a solution
+  fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a> resources from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①①">public</a> pages MUST ensure that the connection is secure. This might involve a solution
   along the lines of <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>, or we might end up inventing a new way of
   ensuring a secure connection to devices (perhaps the pairing ceremony hinted
   at above, or one of the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In
@@ -1355,6 +1374,7 @@ directive-value = ""
    <ul>
     <li><a href="#ref-for-document">2.5. Feature Detection</a>
     <li><a href="#ref-for-document①">3.3. Integration with HTML</a> <a href="#ref-for-document②">(2)</a> <a href="#ref-for-document③">(3)</a> <a href="#ref-for-document④">(4)</a> <a href="#ref-for-document⑤">(5)</a> <a href="#ref-for-document⑥">(6)</a>
+    <li><a href="#ref-for-document⑦">4.2. Proxies</a> <a href="#ref-for-document⑧">(2)</a> <a href="#ref-for-document⑨">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-http-network-fetch">
@@ -1580,6 +1600,7 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space⑦">2.2. Private Network Request</a> <a href="#ref-for-ip-address-space⑧">(2)</a>
     <li><a href="#ref-for-ip-address-space⑨">3.1. Integration with Fetch</a> <a href="#ref-for-ip-address-space①⓪">(2)</a>
     <li><a href="#ref-for-ip-address-space①①">3.3. Integration with HTML</a> <a href="#ref-for-ip-address-space①②">(2)</a> <a href="#ref-for-ip-address-space①③">(3)</a> <a href="#ref-for-ip-address-space①④">(4)</a>
+    <li><a href="#ref-for-ip-address-space①⑤">4.2. Proxies</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-local">
@@ -1598,7 +1619,8 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-private②">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-private③">(2)</a> <a href="#ref-for-ip-address-space-private④">(3)</a> <a href="#ref-for-ip-address-space-private⑤">(4)</a> <a href="#ref-for-ip-address-space-private⑥">(5)</a> <a href="#ref-for-ip-address-space-private⑦">(6)</a> <a href="#ref-for-ip-address-space-private⑧">(7)</a> <a href="#ref-for-ip-address-space-private⑨">(8)</a> <a href="#ref-for-ip-address-space-private①⓪">(9)</a>
     <li><a href="#ref-for-ip-address-space-private①①">2.2. Private Network Request</a> <a href="#ref-for-ip-address-space-private①②">(2)</a>
     <li><a href="#ref-for-ip-address-space-private①③">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-ip-address-space-private①④">5.2. Mixed Content</a>
+    <li><a href="#ref-for-ip-address-space-private①④">4.2. Proxies</a>
+    <li><a href="#ref-for-ip-address-space-private①⑤">5.2. Mixed Content</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-public">
@@ -1627,6 +1649,7 @@ directive-value = ""
     <li><a href="#ref-for-private-address①">2.2. Private Network Request</a> <a href="#ref-for-private-address②">(2)</a>
     <li><a href="#ref-for-private-address③">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-private-address④">3.1. Integration with Fetch</a> <a href="#ref-for-private-address⑤">(2)</a>
+    <li><a href="#ref-for-private-address⑥">4.2. Proxies</a> <a href="#ref-for-private-address⑦">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="public-address">
@@ -1638,6 +1661,7 @@ directive-value = ""
     <li><a href="#ref-for-public-address④">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-public-address⑤">3.1. Integration with Fetch</a>
     <li><a href="#ref-for-public-address⑥">3.3. Integration with HTML</a>
+    <li><a href="#ref-for-public-address⑦">4.2. Proxies</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="private-network-request">
@@ -1697,6 +1721,7 @@ directive-value = ""
    <b><a href="#document-ip-address-space">#document-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-document-ip-address-space">3.3. Integration with HTML</a> <a href="#ref-for-document-ip-address-space①">(2)</a> <a href="#ref-for-document-ip-address-space②">(3)</a> <a href="#ref-for-document-ip-address-space③">(4)</a> <a href="#ref-for-document-ip-address-space④">(5)</a> <a href="#ref-for-document-ip-address-space⑤">(6)</a> <a href="#ref-for-document-ip-address-space⑥">(7)</a> <a href="#ref-for-document-ip-address-space⑦">(8)</a>
+    <li><a href="#ref-for-document-ip-address-space⑧">4.2. Proxies</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="workerglobalscope-ip-address-space">
