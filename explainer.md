@@ -72,11 +72,8 @@ which we organize from most to least private:
 
 We call these layers **address spaces**: `local`, `private`, and `public`.
 
-The mapping from IP address to address space is defined in terms of the IANA
-[IPv4](https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml)
-and
-[IPv6](https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml)
-special-purpose address registries. Globally-routable IP addresses are `public`.
+The mapping from IP address to address space is defined [in the specification](
+https://wicg.github.io/private-network-access/#ip-address-space).
 Details about the `private` vs. `local` distinction are under
 [discussion](https://github.com/WICG/private-network-access/issues/15).
 
