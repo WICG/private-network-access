@@ -34,7 +34,7 @@ For example, we wish to mitigate
 attacks on:
 
 - Users' routers, as outlined in
-  [SOHO Pharming](https://www.team-cymru.com/ReadingRoom/Whitepapers/2013/TeamCymruSOHOPharming.pdf).
+  [SOHO Pharming](https://331.cybersec.fun/TeamCymruSOHOPharming.pdf).
   Note that status quo CORS protections don’t protect against the kinds of
   attacks discussed here as they rely only on
   [CORS-safelisted methods](https://fetch.spec.whatwg.org/#cors-safelisted-method)
