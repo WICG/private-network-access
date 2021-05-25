@@ -93,7 +93,7 @@ make requests to other private IP addresses accessible to the browser. This can
 allow `foo.example` to learn that it was proxied by observing that it is allowed
 to make requests to [=private addresses=], which is a privacy information leak.
 Note however that this requires correctly guessing the URL of a resource on the
-private network such as an image, or some other non-totally-opaque resource.
+private network. On the other hand a single correct guess is enough.
 
 This is expected to be relatively rare and not warrant more mitigations. After
 all, in the status quo all websites can make requests to all IP addresses with
