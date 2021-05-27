@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="4627c13084301ad962c4d562a1f9cf26c2c7cc39" name="document-revision">
+  <meta content="588b4f820e63c0e246032c08d0437afaf7eff228" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -863,9 +863,9 @@ See also the issue below.</p>
     <h3 class="heading settled" data-level="2.4" id="csp"><span class="secno">2.4. </span><span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="treat-as-public-address">treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address④">public address</a>, even if
-  it was actually served from a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address③">private address</a>. That is, it is a
-  mechanism by which private documents may drop the privilege to contact other
-  private documents without a preflight.</p>
+  it was actually served from a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address③">private address</a> or a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a>. That
+  is, it is a mechanism by which non-public documents may drop the privilege to
+  contact other non-public documents without a preflight.</p>
     <p>The directive’s syntax is described by the following ABNF grammar:</p>
 <pre>directive-name  = "treat-as-public-address"
 directive-value = ""
@@ -1051,7 +1051,7 @@ directive-value = ""
      <a class="self-link" href="#example-a76a6ba6"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑥">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①⓪">public</a>. 
      <p>If this <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> then embeds an <code>about:srcdoc</code> iframe, then the child
     frame’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑦">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①①">public</a>.</p>
-     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container②">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑧">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local④">local</a>.</p>
+     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address②">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container②">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑧">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local④">local</a>.</p>
     </div>
    </section>
    <section>
@@ -1574,7 +1574,8 @@ directive-value = ""
    <b><a href="#local-address">#local-address</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-local-address">2.2. Private Network Request</a>
-    <li><a href="#ref-for-local-address①">3.3. Integration with HTML</a>
+    <li><a href="#ref-for-local-address①">2.4. The treat-as-public-address Content Security Policy Directive</a>
+    <li><a href="#ref-for-local-address②">3.3. Integration with HTML</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="private-address">

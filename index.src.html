@@ -486,7 +486,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <h3 id="headers">Additional CORS Headers</h3>
 
   The <dfn export http-header>`Access-Control-Request-Private-Network`</dfn>
-  indicates that the <a>request</a> is a <a>private network request</a>.
+  indicates that the [=request=] is a [=private network request=].
 
   The <dfn export http-header>`Access-Control-Allow-Private-Network`</dfn>
   indicates that a resource can be safely shared with external networks.
@@ -494,10 +494,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
   The <dfn>treat-as-public-address</dfn> directive instructs the user agent to
-  treat a document as though it was served from a <a>public address</a>, even if
-  it was actually served from a <a>private address</a>. That is, it is a
-  mechanism by which private documents may drop the privilege to contact other
-  private documents without a preflight.
+  treat a document as though it was served from a [=public address=], even if
+  it was actually served from a [=private address=] or a [=local address=]. That
+  is, it is a mechanism by which non-public documents may drop the privilege to
+  contact other non-public documents without a preflight.
 
   The directive's syntax is described by the following ABNF grammar:
 
