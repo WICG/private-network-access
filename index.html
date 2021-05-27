@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="588b4f820e63c0e246032c08d0437afaf7eff228" name="document-revision">
+  <meta content="af4274bdb1319c6341026a4c5ddcefb0210c509a" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -1094,20 +1094,23 @@ directive-value = ""
   of pairing ceremony a la <a href="https://en.wikipedia.org/wiki/Password-authenticated_key_agreement">PAKE</a>,
   or any other clever interface which the user agent might devise.</p>
     <h3 class="heading settled" data-level="5.2" id="mixed-content"><span class="secno">5.2. </span><span class="content">Mixed Content</span><a class="self-link" href="#mixed-content"></a></h3>
-    <p>Note that the CORS restrictions added by the proposal in this document do not
-  obviate mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content">[MIXED-CONTENT]</a>. Developers who wish to
-  fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a> resources from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①②">public</a> pages MUST ensure that the connection is secure. This might involve a solution
-  along the lines of <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>, or we might end up inventing a new way of
-  ensuring a secure connection to devices (perhaps the pairing ceremony hinted
-  at above, or one of the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>?). In
-  either case, consenting to access by sending proper CORS is necessary, but not
-  sufficient.</p>
-    <p class="note" role="note"><span>Note:</span> Doing something like the proposal here would make me more comfortable
-  with relaxing the mixed content restrictions that prohibit unencrypted
-  connections to loopback addresses. Right now, those aren’t really subject to
-  the kinds of concerns that drive most of <a data-link-type="biblio" href="#biblio-mixed-content">[MIXED-CONTENT]</a>'s decisions, but
-  I’m reluctant to change Chrome’s implementation without some protection for
-  the local server and user.</p>
+    <p>The CORS restrictions added by the proposal in this document do not obviate
+  mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content-2">[MIXED-CONTENT-2]</a>. Device consent obtained through a
+  CORS preflight request is necessary but not sufficient.</p>
+    <p class="note" role="note"><span>Note:</span> <a data-link-type="biblio" href="#biblio-mixed-content-2">[MIXED-CONTENT-2]</a> does not prevent secure contexts from fetching
+  resources from <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin">origins</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-host" id="ref-for-concept-origin-host">host</a> is <code>localhost</code> or an IP
+  address in the <code>127.0.0.0/8</code> or <code>::1/128</code> blocks. See also the definition of <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin">potentially trustworthy origins</a>.</p>
+    <p>Developers who wish to fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a> or <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑥">local</a> resources (from hosts other than the above
+  exceptions) from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①②">public</a> pages MUST ensure that the
+  connection is secure. This might involve a solution along the lines of <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>, where Web PKI certificates are issued to user-specific domain names
+  that then resolve to private IP addresses which only make sense on the user’s
+  private network.</p>
+    <p class="issue" id="issue-725df7ad"><a class="self-link" href="#issue-725df7ad"></a> Some consumer routers implement overly-aggressive protections
+  against DNS rebinding attacks by simply blocking DNS responses that resolve to
+  non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/private-network-access/issues/23">&lt;https://github.com/wicg/private-network-access/issues/23></a></p>
+    <p>This problem space has been explored a few times already and seems worth
+  revisiting at some point. One could imagine a pairing ceremony such as the one
+  hinted at above, or one of the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]</a>.</p>
     <h3 class="heading settled" data-level="5.3" id="dns-rebinding"><span class="secno">5.3. </span><span class="content">DNS Rebinding</span><a class="self-link" href="#dns-rebinding"></a></h3>
     <p>The mitigation described here operates upon the IP address which the user
   agent actually connects to when loading a particular resource. This check
@@ -1364,10 +1367,22 @@ directive-value = ""
     <li><a href="#ref-for-environment-settings-object">2.4. The treat-as-public-address Content Security Policy Directive</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-origin-host">
+   <a href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-host">https://html.spec.whatwg.org/multipage/origin.html#concept-origin-host</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-origin-host">5.2. Mixed Content</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-meta">
    <a href="https://html.spec.whatwg.org/multipage/semantics.html#meta">https://html.spec.whatwg.org/multipage/semantics.html#meta</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-meta">2.4. The treat-as-public-address Content Security Policy Directive</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-origin">
+   <a href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin">https://html.spec.whatwg.org/multipage/origin.html#concept-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-origin">5.2. Mixed Content</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-settings-object-policy-container">
@@ -1387,6 +1402,12 @@ directive-value = ""
    <a href="https://infra.spec.whatwg.org/#struct">https://infra.spec.whatwg.org/#struct</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-struct">3.3. Integration with HTML</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-potentially-trustworthy-origin">
+   <a href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin">https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-potentially-trustworthy-origin">5.2. Mixed Content</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-url-host">
@@ -1438,7 +1459,9 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-clone-a-policy-container">clone a policy container</span>
      <li><span class="dfn-paneled" id="term-for-creating-a-policy-container-from-a-fetch-response">creating a policy container from a fetch response</span>
      <li><span class="dfn-paneled" id="term-for-environment-settings-object">environment settings object</span>
+     <li><span class="dfn-paneled" id="term-for-concept-origin-host">host</span>
      <li><span class="dfn-paneled" id="term-for-meta">meta</span>
+     <li><span class="dfn-paneled" id="term-for-concept-origin">origin</span>
      <li><span class="dfn-paneled" id="term-for-concept-settings-object-policy-container">policy container <small>(for environment settings object)</small></span>
      <li><span class="dfn-paneled" id="term-for-secure-context">secure context</span>
     </ul>
@@ -1446,6 +1469,11 @@ directive-value = ""
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-struct">struct</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[secure-contexts]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-potentially-trustworthy-origin">potentially trustworthy origin</span>
     </ul>
    <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
@@ -1464,8 +1492,6 @@ directive-value = ""
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/">HTML Standard</a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-infra">[INFRA]
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
-   <dt id="biblio-mixed-content">[MIXED-CONTENT]
-   <dd>Mike West. <a href="https://www.w3.org/TR/mixed-content/">Mixed Content</a>. 2 August 2016. CR. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
    <dt id="biblio-rfc7762">[RFC7762]
    <dd>M. West. <a href="https://datatracker.ietf.org/doc/html/rfc7762">Initial Assignment for the Content Security Policy Directives Registry</a>. January 2016. Informational. URL: <a href="https://datatracker.ietf.org/doc/html/rfc7762">https://datatracker.ietf.org/doc/html/rfc7762</a>
    <dt id="biblio-url">[URL]
@@ -1483,6 +1509,8 @@ directive-value = ""
    <dd><a href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml">IANA IPv4 Special-Purpose Address Registry</a>. URL: <a href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml">https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml</a>
    <dt id="biblio-ipv6-registry">[IPV6-REGISTRY]
    <dd><a href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml">IANA IPv6 Special-Purpose Address Registry</a>. URL: <a href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml">https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml</a>
+   <dt id="biblio-mixed-content-2">[MIXED-CONTENT-2]
+   <dd>Emily Stark; Mike West; Carlos Ibarra Lopez. <a href="https://w3c.github.io/webappsec-mixed-content/level2.html">Mixed Content Level 2</a>. 14 October 2020. W3C First Public Working Draft. URL: <a href="https://w3c.github.io/webappsec-mixed-content/level2.html">https://w3c.github.io/webappsec-mixed-content/level2.html</a>
    <dt id="biblio-plex">[PLEX]
    <dd>Filippo Valsorda. <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">How Plex is doing HTTPS for all its users</a>. URL: <a href="https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/">https://blog.filippo.io/how-plex-is-doing-https-for-all-its-users/</a>
    <dt id="biblio-rfc1122">[RFC1122]
@@ -1501,6 +1529,8 @@ directive-value = ""
    <dd>S. Cheshire; M. Krochmal. <a href="https://datatracker.ietf.org/doc/html/rfc6762">Multicast DNS</a>. February 2013. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc6762">https://datatracker.ietf.org/doc/html/rfc6762</a>
    <dt id="biblio-rfc8305">[RFC8305]
    <dd>D. Schinazi; T. Pauly. <a href="https://datatracker.ietf.org/doc/html/rfc8305">Happy Eyeballs Version 2: Better Connectivity Using Concurrency</a>. December 2017. Proposed Standard. URL: <a href="https://datatracker.ietf.org/doc/html/rfc8305">https://datatracker.ietf.org/doc/html/rfc8305</a>
+   <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
+   <dd>Mike West. <a href="https://www.w3.org/TR/secure-contexts/">Secure Contexts</a>. 15 September 2016. CR. URL: <a href="https://www.w3.org/TR/secure-contexts/">https://www.w3.org/TR/secure-contexts/</a>
    <dt id="biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]
    <dd><a href="http://www.w3.org/2015/10/28-local-minutes.html">Minutes from 'Secure communication with local network devices': TPAC, 2015</a>. URL: <a href="http://www.w3.org/2015/10/28-local-minutes.html">http://www.w3.org/2015/10/28-local-minutes.html</a>
    <dt id="biblio-soho-pharming">[SOHO-PHARMING]
@@ -1527,6 +1557,9 @@ directive-value = ""
   beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
   control the caller has.<a href="#issue-28debeec"> ↵ </a></div>
    <div class="issue"> Reevaluate this after implementation experience.<a href="#issue-5f05c8e3"> ↵ </a></div>
+   <div class="issue"> Some consumer routers implement overly-aggressive protections
+  against DNS rebinding attacks by simply blocking DNS responses that resolve to
+  non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/private-network-access/issues/23">&lt;https://github.com/wicg/private-network-access/issues/23></a><a href="#issue-725df7ad"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="ip-address-space">
    <b><a href="#ip-address-space">#ip-address-space</a></b><b>Referenced in:</b>
@@ -1544,6 +1577,7 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-local">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-local①">(2)</a> <a href="#ref-for-ip-address-space-local②">(3)</a> <a href="#ref-for-ip-address-space-local③">(4)</a>
     <li><a href="#ref-for-ip-address-space-local④">3.3. Integration with HTML</a>
     <li><a href="#ref-for-ip-address-space-local⑤">4.1. Where do file URLs fit?</a>
+    <li><a href="#ref-for-ip-address-space-local⑥">5.2. Mixed Content</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-private">
