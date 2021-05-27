@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="8959503f163c0706560b3d21ba84b2e77fe64f7a" name="document-revision">
+  <meta content="4627c13084301ad962c4d562a1f9cf26c2c7cc39" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -469,7 +469,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-05-25">25 May 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-05-27">27 May 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1087,8 +1087,9 @@ directive-value = ""
     <h2 class="heading settled" data-level="5" id="security-and-privacy-considerations"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
     <h3 class="heading settled" data-level="5.1" id="user-mediation"><span class="secno">5.1. </span><span class="content">User Mediation</span><a class="self-link" href="#user-mediation"></a></h3>
     <p>The proposal in this document only ensures that the device consents to access
-  from the public internet. Users agents SHOULD ensure that the <em>user</em> consents to such access as well, as it might be in their interests to deny
-  such access, even though the device itself would allow it.</p>
+  from the public internet. Users agents MAY ensure that the <em>user</em> consents to
+  such access as well, as it might be in their interests to deny such access,
+  even though the device itself would allow it.</p>
     <p>This mediation could be done via an explicit permission grant, via some sort
   of pairing ceremony a la <a href="https://en.wikipedia.org/wiki/Password-authenticated_key_agreement">PAKE</a>,
   or any other clever interface which the user agent might devise.</p>
