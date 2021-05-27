@@ -53,8 +53,9 @@ attacks on:
 Provide a secure mechanism for initiating HTTPS connections to services
 running on the local network or the user’s machine. This piece is missing to
 allow secure public websites to embed non-public resources without running into
-mixed content violations. While a useful goal, and maybe even a necessary one in
-order to deploy Private Network Access more widely, it is out of scope of this
+mixed content violations, with the exception of `http://localhost` which is
+embeddable. While a useful goal, and maybe even a necessary one in order to
+deploy Private Network Access more widely, it is out of scope of this
 specification.
 
 ## Proposed design
