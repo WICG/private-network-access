@@ -132,14 +132,13 @@ Private network requests are handled differently than others, like so:
   - The response must carry an additional
     `Access-Control-Allow-Private-Network: true` header.
 
-Because the Fetch spec does not yet integrate the details of DNS resolution,
-only defining an **obtain a connection** algorithm, Private Network Access
-checks are applied to the newly-obtained connection. Because of complexities
-such as Happy Eyeballs
-([RFC6555](https://datatracker.ietf.org/doc/html/rfc6555),
-[RFC8305](https://datatracker.ietf.org/doc/html/rfc8305), this means that these
-checks might pass or fail non-deterministically for hosts with multiple IP
-addresses that straddle IP address space boundaries.
+The Fetch spec does not yet integrate the details of DNS resolution,
+only defining an **obtain a connection** algorithm, thus Private Network Access
+checks are applied to the newly-obtained connection. Given complexities such as
+Happy Eyeballs ([RFC6555](https://datatracker.ietf.org/doc/html/rfc6555),
+[RFC8305](https://datatracker.ietf.org/doc/html/rfc8305), these checks might
+pass or fail non-deterministically for hosts with multiple IP addresses that
+straddle IP address space boundaries.
 
 ### Integration with HTML
 

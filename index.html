@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="87f105ed6703b3147b88b64be7601e0133b6ed6f" name="document-revision">
+  <meta content="baaaa4980d326b2569c4ae2b7c93d2a8da05fb79" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -903,11 +903,9 @@ directive-value = ""
   is successful.</p>
     <p class="note" role="note"><span>Note:</span> This includes navigations. These can indeed be used to trigger CSRF
   attacks, albeit with less subtlety than with subresource requests.</p>
-    <p class="note" role="note"><span>Note:</span> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the Fetch
-  algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain">obtain a connection</a> algorithm which is
-  enough for this specification. Private Network Access checks are applied to
-  the newly-obtained connection. Because of complexities such as Happy Eyeballs
-  (<a data-biblio-obsolete data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a>, <a data-link-type="biblio" href="#biblio-rfc8305">[RFC8305]</a>), this means that these checks might pass
+    <p class="note" role="note"><span>Note:</span> <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> does not yet integrate the details of DNS resolution into the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch">Fetch</a> algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain">obtain a connection</a> algorithm which is enough for this specification. Private Network Access
+  checks are applied to the newly-obtained connection. Given complexities such
+  as Happy Eyeballs (<a data-biblio-obsolete data-link-type="biblio" href="#biblio-rfc6555">[RFC6555]</a>, <a data-link-type="biblio" href="#biblio-rfc8305">[RFC8305]</a>), these checks might pass
   or fail non-deterministically for hosts with multiple IP addresses that
   straddle <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⓪">IP address space</a> boundaries.</p>
     <h4 class="heading settled" data-level="3.1.1" id="secure-context-restriction"><span class="secno">3.1.1. </span><span class="content">Secure context restriction</span><a class="self-link" href="#secure-context-restriction"></a></h4>
@@ -1408,6 +1406,12 @@ directive-value = ""
     <li><a href="#ref-for-extract-header-list-values①">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-fetch">
+   <a href="https://fetch.spec.whatwg.org/#concept-fetch">https://fetch.spec.whatwg.org/#concept-fetch</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-fetch">3.1. Integration with Fetch</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-response-header-list">
    <a href="https://fetch.spec.whatwg.org/#concept-response-header-list">https://fetch.spec.whatwg.org/#concept-response-header-list</a><b>Referenced in:</b>
    <ul>
@@ -1590,6 +1594,7 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-concept-request-current-url">current url</span>
      <li><span class="dfn-paneled" id="term-for-concept-websocket-establish">establish a websocket connection</span>
      <li><span class="dfn-paneled" id="term-for-extract-header-list-values">extracting header list values</span>
+     <li><span class="dfn-paneled" id="term-for-concept-fetch">fetch</span>
      <li><span class="dfn-paneled" id="term-for-concept-response-header-list">header list <small>(for response)</small></span>
      <li><span class="dfn-paneled" id="term-for-concept-http-fetch">http fetch</span>
      <li><span class="dfn-paneled" id="term-for-concept-network-error">network error</span>

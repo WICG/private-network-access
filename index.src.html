@@ -568,11 +568,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
   Note: This includes navigations. These can indeed be used to trigger CSRF
   attacks, albeit with less subtlety than with subresource requests.
 
-  Note: [[FETCH]] does not yet integrate the details of DNS resolution into the Fetch
-  algorithm, though it does define an [=obtain a connection=] algorithm which is
-  enough for this specification. Private Network Access checks are applied to
-  the newly-obtained connection. Because of complexities such as Happy Eyeballs
-  ([[RFC6555 obsolete]], [[RFC8305]]), this means that these checks might pass
+  Note: [[FETCH]] does not yet integrate the details of DNS resolution into the
+  [=/Fetch=] algorithm, though it does define an [=obtain a connection=]
+  algorithm which is enough for this specification. Private Network Access
+  checks are applied to the newly-obtained connection. Given complexities such
+  as Happy Eyeballs ([[RFC6555 obsolete]], [[RFC8305]]), these checks might pass
   or fail non-deterministically for hosts with multiple IP addresses that
   straddle [=/IP address space=] boundaries.
 
