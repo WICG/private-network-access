@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="baaaa4980d326b2569c4ae2b7c93d2a8da05fb79" name="document-revision">
+  <meta content="4206ee6c917edadf63f1e8df7478e75704d2d967" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -1085,39 +1085,13 @@ directive-value = ""
       </ol>
     </ol>
     <h3 class="heading settled" data-level="3.2" id="integration-websockets"><span class="secno">3.2. </span><span class="content">Integration with WebSockets</span><a class="self-link" href="#integration-websockets"></a></h3>
-    <p>This document proposes a few changes to WebSockets, with similar implications
-  to the above.</p>
-    <ol>
-     <li data-md>
-      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-websocket-establish" id="ref-for-concept-websocket-establish">establish a WebSocket connection</a> algorithm should be adjusted
-  to ensure that the endpoint is warned about <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request④">private network
-  requests</a>. For instance, the following could be executed after the
-  current step 7:</p>
-      <ol start="8">
-       <li data-md>
-        <p>If <var>request</var> is a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request⑤">private network request</a>, then <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-append" id="ref-for-concept-header-list-append">append</a> <a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network④"><code>Access-Control-Request-Private-Network</code></a>/"<code>true</code>"
-  to <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list②">header list</a>.</p>
-      </ol>
-     <li data-md>
-      <p>Further, the same algorithm should be adjusted to check the response for
-  an opt-in. For instance, the following could be executed after the current
-  step 12:</p>
-      <ol start="13">
-       <li data-md>
-        <p>If <var>request</var> is a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request⑥">private network request</a>, then:</p>
-        <ol>
-         <li data-md>
-          <p>Let <var>allow</var> be the result of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#extract-header-list-values" id="ref-for-extract-header-list-values①">extracting header list
-  values</a> given
-  "<a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network④"><code>Access-Control-Allow-Private-Network</code></a>" and <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list①">header list</a>.</p>
-         <li data-md>
-          <p>If <var>allow</var> is not "<code>true</code>", return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑦">network error</a>.</p>
-        </ol>
-      </ol>
-    </ol>
-    <p class="issue" id="issue-28debeec"><a class="self-link" href="#issue-28debeec"></a> Look into this. Adding headers to the handshake seems reasonable, but we might need to go
-  beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
-  control the caller has.</p>
+    <p class="issue" id="issue-5a78ae74"><a class="self-link" href="#issue-5a78ae74"></a> Preflight requests should probably be sent ahead of WebSocket
+  handshakes, given that WebSocket handshakes have roughly the same capabilities
+  as <code>&lt;img></code> tags. This might require no additional work to specify given that
+  the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-websocket-establish" id="ref-for-concept-websocket-establish">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch①">Fetch</a> algorithm. <a href="https://github.com/wicg/private-network-access/issues/14">&lt;https://github.com/wicg/private-network-access/issues/14></a></p>
+    <p>A previous version of this specification proposed simply adding the new
+  headers (see <a href="#headers">§ 2.3 Additional CORS Headers</a>) to the WebSocket handshake. This would not be
+  sufficient to fully guard against CSRF attacks, however.</p>
     <h3 class="heading settled" data-level="3.3" id="integration-html"><span class="secno">3.3. </span><span class="content">Integration with HTML</span><a class="self-link" href="#integration-html"></a></h3>
     <p>To support the checks in <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a>, user agents must remember the source <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑤">IP address space</a> of contexts in which network requests are made. To this
   effect, the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification is patched as follows:</p>
@@ -1313,12 +1287,6 @@ directive-value = ""
     <li><a href="#ref-for-http-access-control-request-method①">1.2.3. Navigation</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-header-list-append">
-   <a href="https://fetch.spec.whatwg.org/#concept-header-list-append">https://fetch.spec.whatwg.org/#concept-header-list-append</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-header-list-append">3.2. Integration with WebSockets</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-cache-entry">
    <a href="https://fetch.spec.whatwg.org/#cache-entry">https://fetch.spec.whatwg.org/#cache-entry</a><b>Referenced in:</b>
    <ul>
@@ -1403,20 +1371,19 @@ directive-value = ""
    <a href="https://fetch.spec.whatwg.org/#extract-header-list-values">https://fetch.spec.whatwg.org/#extract-header-list-values</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-extract-header-list-values">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-extract-header-list-values①">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-fetch">
    <a href="https://fetch.spec.whatwg.org/#concept-fetch">https://fetch.spec.whatwg.org/#concept-fetch</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-fetch">3.1. Integration with Fetch</a>
+    <li><a href="#ref-for-concept-fetch①">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-response-header-list">
    <a href="https://fetch.spec.whatwg.org/#concept-response-header-list">https://fetch.spec.whatwg.org/#concept-response-header-list</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-response-header-list">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-concept-response-header-list①">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-http-fetch">
@@ -1430,7 +1397,6 @@ directive-value = ""
    <ul>
     <li><a href="#ref-for-concept-network-error">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-network-error①">(2)</a>
     <li><a href="#ref-for-concept-network-error②">3.1.2. CORS preflight</a> <a href="#ref-for-concept-network-error③">(2)</a> <a href="#ref-for-concept-network-error④">(3)</a> <a href="#ref-for-concept-network-error⑤">(4)</a> <a href="#ref-for-concept-network-error⑥">(5)</a>
-    <li><a href="#ref-for-concept-network-error⑦">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-connection-obtain">
@@ -1580,7 +1546,6 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-http-access-control-allow-methods">access-control-allow-methods</span>
      <li><span class="dfn-paneled" id="term-for-http-access-control-allow-origin">access-control-allow-origin</span>
      <li><span class="dfn-paneled" id="term-for-http-access-control-request-method">access-control-request-method</span>
-     <li><span class="dfn-paneled" id="term-for-concept-header-list-append">append</span>
      <li><span class="dfn-paneled" id="term-for-cache-entry">cache entry</span>
      <li><span class="dfn-paneled" id="term-for-concept-cache-match">cache entry match</span>
      <li><span class="dfn-paneled" id="term-for-concept-request-client">client</span>
@@ -1703,9 +1668,10 @@ directive-value = ""
   a change is not deemed worth the payoff for now. This can be shipped as an
   incremental improvement later on. <a href="https://github.com/wicg/private-network-access/issues/39">&lt;https://github.com/wicg/private-network-access/issues/39></a><a href="#issue-4c14e63e"> ↵ </a></div>
    <div class="issue"> The remote endpoint concept is not specified in <a data-link-type="biblio" href="#biblio-fetch">[FETCH]</a> yet, hence this is still handwaving to some extent. <a href="https://github.com/wicg/private-network-access/issues/33">&lt;https://github.com/wicg/private-network-access/issues/33></a><a href="#issue-f99ba27e"> ↵ </a></div>
-   <div class="issue"> Look into this. Adding headers to the handshake seems reasonable, but we might need to go
-  beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
-  control the caller has.<a href="#issue-28debeec"> ↵ </a></div>
+   <div class="issue"> Preflight requests should probably be sent ahead of WebSocket
+  handshakes, given that WebSocket handshakes have roughly the same capabilities
+  as <code>&lt;img></code> tags. This might require no additional work to specify given that
+  the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-websocket-establish">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">Fetch</a> algorithm. <a href="https://github.com/wicg/private-network-access/issues/14">&lt;https://github.com/wicg/private-network-access/issues/14></a><a href="#issue-5a78ae74"> ↵ </a></div>
    <div class="issue"> Reevaluate this after implementation experience.<a href="#issue-5f05c8e3"> ↵ </a></div>
    <div class="issue"> Some consumer routers implement overly-aggressive protections
   against DNS rebinding attacks by simply blocking DNS responses that resolve to
@@ -1805,7 +1771,6 @@ directive-value = ""
     <li><a href="#ref-for-private-network-request①">2.3. Additional CORS Headers</a>
     <li><a href="#ref-for-private-network-request②">3.1. Integration with Fetch</a>
     <li><a href="#ref-for-private-network-request③">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-private-network-request④">3.2. Integration with WebSockets</a> <a href="#ref-for-private-network-request⑤">(2)</a> <a href="#ref-for-private-network-request⑥">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-headerdef-access-control-request-private-network">
@@ -1814,7 +1779,6 @@ directive-value = ""
     <li><a href="#ref-for-http-headerdef-access-control-request-private-network">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-http-headerdef-access-control-request-private-network①">1.2.3. Navigation</a> <a href="#ref-for-http-headerdef-access-control-request-private-network②">(2)</a>
     <li><a href="#ref-for-http-headerdef-access-control-request-private-network③">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-http-headerdef-access-control-request-private-network④">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-headerdef-access-control-allow-private-network">
@@ -1824,7 +1788,6 @@ directive-value = ""
     <li><a href="#ref-for-http-headerdef-access-control-allow-private-network①">1.2.2. Opting-In</a>
     <li><a href="#ref-for-http-headerdef-access-control-allow-private-network②">1.2.3. Navigation</a>
     <li><a href="#ref-for-http-headerdef-access-control-allow-private-network③">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-http-headerdef-access-control-allow-private-network④">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="treat-as-public-address">

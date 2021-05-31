@@ -755,35 +755,14 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="integration-websockets">Integration with WebSockets</h3>
 
-  This document proposes a few changes to WebSockets, with similar implications
-  to the above.
+  ISSUE(14): Preflight requests should probably be sent ahead of WebSocket
+  handshakes, given that WebSocket handshakes have roughly the same capabilities
+  as `<img>` tags. This might require no additional work to specify given that
+  the [=establish a WebSocket connection=] depends on the [=/Fetch=] algorithm.
 
-  1.  The <a>establish a WebSocket connection</a> algorithm should be adjusted
-      to ensure that the endpoint is warned about <a>private network
-      requests</a>. For instance, the following could be executed after the
-      current step 7:
-
-      8.  If |request| is a <a>private network request</a>, then
-          <a for="header list">append</a>
-          <a http-header>`Access-Control-Request-Private-Network`</a>/"`true`"
-          to |request|'s <a for="request">header list</a>.
-
-  2.  Further, the same algorithm should be adjusted to check the response for
-      an opt-in. For instance, the following could be executed after the current
-      step 12:
-
-      13. If |request| is a <a>private network request</a>, then:
-
-          1.  Let |allow| be the result of <a>extracting header list
-              values</a> given
-              "<a http-header>`Access-Control-Allow-Private-Network`</a>" and
-              |response|'s <a for="response">header list</a>.
-
-          2.  If |allow| is not "`true`", return a <a>network error</a>.
-
-  ISSUE: Look into this. Adding headers to the handshake seems reasonable, but we might need to go
-  beyond that and require a preflight. Not sure what the capabilities of the GET are, and how much
-  control the caller has.
+  A previous version of this specification proposed simply adding the new
+  headers (see [[#headers]]) to the WebSocket handshake. This would not be
+  sufficient to fully guard against CSRF attacks, however.
 
   <h3 id="integration-html">Integration with HTML</h3>
 
