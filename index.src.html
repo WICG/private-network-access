@@ -31,6 +31,9 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
 spec: HTML; urlPrefix: https://fetch.spec.whatwg.org/
   type: abstract-op
     text: HTTP-network fetch; url: #concept-http-network-fetch
+spec: HTML; urlPrefix: https://fetch.spec.whatwg.org/
+  type: abstract-op
+    text: HTTP-network-or-cache fetch; url: #concept-http-network-or-cache-fetch
 </pre>
 <pre class="link-defaults">
 spec:fetch; type:dfn; for:/; text:request
@@ -39,6 +42,11 @@ spec:fetch; type:dfn; for:/; text:cors-preflight fetch
 spec:fetch; type:dfn; for:/; text:cors-preflight cache
 spec:fetch; type:dfn; for:/; text:establish a websocket connection
 spec:fetch; type:dfn; for:/; text:obtain a connection
+spec:fetch; type:dfn; for:/; text:fetch params
+spec:fetch; type:dfn; for:/; text:cache entry
+spec:fetch; type:dfn; for:/; text:create a new cache entry
+spec:fetch; type:dfn; for:/; text:cache entry match
+spec:fetch; type:dfn; for:fetch params; text:request
 spec:fetch; type:dfn; for:cache; text:cache match
 </pre>
 <pre class="biblio">
@@ -345,12 +353,20 @@ spec:fetch; type:dfn; for:cache; text:cache match
   1.  A <dfn>public address</dfn> is an IP address whose [=/IP address space=]
       is [=IP address space/public=].
 
-  To determine the [=/IP address space=] of a given IP address (|address|),
-  run the following steps:
+  An [=/IP address space=] |lhs| is
+  <dfn for="IP address space" export>less public</dfn> than an
+  [=/IP address space=] |rhs| if any of the following conditions holds true:
+
+  1.  |lhs| is [=IP address space/local=] and |rhs| is either
+      [=IP address space/private=] or [=IP address space/public=].
+  1.  |lhs| is [=IP address space/private=] and |rhs| is
+      [=IP address space/public=].
+
+  To <dfn export>determine the IP address space</dfn> of an IP address
+  |address|, run the following steps:
 
   1.  If |address| belongs to the `::ffff:0:0/96` "IPv4-mapped Address"
-      address block, then return the [=/IP address space=] of
-      its embedded IPv4 address.
+      address block, then replace |address| with its embedded IPv4 address.
   1.  For each |row| in the
       <a href="#non-public-ip-address-blocks">Non-public IP address blocks"</a>
       table:
@@ -450,18 +466,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <h3 id="private-network-request-heading">Private Network Request</h3>
 
   A [=request=] (|request|) is a <dfn export>private network request</dfn>
-  if any of the following are true:
-
-  1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
-      [=private address=], and |request|'s [=request/client=]'s
-      [=environment settings object/policy container=]'s
-      [=policy container/IP address space=] is [=IP address space/public=].
-      
-  1.  |request|'s [=request/current url=]'s {{URL/host}} maps to a
-      [=local address=], and |request|'s [=request/client=]'s
-      [=environment settings object/policy container=]'s
-      [=policy container/IP address space=] is either
-      [=IP address space/public=] or [=IP address space/private=].
+  if |request|'s [=request/current url=]'s {{URL/host}} maps to an IP address
+  whose [=/IP address space=] is [=IP address space/less public=] than
+  |request|'s [=request/client=]'s
+  [=environment settings object/policy container=]'s
+  [=policy container/IP address space=].
 
   The classification of IP addresses into three broad [=address spaces=] is an
   imperfect and theoretically-unsound approach. It is a proxy used to determine
@@ -556,7 +565,20 @@ spec:fetch; type:dfn; for:cache; text:cache match
   a [=secure context=] **and** a [=CORS-preflight request=] to the target origin
   is successful.
 
-  Note: UAs must not allow <a lt="secure context">non-secure</a>
+  Note: This includes navigations. These can indeed be used to trigger CSRF
+  attacks, albeit with less subtlety than with subresource requests.
+
+  Note: [[FETCH]] does not yet integrate the details of DNS resolution into the Fetch
+  algorithm, though it does define an [=obtain a connection=] algorithm which is
+  enough for this specification. Private Network Access checks are applied to
+  the newly-obtained connection. Because of complexities such as Happy Eyeballs
+  ([[RFC6555 obsolete]], [[RFC8305]]), this means that these checks might pass
+  or fail non-deterministically for hosts with multiple IP addresses that
+  straddle [=/IP address space=] boundaries.
+
+  <h4 id="secure-context-restriction">Secure context restriction</h4>
+
+  UAs must not allow <a lt="secure context">non-secure</a>
   [=IP address space/public=] contexts to request resources from
   [=private addresses=], even if the private server would opt-in to such a
   request via a preflight. Making requests to [=IP address space/private=]
@@ -565,98 +587,171 @@ spec:fetch; type:dfn; for:cache; text:cache match
   attackers should not be able to trivially exploit an endpoint's consent to a
   non-secure origin.
 
-  To those ends:
+  To that end:
 
   1.  [=Connection=] objects are given a new
-      <dfn export for="connection">IP address space</dfn>, whose value is the
-      [=/IP address space=] to which the connection's remote endpoint belongs.
-      This applies to WebSocket connections too.
+      <dfn export for="connection">IP address space</dfn> property, initially
+      null. This applies to WebSocket connections too.
+
+  1.  A new step is added to the [=obtain a connection=] algorithm right after
+      checking whether or not the algorithm was aborted or not:
+
+      1.  Set |connection|'s [=connection/IP address space=] to
+          the result of running the [=determine the IP address space=] algorithm
+          on the IP address of |connection|'s remote endpoint.
+
+          ISSUE(33): The remote endpoint concept is not specified in [[FETCH]]
+          yet, hence this is still handwaving to some extent.
 
   1.  [=Response=] objects are given a new
       <dfn export for="response">IP address space</dfn> property, whose value is
       an [=/IP address space=], initially null.
 
-  1.  The [$HTTP-network fetch$] algorithm is amended to add a new step in
-      between steps 7.1 and 7.2, after successfully obtaining a connection:
+  1.  Define a new <dfn export>Private Network Access check</dfn> algorithm.
+      Given a [=request=] |request| and a [=connection=] |connection|:
 
-      > 7.2. Set <var ignore>response</var>'s [=response/IP address space=] to
-      >      <var ignore>connection</var>'s [=connection/IP address space=].
+      1.  If |request|'s [=request/client=] is a [=non-secure context=]:
 
-  1.  The <a>HTTP fetch</a> algorithm should be adjusted to ensure that a
-      preflight is triggered for all <a>private network requests</a>. This might
-      be as simple as changing the current "HTTP(S) scheme" block of the
-      switch statement to the following:
+          1.  Let |clientAddressSpace| be |request|'s [=request/client=]'s
+              [=environment settings object/policy container=]'s
+              [=policy container/IP address space=].
 
-      1.  If |request| is a <a>private network request</a>, return the result
-          of performing an <a>HTTP fetch</a> using |request| with the
-          |CORS-preflight flag| set.
+          1.  If |connection|'s [=connection/IP address space=] is
+              [=IP address space/less public=] than |clientAddressSpace|, then
+              return a [=network error=].
 
-          Otherwise, return the result of performing an <a>HTTP fetch</a> using
-          |request| with the |CORS-preflight flag| unset.
+      1.  Return null.
 
-      Note: We do not set the |CORS flag| in this case, as we're dealing with
-      either a same-origin request that has been tainted by something like a
-      [[#dns-rebinding]] attack, a navigation, or a `no-cors` request. The
-      preflight alone should be enough to mitigate the risks of such requests.
+  1.  The [$HTTP-network fetch$] algorithm is amended to add 3 new steps right
+      after checking that the newly-obtained <var ignore>connection</var> is not
+      failure:
 
-      Note: This will require a preflight for <em>every</em> request initiated
-      from a <a>public address</a> that targets a <a>private address</a>. This
-      includes navigations.
+      1.  Set |response|'s [=response/IP address space=] to
+          |connection|'s [=connection/IP address space=].
 
-  1.  The <a>CORS-preflight fetch</a> algorithm should be adjusted to append
-      an <a http-header>`Access-Control-Request-Private-Network`</a> header for
-      preflights triggered by <a>private network requests</a>. For instance, the
-      following could be executed after the current step 5:
+      1.  Let |privateNetworkAccessCheckResult| be the result of running
+          [=Private Network Access check=] for |fetchParams|' [=request=]  and
+          |connection|.
 
-      6.  If |request| is a <a>private network request</a>:
+      1.  If |privateNetworkAccessCheckResult| is a [=network error=], return
+          |privateNetworkAccessCheckResult|.
 
-          1.  If |request|'s <a for="request">client</a> is not a <a>secure
-              context</a>, return a <a>network error</a>.
+  <h4 id="cors-preflight">CORS preflight</h4>
 
-              Note: We don't need to touch the network to know that this request
-              will be denied.
+  The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
+  triggered for all [=private network requests=] initiated from
+  [=secure contexts=].
 
-          2.  <a for="header list">Set</a>
-              "<a http-header>`Access-Control-Request-Private-Network`</a>" to
-              "`true`" in |preflight|'s <a for="request">header list</a>.
+  The main issue here is again that the response's
+  [=response/IP address space=] is not known until a connection is obtained in
+  [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
+  What follows is a sketch of a potential solution:
 
-  1.  The <a>CORS-preflight fetch</a> algorithm should be further adjusted to
-      ensure that consent is explicitly granted via an appropriate
-      "<a http-header>`Access-Control-Allow-Private-Network`</a>" header in the
-      response. For instance, the following could be executed before the current
-      step 10:
+  1.  Add a new <dfn for="request" export>target IP address space</dfn> property
+      to the [=request=] struct, initially null.
 
-      10. If |request| is a <a>private network request</a>:
+  1.  Amend the [=Private Network Access check=] algorithm to handle this new
+      property and propagate the [=/IP address space=] of the newly-obtained
+      [=connection=] to the caller of the [$HTTP-network fetch$] algorithm when
+      the [=request/client=] is a [=secure context=]:
 
-          1.  Let |allow| be the result of <a>extracting header list values</a>
-              given
-              "<a http-header>`Access-Control-Allow-Private-Network`</a>" and
-              |response|'s <a for="response">header list</a>.
+      1.  If |request|'s [=request/target IP address space=] is not null, then:
 
-          2.  If |allow| is not "`true`", return a <a>network error</a>.
+          1.  If |connection|'s [=connection/IP address space=] is not equal to
+              then |request|'s [=request/target IP address space=], then return
+              a [=network error=].
+
+          1.  Return null.
+
+      1.  Let |clientAddressSpace| be |request|'s [=request/client=]'s
+          [=environment settings object/policy container=]'s
+          [=policy container/IP address space=].
+
+      1.  If |response|'s [=response/IP address space=] is
+          [=IP address space/less public=] than |clientAddressSpace|, then:
+
+              1.  Let |error| be a [=network error=].
+
+              1.  If |request|'s [=request/client=] is a [=secure context=],
+                  then set |error|'s [=response/IP address space=] property to
+                  |response|'s [=response/IP address space=].
+
+              1.  Return |error|.
+
+      1.  Return null.
+
+  1.  Define a new algorithm called <dfn>HTTP-no-service-worker fetch</dfn>
+      based on the existing steps in [=HTTP fetch=] that are run after handling
+      the fetch via service workers if |response| is still null, and amend those
+      slightly as follows:
+
+      1.  Immediately after running [=CORS-preflight fetch=]:
+
+          1.  If |preflightResponse| is a [=network error=]:
+
+              1.  If |preflightResponse|'s [=response/IP address space=] is
+                  null, return |preflightResponse|.
+
+              1.  Set |request|'s [=request/target IP address space=] to
+                  |preflightResponse|'s [=response/IP address space=].
+
+              1.  Return the result of running [=HTTP-no-service-worker fetch=]
+                  given |fetchParams|.
+
+      1.  Immediately after running [$HTTP-network-or-cache fetch$]:
+
+          1.  If |response| is a [=network error=] and |response|'s
+              [=response/IP address space=] is non-null, then:
+
+              1.  Set |request|'s [=request/target IP address space=] to
+                  |preflightResponse|'s [=response/IP address space=].
+
+              1.  Return the result of running [=HTTP-no-service-worker fetch=]
+                  given |fetchParams|.
+
+      Note: Because |request|'s [=request/target IP address space=] is set to a
+      non-null value when recursing, this recursion can go at most 1 level deep.
+
+  1.  The [=CORS-preflight fetch=] algorithm is adjusted to handle the
+      new headers:
+
+      1.  Immediately before running [$HTTP-network-or-cache fetch$]:
+
+          1.  If |request|'s [=request/target IP address space=] is not null,
+              then:
+
+              1.  [=header list/Set=]
+                  "<a http-header>`Access-Control-Request-Private-Network`</a>"
+                  to "`true`" in <var ignore>preflight</var>'s
+                  [=request/header list=].
+
+      1.  Immediately after checking CORS-unsafe request-header names in
+          |response| against |request|'s [=request/header list=]:
+
+          1.  If |request|'s [=request/target IP address space=] is not null,
+              then:
+
+              1.  Let |allow| be the result of [=extracting header list values=]
+                  given
+                  "<a http-header>`Access-Control-Allow-Private-Network`</a>"
+                  and |response|'s [=response/header list=].
+
+              1.  If |allow| is not "`true`", return a [=network error=].
 
   1.  Finally, to mitigate the impact of DNS rebinding attacks (see
-      [[#dns-rebinding]]), the <a>CORS-preflight cache</a> should be adjusted to
-      distinguish between request types. For example, we could:
+      [[#dns-rebinding]]), the [=CORS-preflight cache=] is adjusted to take
+      [=/IP address space=] information into account:
 
-      1.  Add "<dfn export for="cache">request network type</dfn>" to each cache
-          entry, and change the <a>cache match</a> algorithm to take it into
-          account.
+      1.  A new <dfn export for="cache entry">IP address space</dfn> property
+          (null or an [=/IP address space=]) is added to each [=cache entry=].
 
-      2.  Populate <a>request network type</a> according to the nature of
-          |request| in steps 7.12 and 7.14 of the current <a>CORS-preflight
-          fetch</a> algorithm.
+      1.  This new property is initialized by the [=create a new cache entry=]
+          algorithm from |request|'s [=request/target IP address space=].
 
-      3.  Change the <a>cache match</a> algorithm to take
+      1.  This new property is checked by the [=cache entry match=] algorithm:
 
-  ISSUE: [[FETCH]] does not yet integrate the details of DNS resolution into the
-  Fetch algorithm, though it does define an <a>obtain a connection</a>
-  algorithm which is a good start. We'll need to think about things like Happy
-  Eyeballs ([[RFC6555 obsolete]], [[RFC8305]]) to make sure that we perform the
-  right checks depending on the IP address we actually connect to. For the
-  moment, this document assumes that connection information is available in the
-  <a>HTTP fetch</a> algorithm. That might not be a reasonable assumption, in
-  which case we'll need to revisit all of this.
+          1.  <var ignore>entry</var>'s [=cache entry/IP address space=] is
+              equal to |request|'s [=request/target IP address space=].
 
   <h3 id="integration-websockets">Integration with WebSockets</h3>
 
