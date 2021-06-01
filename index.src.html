@@ -593,8 +593,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
       <dfn export for="connection">IP address space</dfn> property, initially
       null. This applies to WebSocket connections too.
 
-  1.  A new step is added to the [=obtain a connection=] algorithm right after
-      checking whether or not the algorithm was aborted or not:
+  1.  A new step is added to the [=obtain a connection=] algorithm immediately
+      before appending |connection| to the user agent's [=connection pool=]:
 
       1.  Set |connection|'s [=connection/IP address space=] to
           the result of running the [=determine the IP address space=] algorithm
