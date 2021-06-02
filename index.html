@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="a4ae53c82bb3c898a02abd8dfa456f0468b32f08" name="document-revision">
+  <meta content="8e046db76634423bf013aa396a1ec55930499c60" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -1139,15 +1139,15 @@ directive-value = ""
   influence the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑥">address space</a> of resources they proxy. Specifically,
   resources fetched via proxies are considered to have been fetched from the
   proxy’s IP address itself.</p>
-    <div class="example" id="example-387f6e2b">
-     <a class="self-link" href="#example-387f6e2b"></a> If a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> served by <code>foo.example</code> on a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> is fetched
+    <div class="example" id="example-25373bd8">
+     <a class="self-link" href="#example-25373bd8"></a> If a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> served by <code>foo.example</code> on a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> is fetched
     by the user agent via a proxy on a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address④">private address</a>, then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container③">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①⓪">IP address space</a> is set to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a>. 
-     <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> will in turn be allowed to make requests to other <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑤">private addresses</a> accessible to the browser. This can allow <code>foo.example</code> to learn that it was proxied by observing that it is allowed
-    to make requests to <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑥">private addresses</a>, which is a privacy information
-    leak. Note however that this requires correctly guessing the URL of a
-    resource on the private network. On the other hand a single correct guess is
-    enough.</p>
+     <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> will in turn be allowed to make requests to other <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑤">private addresses</a> accessible to the browser.</p>
     </div>
+    <p>This can allow a website to learn that it was proxied by observing that it is
+  allowed to make requests to <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑥">private addresses</a>, which is a privacy
+  information leak. While this requires correctly guessing the URL of a resource
+  on the private network, a single correct guess is sufficient.</p>
     <p>This is expected to be relatively rare and not warrant more mitigations. After
   all, in the status quo all websites can make requests to all IP addresses with
   no restrictions whatsoever.</p>
