@@ -92,8 +92,8 @@ been fetched from a private IP address. The resource will in turn be allowed to
 make requests to other private IP addresses accessible to the browser. This can
 allow `foo.example` to learn that it was proxied by observing that it is allowed
 to make requests to [=private addresses=], which is a privacy information leak.
-Note however that this requires correctly guessing the URL of a resource on the
-private network. On the other hand a single correct guess is enough.
+While this requires correctly guessing the URL of a resource on the private
+network, a single correct guess is sufficient.
 
 This is expected to be relatively rare and not warrant more mitigations. After
 all, in the status quo all websites can make requests to all IP addresses with
