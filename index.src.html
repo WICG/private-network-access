@@ -843,6 +843,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
     [=private addresses=] accessible to the browser.
   </div>
 
+  This can allow a website to learn that it was proxied by observing that it is
+  allowed to make requests to [=private addresses=], which is a privacy
+  information leak. While this requires correctly guessing the URL of a resource
+  on the private network, a single correct guess is sufficient.
+
   This is expected to be relatively rare and not warrant more mitigations. After
   all, in the status quo all websites can make requests to all IP addresses with
   no restrictions whatsoever.
