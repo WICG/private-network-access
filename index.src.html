@@ -858,6 +858,55 @@ spec:fetch; type:dfn; for:cache; text:cache match
   form of the <a href="#csp">CSP directive</a> discussed above, with some minor
   modifications.
 
+  <h3 id="http-cache">HTTP Cache</h3>
+
+  The current implementation of this specification in Chromium interacts with
+  the HTTP cache in two noteworthy ways, depending on which kind of resource is
+  loaded from cache.
+
+  <h4 id="http-cache-main-resources">Main resources</h4>
+
+  Firstly, a [=document=] constructed from a cached [=response=] remembers the
+  IP address whence the [=response=] was initially loaded. The
+  [=/IP address space=] of the [=document=] is derived anew from the IP address.
+
+  In the common case, this entails that the [=document=]'s
+  [=Document/policy container=]'s [=policy container/IP address space=] is
+  restored unmodified. However in the event that the user agent's configuration
+  has changed, the derived [=/IP address space=] might be different.
+
+  <div class="example">
+    The user agent navigates to `http://foo.example/`, loads the main resource
+    from `1.2.3.4`, caches it, then sets the resulting [=document=]'s
+    [=Document/policy container=]'s [=policy container/IP address space=] to
+    [=IP address space/public=].
+
+    The user agent then restarts, and a new configuration is applied specifying
+    that `1.2.3.4` should be classified as a [=private address=] instead.
+
+    The user agent navigates to `http://foo.example/` once more and loads the
+    main resource from the HTTP cache. The resulting [=document=]'s
+    [=Document/policy container=]'s [=policy container/IP address space=] is
+    now set to [=IP address space/private=].
+  </div>
+
+  <h4 id="http-cache-subresources">Subresources</h4>
+
+  Secondly, subresources loaded from the HTTP cache are not subject to the
+  [=Private Network Access check=], since that check is only applied in
+  [$HTTP-network fetch$].
+
+  <div class="example">
+    The user agent navigates to `http://router.example`, which is served from
+    `192.168.1.1`. The website embeds a logo from
+    `http://router.example/logo.png`, which is cached.
+
+    The user agent then navigates to `http://evil.example`, served from a
+    [=public address=], which attempts to embed
+    `http://router.example/logo.png`. This load succeeds, despite the fact
+    that the cached response remembers it was loaded from a [=private address=].
+  </div>
+
 </section>
 
 <section>
@@ -924,6 +973,24 @@ spec:fetch; type:dfn; for:cache; text:cache match
   the reality of private web service implementation quality today, but vendors
   should not consider themselves absolved of responsibility, even if all UAs
   implement this mitigation.
+
+  <h3 id="http-cache-security">HTTP cache</h3>
+
+  Cached subresources are not currently protected by this specification, even
+  though the HTTP cache remembers the source IP address which could be used in
+  the [=Private Network Access check=] algorithm during
+  [$HTTP-network-or-cache fetch$].
+
+  While it may be a good idea to fix this apparent discrepancy, it is not
+  directly relevant to the main goal of this specification: preventing CSRF
+  attacks.
+
+  At most, a malicious public website might be able to determine the brand of a
+  user's router if it can observe a successful load for e.g.
+  `http://some-branded-router.example/logo.png` due to the logo being cached.
+  This attack on the user's privacy is no worse than the status quo, where the
+  logo need not even be cached.
+
 </section>
 
 <section>

@@ -168,6 +168,28 @@ The initial handshake for private network requests is modified like so:
 - The response must carry an additional
   `Access-Control-Allow-Private-Network` header.
 
+## Security and Privacy considerations
+
+See also `./security_privacy_self_review.md`.
+
+### HTTP cache
+
+Documents restored from the HTTP cache are placed in the same IP address space
+as the original document loaded from the network. This avoids trivially
+bypassing Private Network Access checks by round-tripping a document through the
+HTTP cache.
+
+Note that if the browser's configuration changes in between loads and the new
+configuration states that the original IP address should be placed in a
+different IP address space, then the restored document will not belong to the
+same IP address space as the original document.
+
+On the other hand, subresources loaded from the HTTP cache are not subject to
+Private Network Access checks and can be freely loaded by any document
+regardless of its IP address space. While this may seem like a loophole, the
+main goal of this specification is to prevent CSRF attacks, which are not a
+problem when loading cached subresources.
+
 ## Alternatives considered
 
 ### Cover all cross-origin requests targeting the local network
