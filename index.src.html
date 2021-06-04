@@ -974,6 +974,42 @@ spec:fetch; type:dfn; for:cache; text:cache match
   should not consider themselves absolved of responsibility, even if all UAs
   implement this mitigation.
 
+  <h3 id="cross-network-confusion">Cross-network confusion</h3>
+
+  Most private networks cannot communicate with each other, yet they are all
+  treated by this specification as belonging to the [=IP address space/private=]
+  [=/IP address space=]. Going further, [=private addresses=] have meaning only
+  on the private network where they are used. The same IP address might refer to
+  entirely different devices in two different networks.
+
+  This opens the door to cross-network attacks:
+
+  -   A user connects to two different private networks: a home Wi-Fi network
+      and a corporate VPN. Their smart fridge has been hacked. They open their
+      smart fridge's web interface, which then performs CSRF attacks against
+      corporate websites accessible via the VPN.
+  -   A user connects to a malicious internet cafe Wi-Fi, which requires users
+      to keep a captive portal page open. They close their laptop, go home, open
+      up their laptop again. The captive portal page (either still open or
+      reloaded from cache as the user agent restores its previous state)
+      performs CSRF attacks against the user's home devices.
+  -   A user connects to a malicious internet cafe Wi-Fi, whose captive portal
+      website caches a malicious script from
+      `http://router.example/popular-library.js` (the cafe network administrator
+      operates a malicious DNS server) with a very long expiry. The user powers
+      their computer off, goes home, boots up their computer again and visits
+      their router's administration interface at `http://router.example`, which
+      embeds `/popular-library.js`. The malicious script is loaded in the
+      administration interface's first-party context.
+
+  None of these attacks are novel - they are just examples of the limitations of
+  this specification.
+
+  ISSUE(28): Potential mitigations would require noticing network changes and
+  clearing state specific to the previous network. Doing so in a fully general
+  manner is likely to be impossible short of clearing all state. Maybe a
+  practical compromise can be reached.
+
   <h3 id="http-cache-security">HTTP cache</h3>
 
   Cached subresources are not currently protected by this specification, even

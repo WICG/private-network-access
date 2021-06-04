@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="04403d4626a1aeb221b349678d57fbcb5af7cde3" name="document-revision">
+  <meta content="3f6747260a04e744ffa9f44d8522dbf915dca828" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -1264,6 +1264,10 @@ directive-value = ""
     </ul>
     <p>None of these attacks are novel - they are just examples of the limitations of
   this specification.</p>
+    <p class="issue" id="issue-cf35bfd4"><a class="self-link" href="#issue-cf35bfd4"></a> Potential mitigations would require noticing network changes and
+  clearing state specific to the previous network. Doing so in a fully general
+  manner is likely to be impossible short of clearing all state. Maybe a
+  practical compromise can be reached. <a href="https://github.com/wicg/private-network-access/issues/28">&lt;https://github.com/wicg/private-network-access/issues/28></a></p>
     <h3 class="heading settled" data-level="5.6" id="http-cache-security"><span class="secno">5.6. </span><span class="content">HTTP cache</span><a class="self-link" href="#http-cache-security"></a></h3>
     <p>Cached subresources are not currently protected by this specification, even
   though the HTTP cache remembers the source IP address which could be used in
@@ -1777,6 +1781,10 @@ directive-value = ""
    <div class="issue"> Some consumer routers implement overly-aggressive protections
   against DNS rebinding attacks by simply blocking DNS responses that resolve to
   non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/private-network-access/issues/23">&lt;https://github.com/wicg/private-network-access/issues/23></a><a href="#issue-725df7ad"> ↵ </a></div>
+   <div class="issue"> Potential mitigations would require noticing network changes and
+  clearing state specific to the previous network. Doing so in a fully general
+  manner is likely to be impossible short of clearing all state. Maybe a
+  practical compromise can be reached. <a href="https://github.com/wicg/private-network-access/issues/28">&lt;https://github.com/wicg/private-network-access/issues/28></a><a href="#issue-cf35bfd4"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="ip-address-space">
    <b><a href="#ip-address-space">#ip-address-space</a></b><b>Referenced in:</b>
