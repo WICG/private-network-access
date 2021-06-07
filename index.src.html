@@ -36,16 +36,17 @@ spec: HTML; urlPrefix: https://fetch.spec.whatwg.org/
     text: HTTP-network-or-cache fetch; url: #concept-http-network-or-cache-fetch
 </pre>
 <pre class="link-defaults">
-spec:fetch; type:dfn; for:/; text:request
-spec:fetch; type:dfn; for:/; text:response
+spec:fetch; type:dfn; for:/; text:cache entry
+spec:fetch; type:dfn; for:/; text:cache entry match
 spec:fetch; type:dfn; for:/; text:cors-preflight fetch
 spec:fetch; type:dfn; for:/; text:cors-preflight cache
-spec:fetch; type:dfn; for:/; text:establish a websocket connection
-spec:fetch; type:dfn; for:/; text:obtain a connection
-spec:fetch; type:dfn; for:/; text:fetch params
-spec:fetch; type:dfn; for:/; text:cache entry
 spec:fetch; type:dfn; for:/; text:create a new cache entry
-spec:fetch; type:dfn; for:/; text:cache entry match
+spec:fetch; type:dfn; for:/; text:establish a websocket connection
+spec:fetch; type:dfn; for:/; text:fetch params
+spec:fetch; type:dfn; for:/; text:network partition key
+spec:fetch; type:dfn; for:/; text:obtain a connection
+spec:fetch; type:dfn; for:/; text:request
+spec:fetch; type:dfn; for:/; text:response
 spec:fetch; type:dfn; for:fetch params; text:request
 spec:fetch; type:dfn; for:cache; text:cache match
 </pre>
@@ -866,9 +867,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h4 id="http-cache-main-resources">Main resources</h4>
 
-  Firstly, a [=document=] constructed from a cached [=response=] remembers the
-  IP address whence the [=response=] was initially loaded. The
-  [=/IP address space=] of the [=document=] is derived anew from the IP address.
+  A [=document=] constructed from a cached [=response=] remembers the IP address
+  whence the [=response=] was initially loaded. The [=/IP address space=] of the
+  [=document=] is derived anew from the IP address.
 
   In the common case, this entails that the [=document=]'s
   [=Document/policy container=]'s [=policy container/IP address space=] is
@@ -892,20 +893,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h4 id="http-cache-subresources">Subresources</h4>
 
-  Secondly, subresources loaded from the HTTP cache are not subject to the
+  Subresources loaded from the HTTP cache are not subject to the
   [=Private Network Access check=], since that check is only applied in
   [$HTTP-network fetch$].
 
-  <div class="example">
-    The user agent navigates to `http://router.example`, which is served from
-    `192.168.1.1`. The website embeds a logo from
-    `http://router.example/logo.png`, which is cached.
-
-    The user agent then navigates to `http://evil.example`, served from a
-    [=public address=], which attempts to embed
-    `http://router.example/logo.png`. This load succeeds, despite the fact
-    that the cached response remembers it was loaded from a [=private address=].
-  </div>
+  See [[#http-cache-security]] for a discussion of security implications.
 
 </section>
 
@@ -1021,11 +1013,27 @@ spec:fetch; type:dfn; for:cache; text:cache match
   directly relevant to the main goal of this specification: preventing CSRF
   attacks.
 
-  At most, a malicious public website might be able to determine the brand of a
-  user's router if it can observe a successful load for e.g.
-  `http://some-branded-router.example/logo.png` due to the logo being cached.
-  This attack on the user's privacy is no worse than the status quo, where the
-  logo need not even be cached.
+  At most, a malicious public website might be able to determine whether a user
+  has visited particular private websites in the past. This attack on the user's
+  privacy is no worse than the status quo.
+
+  In addition, due to HTTP cache partitioning, a subresource can only be loaded
+  from cache by malicious attackers who manage to replicate the
+  [=network partition key=] of the [=cache entry=]. One way an attacker could
+  achieve this is by manipulating DNS (see also [[#dns-rebinding]]) in order to
+  impersonate the top-level site that initially embedded the cached resource.
+
+  <div class="example">
+    The user agent navigates to `http://router.example`, which is served from
+    `192.168.1.1`. The website embeds a logo from
+    `http://router.example/$BRAND-logo.png`, which is cached.
+
+    A malicious attacker then re-binds `router.example` to an
+    attacker-controlled public IP address, and somehow tricks the user into
+    visiting `http://router.example` again. The malicious website attempts to
+    embed the logo, and monitors whether the load is successful. If so, the
+    attacker has determined the brand of the user's router.
+  </div>
 
 </section>
 

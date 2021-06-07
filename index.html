@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="3f6747260a04e744ffa9f44d8522dbf915dca828" name="document-revision">
+  <meta content="3b8361b968f559ff0b69894986d940f00629d9bc" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -469,7 +469,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-06-04">4 June 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-06-07">7 June 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1169,8 +1169,8 @@ directive-value = ""
   the HTTP cache in two noteworthy ways, depending on which kind of resource is
   loaded from cache.</p>
     <h4 class="heading settled" data-level="4.3.1" id="http-cache-main-resources"><span class="secno">4.3.1. </span><span class="content">Main resources</span><a class="self-link" href="#http-cache-main-resources"></a></h4>
-    <p>Firstly, a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document">document</a> constructed from a cached <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response①">response</a> remembers the
-  IP address whence the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response②">response</a> was initially loaded. The <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑦">IP address space</a> of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①">document</a> is derived anew from the IP address.</p>
+    <p>A <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document">document</a> constructed from a cached <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response①">response</a> remembers the IP address
+  whence the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response②">response</a> was initially loaded. The <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑦">IP address space</a> of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①">document</a> is derived anew from the IP address.</p>
     <p>In the common case, this entails that the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document②">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container④">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①①">IP address space</a> is
   restored unmodified. However in the event that the user agent’s configuration
   has changed, the derived <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑧">IP address space</a> might be different.</p>
@@ -1184,12 +1184,8 @@ directive-value = ""
     now set to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑥">private</a>.</p>
     </div>
     <h4 class="heading settled" data-level="4.3.2" id="http-cache-subresources"><span class="secno">4.3.2. </span><span class="content">Subresources</span><a class="self-link" href="#http-cache-subresources"></a></h4>
-    <p>Secondly, subresources loaded from the HTTP cache are not subject to the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check②">Private Network Access check</a>, since that check is only applied in <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch③">HTTP-network fetch</a>.</p>
-    <div class="example" id="example-2eab1a4a">
-     <a class="self-link" href="#example-2eab1a4a"></a> The user agent navigates to <code>http://router.example</code>, which is served from <code>192.168.1.1</code>. The website embeds a logo from <code>http://router.example/logo.png</code>, which is cached. 
-     <p>The user agent then navigates to <code>http://evil.example</code>, served from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑦">public address</a>, which attempts to embed <code>http://router.example/logo.png</code>. This load succeeds, despite the fact
-    that the cached response remembers it was loaded from a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑧">private address</a>.</p>
-    </div>
+    <p>Subresources loaded from the HTTP cache are not subject to the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check②">Private Network Access check</a>, since that check is only applied in <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch③">HTTP-network fetch</a>.</p>
+    <p>See <a href="#http-cache-security">§ 5.6 HTTP cache</a> for a discussion of security implications.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="5" id="security-and-privacy-considerations"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerations"></a></h2>
@@ -1237,7 +1233,7 @@ directive-value = ""
   implement this mitigation.</p>
     <h3 class="heading settled" data-level="5.5" id="cross-network-confusion"><span class="secno">5.5. </span><span class="content">Cross-network confusion</span><a class="self-link" href="#cross-network-confusion"></a></h3>
     <p>Most private networks cannot communicate with each other, yet they are all
-  treated by this specification as belonging to the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑧">private</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑨">IP address space</a>. Going further, <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑨">private addresses</a> have meaning only
+  treated by this specification as belonging to the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑧">private</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑨">IP address space</a>. Going further, <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑧">private addresses</a> have meaning only
   on the private network where they are used. The same IP address might refer to
   entirely different devices in two different networks.</p>
     <p>This opens the door to cross-network attacks:</p>
@@ -1275,10 +1271,21 @@ directive-value = ""
     <p>While it may be a good idea to fix this apparent discrepancy, it is not
   directly relevant to the main goal of this specification: preventing CSRF
   attacks.</p>
-    <p>At most, a malicious public website might be able to determine the brand of a
-  user’s router if it can observe a successful load for e.g. <code>http://some-branded-router.example/logo.png</code> due to the logo being cached.
-  This attack on the user’s privacy is no worse than the status quo, where the
-  logo need not even be cached.</p>
+    <p>At most, a malicious public website might be able to determine whether a user
+  has visited particular private websites in the past. This attack on the user’s
+  privacy is no worse than the status quo.</p>
+    <p>In addition, due to HTTP cache partitioning, a subresource can only be loaded
+  from cache by malicious attackers who manage to replicate the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#network-partition-key" id="ref-for-network-partition-key">network partition key</a> of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cache-entry" id="ref-for-cache-entry①">cache entry</a>. One way an attacker could
+  achieve this is by manipulating DNS (see also <a href="#dns-rebinding">§ 5.3 DNS Rebinding</a>) in order to
+  impersonate the top-level site that initially embedded the cached resource.</p>
+    <div class="example" id="example-742338b8">
+     <a class="self-link" href="#example-742338b8"></a> The user agent navigates to <code>http://router.example</code>, which is served from <code>192.168.1.1</code>. The website embeds a logo from <code>http://router.example/$BRAND-logo.png</code>, which is cached. 
+     <p>A malicious attacker then re-binds <code>router.example</code> to an
+    attacker-controlled public IP address, and somehow tricks the user into
+    visiting <code>http://router.example</code> again. The malicious website attempts to
+    embed the logo, and monitors whether the load is successful. If so, the
+    attacker has determined the brand of the user’s router.</p>
+    </div>
    </section>
    <section>
     <h2 class="heading settled" data-level="6" id="iana-considerations"><span class="secno">6. </span><span class="content">IANA Considerations</span><a class="self-link" href="#iana-considerations"></a></h2>
@@ -1379,6 +1386,7 @@ directive-value = ""
    <a href="https://fetch.spec.whatwg.org/#cache-entry">https://fetch.spec.whatwg.org/#cache-entry</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cache-entry">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-cache-entry①">5.6. HTTP cache</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-cache-match">
@@ -1491,6 +1499,12 @@ directive-value = ""
    <ul>
     <li><a href="#ref-for-concept-network-error">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-network-error①">(2)</a>
     <li><a href="#ref-for-concept-network-error②">3.1.2. CORS preflight</a> <a href="#ref-for-concept-network-error③">(2)</a> <a href="#ref-for-concept-network-error④">(3)</a> <a href="#ref-for-concept-network-error⑤">(4)</a> <a href="#ref-for-concept-network-error⑥">(5)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-network-partition-key">
+   <a href="https://fetch.spec.whatwg.org/#network-partition-key">https://fetch.spec.whatwg.org/#network-partition-key</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-network-partition-key">5.6. HTTP cache</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-connection-obtain">
@@ -1666,6 +1680,7 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-concept-response-header-list">header list <small>(for response)</small></span>
      <li><span class="dfn-paneled" id="term-for-concept-http-fetch">http fetch</span>
      <li><span class="dfn-paneled" id="term-for-concept-network-error">network error</span>
+     <li><span class="dfn-paneled" id="term-for-network-partition-key">network partition key</span>
      <li><span class="dfn-paneled" id="term-for-concept-connection-obtain">obtain a connection</span>
      <li><span class="dfn-paneled" id="term-for-fetch-params-request">request</span>
      <li><span class="dfn-paneled" id="term-for-concept-response">response</span>
@@ -1852,8 +1867,7 @@ directive-value = ""
     <li><a href="#ref-for-private-address③">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-private-address④">4.2. Proxies</a> <a href="#ref-for-private-address⑤">(2)</a> <a href="#ref-for-private-address⑥">(3)</a>
     <li><a href="#ref-for-private-address⑦">4.3.1. Main resources</a>
-    <li><a href="#ref-for-private-address⑧">4.3.2. Subresources</a>
-    <li><a href="#ref-for-private-address⑨">5.5. Cross-network confusion</a>
+    <li><a href="#ref-for-private-address⑧">5.5. Cross-network confusion</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="public-address">
@@ -1865,7 +1879,6 @@ directive-value = ""
     <li><a href="#ref-for-public-address④">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-public-address⑤">3.3. Integration with HTML</a>
     <li><a href="#ref-for-public-address⑥">4.2. Proxies</a>
-    <li><a href="#ref-for-public-address⑦">4.3.2. Subresources</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-less-public">
