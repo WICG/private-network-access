@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="8606d5be2e6c95d24f347f0b809b5c6ccc70c3ce" name="document-revision">
+  <meta content="ebccc959acddfc64d2d9fe76ab92d07bfd9bd99d" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -1009,10 +1009,16 @@ directive-value = ""
         <p>Return null.</p>
       </ol>
      <li data-md>
-      <p>Define a new algorithm called <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="http-no-service-worker-fetch">HTTP-no-service-worker fetch</dfn> based on the existing steps in <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch" id="ref-for-concept-http-fetch①">HTTP fetch</a> that are run after handling
-  the fetch via service workers if <var>response</var> is still null, and amend those
-  slightly as follows:</p>
+      <p>Define a new algorithm called <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="http-no-service-worker-fetch">HTTP-no-service-worker fetch</dfn> based on the existing steps in <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch" id="ref-for-concept-http-fetch①">HTTP fetch</a> that are run if <var>response</var> is still null after handling the fetch via service workers, and amend
+  those slightly as follows:</p>
       <ol>
+       <li data-md>
+        <p>At the very start:</p>
+        <ol>
+         <li data-md>
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space②">target IP address space</a> is not null,
+  then set <var>makeCORSPreflight</var> to true.</p>
+        </ol>
        <li data-md>
         <p>Immediately after running <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0①">CORS-preflight fetch</a>:</p>
         <ol>
@@ -1023,7 +1029,7 @@ directive-value = ""
             <p>If <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑤">IP address space</a> is
   null, return <var>preflightResponse</var>.</p>
            <li data-md>
-            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space②">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑥">IP address space</a>.</p>
+            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space③">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑥">IP address space</a>.</p>
            <li data-md>
             <p>Return the result of running <a data-link-type="dfn" href="#http-no-service-worker-fetch" id="ref-for-http-no-service-worker-fetch">HTTP-no-service-worker fetch</a> given <var>fetchParams</var>.</p>
           </ol>
@@ -1035,13 +1041,13 @@ directive-value = ""
           <p>If <var>response</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑤">network error</a> and <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑦">IP address space</a> is non-null, then:</p>
           <ol>
            <li data-md>
-            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space③">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑧">IP address space</a>.</p>
+            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space④">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑧">IP address space</a>.</p>
            <li data-md>
             <p>Return the result of running <a data-link-type="dfn" href="#http-no-service-worker-fetch" id="ref-for-http-no-service-worker-fetch①">HTTP-no-service-worker fetch</a> given <var>fetchParams</var>.</p>
           </ol>
         </ol>
       </ol>
-      <p class="note" role="note"><span>Note:</span> Because <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space④">target IP address space</a> is set to a
+      <p class="note" role="note"><span>Note:</span> Because <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑤">target IP address space</a> is set to a
   non-null value when recursing, this recursion can go at most 1 level deep.</p>
      <li data-md>
       <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0②">CORS-preflight fetch</a> algorithm is adjusted to handle the
@@ -1051,7 +1057,7 @@ directive-value = ""
         <p>Immediately before running <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch" id="ref-for-concept-http-network-or-cache-fetch①">HTTP-network-or-cache fetch</a>:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑤">target IP address space</a> is not null,
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑥">target IP address space</a> is not null,
   then:</p>
           <ol>
            <li data-md>
@@ -1063,7 +1069,7 @@ directive-value = ""
         <p>Immediately after checking CORS-unsafe request-header names in <var>response</var> against <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list①">header list</a>:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑥">target IP address space</a> is not null,
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑦">target IP address space</a> is not null,
   then:</p>
           <ol>
            <li data-md>
@@ -1082,13 +1088,13 @@ directive-value = ""
         <p>A new <dfn class="dfn-paneled" data-dfn-for="cache entry" data-dfn-type="dfn" data-export id="cache-entry-ip-address-space">IP address space</dfn> property
   (null or an <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①④">IP address space</a>) is added to each <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cache-entry" id="ref-for-cache-entry">cache entry</a>.</p>
        <li data-md>
-        <p>This new property is initialized by the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-create-entry" id="ref-for-concept-cache-create-entry">create a new cache entry</a> algorithm from <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑦">target IP address space</a>.</p>
+        <p>This new property is initialized by the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-create-entry" id="ref-for-concept-cache-create-entry">create a new cache entry</a> algorithm from <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑧">target IP address space</a>.</p>
        <li data-md>
         <p>This new property is checked by the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-match" id="ref-for-concept-cache-match">cache entry match</a> algorithm:</p>
         <ol>
          <li data-md>
           <p><var>entry</var>’s <a data-link-type="dfn" href="#cache-entry-ip-address-space" id="ref-for-cache-entry-ip-address-space">IP address space</a> is
-  equal to <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑧">target IP address space</a>.</p>
+  equal to <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑨">target IP address space</a>.</p>
         </ol>
       </ol>
     </ol>
@@ -1958,7 +1964,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="request-target-ip-address-space">
    <b><a href="#request-target-ip-address-space">#request-target-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-request-target-ip-address-space">3.1.2. CORS preflight</a> <a href="#ref-for-request-target-ip-address-space①">(2)</a> <a href="#ref-for-request-target-ip-address-space②">(3)</a> <a href="#ref-for-request-target-ip-address-space③">(4)</a> <a href="#ref-for-request-target-ip-address-space④">(5)</a> <a href="#ref-for-request-target-ip-address-space⑤">(6)</a> <a href="#ref-for-request-target-ip-address-space⑥">(7)</a> <a href="#ref-for-request-target-ip-address-space⑦">(8)</a> <a href="#ref-for-request-target-ip-address-space⑧">(9)</a>
+    <li><a href="#ref-for-request-target-ip-address-space">3.1.2. CORS preflight</a> <a href="#ref-for-request-target-ip-address-space①">(2)</a> <a href="#ref-for-request-target-ip-address-space②">(3)</a> <a href="#ref-for-request-target-ip-address-space③">(4)</a> <a href="#ref-for-request-target-ip-address-space④">(5)</a> <a href="#ref-for-request-target-ip-address-space⑤">(6)</a> <a href="#ref-for-request-target-ip-address-space⑥">(7)</a> <a href="#ref-for-request-target-ip-address-space⑦">(8)</a> <a href="#ref-for-request-target-ip-address-space⑧">(9)</a> <a href="#ref-for-request-target-ip-address-space⑨">(10)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-no-service-worker-fetch">

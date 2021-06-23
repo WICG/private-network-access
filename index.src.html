@@ -681,9 +681,14 @@ spec:fetch; type:dfn; for:cache; text:cache match
       1.  Return null.
 
   1.  Define a new algorithm called <dfn>HTTP-no-service-worker fetch</dfn>
-      based on the existing steps in [=HTTP fetch=] that are run after handling
-      the fetch via service workers if |response| is still null, and amend those
-      slightly as follows:
+      based on the existing steps in [=HTTP fetch=] that are run if |response|
+      is still null after handling the fetch via service workers, and amend
+      those slightly as follows:
+
+      1.  At the very start:
+
+          1.  If |request|'s [=request/target IP address space=] is not null,
+              then set <var ignore>makeCORSPreflight</var> to true.
 
       1.  Immediately after running [=CORS-preflight fetch=]:
 
