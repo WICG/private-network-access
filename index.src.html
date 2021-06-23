@@ -469,8 +469,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   A [=request=] (|request|) is a <dfn export>private network request</dfn>
   if |request|'s [=request/current url=]'s {{URL/host}} maps to an IP address
   whose [=/IP address space=] is [=IP address space/less public=] than
-  |request|'s [=request/client=]'s
-  [=environment settings object/policy container=]'s
+  |request|'s [request/policy container=]'s
   [=policy container/IP address space=].
 
   The classification of IP addresses into three broad [=address spaces=] is an
@@ -613,8 +612,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
       1.  If |request|'s [=request/client=] is a [=non-secure context=]:
 
-          1.  Let |clientAddressSpace| be |request|'s [=request/client=]'s
-              [=environment settings object/policy container=]'s
+          1.  Let |clientAddressSpace| be |request|'s
+              [=request/policy container=]'s
               [=policy container/IP address space=].
 
           1.  If |connection|'s [=connection/IP address space=] is
@@ -664,8 +663,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
           1.  Return null.
 
-      1.  Let |clientAddressSpace| be |request|'s [=request/client=]'s
-          [=environment settings object/policy container=]'s
+      1.  Let |clientAddressSpace| be |request|'s
+          [=request/policy container=]'s
           [=policy container/IP address space=].
 
       1.  If |response|'s [=response/IP address space=] is

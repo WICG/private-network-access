@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5c7bc9381, updated Wed May 12 18:18:08 2021 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="3b8361b968f559ff0b69894986d940f00629d9bc" name="document-revision">
+  <meta content="8606d5be2e6c95d24f347f0b809b5c6ccc70c3ce" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -469,7 +469,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-06-07">7 June 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-06-23">23 June 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -846,7 +846,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
   to these addresses is blocked entirely. <a href="https://github.com/wicg/private-network-access/issues/36">&lt;https://github.com/wicg/private-network-access/issues/36></a></p>
     <h3 class="heading settled" data-level="2.2" id="private-network-request-heading"><span class="secno">2.2. </span><span class="content">Private Network Request</span><a class="self-link" href="#private-network-request-heading"></a></h3>
     <p>A <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request">request</a> (<var>request</var>) is a <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="private-network-request">private network request</dfn> if <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host" id="ref-for-dom-url-host">host</a></code> maps to an IP address
-  whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑦">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public">less public</a> than <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client">client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container" id="ref-for-concept-settings-object-policy-container">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space">IP address space</a>.</p>
+  whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑦">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public">less public</a> than <var>request</var>’s [request/policy container=]'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space">IP address space</a>.</p>
     <p>The classification of IP addresses into three broad <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑧">address spaces</a> is an
   imperfect and theoretically-unsound approach. It is a proxy used to determine
   whether two network endpoints should be allowed to communicate freely or not,
@@ -890,7 +890,7 @@ directive-value = ""
   a <code>policy</code> (<var>policy</var>):</p>
     <ol>
      <li data-md>
-      <p>Set <var>context</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container" id="ref-for-concept-settings-object-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①">IP address space</a> to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑦">public</a> if <var>policy</var>’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#policy-disposition" id="ref-for-policy-disposition">disposition</a> is "<code>enforce</code>".</p>
+      <p>Set <var>context</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container" id="ref-for-concept-settings-object-policy-container">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①">IP address space</a> to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑦">public</a> if <var>policy</var>’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#policy-disposition" id="ref-for-policy-disposition">disposition</a> is "<code>enforce</code>".</p>
     </ol>
     <h3 class="heading settled" data-level="2.5" id="feature-detect"><span class="secno">2.5. </span><span class="content">Feature Detection</span><a class="self-link" href="#feature-detect"></a></h3>
     <p>A previous version of this specification proposed adding an <code>addressSpace</code> enum property to <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope">WorkerGlobalScope</a></code>, but it was removed
@@ -906,7 +906,7 @@ directive-value = ""
   integrations are outlined here for clarity, but the external documents are the
   normative references.</p>
     <h3 class="heading settled" data-level="3.1" id="integration-fetch"><span class="secno">3.1. </span><span class="content">Integration with Fetch</span><a class="self-link" href="#integration-fetch"></a></h3>
-    <p>This document proposes a few changes to Fetch, with the following implication: <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request②">private network requests</a> are only allowed if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①">client</a> is
+    <p>This document proposes a few changes to Fetch, with the following implication: <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request②">private network requests</a> are only allowed if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client">client</a> is
   a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context">secure context</a> <strong>and</strong> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request⑤">CORS-preflight request</a> to the target origin
   is successful.</p>
     <p class="note" role="note"><span>Note:</span> This includes navigations. These can indeed be used to trigger CSRF
@@ -918,7 +918,7 @@ directive-value = ""
   straddle <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⓪">IP address space</a> boundaries.</p>
     <h4 class="heading settled" data-level="3.1.1" id="secure-context-restriction"><span class="secno">3.1.1. </span><span class="content">Secure context restriction</span><a class="self-link" href="#secure-context-restriction"></a></h4>
     <p>UAs must not allow <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context①">non-secure</a> <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑧">public</a> contexts to request resources from <a data-link-type="dfn" href="#private-address" id="ref-for-private-address③">private addresses</a>, even if the private server would opt-in to such a
-  request via a preflight. Making requests to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①④">private</a> resources presents risks which are mitigated by ensuring the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client②">client</a> which initiates the request. In particular, network
+  request via a preflight. Making requests to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①④">private</a> resources presents risks which are mitigated by ensuring the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①">client</a> which initiates the request. In particular, network
   attackers should not be able to trivially exploit an endpoint’s consent to a
   non-secure origin.</p>
     <p>To that end:</p>
@@ -944,10 +944,10 @@ directive-value = ""
   Given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request②">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection" id="ref-for-concept-connection①">connection</a> <var>connection</var>:</p>
       <ol>
        <li data-md>
-        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context" id="ref-for-non-secure-context">non-secure context</a>:</p>
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client②">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context" id="ref-for-non-secure-context">non-secure context</a>:</p>
         <ol>
          <li data-md>
-          <p>Let <var>clientAddressSpace</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client④">client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container" id="ref-for-concept-settings-object-policy-container②">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space②">IP address space</a>.</p>
+          <p>Let <var>clientAddressSpace</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space②">IP address space</a>.</p>
          <li data-md>
           <p>If <var>connection</var>’s <a data-link-type="dfn" href="#connection-ip-address-space" id="ref-for-connection-ip-address-space①">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public①">less public</a> than <var>clientAddressSpace</var>, then
   return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error">network error</a>.</p>
@@ -980,7 +980,7 @@ directive-value = ""
      <li data-md>
       <p>Amend the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check①">Private Network Access check</a> algorithm to handle this new
   property and propagate the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①②">IP address space</a> of the newly-obtained <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection" id="ref-for-concept-connection②">connection</a> to the caller of the <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch②">HTTP-network fetch</a> algorithm when
-  the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context③">secure context</a>:</p>
+  the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context③">secure context</a>:</p>
       <ol>
        <li data-md>
         <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space">target IP address space</a> is not null, then:</p>
@@ -993,14 +993,14 @@ directive-value = ""
           <p>Return null.</p>
         </ol>
        <li data-md>
-        <p>Let <var>clientAddressSpace</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container" id="ref-for-concept-settings-object-policy-container③">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space③">IP address space</a>.</p>
+        <p>Let <var>clientAddressSpace</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space③">IP address space</a>.</p>
        <li data-md>
         <p>If <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space②">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public②">less public</a> than <var>clientAddressSpace</var>, then:</p>
         <ol>
          <li data-md>
           <p>Let <var>error</var> be a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error③">network error</a>.</p>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑦">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context④">secure context</a>,
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client④">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context④">secure context</a>,
   then set <var>error</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space③">IP address space</a> property to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space④">IP address space</a>.</p>
          <li data-md>
           <p>Return <var>error</var>.</p>
@@ -1398,10 +1398,9 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-concept-request-client">
    <a href="https://fetch.spec.whatwg.org/#concept-request-client">https://fetch.spec.whatwg.org/#concept-request-client</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-client">2.2. Private Network Request</a>
-    <li><a href="#ref-for-concept-request-client①">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-concept-request-client②">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-request-client③">(2)</a> <a href="#ref-for-concept-request-client④">(3)</a>
-    <li><a href="#ref-for-concept-request-client⑤">3.1.2. CORS preflight</a> <a href="#ref-for-concept-request-client⑥">(2)</a> <a href="#ref-for-concept-request-client⑦">(3)</a>
+    <li><a href="#ref-for-concept-request-client">3.1. Integration with Fetch</a>
+    <li><a href="#ref-for-concept-request-client①">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-request-client②">(2)</a>
+    <li><a href="#ref-for-concept-request-client③">3.1.2. CORS preflight</a> <a href="#ref-for-concept-request-client④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-connection">
@@ -1514,6 +1513,13 @@ directive-value = ""
     <li><a href="#ref-for-concept-connection-obtain①">3.1.1. Secure context restriction</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-request-policy-container">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-policy-container">https://fetch.spec.whatwg.org/#concept-request-policy-container</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-request-policy-container">3.1.1. Secure context restriction</a>
+    <li><a href="#ref-for-concept-request-policy-container①">3.1.2. CORS preflight</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-fetch-params-request">
    <a href="https://fetch.spec.whatwg.org/#fetch-params-request">https://fetch.spec.whatwg.org/#fetch-params-request</a><b>Referenced in:</b>
    <ul>
@@ -1610,10 +1616,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-concept-settings-object-policy-container">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-settings-object-policy-container">2.2. Private Network Request</a>
-    <li><a href="#ref-for-concept-settings-object-policy-container①">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-concept-settings-object-policy-container②">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-concept-settings-object-policy-container③">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-concept-settings-object-policy-container">2.4. The treat-as-public-address Content Security Policy Directive</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-secure-context">
@@ -1682,6 +1685,7 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-concept-network-error">network error</span>
      <li><span class="dfn-paneled" id="term-for-network-partition-key">network partition key</span>
      <li><span class="dfn-paneled" id="term-for-concept-connection-obtain">obtain a connection</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-policy-container">policy container</span>
      <li><span class="dfn-paneled" id="term-for-fetch-params-request">request</span>
      <li><span class="dfn-paneled" id="term-for-concept-response">response</span>
      <li><span class="dfn-paneled" id="term-for-concept-header-list-set">set</span>
