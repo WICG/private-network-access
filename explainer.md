@@ -161,12 +161,15 @@ Javascript. This was removed over security and privacy concerns, see #21.
 
 ### Integration with WebSockets
 
-The initial handshake for private network requests is modified like so:
+Preflight requests should be sent ahead of WebSocket handshakes, given that said
+handshakes have roughly the same capabilities for CSRF as `<img>` tags. This
+might require no additional work to specify given that the **establish a
+WebSocket connection** algorithm depends on the **Fetch** algorithm. See also
+issue [#14](https://github.com/wicg/private-network-access/issues/14).
 
-- The handshake request carries an additional
-  `Access-Control-Request-Private-Network: true` header.
-- The response must carry an additional
-  `Access-Control-Allow-Private-Network` header.
+A previous version of this specification proposed simply adding the new CORS
+headers to the WebSocket handshake. This would not be sufficient to fully guard
+against CSRF attacks, however.
 
 ## Security and Privacy considerations
 
