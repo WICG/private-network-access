@@ -184,11 +184,9 @@ configuration states that the original IP address should be placed in a
 different IP address space, then the restored document will not belong to the
 same IP address space as the original document.
 
-On the other hand, subresources loaded from the HTTP cache are not subject to
-Private Network Access checks and can be freely loaded by any document
-regardless of its IP address space. While this may seem like a loophole, the
-main goal of this specification is to prevent CSRF attacks, which are not a
-problem when loading cached subresources.
+Subresources loaded from the HTTP cache are subject to the same Private Network
+Access checks as if they were loaded from the origin IP address. This does not
+immediately prevent CSRF attacks, yet is included for coherence.
 
 ## Alternatives considered
 
