@@ -91,7 +91,7 @@ IP address (e.g. `192.168.1.123`), then the resource will be considered to have
 been fetched from a private IP address. The resource will in turn be allowed to
 make requests to other private IP addresses accessible to the browser. This can
 allow `foo.example` to learn that it was proxied by observing that it is allowed
-to make requests to [=private addresses=], which is a privacy information leak.
+to make requests to private addresses, which is a privacy information leak.
 While this requires correctly guessing the URL of a resource on the private
 network, a single correct guess is sufficient.
 
