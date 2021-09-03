@@ -157,7 +157,8 @@ directive, then its address space is set to `public` unconditionally.
 
 A previous version of this specification introduced a new `addressSpace`
 attribute to `Document` and `WorkerGlobalScope` to allow for introspection from
-Javascript. This was removed over security and privacy concerns, see #21.
+Javascript. This was removed over security and privacy concerns, see issue
+[#21](https://github.com/wicg/private-network-access/issues/21).
 
 ### Integration with WebSockets
 
