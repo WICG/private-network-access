@@ -267,7 +267,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
     hosted at a <a>public address</a> in order to ensure that employees can work
     even when they're not at the office. How considerate!
 
-    Clicking `http://go/*` links from `https://mail.mega.corp/` will trigger a
+    Clicking `https://go/*` links from `https://mail.mega.corp/` will trigger a
     <a>CORS-preflight request</a>, as it is a request from a <a>public
     address</a> to a <a>private address</a>:
 
@@ -469,7 +469,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   A [=request=] (|request|) is a <dfn export>private network request</dfn>
   if |request|'s [=request/current url=]'s {{URL/host}} maps to an IP address
   whose [=/IP address space=] is [=IP address space/less public=] than
-  |request|'s [request/policy container=]'s
+  |request|'s [=request/policy container=]'s
   [=policy container/IP address space=].
 
   The classification of IP addresses into three broad [=address spaces=] is an
@@ -536,7 +536,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       |policy|'s [=policy/disposition=] is "`enforce`".
 
   <h3 id="feature-detect">Feature Detection</h3>
-  
+
   A previous version of this specification proposed adding an `addressSpace`
   enum property to {{Document}} and {{WorkerGlobalScope}}, but it was removed
   due to fingerprinting concerns (see
@@ -822,7 +822,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   It isn't entirely clear how `file` URLs fit into the public/private scheme
   outlined above. It would be nice to prevent folks from harming themselves by
   opening a malicious HTML file locally, on the one hand, but on the other, code
-  running locally is somewhat outside of any sane threat model.
+  running locally is somewhat outside of any coherent threat model.
 
   For the moment, let's err on the side of treating `file` URLs as
   [=IP address space/local=], as they seem to be just as much a part of the local
