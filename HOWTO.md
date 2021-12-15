@@ -9,7 +9,7 @@ for more details.
 
 It can be controlled in a variety of ways:
 
-* the command-line flag: `--enable-feature=BlockInsecurePrivateNetworkRequests`
+* the command-line flag: `--enable-features=BlockInsecurePrivateNetworkRequests`
 * the `chrome://` flag:
   `chrome://flags/#block-insecure-private-network-requests`
 * the [deprecation
@@ -24,8 +24,8 @@ It can be controlled in a variety of ways:
 PNA preflight requests are available in Chrome starting in version 98 behind
 a pair of command-line flags:
 
-1. `--enable-feature=PrivateNetworkAccessSendPreflights`
-2. `--enable-feature=PrivateNetworkAccessRespectPreflightResults`
+1. `--enable-features=PrivateNetworkAccessSendPreflights`
+2. `--enable-features=PrivateNetworkAccessRespectPreflightResults`
 
 The former configures Chrome to send preflight requests ahead of private network
 requests, but not does require the response to be successful. The latter enables
