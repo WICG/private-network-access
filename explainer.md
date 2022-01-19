@@ -10,12 +10,17 @@
 
 Private Network Access is a web specification which aims to protect websites
 accessed over the private network (either on localhost or a private IP address)
-from malicious cross-origin requests.
+from malicious requests from websites located outside the private network.
 
 Say you visit evil.com, we want to prevent it from using your browser as a
 springboard to hack your printer. Perhaps surprisingly, evil.com can easily
 accomplish that in most browsers today (given a web-accessible printer
 exploit).
+
+This specification only affects requests from a public IP address to a private
+IP address or localhost, and requests from a private IP address to localhost.
+This may change to cover all cross-origin requests to the private network in
+the future, see [issue #39](https://github.com/WICG/private-network-access/issues/39).
 
 This specification used to be named "CORS-RFC1918" , after
 [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), which
