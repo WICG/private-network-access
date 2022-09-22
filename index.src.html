@@ -1014,6 +1014,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="http-cache-security">HTTP cache</h3>
 
+  <h4 id="http-cache-security-subresources">Applying checks to subresources</h4>
+
   ISSUE(75): The following is no longer accurate. Implementation experience
   revealed that integrating with the cache was useful even in protecting
   network resources against CSRF attacks. This section needs to be rewritten.
@@ -1048,6 +1050,23 @@ spec:fetch; type:dfn; for:cache; text:cache match
     embed the logo, and monitors whether the load is successful. If so, the
     attacker has determined the brand of the user's router.
   </div>
+
+  <h4 id="http-cache-poisoning">HTTP cache poisoning</h4>
+
+  While this specification aims to protect private network servers from
+  receiving requests from public websites, DNS rebinding can be used to carry
+  out a similar attack through cache poisoning of unauthenticated resources.
+
+  Attackers masquerading as `http://router.com` can cache a malicious script at
+  `http://router.com/totally-legit.js`. Later on, when the user navigates to
+  `http://router.com/`, the page might request the poisoned script and execute
+  attacker code in a [=IP address space/less public=] [=/IP address space=].
+
+  This attack is partially mitigated by cache partitioning,
+  which makes it so that the attacker must navigate a top-level browsing context
+  to `http://router.com/` before caching resources, which lacks subtlety. It is
+  also not specific to Private Network Access, rather being a symptom of
+  plaintext HTTP's lack of authentication and integrity protection.
 
 </section>
 

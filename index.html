@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="2e3acef75d68abc35df85fa8b816245efa174578" name="document-revision">
+  <meta content="daff8e720e3a3682898f24264fe7110d6712a9c9" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -573,7 +573,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#dns-rebinding"><span class="secno">5.3</span> <span class="content">DNS Rebinding</span></a>
       <li><a href="#scope-mitigation"><span class="secno">5.4</span> <span class="content">Scope of Mitigation</span></a>
       <li><a href="#cross-network-confusion"><span class="secno">5.5</span> <span class="content">Cross-network confusion</span></a>
-      <li><a href="#http-cache-security"><span class="secno">5.6</span> <span class="content">HTTP cache</span></a>
+      <li>
+       <a href="#http-cache-security"><span class="secno">5.6</span> <span class="content">HTTP cache</span></a>
+       <ol class="toc">
+        <li><a href="#http-cache-security-subresources"><span class="secno">5.6.1</span> <span class="content">Applying checks to subresources</span></a>
+        <li><a href="#http-cache-poisoning"><span class="secno">5.6.2</span> <span class="content">HTTP cache poisoning</span></a>
+       </ol>
      </ol>
     <li><a href="#iana-considerations"><span class="secno">6</span> <span class="content">IANA Considerations</span></a>
     <li><a href="#acknowledgements"><span class="secno">7</span> <span class="content">Acknowledgements</span></a>
@@ -1284,6 +1289,7 @@ directive-value = ""
   manner is likely to be impossible short of clearing all state. Maybe a
   practical compromise can be reached. <a href="https://github.com/wicg/private-network-access/issues/28">[Issue #28]</a></p>
     <h3 class="heading settled" data-level="5.6" id="http-cache-security"><span class="secno">5.6. </span><span class="content">HTTP cache</span><a class="self-link" href="#http-cache-security"></a></h3>
+    <h4 class="heading settled" data-level="5.6.1" id="http-cache-security-subresources"><span class="secno">5.6.1. </span><span class="content">Applying checks to subresources</span><a class="self-link" href="#http-cache-security-subresources"></a></h4>
     <p class="issue" id="issue-dfc740be"><a class="self-link" href="#issue-dfc740be"></a> The following is no longer accurate. Implementation experience
   revealed that integrating with the cache was useful even in protecting
   network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a></p>
@@ -1308,6 +1314,17 @@ directive-value = ""
     embed the logo, and monitors whether the load is successful. If so, the
     attacker has determined the brand of the user’s router.</p>
     </div>
+    <h4 class="heading settled" data-level="5.6.2" id="http-cache-poisoning"><span class="secno">5.6.2. </span><span class="content">HTTP cache poisoning</span><a class="self-link" href="#http-cache-poisoning"></a></h4>
+    <p>While this specification aims to protect private network servers from
+  receiving requests from public websites, DNS rebinding can be used to carry
+  out a similar attack through cache poisoning of unauthenticated resources.</p>
+    <p>Attackers masquerading as <code>http://router.com</code> can cache a malicious script at <code>http://router.com/totally-legit.js</code>. Later on, when the user navigates to <code>http://router.com/</code>, the page might request the poisoned script and execute
+  attacker code in a <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public③">less public</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space②⓪">IP address space</a>.</p>
+    <p>This attack is partially mitigated by cache partitioning,
+  which makes it so that the attacker must navigate a top-level browsing context
+  to <code>http://router.com/</code> before caching resources, which lacks subtlety. It is
+  also not specific to Private Network Access, rather being a symptom of
+  plaintext HTTP’s lack of authentication and integrity protection.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="6" id="iana-considerations"><span class="secno">6. </span><span class="content">IANA Considerations</span><a class="self-link" href="#iana-considerations"></a></h2>
@@ -1408,7 +1425,7 @@ directive-value = ""
    <a href="https://fetch.spec.whatwg.org/#cache-entry">https://fetch.spec.whatwg.org/#cache-entry</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cache-entry">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-cache-entry①">5.6. HTTP cache</a>
+    <li><a href="#ref-for-cache-entry①">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-cache-match">
@@ -1525,7 +1542,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-network-partition-key">
    <a href="https://fetch.spec.whatwg.org/#network-partition-key">https://fetch.spec.whatwg.org/#network-partition-key</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-network-partition-key">5.6. HTTP cache</a>
+    <li><a href="#ref-for-network-partition-key">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-connection-obtain">
@@ -1585,7 +1602,7 @@ directive-value = ""
    <a href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch">https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-http-network-or-cache-fetch">3.1.2. CORS preflight</a> <a href="#ref-for-concept-http-network-or-cache-fetch①">(2)</a>
-    <li><a href="#ref-for-concept-http-network-or-cache-fetch②">5.6. HTTP cache</a>
+    <li><a href="#ref-for-concept-http-network-or-cache-fetch②">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-workerglobalscope">
@@ -1846,6 +1863,7 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space①⑥">4.2. Proxies</a>
     <li><a href="#ref-for-ip-address-space①⑦">4.3.1. Main resources</a> <a href="#ref-for-ip-address-space①⑧">(2)</a>
     <li><a href="#ref-for-ip-address-space①⑨">5.5. Cross-network confusion</a>
+    <li><a href="#ref-for-ip-address-space②⓪">5.6.2. HTTP cache poisoning</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-local">
@@ -1920,6 +1938,7 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-less-public">2.2. Private Network Request</a>
     <li><a href="#ref-for-ip-address-space-less-public①">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-ip-address-space-less-public②">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-ip-address-space-less-public③">5.6.2. HTTP cache poisoning</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="determine-the-ip-address-space">
@@ -1981,7 +2000,7 @@ directive-value = ""
     <li><a href="#ref-for-private-network-access-check">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-private-network-access-check①">3.1.2. CORS preflight</a>
     <li><a href="#ref-for-private-network-access-check②">4.3.2. Subresources</a>
-    <li><a href="#ref-for-private-network-access-check③">5.6. HTTP cache</a>
+    <li><a href="#ref-for-private-network-access-check③">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="request-target-ip-address-space">
