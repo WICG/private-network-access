@@ -148,12 +148,12 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <em>This section is not normative.</em>
 
   Although [[RFC1918]] has specified a distinction between "private" and
-  "public" internet addresses for over a decade, user agents haven't made
+  "public" internet addresses for over two decades, user agents haven't made
   much progress at segregating the one from the other. Websites on the public
   internet can make requests to internal devices and servers, which enable a
   number of malicious behaviors, including attacks on users' routers like those
-  documented in [[DRIVE-BY-PHARMING]] (and, more recenly, [[SOHO-PHARMING]] and
-  [[CSRF-EXPLOIT-KIT]]).
+  documented in [[DRIVE-BY-PHARMING]], [[SOHO-PHARMING]] and
+  [[CSRF-EXPLOIT-KIT]].
 
   Here, we propose a mitigation against these kinds of attacks that would
   require internal devices to explicitly opt-in to requests from the public
@@ -161,7 +161,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="goals">Goals</h3>
 
-  The overarching goal is to prevent the user agent from inadvertantly enabling
+  The overarching goal is to prevent the user agent from inadvertently enabling
   attacks on devices running on a user's local intranet, or services running on
   the user's machine directly. For example, we wish to mitigate attacks on:
 
@@ -813,6 +813,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
     property set to [=IP address space/local=].
   </div>
 
+  ISSUE(76): This section probably needs to be updated to specify how Private
+  Network Access integrates with dedicated, shared and service workers.
+
 </section>
 
 <section>
@@ -898,9 +901,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h4 id="http-cache-subresources">Subresources</h4>
 
-  Subresources loaded from the HTTP cache are not subject to the
-  [=Private Network Access check=], since that check is only applied in
-  [$HTTP-network fetch$].
+  Subresources loaded from the HTTP cache are subject to the
+  [=Private Network Access check=]. This is not yet reflected in the algoritms
+  above, since that check is only applied in [$HTTP-network fetch$].
+
+  ISSUE(75): Specify and explain Chromium's behavior here.
 
   See [[#http-cache-security]] for a discussion of security implications.
 
@@ -1008,6 +1013,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
   practical compromise can be reached.
 
   <h3 id="http-cache-security">HTTP cache</h3>
+
+  ISSUE(75): The following is no longer accurate. Implementation experience
+  revealed that integrating with the cache was useful even in protecting
+  network resources against CSRF attacks. This section needs to be rewritten.
 
   Cached subresources are not currently protected by this specification, even
   though the HTTP cache remembers the source IP address which could be used in

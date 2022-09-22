@@ -4,9 +4,9 @@
   <title>Private Network Access</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version cace53f8c, updated Tue Dec 7 12:12:54 2021 -0800" name="generator">
+  <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="a409e3c522d719ad063418fcde12587ce18ff99b" name="document-revision">
+  <meta content="2e3acef75d68abc35df85fa8b816245efa174578" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -477,9 +477,9 @@ dfn > a.self-link::before      { content: "#"; }
 }</style>
  <body class="h-entry">
   <div class="head">
-   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
+   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2022-02-23">23 February 2022</time></span></h2>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-09-22">22 September 2022</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -597,16 +597,16 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <h2 class="heading settled" data-level="1" id="intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#intro"></a></h2>
     <p><em>This section is not normative.</em></p>
     <p>Although <a data-link-type="biblio" href="#biblio-rfc1918">[RFC1918]</a> has specified a distinction between "private" and
-  "public" internet addresses for over a decade, user agents haven’t made
+  "public" internet addresses for over two decades, user agents haven’t made
   much progress at segregating the one from the other. Websites on the public
   internet can make requests to internal devices and servers, which enable a
   number of malicious behaviors, including attacks on users' routers like those
-  documented in <a data-link-type="biblio" href="#biblio-drive-by-pharming">[DRIVE-BY-PHARMING]</a> (and, more recenly, <a data-link-type="biblio" href="#biblio-soho-pharming">[SOHO-PHARMING]</a> and <a data-link-type="biblio" href="#biblio-csrf-exploit-kit">[CSRF-EXPLOIT-KIT]</a>).</p>
+  documented in <a data-link-type="biblio" href="#biblio-drive-by-pharming">[DRIVE-BY-PHARMING]</a>, <a data-link-type="biblio" href="#biblio-soho-pharming">[SOHO-PHARMING]</a> and <a data-link-type="biblio" href="#biblio-csrf-exploit-kit">[CSRF-EXPLOIT-KIT]</a>.</p>
     <p>Here, we propose a mitigation against these kinds of attacks that would
   require internal devices to explicitly opt-in to requests from the public
   internet.</p>
     <h3 class="heading settled" data-level="1.1" id="goals"><span class="secno">1.1. </span><span class="content">Goals</span><a class="self-link" href="#goals"></a></h3>
-    <p>The overarching goal is to prevent the user agent from inadvertantly enabling
+    <p>The overarching goal is to prevent the user agent from inadvertently enabling
   attacks on devices running on a user’s local intranet, or services running on
   the user’s machine directly. For example, we wish to mitigate attacks on:</p>
     <ul>
@@ -1146,6 +1146,8 @@ directive-value = ""
     frame’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑧">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①①">public</a>.</p>
      <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container②">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑨">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑤">local</a>.</p>
     </div>
+    <p class="issue" id="issue-a4109108"><a class="self-link" href="#issue-a4109108"></a> This section probably needs to be updated to specify how Private
+  Network Access integrates with dedicated, shared and service workers. <a href="https://github.com/wicg/private-network-access/issues/76">[Issue #76]</a></p>
    </section>
    <section>
     <h2 class="heading settled" data-level="4" id="implementation-considerations"><span class="secno">4. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation-considerations"></a></h2>
@@ -1199,7 +1201,9 @@ directive-value = ""
     now set to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑥">private</a>.</p>
     </div>
     <h4 class="heading settled" data-level="4.3.2" id="http-cache-subresources"><span class="secno">4.3.2. </span><span class="content">Subresources</span><a class="self-link" href="#http-cache-subresources"></a></h4>
-    <p>Subresources loaded from the HTTP cache are not subject to the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check②">Private Network Access check</a>, since that check is only applied in <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch③">HTTP-network fetch</a>.</p>
+    <p>Subresources loaded from the HTTP cache are subject to the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check②">Private Network Access check</a>. This is not yet reflected in the algoritms
+  above, since that check is only applied in <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch③">HTTP-network fetch</a>.</p>
+    <p class="issue" id="issue-e91d422c"><a class="self-link" href="#issue-e91d422c"></a> Specify and explain Chromium’s behavior here. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a></p>
     <p>See <a href="#http-cache-security">§ 5.6 HTTP cache</a> for a discussion of security implications.</p>
    </section>
    <section>
@@ -1280,6 +1284,9 @@ directive-value = ""
   manner is likely to be impossible short of clearing all state. Maybe a
   practical compromise can be reached. <a href="https://github.com/wicg/private-network-access/issues/28">[Issue #28]</a></p>
     <h3 class="heading settled" data-level="5.6" id="http-cache-security"><span class="secno">5.6. </span><span class="content">HTTP cache</span><a class="self-link" href="#http-cache-security"></a></h3>
+    <p class="issue" id="issue-dfc740be"><a class="self-link" href="#issue-dfc740be"></a> The following is no longer accurate. Implementation experience
+  revealed that integrating with the cache was useful even in protecting
+  network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a></p>
     <p>Cached subresources are not currently protected by this specification, even
   though the HTTP cache remembers the source IP address which could be used in
   the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check③">Private Network Access check</a> algorithm during <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch" id="ref-for-concept-http-network-or-cache-fetch②">HTTP-network-or-cache fetch</a>.</p>
@@ -1321,7 +1328,7 @@ directive-value = ""
   resulting thread were useful, as always.</p>
    </section>
   </main>
-<script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
+<script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
@@ -1729,7 +1736,7 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-struct">struct</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[secure-contexts]</a> defines the following terms:
+    <a data-link-type="biblio">[SECURE-CONTEXTS]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-potentially-trustworthy-origin">potentially trustworthy origin</span>
     </ul>
@@ -1743,7 +1750,7 @@ directive-value = ""
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-csp3">[CSP3]
-   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. 29 June 2021. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+   <dd>Mike West. <a href="https://w3c.github.io/webappsec-csp/"><cite>Content Security Policy Level 3</cite></a>. URL: <a href="https://w3c.github.io/webappsec-csp/">https://w3c.github.io/webappsec-csp/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-fetch">[FETCH]
@@ -1790,7 +1797,7 @@ directive-value = ""
    <dt id="biblio-rfc8305">[RFC8305]
    <dd>D. Schinazi; T. Pauly. <a href="https://www.rfc-editor.org/rfc/rfc8305"><cite>Happy Eyeballs Version 2: Better Connectivity Using Concurrency</cite></a>. December 2017. Proposed Standard. URL: <a href="https://www.rfc-editor.org/rfc/rfc8305">https://www.rfc-editor.org/rfc/rfc8305</a>
    <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
-   <dd>Mike West. <a href="https://www.w3.org/TR/secure-contexts/"><cite>Secure Contexts</cite></a>. 18 September 2021. CR. URL: <a href="https://www.w3.org/TR/secure-contexts/">https://www.w3.org/TR/secure-contexts/</a>
+   <dd>Mike West. <a href="https://w3c.github.io/webappsec-secure-contexts/"><cite>Secure Contexts</cite></a>. URL: <a href="https://w3c.github.io/webappsec-secure-contexts/">https://w3c.github.io/webappsec-secure-contexts/</a>
    <dt id="biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]
    <dd><a href="http://www.w3.org/2015/10/28-local-minutes.html"><cite>Minutes from 'Secure communication with local network devices': TPAC, 2015</cite></a>. URL: <a href="http://www.w3.org/2015/10/28-local-minutes.html">http://www.w3.org/2015/10/28-local-minutes.html</a>
    <dt id="biblio-soho-pharming">[SOHO-PHARMING]
@@ -1812,7 +1819,10 @@ directive-value = ""
   handshakes, given that WebSocket handshakes have roughly the same capabilities
   as <code>&lt;img></code> tags. This might require no additional work to specify given that
   the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-websocket-establish">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">Fetch</a> algorithm. <a href="https://github.com/wicg/private-network-access/issues/14">[Issue #14]</a> <a class="issue-return" href="#issue-5a78ae74" title="Jump to section">↵</a></div>
+   <div class="issue"> This section probably needs to be updated to specify how Private
+  Network Access integrates with dedicated, shared and service workers. <a href="https://github.com/wicg/private-network-access/issues/76">[Issue #76]</a> <a class="issue-return" href="#issue-a4109108" title="Jump to section">↵</a></div>
    <div class="issue"> Reevaluate this after implementation experience. <a class="issue-return" href="#issue-5f05c8e3" title="Jump to section">↵</a></div>
+   <div class="issue"> Specify and explain Chromium’s behavior here. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-e91d422c" title="Jump to section">↵</a></div>
    <div class="issue"> Some consumer routers implement overly-aggressive protections
   against DNS rebinding attacks by simply blocking DNS responses that resolve to
   non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/private-network-access/issues/23">[Issue #23]</a> <a class="issue-return" href="#issue-725df7ad" title="Jump to section">↵</a></div>
@@ -1820,6 +1830,9 @@ directive-value = ""
   clearing state specific to the previous network. Doing so in a fully general
   manner is likely to be impossible short of clearing all state. Maybe a
   practical compromise can be reached. <a href="https://github.com/wicg/private-network-access/issues/28">[Issue #28]</a> <a class="issue-return" href="#issue-cf35bfd4" title="Jump to section">↵</a></div>
+   <div class="issue"> The following is no longer accurate. Implementation experience
+  revealed that integrating with the cache was useful even in protecting
+  network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-dfc740be" title="Jump to section">↵</a></div>
   </div>
   <aside class="dfn-panel" data-for="ip-address-space">
    <b><a href="#ip-address-space">#ip-address-space</a></b><b>Referenced in:</b>
