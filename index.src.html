@@ -759,6 +759,14 @@ spec:fetch; type:dfn; for:cache; text:cache match
           1.  <var ignore>entry</var>'s [=cache entry/IP address space=] is
               equal to |request|'s [=request/target IP address space=].
 
+  <h4 id="forbidden-header-names">Forbidden header names</h4>
+
+  A new entry is added to the list of [=forbidden header names=]:
+  <a http-header>`Access-Control-Request-Private-Network`</a>.
+
+  The user agent should have full control over this header, just as it does over
+  other CORS headers.
+
   <h3 id="integration-websockets">Integration with WebSockets</h3>
 
   ISSUE(14): Preflight requests should probably be sent ahead of WebSocket

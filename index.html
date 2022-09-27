@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="daff8e720e3a3682898f24264fe7110d6712a9c9" name="document-revision">
+  <meta content="708ece87635c71968209921bc224c62584591054" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -479,7 +479,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-09-22">22 September 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-09-27">27 September 2022</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -549,6 +549,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
        <ol class="toc">
         <li><a href="#secure-context-restriction"><span class="secno">3.1.1</span> <span class="content">Secure context restriction</span></a>
         <li><a href="#cors-preflight"><span class="secno">3.1.2</span> <span class="content">CORS preflight</span></a>
+        <li><a href="#forbidden-header-names"><span class="secno">3.1.3</span> <span class="content">Forbidden header names</span></a>
        </ol>
       <li><a href="#integration-websockets"><span class="secno">3.2</span> <span class="content">Integration with WebSockets</span></a>
       <li><a href="#integration-html"><span class="secno">3.3</span> <span class="content">Integration with HTML</span></a>
@@ -1112,6 +1113,10 @@ directive-value = ""
         </ol>
       </ol>
     </ol>
+    <h4 class="heading settled" data-level="3.1.3" id="forbidden-header-names"><span class="secno">3.1.3. </span><span class="content">Forbidden header names</span><a class="self-link" href="#forbidden-header-names"></a></h4>
+    <p>A new entry is added to the list of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#forbidden-header-name" id="ref-for-forbidden-header-name">forbidden header names</a>: <a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network④"><code>Access-Control-Request-Private-Network</code></a>.</p>
+    <p>The user agent should have full control over this header, just as it does over
+  other CORS headers.</p>
     <h3 class="heading settled" data-level="3.2" id="integration-websockets"><span class="secno">3.2. </span><span class="content">Integration with WebSockets</span><a class="self-link" href="#integration-websockets"></a></h3>
     <p class="issue" id="issue-5a78ae74"><a class="self-link" href="#issue-5a78ae74"></a> Preflight requests should probably be sent ahead of WebSocket
   handshakes, given that WebSocket handshakes have roughly the same capabilities
@@ -1520,6 +1525,12 @@ directive-value = ""
     <li><a href="#ref-for-concept-fetch①">3.2. Integration with WebSockets</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-forbidden-header-name">
+   <a href="https://fetch.spec.whatwg.org/#forbidden-header-name">https://fetch.spec.whatwg.org/#forbidden-header-name</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-forbidden-header-name">3.1.3. Forbidden header names</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-response-header-list">
    <a href="https://fetch.spec.whatwg.org/#concept-response-header-list">https://fetch.spec.whatwg.org/#concept-response-header-list</a><b>Referenced in:</b>
    <ul>
@@ -1720,6 +1731,7 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-concept-websocket-establish">establish a websocket connection</span>
      <li><span class="dfn-paneled" id="term-for-extract-header-list-values">extracting header list values</span>
      <li><span class="dfn-paneled" id="term-for-concept-fetch">fetch</span>
+     <li><span class="dfn-paneled" id="term-for-forbidden-header-name">forbidden header name</span>
      <li><span class="dfn-paneled" id="term-for-concept-response-header-list">header list <small>(for response)</small></span>
      <li><span class="dfn-paneled" id="term-for-concept-http-fetch">http fetch</span>
      <li><span class="dfn-paneled" id="term-for-concept-network-error">network error</span>
@@ -1962,6 +1974,7 @@ directive-value = ""
     <li><a href="#ref-for-http-headerdef-access-control-request-private-network">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-http-headerdef-access-control-request-private-network①">1.2.3. Navigation</a> <a href="#ref-for-http-headerdef-access-control-request-private-network②">(2)</a>
     <li><a href="#ref-for-http-headerdef-access-control-request-private-network③">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-http-headerdef-access-control-request-private-network④">3.1.3. Forbidden header names</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-headerdef-access-control-allow-private-network">
