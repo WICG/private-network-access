@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="708ece87635c71968209921bc224c62584591054" name="document-revision">
+  <meta content="a818f0f2de15134a5b7acad559007ae41cee92b8" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -666,8 +666,8 @@ Origin: https://csrf.attack
      </ul>
     </div>
     <h4 class="heading settled" data-level="1.2.2" id="example-opt-in"><span class="secno">1.2.2. </span><span class="content">Opting-In</span><a class="self-link" href="#example-opt-in"></a></h4>
-    <div class="example" id="example-a008671f">
-     <a class="self-link" href="#example-a008671f"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
+    <div class="example" id="example-6ce42a93">
+     <a class="self-link" href="#example-6ce42a93"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
     for various reasons. They can explicitly opt-in to receiving requests from
     the internet by sending proper CORS headers in response to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request②">CORS-preflight request</a>. 
      <p>When a website on the public internet makes a request to the device, the
@@ -683,14 +683,13 @@ Origin: https://csrf.attack
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods" id="ref-for-http-access-control-allow-methods">Access-Control-Allow-Methods</a>: GET
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials" id="ref-for-http-access-control-allow-credentials">Access-Control-Allow-Credentials</a>: true
 <a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network①">Access-Control-Allow-Private-Network</a>: true
-Vary: Origin
 Content-Length: 0
 ...
 </pre>
     </div>
     <h4 class="heading settled" data-level="1.2.3" id="shortlinks"><span class="secno">1.2.3. </span><span class="content">Navigation</span><a class="self-link" href="#shortlinks"></a></h4>
-    <div class="example" id="example-59d67516">
-     <a class="self-link" href="#example-59d67516"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
+    <div class="example" id="example-578ed6d0">
+     <a class="self-link" href="#example-578ed6d0"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
     its employees often email such links to each other. The email server is
     hosted at a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address①">public address</a> in order to ensure that employees can work
     even when they’re not at the office. How considerate! 
@@ -711,7 +710,6 @@ Origin: https://mail.mega.corp
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods" id="ref-for-http-access-control-allow-methods①">Access-Control-Allow-Methods</a>: GET
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials" id="ref-for-http-access-control-allow-credentials①">Access-Control-Allow-Credentials</a>: true
 <a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network②">Access-Control-Allow-Private-Network</a>: true
-Vary: Origin
 Content-Length: 0
 ...
 </pre>
