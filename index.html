@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="a818f0f2de15134a5b7acad559007ae41cee92b8" name="document-revision">
+  <meta content="b4f4db3b57ed31ca987087e9f3ca30ed1d225916" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -688,8 +688,8 @@ Content-Length: 0
 </pre>
     </div>
     <h4 class="heading settled" data-level="1.2.3" id="shortlinks"><span class="secno">1.2.3. </span><span class="content">Navigation</span><a class="self-link" href="#shortlinks"></a></h4>
-    <div class="example" id="example-578ed6d0">
-     <a class="self-link" href="#example-578ed6d0"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
+    <div class="example" id="example-e45f5be8">
+     <a class="self-link" href="#example-e45f5be8"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
     its employees often email such links to each other. The email server is
     hosted at a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address①">public address</a> in order to ensure that employees can work
     even when they’re not at the office. How considerate! 
@@ -725,9 +725,7 @@ Content-Length: 0
 <pre>// Request:
 GET /short-links-are-short-after-shortening HTTP/1.1
 Host: go
-<a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network②">Access-Control-Request-Private-Network</a>: true
 ...
-Origin: https://mail.mega.corp
 
 // Response:
 HTTP/1.1 301 Moved Permanently
@@ -1074,7 +1072,7 @@ directive-value = ""
   then:</p>
           <ol>
            <li data-md>
-            <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-set" id="ref-for-concept-header-list-set">Set</a> "<a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network③"><code>Access-Control-Request-Private-Network</code></a>"
+            <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-set" id="ref-for-concept-header-list-set">Set</a> "<a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network②"><code>Access-Control-Request-Private-Network</code></a>"
   to "<code>true</code>" in <var>preflight</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list">header list</a>.</p>
           </ol>
         </ol>
@@ -1112,7 +1110,7 @@ directive-value = ""
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.1.3" id="forbidden-header-names"><span class="secno">3.1.3. </span><span class="content">Forbidden header names</span><a class="self-link" href="#forbidden-header-names"></a></h4>
-    <p>A new entry is added to the list of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#forbidden-header-name" id="ref-for-forbidden-header-name">forbidden header names</a>: <a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network④"><code>Access-Control-Request-Private-Network</code></a>.</p>
+    <p>A new entry is added to the list of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#forbidden-header-name" id="ref-for-forbidden-header-name">forbidden header names</a>: <a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network③"><code>Access-Control-Request-Private-Network</code></a>.</p>
     <p>The user agent should have full control over this header, just as it does over
   other CORS headers.</p>
     <h3 class="heading settled" data-level="3.2" id="integration-websockets"><span class="secno">3.2. </span><span class="content">Integration with WebSockets</span><a class="self-link" href="#integration-websockets"></a></h3>
@@ -1970,9 +1968,9 @@ directive-value = ""
    <b><a href="#http-headerdef-access-control-request-private-network">#http-headerdef-access-control-request-private-network</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-headerdef-access-control-request-private-network">1.2.1. Secure by Default</a>
-    <li><a href="#ref-for-http-headerdef-access-control-request-private-network①">1.2.3. Navigation</a> <a href="#ref-for-http-headerdef-access-control-request-private-network②">(2)</a>
-    <li><a href="#ref-for-http-headerdef-access-control-request-private-network③">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-http-headerdef-access-control-request-private-network④">3.1.3. Forbidden header names</a>
+    <li><a href="#ref-for-http-headerdef-access-control-request-private-network①">1.2.3. Navigation</a>
+    <li><a href="#ref-for-http-headerdef-access-control-request-private-network②">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-http-headerdef-access-control-request-private-network③">3.1.3. Forbidden header names</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-headerdef-access-control-allow-private-network">
