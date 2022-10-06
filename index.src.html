@@ -29,10 +29,10 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
     text: create a new browsing context; url: multipage/browsers.html#creating-a-new-browsing-context
     text: initialize the Document object; url: multipage/browsing-the-web.html#initialise-the-document-object
     text: run a worker; url: multipage/workers.html#run-a-worker
-spec: HTML; urlPrefix: https://fetch.spec.whatwg.org/
+spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: abstract-op
     text: HTTP-network fetch; url: #concept-http-network-fetch
-spec: HTML; urlPrefix: https://fetch.spec.whatwg.org/
+spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: abstract-op
     text: HTTP-network-or-cache fetch; url: #concept-http-network-or-cache-fetch
 </pre>
@@ -817,8 +817,35 @@ spec:fetch; type:dfn; for:cache; text:cache match
     property set to [=IP address space/local=].
   </div>
 
-  ISSUE(76): This section probably needs to be updated to specify how Private
-  Network Access integrates with dedicated, shared and service workers.
+  <h3 id="workers">Workers</h3>
+
+  *This section is non-normative.*
+
+  Given that {{WorkerGlobalScope}} already has a
+  [=WorkerGlobalScope/policy container=] field populated using the [=create a
+  policy container from a fetch response=] algorithm, the avove integrations
+  with Fetch and HTML apply just as well to worker contexts as to documents.
+
+  <div class="example">
+    Assuming that `example.com` resolves to a [=public address=] (say,
+    `123.123.123.123`), then a {{WorkerGlobalScope}} created by fetching a
+    script from `https://example.com/worker.js` will have its
+    [=WorkerGlobalScope/policy container=]'s
+    [=policy container/IP address space=] property set to
+    [=IP address space/public=].
+
+    Any fetch [=request=] initiated by this worker that [=obtains a connection=]
+    to an IP address in the [=IP address space/private=] or
+    [=IP address space/local=] [=address spaces=] would then be a
+    [=private network request=].
+  </div>
+
+  ISSUE(83): The [=/Service Worker=] <a spec="service-workers">soft update</a>
+  algorithm unfortunately sets a [=request/client|request client=] of `"null"`
+  when [=fetching=] an updated script. This causes all sorts of issues, and
+  interferes with the [=private network access check=] algorithm laid out above.
+  Indeed, there is no [=request/client|request client=] from which to copy the
+  [=request/policy container=] during [=fetch=].
 
 </section>
 
