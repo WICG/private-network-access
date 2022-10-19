@@ -11,3 +11,10 @@ You may be interested in reading:
    [`./explainer.md`](https://github.com/WICG/private-network-access/blob/master/explainer.md)
  - the security & privacy self-review:
    [`./security_privacy_self_review.md`](https://github.com/WICG/private-network-access/blob/master/security_privacy_self_review.md)
+
+ - Permission prompt
+   - the explainer:
+   [`./permission_prompt/explainer.md`](https://github.com/WICG/private-network-access/blob/master/permission_prompt/explainer.md)
+   - the security & privacy self-review:
+   [`./permission_prompt/security_privacy_self_review.md`](https://github.com/WICG/private-network-access/blob/master/permission_prompt/security_privacy_self_review.md)
+
