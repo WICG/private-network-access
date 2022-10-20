@@ -126,7 +126,7 @@ Instead of having the target provide a unique ID, we could use:
 * the IP address: subject to collisions and churn with DHCP
 * the MAC address: does not work if the target is not directly reachable on layer 2
 * a public key: complex, would need to design a new protocol to make use of the key later
-* the `-id` and the IP address: in case that multiple devices might accidentally choose the same `-id`.
+* the `-ID` and the IP address: in case that multiple devices might accidentally choose the same `-ID`.
 
 ### Ephemeral permission
 
