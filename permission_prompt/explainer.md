@@ -8,7 +8,7 @@
 
 The Private Network Access specification aims to prevent the user agent from inadvertently enabling attacks on devices running on a user's local intranet, or services running on the user's machine directly. It used to be named "CORS-RFC1918", after [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), which provides a mechanism for securing websites against cross-origin requests, and [RFC 1918](https://tools.ietf.org/html/rfc1918), which describes IPv4 address ranges reserved for private networks.
 
-Preflights and secure-context restrictions have already been introduced. Here, we would like to introduce a new part of specification. A way to allow plaintext HTTP requests on the private network to be made from an HTTPS page by gaining permission from users with new prompts. It is a way to allow websites to use secure-context and in the meanwhile relax mixed content restrictions and access specific targets on the private network over plaintext HTTP.
+Preflights and secure-context restrictions have already been introduced. Here, we would like to introduce a new part of the specification: a way to allow plaintext HTTP requests on the private network to be made from an HTTPS page. This would require obtaining a new permission from users with a prompt. It is a way to allow websites to upgrade to HTTPS while relaxing mixed content restrictions and continuing to access specific targets on the private network over plaintext HTTP.
 
 ## Goals
 
