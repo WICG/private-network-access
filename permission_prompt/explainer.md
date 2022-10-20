@@ -46,7 +46,7 @@ Instead, the device must generate a new certificate at setup time. Somehow, the 
 
 Unfortunately, the IoT ecosystem has been moving away from this model. Our understanding is that in order for a device to get a coveted MFi (“Works with HomeKit”) certification from Apple, it must not require direct internet access for the initial setup.
 
-If the device cannot directly inform the backend of its certificate hash, then both ends must somehow compute the same public key independently. Sounds like a job for [TOTP](https://en.wikipedia.org/wiki/Time-based_one-time_password)! Except that it requires the device to have a moderate and accurate clock, which is often not the case when powering devices on for the first time. Once again, this problem could be solved with NTP or somesuch network-based protocol, but the requirement that the device not communicate to the internet precludes this approach.
+If the device cannot directly inform the backend of its certificate hash, then both ends must somehow compute the same public key independently. Sounds like a job for [TOTP](https://en.wikipedia.org/wiki/Time-based_one-time_password)! Except that it requires the device to have a moderately accurate clock, which is often not the case when powering devices on for the first time. Once again, this problem could be solved with NTP or somesuch network-based protocol, but the requirement that the device not communicate to the internet precludes this approach.
 
 Long story short, there does not seem to be a way to get out of this bind and achieve our goals with WebTransport.
 
