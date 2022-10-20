@@ -54,7 +54,7 @@ Long story short, there does not seem to be a way to get out of this bind and ac
 
 The previous attempts motivated the switch to a permission-based alternative. We propose that secure contexts be allowed to fetch resources from private network servers over plaintext HTTP - circumventing mixed content restrictions - given express user permission.
 
-At a high level, websites indicate their intention to access a private network server using some new API. Chrome queries the server for some identification information it can display to the user in a permission prompt. The user then chooses if they desire to allow the website to access the target server.
+At a high level, websites indicate their intention to access a private network server using a new API. The browser then queries the server for some identification information it can display to the user in a permission prompt. The user then chooses if they desire to allow the website to access the target server.
 
 This would mean that websites that wish to speak to private network devices must be served over HTTPS. The target device, however, would not have to serve HTTPS. It would only need to respond correctly to CORS preflights, and maybe to some kind of simple identification request.
 
