@@ -72,7 +72,7 @@ This would instruct the browser to allow the fetch even though the scheme is non
 
 If the remote IP address does not belong to the IP address space specified as the privateNetworkAccess option value, then the request is failed.
 
-### Preflighting 
+### Preflight
 
 If it does belong, then a CORS preflight request is sent as specified today. The target server then responds with a CORS preflight response, augmented with the following two headers:
 
