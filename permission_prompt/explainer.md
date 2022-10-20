@@ -2,7 +2,7 @@
 
 - **Author**: lyf@google.com
 - **Created**: 2022-06-22
-- **Last Updated**: 2022-06-27
+- **Last Updated**: 2022-10-20
 
 ## Introduction
 
@@ -96,11 +96,10 @@ A prompt is then shown to the user asking for permission to access the target de
 
 The `-Name` header is used to present a friendly string to the user instead of, or in addition to, an origin (often a raw IP literal).
 
-The `-ID` header is used to key the permission and recognize the device across IP addresses. Indeed, widespread use of DHCP means that devices are likely to change IP addresses regularly, and we would like to avoid both cross-device confusion and permission fatigue.
+The `-ID` header is used to key the permission and recognize the device across IP addresses. Indeed, widespread use of DHCP means that devices are likely to change IP addresses regularly, and we would like to avoid both cross-device confusion and permission fatigue. However, we are still open with opinions for how to recognize the device, see more
+options in `identify the target differently` section under `What are the alternatives`.
 
 If the user decides to grant the permission, then the fetch continues. If not, it fails.
-
-Once the permission is granted, then the document can make arbitrary fetches to the target origin for its entire lifetime, through media tags, XHRs, etc.
 
 The permission is then persisted. The next document belonging to the same initiator origin that declares its intent to access the same server (perhaps at a different origin, if using a raw IP address) does not trigger a permission prompt. The initial CORS preflight response carries the same ID, and the browser recognizes that the document already has permission to access the server.
 
@@ -142,10 +141,25 @@ To prevent abuse of the permission prompt, we might also want to automatically d
 * Automatically deny the request to the same local device in the current document.
 * Automatically deny the request to the same local device for the specific public website for a while.
 
-## Security and privacy considerations
-
-See also [`./security_privacy_self_review.md`](./security_privacy_self_review.md)
-
 ### IDs
 
 The preflight request sent with plaintext HTTP can be hijacked which means that the `-ID` provided by the local device can be leaked to third-party attackers. However, this also means that the attacker is already in the private network. In this case, it doesn't matter whether the public page is allowed to make requests on the private network  since the attacker can make the request themselves.
+
+### Behavior of `targetAddressSpace` and fetch
+
+It might be annoying on one hand and limited developers ability to request private network resource to fetch only on
+the other if `targetAddressSpace` as an fetch option required to be set by developers manually every time. In this
+case, we once agreed on preserving the permission for the document's entire lifetime if once granted via fetch, and
+the document can perform arbitrary fetches with media tags, XHRs, etc. However, such behavior would still cause
+problems such as the DNS could be rebind in the middle of a document's lifetime.
+
+Other alternative options we currently have are:
+* infer target address space when fetch from a raw IP address, even restrict into IP address only.
+* add a new attribute `targetAddressSpace` to fetch elements such as iframe elements.
+* use a service worker to intercept requests.
+* create a blob after fetching and loading stuff from the blob URL.
+* preserve permission for the life of the socket.
+
+## Security and privacy considerations
+
+See also [`./security_privacy_self_review.md`](./security_privacy_self_review.md)
