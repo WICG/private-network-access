@@ -136,7 +136,7 @@ Alternatively, the permission only lasts shortly for a certain origin, similarly
 
 ### Automatically deny similar requests
 
-To avoid the abuse of the permission prompt, we might also want some automatically deny operation for similar requests. Here we propose some alternatives:
+To prevent abuse of the permission prompt, we might also want to automatically deny permission in some cases. Here we propose some alternatives:
 
 * Show `cancel` and `allow` instead of `block` and `allow` on the first time the prompt shows and add a “Do not show this again.” check box on the second prompt.
 * Automatically deny the request to the same local device in the current document.
