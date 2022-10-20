@@ -20,7 +20,7 @@ For example, we wish to mitigate attacks on:
 
 * Users' routers, as outlined in [SOHO Pharming](https://331.cybersec.fun/TeamCymruSOHOPharming.pdf). Note that status quo CORS protections don’t protect against the kinds of attacks discussed here as they rely only on [CORS-safelisted methods](https://fetch.spec.whatwg.org/#cors-safelisted-method) and [CORS-safelisted request-headers](https://fetch.spec.whatwg.org/#cors-safelisted-request-header). No preflight is triggered, and the attacker doesn’t actually care about reading the response, as the request itself is the CSRF attack.
 
-Particularly in this extensional piece of specification for private network access, we focus on providing a secure mechanism to allow secure public websites to embed non-public resources without running into mixed content violations by obtaining permissions from the user.
+In this particular extension to the base Private Network Access specification, we focus on providing a secure mechanism to allow secure public websites to embed non-secure non-public resources without running into mixed content violations, by instead requesting permission from the user.
 
 ### Secure context
 
