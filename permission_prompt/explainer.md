@@ -24,7 +24,7 @@ In this particular extension to the base Private Network Access specification, w
 
 ### Secure context
 
-To achieve this, we introduced the [secure context restriction](https://wicg.github.io/private-network-access/#secure-context-restriction) part of the Private Network Access specification. However, a bunch of feedback from websites have been received since then. For detailed information, see [Private Network Access:Secure Context Restriction Launch delay](https://docs.google.com/document/d/1bpis0QwaA9ZrRFmpPW6LiaPmdwT0UhhUMNsEnU0zfLk/edit?usp=sharing).
+Private Network Access specifies that access to the private network is [restricted to secure contexts](https://wicg.github.io/private-network-access/#secure-context-restriction). However, extensive feedback from web developers has been received since then which caused this plan to be put on hold in Chrome. For detailed information, see [Private Network Access: Secure Context Restriction Launch delay](https://docs.google.com/document/d/1bpis0QwaA9ZrRFmpPW6LiaPmdwT0UhhUMNsEnU0zfLk/edit?usp=sharing).
 
 Briefly, the “[Plex](https://plex.tv) solution” consists of provisioning the private server with a certificate for `*.$user_id.foo.example`, then maintaining a DNS service that resolves `10-1-2-3.$user_id.foo.example` to `10.1.2.3`. This allows `https://bar.example` to stream a video from `https://10-1-2-3.$user_id.foo.example/titanic.mp4` directly over the private network. There are even services like [sslip.io](https://sslip.io) that provide this functionality to smaller web apps.
 
