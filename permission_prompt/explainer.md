@@ -12,7 +12,7 @@ Preflights and secure-context restrictions have already been introduced. Here, w
 
 ## Goals
 
-The overarching goal is to prevent malicious websites from pivoting through the user agent's network position to attack devices without users’ knowledge and services which reasonably assumed they were unreachable from the Internet at large, by virtue of residing on the user’s local intranet or the user's machine.
+The overarching goal is to prevent malicious websites from pivoting through the user agent's network position to attack endpoints on the private network. These endpoints might be devices or services which reasonably assumed they were unreachable from the Internet at large, by virtue of residing on the user’s local intranet or the user's machine.
 
 For example, we wish to mitigate attacks on:
 
