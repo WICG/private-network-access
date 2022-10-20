@@ -36,7 +36,7 @@ Beyond this, the main drawback of this approach is that it degrades system relia
 
 To solve the above problems, we proposed an alternative solution with [WebTransport](https://w3c.github.io/webtransport)’s `serverCertificateHashes` feature. This allows a secure context to establish a secure connection to a local server that only possesses a self-signed certificate.
 
-Unfortunately, it turns out that WebTransport is not a good replacement there. See [Github Issue](https://github.com/WICG/private-network-access/issues/23).
+Unfortunately, it turns out that WebTransport is not a good replacement there. See [spec issue #23](https://github.com/WICG/private-network-access/issues/23).
 
 WebTransport `serverCertificateHashes` requires the website initiating the connection to know in advance the hash of the target server’s certificate. Somehow, they must both agree on the hash value.
 
