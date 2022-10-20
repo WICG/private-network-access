@@ -70,7 +70,7 @@ fetch("http://router.private/ping", {
 
 This would instruct the browser to allow the fetch even though the scheme is non-secure and obtain a connection to the target server. This ensures the feature cannot be abused to bypass mixed content in general.
 
-If the remote IP address does not belong to the IP address space specified as the privateNetworkAccess option value, then the request is failed.
+If the remote IP address does not belong to the IP address space specified as the `targetAddressSpace` option value, then the request is failed.
 
 ### Preflight
 
