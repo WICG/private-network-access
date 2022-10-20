@@ -148,4 +148,4 @@ See also [`./security_privacy_self_review.md`](./security_privacy_self_review.md
 
 ### IDs
 
-The preflight request sent with plaintext HTTP can be hijacked which means that the `-id` provided by the local device can be leaked to third-party attackers. However, this also means that the attacker is already in the private network. In this case, it doesn't matter whether the public page is allowed to make requests on the private network  since the attacker can make the request themselves.
+The preflight request sent with plaintext HTTP can be hijacked which means that the `-ID` provided by the local device can be leaked to third-party attackers. However, this also means that the attacker is already in the private network. In this case, it doesn't matter whether the public page is allowed to make requests on the private network  since the attacker can make the request themselves.
