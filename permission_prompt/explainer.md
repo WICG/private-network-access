@@ -40,7 +40,7 @@ Unfortunately, it turns out that WebTransport is not a good replacement there. S
 
 WebTransport `serverCertificateHashes` requires the website initiating the connection to know in advance the hash of the target server’s certificate. Somehow, they must both agree on the hash value.
 
-WebTransport requires the server’s certificate expiry be limited to 2 weeks (increasing this limit to X weeks would not resolve the issue). The limit is a mitigation to guard against unsafe certificate practices that are normally prevented by the Web PKI. This means that device manufacturers cannot simply provision a certificate on the device while they still have it, because users cannot be expected to set up the device within weeks of the manufacturer shipping it.
+WebTransport also requires the server’s certificate expiry be limited to 2 weeks (increasing this limit to X weeks would not resolve the issue). The limit is a mitigation to guard against unsafe certificate practices that are normally prevented by the Web PKI. This means that device manufacturers cannot simply provision a certificate on the device while they still have it, because users cannot be expected to set up the device within weeks of the manufacturer shipping it.
 
 Instead, the device must generate a new certificate at setup time. Somehow, the website must know the hash of this certificate. The easiest solution is for the device to connect to the internet and communicate its identity and certificate hash to the website’s backend. Then, when the user navigates to the website to set up their device, the website can somehow match the user back to the device - by public IP, by user ID, or any other means. The website can then attempt to connect to the device expecting the right hash.
 
