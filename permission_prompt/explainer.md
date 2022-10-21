@@ -147,7 +147,7 @@ The preflight request sent with plaintext HTTP can be hijacked which means that 
 
 ### Behavior of `targetAddressSpace` and fetch
 
-Requiring every single request to the private network to be issued with `fetch()` and the new `targetAddressSpace` might not support all developer use cases. We could improve this by only requiring it for the first request to the target origin. After a successful `fetch()` with `targetAddressSpace`, the browser could store a mapping from the target origin to the given `targetAddressSpace` for the remainder of the lifetime of the execution context. The execution context could then perform arbitrary fetches with media tags, XHRs, etc to the tartget origin.
+Requiring every single request to the private network to be issued with `fetch()` and the new `targetAddressSpace` might not support all developer use cases. We could improve this by only requiring it for the first request to the target origin. After a successful `fetch()` with `targetAddressSpace`, the browser could store a mapping from the target origin to the given `targetAddressSpace` for the remainder of the lifetime of the execution context. The execution context could then perform arbitrary fetches with media tags, XHRs, etc to the target origin.
 
 Note that this might cause problems if the DNS entry for the target domain changes to point to a different IP address space in the middle of an execution context's lifetime.
 
