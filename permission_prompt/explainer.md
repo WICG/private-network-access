@@ -152,7 +152,8 @@ Requiring every single request to the private network to be issued with `fetch()
 Note that this might cause problems if the DNS entry for the target domain changes to point to a different IP address space in the middle of an execution context's lifetime.
 
 Other alternative options we currently have are:
-* infer target address space when fetch from a raw IP address, even restrict into IP address only.
+* infer target address space when fetching from a raw IP address
+* do the above and restrict private network access to IP addresses only
 * add a new attribute `targetAddressSpace` to fetch elements such as iframe elements.
 * use a service worker to intercept requests.
 * create a blob after fetching and loading stuff from the blob URL.
