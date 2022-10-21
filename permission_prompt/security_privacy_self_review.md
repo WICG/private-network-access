@@ -75,8 +75,7 @@ None.
 
 ## 13. How does this specification distinguish between behavior in first-party and third-party contexts?
 
-For permission prompt in particular, it would be restricted to first-party
-embedders in current stage.
+The permission can only be granted to the top-level page.
 
 We might want to relax the boundary and also allow same-origin child contexts to
 be able to request the permission by default. However, third-party contexts (e.g. iframes) would
