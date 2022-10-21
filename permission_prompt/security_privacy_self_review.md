@@ -78,9 +78,9 @@ None.
 For permission prompt in particular, it would be restricted to first-party
 embedders in current stage.
 
-We might want to relax the boundary and also allow same-origin child context to
-be able to raise the permission by default. However, third-party iframes would
-be exclude from that.
+We might want to relax the boundary and also allow same-origin child contexts to
+be able to request the permission by default. However, third-party contexts (e.g. iframes) would
+not be allowed.
 
 In the future, it might make sense to allow top-level documents to control its
 permission with permission policy and even allow the private network access
