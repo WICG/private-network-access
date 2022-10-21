@@ -147,11 +147,9 @@ The preflight request sent with plaintext HTTP can be hijacked which means that 
 
 ### Behavior of `targetAddressSpace` and fetch
 
-It might be annoying on one hand and limited developers ability to request private network resource to fetch only on
-the other if `targetAddressSpace` as an fetch option required to be set by developers manually every time. In this
-case, we once agreed on preserving the permission for the document's entire lifetime if once granted via fetch, and
-the document can perform arbitrary fetches with media tags, XHRs, etc. However, such behavior would still cause
-problems such as the DNS could be rebind in the middle of a document's lifetime.
+Requiring every single request to the private network to be issued with `fetch()` and the new `targetAddressSpace` might not support all developer use cases. We could improve this by only requiring it for the first request to the target origin. After a successful `fetch()` with `targetAddressSpace`, the browser could store a mapping from the target origin to the given `targetAddressSpace` for the remainder of the lifetime of the execution context. The execution context could then perform arbitrary fetches with media tags, XHRs, etc to the tartget origin.
+
+Note that this might cause problems if the DNS entry for the target domain changes to point to a different IP address space in the middle of an execution context's lifetime.
 
 Other alternative options we currently have are:
 * infer target address space when fetch from a raw IP address, even restrict into IP address only.
