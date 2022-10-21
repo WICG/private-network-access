@@ -59,7 +59,7 @@ No.
 
 ## 10. Do features in this specification allow an origin to access other devices?
 
-Compare to the previous version of Private Network Access, this feature relaxes
+Compared to the previous version of Private Network Access, this feature relaxes
 mixed content check and allows access to devices via plaintext.
 
 However, compared to the current state of the web, it restricts the capabilities
