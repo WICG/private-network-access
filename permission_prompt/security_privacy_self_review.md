@@ -83,8 +83,8 @@ not be allowed.
 
 In the future, it might make sense to allow top-level documents to control its
 permission with permission policy and even allow the private network access
-permission to be delegated to third-party contexts. In that case, third-party
-context should be the one taking into account for the permission.
+permission to be delegated to third-party contexts. In that case, the third-party
+context should be the one taken into account for the permission.
 
 ## 14. How do the features in this specification work in the context of a browser’s Private Browsing or Incognito mode?
 
