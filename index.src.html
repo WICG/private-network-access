@@ -542,6 +542,10 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   [issue #91](https://github.com/WICG/private-network-access/issues/91) for
   details.
 
+  The <a http-header>`Private-Network-Access-Name`</a> attempt to provide users
+  a human friendly name in the [=private network access permission prompt=] (will
+  simpliy use the content permission prompt below).
+
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
   The <dfn>treat-as-public-address</dfn> directive instructs the user agent to
@@ -621,6 +625,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   attackers should not be able to trivially exploit an endpoint's consent to a
   non-secure origin.
 
+  However, private devices which is not able to migrate with secure context would
+  be able to use a [=permission prompt=] to relax mixed-content check.
+
   To that end:
 
   1.  [=Connection=] objects are given a new
@@ -658,7 +665,15 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
           1.  If |connection|'s [=connection/IP address space=] is
               [=IP address space/less public=] than |clientAddressSpace|, then
-              return a [=network error=].
+              show a [=permission prompt=].
+
+          1. If |permission|'s result is:
+          
+              1. [Deniel](https://www.w3.org/TR/permissions/#:~:text=following%20states%3A-,Denied,-%3A),
+                  then return a [=network error=].
+              
+              2. [Granted](https://www.w3.org/TR/permissions/#:~:text=use%20the%20feature.-,Granted,-%3A),
+                  then return null.
 
       1.  Return null.
 
@@ -896,6 +911,54 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   interferes with the [=private network access check=] algorithm laid out above.
   Indeed, there is no [=request/client|request client=] from which to copy the
   [=request/policy container=] during [=fetch=].
+
+</section>
+
+<section>
+  <h2 id="premission-prompt">Permission Prompt</h2>
+
+  <em>This section is not normative.</em>
+
+  According to the discutions
+  [[Issue#23](https://github.com/WICG/private-network-access/issues/23)], the
+  <dfn export local-lt="permission prompt">private network access permission
+  prompt</dfn> is introduced to relax mixed-content checks.
+
+  Private network access permission prompt is a <a spec="permissions">permission</a>.
+
+  <h3 id="permission-goals">Goals</h3>
+
+  The overarching goal is to provide a way for private devices which are not able
+  and not welling to directly talk to any public servers including TLS certificate
+  authorities and not able to apply secure contexts to relax mixed-content checks.
+
+  <h3 id="permission-header">Additional CORS Headers</h3>
+
+  The <dfn export http-header>`Private-Network-Access-Name`</dfn> attempt to
+  provide users a human friendly name in the private network access permission
+  prompt.
+
+  <h3 id="permission-states">States</h3>
+
+  The states of the private network access permission can be one of the three:
+
+  * <dfn export>Denied</dfn>:
+
+  * <dfn export>Granted</dfn>:
+
+  * <dfn export>Prompt</dfn>:
+
+  <h3 id="permission-store">Store</h3>
+
+  The user agent maintains a single permission store which is a list of permission
+  store entries. Each particular entry denoted by its descriptor and key can only
+  appear at most once in the list.
+
+  The |key| for the entries should be the IP address of local devices.
+
+  The |discriptor| woule contains the list of origin which gained user permission
+  for the key IP address, the optional name for the entry and the optional id for
+  the entry.
 
 </section>
 
