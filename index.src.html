@@ -542,9 +542,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   [issue #91](https://github.com/WICG/private-network-access/issues/91) for
   details.
 
-  The <a http-header>`Private-Network-Access-Name`</a> attempt to provide users
+  The <a http-header>`Private-Network-Access-Name`</a> attempts to provide users
   a human friendly name in the [=private network access permission prompt=] (will
-  simpliy use the content permission prompt below).
+  simply use the content permission prompt below).
 
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
@@ -625,8 +625,11 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   attackers should not be able to trivially exploit an endpoint's consent to a
   non-secure origin.
 
-  However, private devices which is not able to migrate with secure context would
-  be able to use a [=permission prompt=] to relax mixed-content check.
+  Mixed content checks [[MIXED-CONTENT-2]] prevent secure contexts from making
+	requests over HTTP, so this restriction would seem to require that local network
+	servers migrate to HTTPS. This is often difficult to impossible. A new
+	[=permission prompt=] is introduced to allow secure contexts to make requests
+	over HTTP to the private network anyway, given user consent.
 
   To that end:
 
@@ -664,16 +667,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
               [=policy container/IP address space=].
 
           1.  If |connection|'s [=connection/IP address space=] is
-              [=IP address space/less public=] than |clientAddressSpace|, then
-              show a [=permission prompt=].
-
-          1. If |permission|'s result is:
-          
-              1. [Deniel](https://www.w3.org/TR/permissions/#:~:text=following%20states%3A-,Denied,-%3A),
-                  then return a [=network error=].
-              
-              2. [Granted](https://www.w3.org/TR/permissions/#:~:text=use%20the%20feature.-,Granted,-%3A),
-                  then return null.
+              [=IP address space/less public=] than |clientAddressSpace|.
 
       1.  Return null.
 
@@ -684,6 +678,24 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       [=environment settings object/policy container=] and let [=fetch=]
       initialize |request|'s [=request/policy container=] accordingly, or to
       directly set |request|'s [=request/policy container=] to a non-null value.
+
+      1. else:
+          1.  Let |clientAddressSpace| be |request|'s
+              [=request/policy container=]'s
+              [=policy container/IP address space=].
+
+          1.  If |connection|'s [=connection/IP address space=] is
+              [=IP address space/less public=] than |clientAddressSpace|.
+
+          1. then show a [=permission prompt=].
+
+          1. If |permission|'s result is:
+          
+              1. [Deniel](https://www.w3.org/TR/permissions/#:~:text=following%20states%3A-,Denied,-%3A),
+                  then return a [=network error=].
+              
+              2. [Granted](https://www.w3.org/TR/permissions/#:~:text=use%20the%20feature.-,Granted,-%3A),
+                  then return null.
 
   1.  The [$HTTP-network fetch$] algorithm is amended to add 3 new steps right
       after checking that the newly-obtained <var ignore>connection</var> is not
