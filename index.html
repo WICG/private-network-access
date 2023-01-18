@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="778840dd8e77e2299a65f1422679c4941fa9ded4" name="document-revision">
+  <meta content="57508c45b3b854dcfa3e4ca9c8d0f65d509751b6" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -753,7 +753,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
   of three different values:</p>
     <ol>
      <li data-md>
-      <p><dfn class="dfn-paneled" data-dfn-for="IP address space" data-dfn-type="dfn" data-export id="ip-address-space-local">local</dfn>: contains the local
+      <p><dfn class="dfn-paneled" data-dfn-for="IP address space" data-dfn-type="dfn" data-export id="ip-address-space-loopback">loopback</dfn>: contains the local
   host only. In other words, addresses whose target differs for every
   device.</p>
      <li data-md>
@@ -768,7 +768,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p>For convenience, we additionally define the following terms:</p>
     <ol>
      <li data-md>
-      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="local-address">local address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local">local</a>.</p>
+      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="loopback-address">loopback address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback">loopback</a>.</p>
      <li data-md>
       <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="private-address">private address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private②">private</a>.</p>
      <li data-md>
@@ -777,7 +777,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p>An <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space③">IP address space</a> <var>lhs</var> is <dfn class="dfn-paneled" data-dfn-for="IP address space" data-dfn-type="dfn" data-export id="ip-address-space-less-public">less public</dfn> than an <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space④">IP address space</a> <var>rhs</var> if any of the following conditions holds true:</p>
     <ol>
      <li data-md>
-      <p><var>lhs</var> is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①">local</a> and <var>rhs</var> is either <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private③">private</a> or <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public②">public</a>.</p>
+      <p><var>lhs</var> is <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback①">loopback</a> and <var>rhs</var> is either <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private③">private</a> or <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public②">public</a>.</p>
      <li data-md>
       <p><var>lhs</var> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private④">private</a> and <var>rhs</var> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public③">public</a>.</p>
     </ol>
@@ -809,7 +809,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
        <td><code>127.0.0.0/8</code>
        <td>IPv4 Loopback
        <td><a data-link-type="biblio" href="#biblio-rfc1122" title="Requirements for Internet Hosts - Communication Layers">[RFC1122]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local②">local</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback②">loopback</a>
       <tr>
        <td><code>10.0.0.0/8</code>
        <td>Private Use
@@ -839,7 +839,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
        <td><code>::1/128</code>
        <td>IPv6 Loopback
        <td><a data-link-type="biblio" href="#biblio-rfc4291" title="IP Version 6 Addressing Architecture">[RFC4291]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local③">local</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback③">loopback</a>
       <tr>
        <td><code>fc00::/7</code>
        <td>Unique Local
@@ -862,7 +862,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
   user agents to treat the intranet as <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①②">private</a>.</p>
     <p class="note" role="note"><span class="marker">Note:</span> Link-local IP addresses such as <code>169.254.0.0/16</code> are considered <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①③">private</a>, since such addresses can identify the same
   target for all devices on a network link. A previous version of this
-  specification considered them to be <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local④">local</a> instead.</p>
+  specification considered them to be <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback④">loopback</a> instead.</p>
     <p class="note" role="note"><span class="marker">Note:</span> The contents of each <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑥">IP address space</a> were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
   (<a data-link-type="biblio" href="#biblio-ipv4-registry" title="IANA IPv4 Special-Purpose Address Registry">[IPV4-REGISTRY]</a> and <a data-link-type="biblio" href="#biblio-ipv6-registry" title="IANA IPv6 Special-Purpose Address Registry">[IPV6-REGISTRY]</a>) and the <code>Globally Reachable</code> bit
@@ -902,7 +902,7 @@ See also the issue below.</p>
     <h3 class="heading settled" data-level="2.4" id="csp"><span class="secno">2.4. </span><span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="treat-as-public-address">treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address④">public address</a>, even if
-  it was actually served from a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address②">private address</a> or a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address">local address</a>. That
+  it was actually served from a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address②">private address</a> or a <a data-link-type="dfn" href="#loopback-address" id="ref-for-loopback-address">loopback address</a>. That
   is, it is a mechanism by which non-public documents may drop the privilege to
   contact other non-public documents without a preflight.</p>
     <p>The directive’s syntax is described by the following ABNF grammar:</p>
@@ -1161,21 +1161,21 @@ directive-value = ""
         <p>Set <var>result</var>’s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑥">IP address space</a> to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑨">IP address space</a>.</p>
       </ol>
     </ol>
-    <div class="example" id="example-a76a6ba6">
-     <a class="self-link" href="#example-a76a6ba6"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑤">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑦">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①⓪">public</a>. 
+    <div class="example" id="example-06e9264c">
+     <a class="self-link" href="#example-06e9264c"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑤">public address</a> (say, <code>123.123.123.123</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑦">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①⓪">public</a>. 
      <p>If this <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> then embeds an <code>about:srcdoc</code> iframe, then the child
     frame’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑧">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①①">public</a>.</p>
-     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container②">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑨">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑤">local</a>.</p>
+     <p>If, on the other hand, <code>example.com</code> resolved to a <a data-link-type="dfn" href="#loopback-address" id="ref-for-loopback-address①">loopback address</a> (say, <code>127.0.0.1</code>), then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code> created when navigating to <code>https://example.com/document.html</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container②">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑨">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑤">loopback</a>.</p>
     </div>
     <h3 class="heading settled" data-level="3.4" id="workers"><span class="secno">3.4. </span><span class="content">Workers</span><a class="self-link" href="#workers"></a></h3>
     <p><em>This section is non-normative.</em></p>
     <p>Given that <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope①">WorkerGlobalScope</a></code> already has a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container" id="ref-for-concept-workerglobalscope-policy-container">policy container</a> field populated using the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response" id="ref-for-creating-a-policy-container-from-a-fetch-response①">create a
   policy container from a fetch response</a> algorithm, the avove integrations
   with Fetch and HTML apply just as well to worker contexts as to documents.</p>
-    <div class="example" id="example-9722f9da">
-     <a class="self-link" href="#example-9722f9da"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope②">WorkerGlobalScope</a></code> created by fetching a
+    <div class="example" id="example-065adeec">
+     <a class="self-link" href="#example-065adeec"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope②">WorkerGlobalScope</a></code> created by fetching a
     script from <code>https://example.com/worker.js</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container" id="ref-for-concept-workerglobalscope-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①⓪">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①②">public</a>. 
-     <p>Any fetch <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑤">request</a> initiated by this worker that <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain②">obtains a connection</a> to an IP address in the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑥">private</a> or <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑥">local</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑥">address spaces</a> would then be a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request④">private network request</a>.</p>
+     <p>Any fetch <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑤">request</a> initiated by this worker that <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain②">obtains a connection</a> to an IP address in the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑥">private</a> or <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑥">loopback</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑥">address spaces</a> would then be a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request④">private network request</a>.</p>
     </div>
     <p class="issue" id="issue-62b6d083"><a class="self-link" href="#issue-62b6d083"></a> The <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#dfn-service-worker" id="ref-for-dfn-service-worker">Service Worker</a> <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#soft-update" id="ref-for-soft-update">soft update</a> algorithm unfortunately sets a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">request client</a> of <code>"null"</code> when <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch②">fetching</a> an updated script. This causes all sorts of issues, and
   interferes with the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check②">private network access check</a> algorithm laid out above.
@@ -1188,7 +1188,7 @@ directive-value = ""
   outlined above. It would be nice to prevent folks from harming themselves by
   opening a malicious HTML file locally, on the one hand, but on the other, code
   running locally is somewhat outside of any coherent threat model.</p>
-    <p>For the moment, let’s err on the side of treating <code>file</code> URLs as <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑦">local</a>, as they seem to be just as much a part of the local
+    <p>For the moment, let’s err on the side of treating <code>file</code> URLs as <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑦">loopback</a>, as they seem to be just as much a part of the loopback
   system as anything else on a loopback address.</p>
     <p class="issue" id="issue-5f05c8e3"><a class="self-link" href="#issue-5f05c8e3"></a> Reevaluate this after implementation experience.</p>
     <h3 class="heading settled" data-level="4.2" id="proxies"><span class="secno">4.2. </span><span class="content">Proxies</span><a class="self-link" href="#proxies"></a></h3>
@@ -1255,7 +1255,7 @@ directive-value = ""
     <p class="note" role="note"><span class="marker">Note:</span> <a data-link-type="biblio" href="#biblio-mixed-content-2" title="Mixed Content Level 2">[MIXED-CONTENT-2]</a> does not prevent secure contexts from fetching
   resources from <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin" id="ref-for-concept-origin">origins</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host" id="ref-for-concept-origin-host">host</a> is <code>localhost</code> or an IP
   address in the <code>127.0.0.0/8</code> or <code>::1/128</code> blocks. See also the definition of <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin">potentially trustworthy origins</a>.</p>
-    <p>Developers who wish to fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑨">private</a> or <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑧">local</a> resources (from hosts other than the above
+    <p>Developers who wish to fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑨">private</a> or <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑧">loopback</a> resources (from hosts other than the above
   exceptions) from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①④">public</a> pages MUST ensure that the
   connection is secure. This might involve a solution along the lines of <a data-link-type="biblio" href="#biblio-plex" title="How Plex is doing HTTPS for all its users">[PLEX]</a>, where Web PKI certificates are issued to user-specific domain names
   that then resolve to private IP addresses which only make sense on the user’s
@@ -1391,8 +1391,8 @@ directive-value = ""
      <li><a href="#response-ip-address-space">dfn for response</a><span>, in § 3.1.1</span>
     </ul>
    <li><a href="#ip-address-space-less-public">less public</a><span>, in § 2.1</span>
-   <li><a href="#ip-address-space-local">local</a><span>, in § 2.1</span>
-   <li><a href="#local-address">local address</a><span>, in § 2.1</span>
+   <li><a href="#ip-address-space-loopback">loopback</a><span>, in § 2.1</span>
+   <li><a href="#loopback-address">loopback address</a><span>, in § 2.1</span>
    <li><a href="#ip-address-space-private">private</a><span>, in § 2.1</span>
    <li><a href="#private-address">private address</a><span>, in § 2.1</span>
    <li><a href="#private-network-access-check">Private Network Access check</a><span>, in § 3.1.1</span>
@@ -1960,14 +1960,14 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space②①">5.6.2. HTTP cache poisoning</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="ip-address-space-local">
-   <b><a href="#ip-address-space-local">#ip-address-space-local</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="ip-address-space-loopback">
+   <b><a href="#ip-address-space-loopback">#ip-address-space-loopback</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-ip-address-space-local">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-local①">(2)</a> <a href="#ref-for-ip-address-space-local②">(3)</a> <a href="#ref-for-ip-address-space-local③">(4)</a> <a href="#ref-for-ip-address-space-local④">(5)</a>
-    <li><a href="#ref-for-ip-address-space-local⑤">3.3. Integration with HTML</a>
-    <li><a href="#ref-for-ip-address-space-local⑥">3.4. Workers</a>
-    <li><a href="#ref-for-ip-address-space-local⑦">4.1. Where do file URLs fit?</a>
-    <li><a href="#ref-for-ip-address-space-local⑧">5.2. Mixed Content</a>
+    <li><a href="#ref-for-ip-address-space-loopback">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-loopback①">(2)</a> <a href="#ref-for-ip-address-space-loopback②">(3)</a> <a href="#ref-for-ip-address-space-loopback③">(4)</a> <a href="#ref-for-ip-address-space-loopback④">(5)</a>
+    <li><a href="#ref-for-ip-address-space-loopback⑤">3.3. Integration with HTML</a>
+    <li><a href="#ref-for-ip-address-space-loopback⑥">3.4. Workers</a>
+    <li><a href="#ref-for-ip-address-space-loopback⑦">4.1. Where do file URLs fit?</a>
+    <li><a href="#ref-for-ip-address-space-loopback⑧">5.2. Mixed Content</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-private">
@@ -1999,11 +1999,11 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-public①④">5.2. Mixed Content</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="local-address">
-   <b><a href="#local-address">#local-address</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="loopback-address">
+   <b><a href="#loopback-address">#loopback-address</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-local-address">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-local-address①">3.3. Integration with HTML</a>
+    <li><a href="#ref-for-loopback-address">2.4. The treat-as-public-address Content Security Policy Directive</a>
+    <li><a href="#ref-for-loopback-address①">3.3. Integration with HTML</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="private-address">

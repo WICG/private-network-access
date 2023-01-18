@@ -333,7 +333,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <dfn export local-lt="address space">IP address space</dfn>, which can be one
   of three different values:
 
-  1.  <dfn for="IP address space" export>local</dfn>: contains the local
+  1.  <dfn for="IP address space" export>loopback</dfn>: contains the local
       host only. In other words, addresses whose target differs for every
       device.
   1.  <dfn for="IP address space" export>private</dfn>: contains
@@ -345,8 +345,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   For convenience, we additionally define the following terms:
 
-  1.  A <dfn>local address</dfn> is an IP address whose [=/IP address space=] is
-      [=IP address space/local=].
+  1.  A <dfn>loopback address</dfn> is an IP address whose [=/IP address space=] is
+      [=IP address space/loopback=].
   1.  A <dfn>private address</dfn> is an IP address whose [=/IP address space=]
       is [=IP address space/private=].
   1.  A <dfn>public address</dfn> is an IP address whose [=/IP address space=]
@@ -356,7 +356,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <dfn for="IP address space" export>less public</dfn> than an
   [=/IP address space=] |rhs| if any of the following conditions holds true:
 
-  1.  |lhs| is [=IP address space/local=] and |rhs| is either
+  1.  |lhs| is [=IP address space/loopback=] and |rhs| is either
       [=IP address space/private=] or [=IP address space/public=].
   1.  |lhs| is [=IP address space/private=] and |rhs| is
       [=IP address space/public=].
@@ -388,7 +388,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
         <td>`127.0.0.0/8`</td>
         <td>IPv4 Loopback</td>
         <td>[[RFC1122]]</td>
-        <td>[=IP address space/local=]</td>
+        <td>[=IP address space/loopback=]</td>
       </tr>
       <tr>
         <td>`10.0.0.0/8`</td>
@@ -424,7 +424,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
         <td>`::1/128`</td>
         <td>IPv6 Loopback</td>
         <td>[[RFC4291]]</td>
-        <td>[=IP address space/local=]</td>
+        <td>[=IP address space/loopback=]</td>
       </tr>
       <tr>
         <td>`fc00::/7`</td>
@@ -456,7 +456,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   Note: Link-local IP addresses such as `169.254.0.0/16` are considered
   [=IP address space/private=], since such addresses can identify the same
   target for all devices on a network link. A previous version of this
-  specification considered them to be [=IP address space/local=] instead.
+  specification considered them to be [=IP address space/loopback=] instead.
 
   Note: The contents of each [=/IP address space=] were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
@@ -516,7 +516,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   The <dfn>treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a [=public address=], even if
-  it was actually served from a [=private address=] or a [=local address=]. That
+  it was actually served from a [=private address=] or a [=loopback address=]. That
   is, it is a mechanism by which non-public documents may drop the privilege to
   contact other non-public documents without a preflight.
 
@@ -816,11 +816,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
     [=policy container/IP address space=] property set to
     [=IP address space/public=].
 
-    If, on the other hand, `example.com` resolved to a [=local address=]
+    If, on the other hand, `example.com` resolved to a [=loopback address=]
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
     `https://example.com/document.html` will have its
     [=Document/policy container=]'s [=policy container/IP address space=]
-    property set to [=IP address space/local=].
+    property set to [=IP address space/loopback=].
   </div>
 
   <h3 id="workers">Workers</h3>
@@ -842,7 +842,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
     Any fetch [=request=] initiated by this worker that [=obtains a connection=]
     to an IP address in the [=IP address space/private=] or
-    [=IP address space/local=] [=address spaces=] would then be a
+    [=IP address space/loopback=] [=address spaces=] would then be a
     [=private network request=].
   </div>
 
@@ -866,7 +866,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   running locally is somewhat outside of any coherent threat model.
 
   For the moment, let's err on the side of treating `file` URLs as
-  [=IP address space/local=], as they seem to be just as much a part of the local
+  [=IP address space/loopback=], as they seem to be just as much a part of the loopback
   system as anything else on a loopback address.
 
   ISSUE: Reevaluate this after implementation experience.
@@ -975,7 +975,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   [=potentially trustworthy origins=].
 
   Developers who wish to fetch [=IP address space/private=] or
-  [=IP address space/local=] resources (from hosts other than the above
+  [=IP address space/loopback=] resources (from hosts other than the above
   exceptions) from [=IP address space/public=] pages MUST ensure that the
   connection is secure. This might involve a solution along the lines of
   [[PLEX]], where Web PKI certificates are issued to user-specific domain names
