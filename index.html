@@ -1,12 +1,12 @@
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <title>Private Network Access</title>
+  <title>Local Network Access</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
-  <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="57508c45b3b854dcfa3e4ca9c8d0f65d509751b6" name="document-revision">
+  <link href="https://wicg.github.io/local-network-access/" rel="canonical">
+  <meta content="71ce97b5a5a5b9e964e39e8889a8048ed62474db" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -486,14 +486,14 @@ dfn > a.self-link::before      { content: "#"; }
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
-   <h1>Private Network Access</h1>
+   <h1>Local Network Access</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-02-21">21 February 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
-     <dd><a class="u-url" href="https://wicg.github.io/private-network-access/">https://wicg.github.io/private-network-access/</a>
+     <dd><a class="u-url" href="https://wicg.github.io/local-network-access/">https://wicg.github.io/local-network-access/</a>
      <dt>Issue Tracking:
-     <dd><a href="https://github.com/wicg/private-network-access/issues/">GitHub</a>
+     <dd><a href="https://github.com/wicg/local-network-access/issues/">GitHub</a>
      <dd><a href="#issues-index">Inline In Spec</a>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard" data-editor-id="124486"><a class="p-name fn u-email email" href="mailto:titouan@google.com">Titouan Rigoudy</a> (<span class="p-org org">Google</span>)
@@ -502,7 +502,7 @@ dfn > a.self-link::before      { content: "#"; }
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2023 the Contributors to the Private Network Access Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2023 the Contributors to the Local Network Access Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -545,7 +545,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
      <ol class="toc">
       <li><a href="#ip-address-space-heading"><span class="secno">2.1</span> <span class="content">IP Address Space</span></a>
-      <li><a href="#private-network-request-heading"><span class="secno">2.2</span> <span class="content">Private Network Request</span></a>
+      <li><a href="#local-network-request-heading"><span class="secno">2.2</span> <span class="content">Local Network Request</span></a>
       <li><a href="#headers"><span class="secno">2.3</span> <span class="content">Additional CORS Headers</span></a>
       <li><a href="#csp"><span class="secno">2.4</span> <span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span></a>
       <li><a href="#feature-detect"><span class="secno">2.5</span> <span class="content">Feature Detection</span></a>
@@ -639,8 +639,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     </ul>
     <h3 class="heading settled" data-level="1.2" id="examples"><span class="secno">1.2. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
     <h4 class="heading settled" data-level="1.2.1" id="example-deny-by-default"><span class="secno">1.2.1. </span><span class="content">Secure by Default</span><a class="self-link" href="#example-deny-by-default"></a></h4>
-    <div class="example" id="example-262fae93">
-     <a class="self-link" href="#example-262fae93"></a> MegaCorp Inc’s routers have a fairly serious CSRF vulnerability which allows
+    <div class="example" id="example-ab20844c">
+     <a class="self-link" href="#example-ab20844c"></a> MegaCorp Inc’s routers have a fairly serious CSRF vulnerability which allows
     their DNS settings to be altered by navigating to <code>http://admin:admin@router.local/set_dns</code> and passing in various GET
     parameters. Oh noes! 
      <p>Happily, MegaCorp Inc’s routers don’t have any interest in requests from the
@@ -653,7 +653,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
 &lt;/iframe>
 </pre>
      <p><code>router.local</code> will be resolved to the router’s address via the magic of
-    multicast DNS <a data-link-type="biblio" href="#biblio-rfc6762" title="Multicast DNS">[RFC6762]</a>, and the user agent will note it as <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private">private</a>. Since <code>csrf.attack</code> resolved to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address">public address</a>, the request will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request①">CORS-preflight request</a>:</p>
+    multicast DNS <a data-link-type="biblio" href="#biblio-rfc6762" title="Multicast DNS">[RFC6762]</a>, and the user agent will note it as <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local">local</a>. Since <code>csrf.attack</code> resolved to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address">public address</a>, the request will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request①">CORS-preflight request</a>:</p>
 <pre>OPTIONS /set_dns?... HTTP/1.1
 Host: router.local
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-request-method" id="ref-for-http-access-control-request-method">Access-Control-Request-Method</a>: GET
@@ -676,13 +676,13 @@ Origin: https://csrf.attack
      </ul>
     </div>
     <h4 class="heading settled" data-level="1.2.2" id="example-opt-in"><span class="secno">1.2.2. </span><span class="content">Opting-In</span><a class="self-link" href="#example-opt-in"></a></h4>
-    <div class="example" id="example-6ce42a93">
-     <a class="self-link" href="#example-6ce42a93"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
+    <div class="example" id="example-c1a1a3d3">
+     <a class="self-link" href="#example-c1a1a3d3"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
     for various reasons. They can explicitly opt-in to receiving requests from
     the internet by sending proper CORS headers in response to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request②">CORS-preflight request</a>. 
      <p>When a website on the public internet makes a request to the device, the
     user agent determines that the requestor is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public">public</a>, and
-    the router is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①">private</a>. This means that requests will
+    the router is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①">local</a>. This means that requests will
     trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request③">CORS-preflight request</a>, just as above.</p>
      <p>The device can explicitly grant access by sending the right headers in its
     response to the preflight request. For the above request, that might look
@@ -698,13 +698,13 @@ Content-Length: 0
 </pre>
     </div>
     <h4 class="heading settled" data-level="1.2.3" id="shortlinks"><span class="secno">1.2.3. </span><span class="content">Navigation</span><a class="self-link" href="#shortlinks"></a></h4>
-    <div class="example" id="example-e45f5be8">
-     <a class="self-link" href="#example-e45f5be8"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
+    <div class="example" id="example-a6faed4f">
+     <a class="self-link" href="#example-a6faed4f"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
     its employees often email such links to each other. The email server is
     hosted at a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address①">public address</a> in order to ensure that employees can work
     even when they’re not at the office. How considerate! 
      <p>Clicking <code>https://go/*</code> links from <code>https://mail.mega.corp/</code> will trigger a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request④">CORS-preflight request</a>, as it is a request from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address②">public
-    address</a> to a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address">private address</a>:</p>
+    address</a> to a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address">local address</a>:</p>
 <pre>OPTIONS /short-links-are-short-after-shortening HTTP/1.1
 Host: go
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-request-method" id="ref-for-http-access-control-request-method①">Access-Control-Request-Method</a>: GET
@@ -713,7 +713,7 @@ Host: go
 Origin: https://mail.mega.corp
 </pre>
      <p>In order to ensure that employees can continue to navigate such links as
-    expected, MegaCorp chooses to allow private network requests:</p>
+    expected, MegaCorp chooses to allow local network requests:</p>
 <pre>HTTP/1.1 200 OK
 ...
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin" id="ref-for-http-access-control-allow-origin①">Access-Control-Allow-Origin</a>: https://mail.mega.corp
@@ -757,7 +757,7 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
   host only. In other words, addresses whose target differs for every
   device.</p>
      <li data-md>
-      <p><dfn class="dfn-paneled" data-dfn-for="IP address space" data-dfn-type="dfn" data-export id="ip-address-space-private">private</dfn>: contains
+      <p><dfn class="dfn-paneled" data-dfn-for="IP address space" data-dfn-type="dfn" data-export id="ip-address-space-local">local</dfn>: contains
   addresses that have meaning only within the current network. In other
   words, addresses whose target differs based on network position.</p>
      <li data-md>
@@ -770,16 +770,16 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
      <li data-md>
       <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="loopback-address">loopback address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback">loopback</a>.</p>
      <li data-md>
-      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="private-address">private address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private②">private</a>.</p>
+      <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="local-address">local address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local②">local</a>.</p>
      <li data-md>
       <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="public-address">public address</dfn> is an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space②">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①">public</a>.</p>
     </ol>
     <p>An <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space③">IP address space</a> <var>lhs</var> is <dfn class="dfn-paneled" data-dfn-for="IP address space" data-dfn-type="dfn" data-export id="ip-address-space-less-public">less public</dfn> than an <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space④">IP address space</a> <var>rhs</var> if any of the following conditions holds true:</p>
     <ol>
      <li data-md>
-      <p><var>lhs</var> is <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback①">loopback</a> and <var>rhs</var> is either <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private③">private</a> or <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public②">public</a>.</p>
+      <p><var>lhs</var> is <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback①">loopback</a> and <var>rhs</var> is either <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local③">local</a> or <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public②">public</a>.</p>
      <li data-md>
-      <p><var>lhs</var> is <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private④">private</a> and <var>rhs</var> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public③">public</a>.</p>
+      <p><var>lhs</var> is <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local④">local</a> and <var>rhs</var> is <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public③">public</a>.</p>
     </ol>
     <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="determine-the-ip-address-space">determine the IP address space</dfn> of an IP address <var>address</var>, run the following steps:</p>
     <ol>
@@ -814,27 +814,27 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
        <td><code>10.0.0.0/8</code>
        <td>Private Use
        <td><a data-link-type="biblio" href="#biblio-rfc1918" title="Address Allocation for Private Internets">[RFC1918]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑤">private</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑤">local</a>
       <tr>
        <td><code>100.64.0.0/10</code>
        <td>Carrier-Grade NAT
        <td><a data-link-type="biblio" href="#biblio-rfc6598" title="IANA-Reserved IPv4 Prefix for Shared Address Space">[RFC6598]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑥">private</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑥">local</a>
       <tr>
        <td><code>172.16.0.0/12</code>
        <td>Private Use
        <td><a data-link-type="biblio" href="#biblio-rfc1918" title="Address Allocation for Private Internets">[RFC1918]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑦">private</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑦">local</a>
       <tr>
        <td><code>192.168.0.0/16</code>
        <td>Private Use
        <td><a data-link-type="biblio" href="#biblio-rfc1918" title="Address Allocation for Private Internets">[RFC1918]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑧">private</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑧">local</a>
       <tr>
        <td><code>169.254.0.0/16</code>
        <td>Link Local
        <td><a data-link-type="biblio" href="#biblio-rfc3927" title="Dynamic Configuration of IPv4 Link-Local Addresses">[RFC3927]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private⑨">private</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑨">local</a>
       <tr>
        <td><code>::1/128</code>
        <td>IPv6 Loopback
@@ -844,12 +844,12 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
        <td><code>fc00::/7</code>
        <td>Unique Local
        <td><a data-link-type="biblio" href="#biblio-rfc4193" title="Unique Local IPv6 Unicast Addresses">[RFC4193]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⓪">private</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①⓪">local</a>
       <tr>
        <td><code>fe80::/10</code>
        <td>Link-Local Unicast
        <td><a data-link-type="biblio" href="#biblio-rfc4291" title="IP Version 6 Addressing Architecture">[RFC4291]</a>
-       <td><a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①①">private</a>
+       <td><a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①①">local</a>
       <tr>
        <td><code>::ffff:0:0/96</code>
        <td>IPv4-mapped
@@ -859,19 +859,19 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p>User Agents MAY allow certain IP address blocks' <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑤">address space</a> to be
   overridden through administrator or user configuration. This could prove
   useful to protect e.g. IPv6 intranets where most IP addresses are considered <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑤">public</a> per the algorithm above, by instead configuring
-  user agents to treat the intranet as <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①②">private</a>.</p>
-    <p class="note" role="note"><span class="marker">Note:</span> Link-local IP addresses such as <code>169.254.0.0/16</code> are considered <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①③">private</a>, since such addresses can identify the same
+  user agents to treat the intranet as <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①②">local</a>.</p>
+    <p class="note" role="note"><span class="marker">Note:</span> Link-local IP addresses such as <code>169.254.0.0/16</code> are considered <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①③">local</a>, since such addresses can identify the same
   target for all devices on a network link. A previous version of this
   specification considered them to be <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback④">loopback</a> instead.</p>
     <p class="note" role="note"><span class="marker">Note:</span> The contents of each <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑥">IP address space</a> were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
   (<a data-link-type="biblio" href="#biblio-ipv4-registry" title="IANA IPv4 Special-Purpose Address Registry">[IPV4-REGISTRY]</a> and <a data-link-type="biblio" href="#biblio-ipv6-registry" title="IANA IPv6 Special-Purpose Address Registry">[IPV6-REGISTRY]</a>) and the <code>Globally Reachable</code> bit
   defined therein. This turned out to be an inaccurate signal for our uses, as
-  described in <a href="https://github.com/WICG/private-network-access/issues/50">spec issue #50</a>.</p>
+  described in <a href="https://github.com/WICG/local-network-access/issues/50">spec issue #50</a>.</p>
     <p class="issue" id="issue-1456f875"><a class="self-link" href="#issue-1456f875"></a> Remove the special case for IPv4-mapped IPv6 addresses once access
-  to these addresses is blocked entirely. <a href="https://github.com/wicg/private-network-access/issues/36">[Issue #36]</a></p>
-    <h3 class="heading settled" data-level="2.2" id="private-network-request-heading"><span class="secno">2.2. </span><span class="content">Private Network Request</span><a class="self-link" href="#private-network-request-heading"></a></h3>
-    <p>A <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request">request</a> (<var>request</var>) is a <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="private-network-request">private network request</dfn> if <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host" id="ref-for-dom-url-host">host</a></code> maps to an IP address
+  to these addresses is blocked entirely. <a href="https://github.com/wicg/local-network-access/issues/36">[Issue #36]</a></p>
+    <h3 class="heading settled" data-level="2.2" id="local-network-request-heading"><span class="secno">2.2. </span><span class="content">Local Network Request</span><a class="self-link" href="#local-network-request-heading"></a></h3>
+    <p>A <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request">request</a> (<var>request</var>) is a <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="local-network-request">local network request</dfn> if <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host" id="ref-for-dom-url-host">host</a></code> maps to an IP address
   whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑦">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public">less public</a> than <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space">IP address space</a>.</p>
     <p>The classification of IP addresses into three broad <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑧">address spaces</a> is an
   imperfect and theoretically-unsound approach. It is a proxy used to determine
@@ -882,27 +882,27 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <ul>
      <li data-md>
       <p>false positives: an intranet server with a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address③">public address</a> might be able
-to directy issue requests to another server on the same intranet with a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address①">private address</a>.</p>
+to directy issue requests to another server on the same intranet with a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address①">local address</a>.</p>
      <li data-md>
-      <p>false negatives: a client connected to two different <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①④">private</a> networks, say a home network and a VPN, might
+      <p>false negatives: a client connected to two different <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①④">local</a> networks, say a home network and a VPN, might
 allow a website served from the VPN to access devices on the home network.
 See also the issue below.</p>
     </ul>
     <p>Even so, this specification aims to offer a pragmatic solution to a security
   issue that broadly affects most users of the Web whose network configurations
   are not so complex.</p>
-    <p class="issue" id="issue-4c14e63e"><a class="self-link" href="#issue-4c14e63e"></a> The definition of <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request">private network requests</a> could be expanded to
+    <p class="issue" id="issue-5b6b8f38"><a class="self-link" href="#issue-5b6b8f38"></a> The definition of <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request">local network requests</a> could be expanded to
   cover all cross-origin requests for which the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url①">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host" id="ref-for-dom-url-host①">host</a></code> maps to an IP address whose <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑨">IP address space</a> is not <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑥">public</a>. This would prevent a malicious server on the
-  private network from attacking other servers. The effort require to ship such
+  local network from attacking other servers. The effort require to ship such
   a change is not deemed worth the payoff for now. This can be shipped as an
-  incremental improvement later on. <a href="https://github.com/wicg/private-network-access/issues/39">[Issue #39]</a></p>
+  incremental improvement later on. <a href="https://github.com/wicg/local-network-access/issues/39">[Issue #39]</a></p>
     <h3 class="heading settled" data-level="2.3" id="headers"><span class="secno">2.3. </span><span class="content">Additional CORS Headers</span><a class="self-link" href="#headers"></a></h3>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-request-private-network"><code>Access-Control-Request-Private-Network</code></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request①">request</a> is a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request①">private network request</a>.</p>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-request-private-network"><code>Access-Control-Request-Private-Network</code></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request①">request</a> is a <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request①">local network request</a>.</p>
     <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-allow-private-network"><code>Access-Control-Allow-Private-Network</code></dfn> indicates that a resource can be safely shared with external networks.</p>
     <h3 class="heading settled" data-level="2.4" id="csp"><span class="secno">2.4. </span><span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="treat-as-public-address">treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address④">public address</a>, even if
-  it was actually served from a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address②">private address</a> or a <a data-link-type="dfn" href="#loopback-address" id="ref-for-loopback-address">loopback address</a>. That
+  it was actually served from a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address②">local address</a> or a <a data-link-type="dfn" href="#loopback-address" id="ref-for-loopback-address">loopback address</a>. That
   is, it is a mechanism by which non-public documents may drop the privilege to
   contact other non-public documents without a preflight.</p>
     <p>The directive’s syntax is described by the following ABNF grammar:</p>
@@ -920,7 +920,7 @@ directive-value = ""
     </ol>
     <h3 class="heading settled" data-level="2.5" id="feature-detect"><span class="secno">2.5. </span><span class="content">Feature Detection</span><a class="self-link" href="#feature-detect"></a></h3>
     <p>A previous version of this specification proposed adding an <code>addressSpace</code> enum property to <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope">WorkerGlobalScope</a></code>, but it was removed
-  due to fingerprinting concerns (see <a href="https://github.com/WICG/private-network-access/issues/21">issue #21</a>).</p>
+  due to fingerprinting concerns (see <a href="https://github.com/WICG/local-network-access/issues/21">issue #21</a>).</p>
     <p>Documents should not behave differently or not based on whether the UA
   implements this specification or not - all documents should assume it does.</p>
    </section>
@@ -932,19 +932,19 @@ directive-value = ""
   integrations are outlined here for clarity, but the external documents are the
   normative references.</p>
     <h3 class="heading settled" data-level="3.1" id="integration-fetch"><span class="secno">3.1. </span><span class="content">Integration with Fetch</span><a class="self-link" href="#integration-fetch"></a></h3>
-    <p>This document proposes a few changes to Fetch, with the following implication: <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request②">private network requests</a> are only allowed if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client">client</a> is
+    <p>This document proposes a few changes to Fetch, with the following implication: <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request②">local network requests</a> are only allowed if their <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client">client</a> is
   a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context">secure context</a> <strong>and</strong> a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request⑤">CORS-preflight request</a> to the target origin
   is successful.</p>
     <p class="note" role="note"><span class="marker">Note:</span> This includes navigations. These can indeed be used to trigger CSRF
   attacks, albeit with less subtlety than with subresource requests.</p>
-    <p class="note" role="note"><span class="marker">Note:</span> <a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a> does not yet integrate the details of DNS resolution into the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch">Fetch</a> algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain">obtain a connection</a> algorithm which is enough for this specification. Private Network Access
+    <p class="note" role="note"><span class="marker">Note:</span> <a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a> does not yet integrate the details of DNS resolution into the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch">Fetch</a> algorithm, though it does define an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain">obtain a connection</a> algorithm which is enough for this specification. Local Network Access
   checks are applied to the newly-obtained connection. Given complexities such
   as Happy Eyeballs (<a data-biblio-obsolete data-link-type="biblio" href="#biblio-rfc6555" title="Happy Eyeballs: Success with Dual-Stack Hosts">[RFC6555]</a>, <a data-link-type="biblio" href="#biblio-rfc8305" title="Happy Eyeballs Version 2: Better Connectivity Using Concurrency">[RFC8305]</a>), these checks might pass
   or fail non-deterministically for hosts with multiple IP addresses that
   straddle <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⓪">IP address space</a> boundaries.</p>
     <h4 class="heading settled" data-level="3.1.1" id="secure-context-restriction"><span class="secno">3.1.1. </span><span class="content">Secure context restriction</span><a class="self-link" href="#secure-context-restriction"></a></h4>
-    <p>UAs must not allow <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context①">non-secure</a> <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑧">public</a> contexts to request resources from <a data-link-type="dfn" href="#private-address" id="ref-for-private-address③">private addresses</a>, even if the private server would opt-in to such a
-  request via a preflight. Making requests to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a> resources presents risks which are mitigated by ensuring the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①">client</a> which initiates the request. In particular, network
+    <p>UAs must not allow <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context①">non-secure</a> <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public⑧">public</a> contexts to request resources from <a data-link-type="dfn" href="#local-address" id="ref-for-local-address③">local addresses</a>, even if the local server would opt-in to such a
+  request via a preflight. Making requests to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①⑤">local</a> resources presents risks which are mitigated by ensuring the integrity of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①">client</a> which initiates the request. In particular, network
   attackers should not be able to trivially exploit an endpoint’s consent to a
   non-secure origin.</p>
     <p>To that end:</p>
@@ -960,13 +960,13 @@ directive-value = ""
         <p>Set <var>connection</var>’s <a data-link-type="dfn" href="#connection-ip-address-space" id="ref-for-connection-ip-address-space">IP address space</a> to
   the result of running the <a data-link-type="dfn" href="#determine-the-ip-address-space" id="ref-for-determine-the-ip-address-space">determine the IP address space</a> algorithm
   on the IP address of <var>connection</var>’s remote endpoint.</p>
-        <p class="issue" id="issue-f99ba27e"><a class="self-link" href="#issue-f99ba27e"></a> The remote endpoint concept is not specified in <a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a> yet, hence this is still handwaving to some extent. <a href="https://github.com/wicg/private-network-access/issues/33">[Issue #33]</a></p>
+        <p class="issue" id="issue-f99ba27e"><a class="self-link" href="#issue-f99ba27e"></a> The remote endpoint concept is not specified in <a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a> yet, hence this is still handwaving to some extent. <a href="https://github.com/wicg/local-network-access/issues/33">[Issue #33]</a></p>
       </ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response">Response</a> objects are given a new <dfn class="dfn-paneled" data-dfn-for="response" data-dfn-type="dfn" data-export id="response-ip-address-space">IP address space</dfn> property, whose value is
   an <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①①">IP address space</a>, initially null.</p>
      <li data-md>
-      <p>Define a new <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="private-network-access-check">Private Network Access check</dfn> algorithm.
+      <p>Define a new <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="local-network-access-check">Local Network Access check</dfn> algorithm.
   Given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request②">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection" id="ref-for-concept-connection①">connection</a> <var>connection</var>:</p>
       <ol>
        <li data-md>
@@ -989,14 +989,14 @@ directive-value = ""
        <li data-md>
         <p>Set <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space">IP address space</a> to <var>connection</var>’s <a data-link-type="dfn" href="#connection-ip-address-space" id="ref-for-connection-ip-address-space②">IP address space</a>.</p>
        <li data-md>
-        <p>Let <var>privateNetworkAccessCheckResult</var> be the result of running <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check">Private Network Access check</a> for <var>fetchParams</var>’ <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request③">request</a> and <var>connection</var>.</p>
+        <p>Let <var>localNetworkAccessCheckResult</var> be the result of running <a data-link-type="dfn" href="#local-network-access-check" id="ref-for-local-network-access-check">Local Network Access check</a> for <var>fetchParams</var>’ <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request③">request</a> and <var>connection</var>.</p>
        <li data-md>
-        <p>If <var>privateNetworkAccessCheckResult</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error①">network error</a>, return <var>privateNetworkAccessCheckResult</var>.</p>
+        <p>If <var>localNetworkAccessCheckResult</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error①">network error</a>, return <var>localNetworkAccessCheckResult</var>.</p>
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.1.2" id="cors-preflight"><span class="secno">3.1.2. </span><span class="content">CORS preflight</span><a class="self-link" href="#cors-preflight"></a></h4>
     <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch" id="ref-for-concept-http-fetch">HTTP fetch</a> algorithm should be adjusted to ensure that a preflight is
-  triggered for all <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request③">private network requests</a> initiated from <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context②">secure contexts</a>.</p>
+  triggered for all <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request③">local network requests</a> initiated from <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context②">secure contexts</a>.</p>
     <p>The main issue here is again that the response’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space①">IP address space</a> is not known until a connection is obtained in <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch①">HTTP-network fetch</a>, which is layered under <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0">CORS-preflight fetch</a>.
   What follows is a sketch of a potential solution:</p>
     <ol>
@@ -1004,7 +1004,7 @@ directive-value = ""
       <p>Add a new <dfn class="dfn-paneled" data-dfn-for="request" data-dfn-type="dfn" data-export id="request-target-ip-address-space">target IP address space</dfn> property
   to the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request④">request</a> struct, initially null.</p>
      <li data-md>
-      <p>Amend the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check①">Private Network Access check</a> algorithm to handle this new
+      <p>Amend the <a data-link-type="dfn" href="#local-network-access-check" id="ref-for-local-network-access-check①">Local Network Access check</a> algorithm to handle this new
   property and propagate the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①②">IP address space</a> of the newly-obtained <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection" id="ref-for-concept-connection②">connection</a> to the caller of the <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch②">HTTP-network fetch</a> algorithm when
   the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context③">secure context</a>:</p>
       <ol>
@@ -1132,7 +1132,7 @@ directive-value = ""
     <p class="issue" id="issue-5a78ae74"><a class="self-link" href="#issue-5a78ae74"></a> Preflight requests should probably be sent ahead of WebSocket
   handshakes, given that WebSocket handshakes have roughly the same capabilities
   as <code>&lt;img></code> tags. This might require no additional work to specify given that
-  the <a data-link-type="dfn">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch①">Fetch</a> algorithm. <a href="https://github.com/wicg/private-network-access/issues/14">[Issue #14]</a></p>
+  the <a data-link-type="dfn">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch①">Fetch</a> algorithm. <a href="https://github.com/wicg/local-network-access/issues/14">[Issue #14]</a></p>
     <p>A previous version of this specification proposed simply adding the new
   headers (see <a href="#headers">§ 2.3 Additional CORS Headers</a>) to the WebSocket handshake. This would not be
   sufficient to fully guard against CSRF attacks, however.</p>
@@ -1172,19 +1172,19 @@ directive-value = ""
     <p>Given that <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope①">WorkerGlobalScope</a></code> already has a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container" id="ref-for-concept-workerglobalscope-policy-container">policy container</a> field populated using the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response" id="ref-for-creating-a-policy-container-from-a-fetch-response①">create a
   policy container from a fetch response</a> algorithm, the avove integrations
   with Fetch and HTML apply just as well to worker contexts as to documents.</p>
-    <div class="example" id="example-065adeec">
-     <a class="self-link" href="#example-065adeec"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope②">WorkerGlobalScope</a></code> created by fetching a
+    <div class="example" id="example-e051c6d0">
+     <a class="self-link" href="#example-e051c6d0"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope②">WorkerGlobalScope</a></code> created by fetching a
     script from <code>https://example.com/worker.js</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container" id="ref-for-concept-workerglobalscope-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①⓪">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①②">public</a>. 
-     <p>Any fetch <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑤">request</a> initiated by this worker that <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain②">obtains a connection</a> to an IP address in the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑥">private</a> or <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑥">loopback</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑥">address spaces</a> would then be a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request④">private network request</a>.</p>
+     <p>Any fetch <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑤">request</a> initiated by this worker that <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain②">obtains a connection</a> to an IP address in the <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①⑥">local</a> or <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑥">loopback</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑥">address spaces</a> would then be a <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request④">local network request</a>.</p>
     </div>
-    <p class="issue" id="issue-62b6d083"><a class="self-link" href="#issue-62b6d083"></a> The <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#dfn-service-worker" id="ref-for-dfn-service-worker">Service Worker</a> <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#soft-update" id="ref-for-soft-update">soft update</a> algorithm unfortunately sets a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">request client</a> of <code>"null"</code> when <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch②">fetching</a> an updated script. This causes all sorts of issues, and
-  interferes with the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check②">private network access check</a> algorithm laid out above.
-  Indeed, there is no <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">request client</a> from which to copy the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container③">policy container</a> during <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch③">fetch</a>. <a href="https://github.com/wicg/private-network-access/issues/83">[Issue #83]</a></p>
+    <p class="issue" id="issue-c268a57d"><a class="self-link" href="#issue-c268a57d"></a> The <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#dfn-service-worker" id="ref-for-dfn-service-worker">Service Worker</a> <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#soft-update" id="ref-for-soft-update">soft update</a> algorithm unfortunately sets a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">request client</a> of <code>"null"</code> when <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch②">fetching</a> an updated script. This causes all sorts of issues, and
+  interferes with the <a data-link-type="dfn" href="#local-network-access-check" id="ref-for-local-network-access-check②">local network access check</a> algorithm laid out above.
+  Indeed, there is no <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">request client</a> from which to copy the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container③">policy container</a> during <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch③">fetch</a>. <a href="https://github.com/wicg/local-network-access/issues/83">[Issue #83]</a></p>
    </section>
    <section>
     <h2 class="heading settled" data-level="4" id="implementation-considerations"><span class="secno">4. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation-considerations"></a></h2>
     <h3 class="heading settled" data-level="4.1" id="file-url"><span class="secno">4.1. </span><span class="content">Where do <code>file</code> URLs fit?</span><a class="self-link" href="#file-url"></a></h3>
-    <p>It isn’t entirely clear how <code>file</code> URLs fit into the public/private scheme
+    <p>It isn’t entirely clear how <code>file</code> URLs fit into the public/local scheme
   outlined above. It would be nice to prevent folks from harming themselves by
   opening a malicious HTML file locally, on the one hand, but on the other, code
   running locally is somewhat outside of any coherent threat model.</p>
@@ -1196,20 +1196,20 @@ directive-value = ""
   influence the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑦">address space</a> of resources they proxy. Specifically,
   resources fetched via proxies are considered to have been fetched from the
   proxy’s IP address itself.</p>
-    <div class="example" id="example-25373bd8">
-     <a class="self-link" href="#example-25373bd8"></a> If a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> served by <code>foo.example</code> on a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑦">public address</a> is fetched
-    by the user agent via a proxy on a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address④">private address</a>, then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container③">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①①">IP address space</a> is set to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑦">private</a>. 
-     <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> will in turn be allowed to make requests to other <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑤">private addresses</a> accessible to the browser.</p>
+    <div class="example" id="example-4c7b8894">
+     <a class="self-link" href="#example-4c7b8894"></a> If a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑤">Document</a></code> served by <code>foo.example</code> on a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑦">public address</a> is fetched
+    by the user agent via a proxy on a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address④">local address</a>, then the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container③">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①①">IP address space</a> is set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①⑦">local</a>. 
+     <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code> will in turn be allowed to make requests to other <a data-link-type="dfn" href="#local-address" id="ref-for-local-address⑤">local addresses</a> accessible to the browser.</p>
     </div>
     <p>This can allow a website to learn that it was proxied by observing that it is
-  allowed to make requests to <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑥">private addresses</a>, which is a privacy
+  allowed to make requests to <a data-link-type="dfn" href="#local-address" id="ref-for-local-address⑥">local addresses</a>, which is a privacy
   information leak. While this requires correctly guessing the URL of a resource
-  on the private network, a single correct guess is sufficient.</p>
+  on the local network, a single correct guess is sufficient.</p>
     <p>This is expected to be relatively rare and not warrant more mitigations. After
   all, in the status quo all websites can make requests to all IP addresses with
   no restrictions whatsoever.</p>
     <p>It would be interesting to explore a mechanism by which proxies could tell the
-  browser "please treat this resource as public/private anyway", thereby passing
+  browser "please treat this resource as public/local anyway", thereby passing
   on some information about the IP address behing the proxy. This might take the
   form of the <a href="#csp">CSP directive</a> discussed above, with some minor
   modifications.</p>
@@ -1223,19 +1223,19 @@ directive-value = ""
     <p>In the common case, this entails that the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document②">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container④">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①②">IP address space</a> is
   restored unmodified. However in the event that the user agent’s configuration
   has changed, the derived <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑨">IP address space</a> might be different.</p>
-    <div class="example" id="example-e3908999">
-     <a class="self-link" href="#example-e3908999"></a> The user agent navigates to <code>http://foo.example/</code>, loads the main resource
+    <div class="example" id="example-23e56f70">
+     <a class="self-link" href="#example-23e56f70"></a> The user agent navigates to <code>http://foo.example/</code>, loads the main resource
     from <code>1.2.3.4</code>, caches it, then sets the resulting <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document③">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container⑤">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①③">IP address space</a> to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①③">public</a>. 
      <p>The user agent then restarts, and a new configuration is applied specifying
-    that <code>1.2.3.4</code> should be classified as a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑦">private address</a> instead.</p>
+    that <code>1.2.3.4</code> should be classified as a <a data-link-type="dfn" href="#local-address" id="ref-for-local-address⑦">local address</a> instead.</p>
      <p>The user agent navigates to <code>http://foo.example/</code> once more and loads the
     main resource from the HTTP cache. The resulting <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document④">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container" id="ref-for-concept-document-policy-container⑥">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space①④">IP address space</a> is
-    now set to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑧">private</a>.</p>
+    now set to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①⑧">local</a>.</p>
     </div>
     <h4 class="heading settled" data-level="4.3.2" id="http-cache-subresources"><span class="secno">4.3.2. </span><span class="content">Subresources</span><a class="self-link" href="#http-cache-subresources"></a></h4>
-    <p>Subresources loaded from the HTTP cache are subject to the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check③">Private Network Access check</a>. This is not yet reflected in the algoritms
+    <p>Subresources loaded from the HTTP cache are subject to the <a data-link-type="dfn" href="#local-network-access-check" id="ref-for-local-network-access-check③">Local Network Access check</a>. This is not yet reflected in the algoritms
   above, since that check is only applied in <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch③">HTTP-network fetch</a>.</p>
-    <p class="issue" id="issue-e91d422c"><a class="self-link" href="#issue-e91d422c"></a> Specify and explain Chromium’s behavior here. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a></p>
+    <p class="issue" id="issue-e91d422c"><a class="self-link" href="#issue-e91d422c"></a> Specify and explain Chromium’s behavior here. <a href="https://github.com/wicg/local-network-access/issues/75">[Issue #75]</a></p>
     <p>See <a href="#http-cache-security">§ 5.6 HTTP cache</a> for a discussion of security implications.</p>
    </section>
    <section>
@@ -1255,14 +1255,14 @@ directive-value = ""
     <p class="note" role="note"><span class="marker">Note:</span> <a data-link-type="biblio" href="#biblio-mixed-content-2" title="Mixed Content Level 2">[MIXED-CONTENT-2]</a> does not prevent secure contexts from fetching
   resources from <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin" id="ref-for-concept-origin">origins</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host" id="ref-for-concept-origin-host">host</a> is <code>localhost</code> or an IP
   address in the <code>127.0.0.0/8</code> or <code>::1/128</code> blocks. See also the definition of <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin">potentially trustworthy origins</a>.</p>
-    <p>Developers who wish to fetch <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑨">private</a> or <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑧">loopback</a> resources (from hosts other than the above
+    <p>Developers who wish to fetch <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①⑨">local</a> or <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑧">loopback</a> resources (from hosts other than the above
   exceptions) from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①④">public</a> pages MUST ensure that the
   connection is secure. This might involve a solution along the lines of <a data-link-type="biblio" href="#biblio-plex" title="How Plex is doing HTTPS for all its users">[PLEX]</a>, where Web PKI certificates are issued to user-specific domain names
-  that then resolve to private IP addresses which only make sense on the user’s
-  private network.</p>
+  that then resolve to local IP addresses which only make sense on the user’s
+  local network.</p>
     <p class="issue" id="issue-725df7ad"><a class="self-link" href="#issue-725df7ad"></a> Some consumer routers implement overly-aggressive protections
   against DNS rebinding attacks by simply blocking DNS responses that resolve to
-  non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex" title="How Plex is doing HTTPS for all its users">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/private-network-access/issues/23">[Issue #23]</a></p>
+  non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex" title="How Plex is doing HTTPS for all its users">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/local-network-access/issues/23">[Issue #23]</a></p>
     <p>This problem space has been explored a few times already and seems worth
   revisiting at some point. One could imagine a pairing ceremony such as the one
   hinted at above, or one of the ideas floated in <a data-link-type="biblio" href="#biblio-secure-local-communication" title="Minutes from &apos;Secure communication with local network devices&apos;: TPAC, 2015">[SECURE-LOCAL-COMMUNICATION]</a>.</p>
@@ -1274,23 +1274,23 @@ directive-value = ""
     <p>The modifications to the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache" id="ref-for-concept-cache①">CORS-preflight cache</a> are intended to mitigate
   this attack vector.</p>
     <h3 class="heading settled" data-level="5.4" id="scope-mitigation"><span class="secno">5.4. </span><span class="content">Scope of Mitigation</span><a class="self-link" href="#scope-mitigation"></a></h3>
-    <p>The proposal in this document merely mitigates attacks against private web
+    <p>The proposal in this document merely mitigates attacks against local web
   services, it cannot fully solve them. For example, a router’s
   web-based administration interface must be designed and implemented to defend
   against CSRF on its own, and should not rely on a UA that behaves as specified
   in this document. The mitigation this document specifies is necessary given
-  the reality of private web service implementation quality today, but vendors
+  the reality of local web service implementation quality today, but vendors
   should not consider themselves absolved of responsibility, even if all UAs
   implement this mitigation.</p>
     <h3 class="heading settled" data-level="5.5" id="cross-network-confusion"><span class="secno">5.5. </span><span class="content">Cross-network confusion</span><a class="self-link" href="#cross-network-confusion"></a></h3>
-    <p>Most private networks cannot communicate with each other, yet they are all
-  treated by this specification as belonging to the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private②⓪">private</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space②⓪">IP address space</a>. Going further, <a data-link-type="dfn" href="#private-address" id="ref-for-private-address⑧">private addresses</a> have meaning only
-  on the private network where they are used. The same IP address might refer to
+    <p>Most local networks cannot communicate with each other, yet they are all
+  treated by this specification as belonging to the <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local②⓪">local</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space②⓪">IP address space</a>. Going further, <a data-link-type="dfn" href="#local-address" id="ref-for-local-address⑧">local addresses</a> have meaning only
+  on the local network where they are used. The same IP address might refer to
   entirely different devices in two different networks.</p>
     <p>This opens the door to cross-network attacks:</p>
     <ul>
      <li data-md>
-      <p>A user connects to two different private networks: a home Wi-Fi network
+      <p>A user connects to two different local networks: a home Wi-Fi network
   and a corporate VPN. Their smart fridge has been hacked. They open their
   smart fridge’s web interface, which then performs CSRF attacks against
   corporate websites accessible via the VPN.</p>
@@ -1314,20 +1314,20 @@ directive-value = ""
     <p class="issue" id="issue-cf35bfd4"><a class="self-link" href="#issue-cf35bfd4"></a> Potential mitigations would require noticing network changes and
   clearing state specific to the previous network. Doing so in a fully general
   manner is likely to be impossible short of clearing all state. Maybe a
-  practical compromise can be reached. <a href="https://github.com/wicg/private-network-access/issues/28">[Issue #28]</a></p>
+  practical compromise can be reached. <a href="https://github.com/wicg/local-network-access/issues/28">[Issue #28]</a></p>
     <h3 class="heading settled" data-level="5.6" id="http-cache-security"><span class="secno">5.6. </span><span class="content">HTTP cache</span><a class="self-link" href="#http-cache-security"></a></h3>
     <h4 class="heading settled" data-level="5.6.1" id="http-cache-security-subresources"><span class="secno">5.6.1. </span><span class="content">Applying checks to subresources</span><a class="self-link" href="#http-cache-security-subresources"></a></h4>
     <p class="issue" id="issue-dfc740be"><a class="self-link" href="#issue-dfc740be"></a> The following is no longer accurate. Implementation experience
   revealed that integrating with the cache was useful even in protecting
-  network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a></p>
+  network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/local-network-access/issues/75">[Issue #75]</a></p>
     <p>Cached subresources are not currently protected by this specification, even
   though the HTTP cache remembers the source IP address which could be used in
-  the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check④">Private Network Access check</a> algorithm during <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch" id="ref-for-concept-http-network-or-cache-fetch②">HTTP-network-or-cache fetch</a>.</p>
+  the <a data-link-type="dfn" href="#local-network-access-check" id="ref-for-local-network-access-check④">Local Network Access check</a> algorithm during <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch" id="ref-for-concept-http-network-or-cache-fetch②">HTTP-network-or-cache fetch</a>.</p>
     <p>While it may be a good idea to fix this apparent discrepancy, it is not
   directly relevant to the main goal of this specification: preventing CSRF
   attacks.</p>
     <p>At most, a malicious public website might be able to determine whether a user
-  has visited particular private websites in the past. This attack on the user’s
+  has visited particular local websites in the past. This attack on the user’s
   privacy is no worse than the status quo.</p>
     <p>In addition, due to HTTP cache partitioning, a subresource can only be loaded
   from cache by malicious attackers who manage to replicate the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#network-partition-key" id="ref-for-network-partition-key">network partition key</a> of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cache-entry" id="ref-for-cache-entry①">cache entry</a>. One way an attacker could
@@ -1342,7 +1342,7 @@ directive-value = ""
     attacker has determined the brand of the user’s router.</p>
     </div>
     <h4 class="heading settled" data-level="5.6.2" id="http-cache-poisoning"><span class="secno">5.6.2. </span><span class="content">HTTP cache poisoning</span><a class="self-link" href="#http-cache-poisoning"></a></h4>
-    <p>While this specification aims to protect private network servers from
+    <p>While this specification aims to protect local network servers from
   receiving requests from public websites, DNS rebinding can be used to carry
   out a similar attack through cache poisoning of unauthenticated resources.</p>
     <p>Attackers masquerading as <code>http://router.com</code> can cache a malicious script at <code>http://router.com/totally-legit.js</code>. Later on, when the user navigates to <code>http://router.com/</code>, the page might request the poisoned script and execute
@@ -1350,7 +1350,7 @@ directive-value = ""
     <p>This attack is partially mitigated by cache partitioning,
   which makes it so that the attacker must navigate a top-level browsing context
   to <code>http://router.com/</code> before caching resources, which lacks subtlety. It is
-  also not specific to Private Network Access, rather being a symptom of
+  also not specific to Local Network Access, rather being a symptom of
   plaintext HTTP’s lack of authentication and integrity protection.</p>
    </section>
    <section>
@@ -1391,12 +1391,12 @@ directive-value = ""
      <li><a href="#response-ip-address-space">dfn for response</a><span>, in § 3.1.1</span>
     </ul>
    <li><a href="#ip-address-space-less-public">less public</a><span>, in § 2.1</span>
+   <li><a href="#ip-address-space-local">local</a><span>, in § 2.1</span>
+   <li><a href="#local-address">local address</a><span>, in § 2.1</span>
+   <li><a href="#local-network-access-check">Local Network Access check</a><span>, in § 3.1.1</span>
+   <li><a href="#local-network-request">local network request</a><span>, in § 2.2</span>
    <li><a href="#ip-address-space-loopback">loopback</a><span>, in § 2.1</span>
    <li><a href="#loopback-address">loopback address</a><span>, in § 2.1</span>
-   <li><a href="#ip-address-space-private">private</a><span>, in § 2.1</span>
-   <li><a href="#private-address">private address</a><span>, in § 2.1</span>
-   <li><a href="#private-network-access-check">Private Network Access check</a><span>, in § 3.1.1</span>
-   <li><a href="#private-network-request">private network request</a><span>, in § 2.2</span>
    <li><a href="#ip-address-space-public">public</a><span>, in § 2.1</span>
    <li><a href="#public-address">public address</a><span>, in § 2.1</span>
    <li><a href="#request-target-ip-address-space">target IP address space</a><span>, in § 3.1.2</span>
@@ -1541,7 +1541,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-concept-request-current-url">
    <a href="https://fetch.spec.whatwg.org/#concept-request-current-url">https://fetch.spec.whatwg.org/#concept-request-current-url</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-current-url">2.2. Private Network Request</a> <a href="#ref-for-concept-request-current-url①">(2)</a>
+    <li><a href="#ref-for-concept-request-current-url">2.2. Local Network Request</a> <a href="#ref-for-concept-request-current-url①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-extract-header-list-values">
@@ -1600,7 +1600,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-concept-request-policy-container">
    <a href="https://fetch.spec.whatwg.org/#concept-request-policy-container">https://fetch.spec.whatwg.org/#concept-request-policy-container</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-policy-container">2.2. Private Network Request</a>
+    <li><a href="#ref-for-concept-request-policy-container">2.2. Local Network Request</a>
     <li><a href="#ref-for-concept-request-policy-container①">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-concept-request-policy-container②">3.1.2. CORS preflight</a>
     <li><a href="#ref-for-concept-request-policy-container③">3.4. Workers</a>
@@ -1609,7 +1609,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-fetch-params-request">
    <a href="https://fetch.spec.whatwg.org/#fetch-params-request">https://fetch.spec.whatwg.org/#fetch-params-request</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-fetch-params-request">2.2. Private Network Request</a>
+    <li><a href="#ref-for-fetch-params-request">2.2. Local Network Request</a>
     <li><a href="#ref-for-fetch-params-request①">2.3. Additional CORS Headers</a>
     <li><a href="#ref-for-fetch-params-request②">3.1.1. Secure context restriction</a> <a href="#ref-for-fetch-params-request③">(2)</a>
     <li><a href="#ref-for-fetch-params-request④">3.1.2. CORS preflight</a>
@@ -1754,7 +1754,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-dom-url-host">
    <a href="https://url.spec.whatwg.org/#dom-url-host">https://url.spec.whatwg.org/#dom-url-host</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-url-host">2.2. Private Network Request</a> <a href="#ref-for-dom-url-host①">(2)</a>
+    <li><a href="#ref-for-dom-url-host">2.2. Local Network Request</a> <a href="#ref-for-dom-url-host①">(2)</a>
    </ul>
   </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -1917,38 +1917,38 @@ directive-value = ""
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Remove the special case for IPv4-mapped IPv6 addresses once access
-  to these addresses is blocked entirely. <a href="https://github.com/wicg/private-network-access/issues/36">[Issue #36]</a> <a class="issue-return" href="#issue-1456f875" title="Jump to section">↵</a></div>
-   <div class="issue"> The definition of <a data-link-type="dfn" href="#private-network-request">private network requests</a> could be expanded to
+  to these addresses is blocked entirely. <a href="https://github.com/wicg/local-network-access/issues/36">[Issue #36]</a> <a class="issue-return" href="#issue-1456f875" title="Jump to section">↵</a></div>
+   <div class="issue"> The definition of <a data-link-type="dfn" href="#local-network-request">local network requests</a> could be expanded to
   cover all cross-origin requests for which the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url">current url</a>'s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-host">host</a></code> maps to an IP address whose <a data-link-type="dfn" href="#ip-address-space">IP address space</a> is not <a data-link-type="dfn" href="#ip-address-space-public">public</a>. This would prevent a malicious server on the
-  private network from attacking other servers. The effort require to ship such
+  local network from attacking other servers. The effort require to ship such
   a change is not deemed worth the payoff for now. This can be shipped as an
-  incremental improvement later on. <a href="https://github.com/wicg/private-network-access/issues/39">[Issue #39]</a> <a class="issue-return" href="#issue-4c14e63e" title="Jump to section">↵</a></div>
-   <div class="issue"> The remote endpoint concept is not specified in <a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a> yet, hence this is still handwaving to some extent. <a href="https://github.com/wicg/private-network-access/issues/33">[Issue #33]</a> <a class="issue-return" href="#issue-f99ba27e" title="Jump to section">↵</a></div>
+  incremental improvement later on. <a href="https://github.com/wicg/local-network-access/issues/39">[Issue #39]</a> <a class="issue-return" href="#issue-5b6b8f38" title="Jump to section">↵</a></div>
+   <div class="issue"> The remote endpoint concept is not specified in <a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a> yet, hence this is still handwaving to some extent. <a href="https://github.com/wicg/local-network-access/issues/33">[Issue #33]</a> <a class="issue-return" href="#issue-f99ba27e" title="Jump to section">↵</a></div>
    <div class="issue"> Preflight requests should probably be sent ahead of WebSocket
   handshakes, given that WebSocket handshakes have roughly the same capabilities
   as <code>&lt;img></code> tags. This might require no additional work to specify given that
-  the <a data-link-type="dfn">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">Fetch</a> algorithm. <a href="https://github.com/wicg/private-network-access/issues/14">[Issue #14]</a> <a class="issue-return" href="#issue-5a78ae74" title="Jump to section">↵</a></div>
+  the <a data-link-type="dfn">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">Fetch</a> algorithm. <a href="https://github.com/wicg/local-network-access/issues/14">[Issue #14]</a> <a class="issue-return" href="#issue-5a78ae74" title="Jump to section">↵</a></div>
    <div class="issue"> The <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#dfn-service-worker">Service Worker</a> <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#soft-update">soft update</a> algorithm unfortunately sets a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">request client</a> of <code>"null"</code> when <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">fetching</a> an updated script. This causes all sorts of issues, and
-  interferes with the <a data-link-type="dfn" href="#private-network-access-check">private network access check</a> algorithm laid out above.
-  Indeed, there is no <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">request client</a> from which to copy the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container">policy container</a> during <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">fetch</a>. <a href="https://github.com/wicg/private-network-access/issues/83">[Issue #83]</a> <a class="issue-return" href="#issue-62b6d083" title="Jump to section">↵</a></div>
+  interferes with the <a data-link-type="dfn" href="#local-network-access-check">local network access check</a> algorithm laid out above.
+  Indeed, there is no <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">request client</a> from which to copy the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container">policy container</a> during <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">fetch</a>. <a href="https://github.com/wicg/local-network-access/issues/83">[Issue #83]</a> <a class="issue-return" href="#issue-c268a57d" title="Jump to section">↵</a></div>
    <div class="issue"> Reevaluate this after implementation experience. <a class="issue-return" href="#issue-5f05c8e3" title="Jump to section">↵</a></div>
-   <div class="issue"> Specify and explain Chromium’s behavior here. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-e91d422c" title="Jump to section">↵</a></div>
+   <div class="issue"> Specify and explain Chromium’s behavior here. <a href="https://github.com/wicg/local-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-e91d422c" title="Jump to section">↵</a></div>
    <div class="issue"> Some consumer routers implement overly-aggressive protections
   against DNS rebinding attacks by simply blocking DNS responses that resolve to
-  non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex" title="How Plex is doing HTTPS for all its users">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/private-network-access/issues/23">[Issue #23]</a> <a class="issue-return" href="#issue-725df7ad" title="Jump to section">↵</a></div>
+  non-public IP addresses. This presents a stumbling block for solutions like <a data-link-type="biblio" href="#biblio-plex" title="How Plex is doing HTTPS for all its users">[PLEX]</a>. Workarounds are discussed in the linked issue. <a href="https://github.com/wicg/local-network-access/issues/23">[Issue #23]</a> <a class="issue-return" href="#issue-725df7ad" title="Jump to section">↵</a></div>
    <div class="issue"> Potential mitigations would require noticing network changes and
   clearing state specific to the previous network. Doing so in a fully general
   manner is likely to be impossible short of clearing all state. Maybe a
-  practical compromise can be reached. <a href="https://github.com/wicg/private-network-access/issues/28">[Issue #28]</a> <a class="issue-return" href="#issue-cf35bfd4" title="Jump to section">↵</a></div>
+  practical compromise can be reached. <a href="https://github.com/wicg/local-network-access/issues/28">[Issue #28]</a> <a class="issue-return" href="#issue-cf35bfd4" title="Jump to section">↵</a></div>
    <div class="issue"> The following is no longer accurate. Implementation experience
   revealed that integrating with the cache was useful even in protecting
-  network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/private-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-dfc740be" title="Jump to section">↵</a></div>
+  network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/local-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-dfc740be" title="Jump to section">↵</a></div>
   </div>
   <aside class="dfn-panel" data-for="ip-address-space">
    <b><a href="#ip-address-space">#ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-ip-address-space">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space①">(2)</a> <a href="#ref-for-ip-address-space②">(3)</a> <a href="#ref-for-ip-address-space③">(4)</a> <a href="#ref-for-ip-address-space④">(5)</a> <a href="#ref-for-ip-address-space⑤">(6)</a> <a href="#ref-for-ip-address-space⑥">(7)</a>
-    <li><a href="#ref-for-ip-address-space⑦">2.2. Private Network Request</a> <a href="#ref-for-ip-address-space⑧">(2)</a> <a href="#ref-for-ip-address-space⑨">(3)</a>
+    <li><a href="#ref-for-ip-address-space⑦">2.2. Local Network Request</a> <a href="#ref-for-ip-address-space⑧">(2)</a> <a href="#ref-for-ip-address-space⑨">(3)</a>
     <li><a href="#ref-for-ip-address-space①⓪">3.1. Integration with Fetch</a>
     <li><a href="#ref-for-ip-address-space①①">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-ip-address-space①②">3.1.2. CORS preflight</a> <a href="#ref-for-ip-address-space①③">(2)</a> <a href="#ref-for-ip-address-space①④">(3)</a>
@@ -1970,19 +1970,19 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-loopback⑧">5.2. Mixed Content</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="ip-address-space-private">
-   <b><a href="#ip-address-space-private">#ip-address-space-private</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="ip-address-space-local">
+   <b><a href="#ip-address-space-local">#ip-address-space-local</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-ip-address-space-private">1.2.1. Secure by Default</a>
-    <li><a href="#ref-for-ip-address-space-private①">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-ip-address-space-private②">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-private③">(2)</a> <a href="#ref-for-ip-address-space-private④">(3)</a> <a href="#ref-for-ip-address-space-private⑤">(4)</a> <a href="#ref-for-ip-address-space-private⑥">(5)</a> <a href="#ref-for-ip-address-space-private⑦">(6)</a> <a href="#ref-for-ip-address-space-private⑧">(7)</a> <a href="#ref-for-ip-address-space-private⑨">(8)</a> <a href="#ref-for-ip-address-space-private①⓪">(9)</a> <a href="#ref-for-ip-address-space-private①①">(10)</a> <a href="#ref-for-ip-address-space-private①②">(11)</a> <a href="#ref-for-ip-address-space-private①③">(12)</a>
-    <li><a href="#ref-for-ip-address-space-private①④">2.2. Private Network Request</a>
-    <li><a href="#ref-for-ip-address-space-private①⑤">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-ip-address-space-private①⑥">3.4. Workers</a>
-    <li><a href="#ref-for-ip-address-space-private①⑦">4.2. Proxies</a>
-    <li><a href="#ref-for-ip-address-space-private①⑧">4.3.1. Main resources</a>
-    <li><a href="#ref-for-ip-address-space-private①⑨">5.2. Mixed Content</a>
-    <li><a href="#ref-for-ip-address-space-private②⓪">5.5. Cross-network confusion</a>
+    <li><a href="#ref-for-ip-address-space-local">1.2.1. Secure by Default</a>
+    <li><a href="#ref-for-ip-address-space-local①">1.2.2. Opting-In</a>
+    <li><a href="#ref-for-ip-address-space-local②">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-local③">(2)</a> <a href="#ref-for-ip-address-space-local④">(3)</a> <a href="#ref-for-ip-address-space-local⑤">(4)</a> <a href="#ref-for-ip-address-space-local⑥">(5)</a> <a href="#ref-for-ip-address-space-local⑦">(6)</a> <a href="#ref-for-ip-address-space-local⑧">(7)</a> <a href="#ref-for-ip-address-space-local⑨">(8)</a> <a href="#ref-for-ip-address-space-local①⓪">(9)</a> <a href="#ref-for-ip-address-space-local①①">(10)</a> <a href="#ref-for-ip-address-space-local①②">(11)</a> <a href="#ref-for-ip-address-space-local①③">(12)</a>
+    <li><a href="#ref-for-ip-address-space-local①④">2.2. Local Network Request</a>
+    <li><a href="#ref-for-ip-address-space-local①⑤">3.1.1. Secure context restriction</a>
+    <li><a href="#ref-for-ip-address-space-local①⑥">3.4. Workers</a>
+    <li><a href="#ref-for-ip-address-space-local①⑦">4.2. Proxies</a>
+    <li><a href="#ref-for-ip-address-space-local①⑧">4.3.1. Main resources</a>
+    <li><a href="#ref-for-ip-address-space-local①⑨">5.2. Mixed Content</a>
+    <li><a href="#ref-for-ip-address-space-local②⓪">5.5. Cross-network confusion</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ip-address-space-public">
@@ -1990,7 +1990,7 @@ directive-value = ""
    <ul>
     <li><a href="#ref-for-ip-address-space-public">1.2.2. Opting-In</a>
     <li><a href="#ref-for-ip-address-space-public①">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-public②">(2)</a> <a href="#ref-for-ip-address-space-public③">(3)</a> <a href="#ref-for-ip-address-space-public④">(4)</a> <a href="#ref-for-ip-address-space-public⑤">(5)</a>
-    <li><a href="#ref-for-ip-address-space-public⑥">2.2. Private Network Request</a>
+    <li><a href="#ref-for-ip-address-space-public⑥">2.2. Local Network Request</a>
     <li><a href="#ref-for-ip-address-space-public⑦">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-ip-address-space-public⑧">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-ip-address-space-public⑨">3.3. Integration with HTML</a> <a href="#ref-for-ip-address-space-public①⓪">(2)</a> <a href="#ref-for-ip-address-space-public①①">(3)</a>
@@ -2006,16 +2006,16 @@ directive-value = ""
     <li><a href="#ref-for-loopback-address①">3.3. Integration with HTML</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="private-address">
-   <b><a href="#private-address">#private-address</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="local-address">
+   <b><a href="#local-address">#local-address</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-private-address">1.2.3. Navigation</a>
-    <li><a href="#ref-for-private-address①">2.2. Private Network Request</a>
-    <li><a href="#ref-for-private-address②">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-private-address③">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-private-address④">4.2. Proxies</a> <a href="#ref-for-private-address⑤">(2)</a> <a href="#ref-for-private-address⑥">(3)</a>
-    <li><a href="#ref-for-private-address⑦">4.3.1. Main resources</a>
-    <li><a href="#ref-for-private-address⑧">5.5. Cross-network confusion</a>
+    <li><a href="#ref-for-local-address">1.2.3. Navigation</a>
+    <li><a href="#ref-for-local-address①">2.2. Local Network Request</a>
+    <li><a href="#ref-for-local-address②">2.4. The treat-as-public-address Content Security Policy Directive</a>
+    <li><a href="#ref-for-local-address③">3.1.1. Secure context restriction</a>
+    <li><a href="#ref-for-local-address④">4.2. Proxies</a> <a href="#ref-for-local-address⑤">(2)</a> <a href="#ref-for-local-address⑥">(3)</a>
+    <li><a href="#ref-for-local-address⑦">4.3.1. Main resources</a>
+    <li><a href="#ref-for-local-address⑧">5.5. Cross-network confusion</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="public-address">
@@ -2023,7 +2023,7 @@ directive-value = ""
    <ul>
     <li><a href="#ref-for-public-address">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-public-address①">1.2.3. Navigation</a> <a href="#ref-for-public-address②">(2)</a>
-    <li><a href="#ref-for-public-address③">2.2. Private Network Request</a>
+    <li><a href="#ref-for-public-address③">2.2. Local Network Request</a>
     <li><a href="#ref-for-public-address④">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-public-address⑤">3.3. Integration with HTML</a>
     <li><a href="#ref-for-public-address⑥">3.4. Workers</a>
@@ -2033,7 +2033,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="ip-address-space-less-public">
    <b><a href="#ip-address-space-less-public">#ip-address-space-less-public</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-ip-address-space-less-public">2.2. Private Network Request</a>
+    <li><a href="#ref-for-ip-address-space-less-public">2.2. Local Network Request</a>
     <li><a href="#ref-for-ip-address-space-less-public①">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-ip-address-space-less-public②">3.1.2. CORS preflight</a>
     <li><a href="#ref-for-ip-address-space-less-public③">5.6.2. HTTP cache poisoning</a>
@@ -2045,14 +2045,14 @@ directive-value = ""
     <li><a href="#ref-for-determine-the-ip-address-space">3.1.1. Secure context restriction</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="private-network-request">
-   <b><a href="#private-network-request">#private-network-request</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="local-network-request">
+   <b><a href="#local-network-request">#local-network-request</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-private-network-request">2.2. Private Network Request</a>
-    <li><a href="#ref-for-private-network-request①">2.3. Additional CORS Headers</a>
-    <li><a href="#ref-for-private-network-request②">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-private-network-request③">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-private-network-request④">3.4. Workers</a>
+    <li><a href="#ref-for-local-network-request">2.2. Local Network Request</a>
+    <li><a href="#ref-for-local-network-request①">2.3. Additional CORS Headers</a>
+    <li><a href="#ref-for-local-network-request②">3.1. Integration with Fetch</a>
+    <li><a href="#ref-for-local-network-request③">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-local-network-request④">3.4. Workers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="http-headerdef-access-control-request-private-network">
@@ -2094,14 +2094,14 @@ directive-value = ""
     <li><a href="#ref-for-response-ip-address-space⑨">3.3. Integration with HTML</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="private-network-access-check">
-   <b><a href="#private-network-access-check">#private-network-access-check</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="local-network-access-check">
+   <b><a href="#local-network-access-check">#local-network-access-check</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-private-network-access-check">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-private-network-access-check①">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-private-network-access-check②">3.4. Workers</a>
-    <li><a href="#ref-for-private-network-access-check③">4.3.2. Subresources</a>
-    <li><a href="#ref-for-private-network-access-check④">5.6.1. Applying checks to subresources</a>
+    <li><a href="#ref-for-local-network-access-check">3.1.1. Secure context restriction</a>
+    <li><a href="#ref-for-local-network-access-check①">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-local-network-access-check②">3.4. Workers</a>
+    <li><a href="#ref-for-local-network-access-check③">4.3.2. Subresources</a>
+    <li><a href="#ref-for-local-network-access-check④">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="request-target-ip-address-space">
@@ -2125,7 +2125,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="policy-container-ip-address-space">
    <b><a href="#policy-container-ip-address-space">#policy-container-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-policy-container-ip-address-space">2.2. Private Network Request</a>
+    <li><a href="#ref-for-policy-container-ip-address-space">2.2. Local Network Request</a>
     <li><a href="#ref-for-policy-container-ip-address-space①">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-policy-container-ip-address-space②">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-policy-container-ip-address-space③">3.1.2. CORS preflight</a>
