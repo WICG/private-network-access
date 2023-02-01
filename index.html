@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="32e4ef932fe7c32a311ed57ada479c32fbee707c" name="document-revision">
+  <meta content="8f87e068dd1fbfe256867804b32a1a50f19ebce2" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -479,7 +479,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-01-11">11 January 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-02-01">1 February 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1084,7 +1084,7 @@ directive-value = ""
           </ol>
         </ol>
        <li data-md>
-        <p>Immediately after checking CORS-unsafe request-header names in <var>response</var> against <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list①">header list</a>:</p>
+        <p>Immediately after the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check" id="ref-for-concept-cors-check">CORS check</a>:</p>
         <ol>
          <li data-md>
           <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑦">target IP address space</a> is not null,
@@ -1490,6 +1490,12 @@ directive-value = ""
     <li><a href="#ref-for-concept-connection-pool">3.1.1. Secure context restriction</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-cors-check">
+   <a href="https://fetch.spec.whatwg.org/#concept-cors-check">https://fetch.spec.whatwg.org/#concept-cors-check</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-cors-check">3.1.2. CORS preflight</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-cache">
    <a href="https://fetch.spec.whatwg.org/#concept-cache">https://fetch.spec.whatwg.org/#concept-cache</a><b>Referenced in:</b>
    <ul>
@@ -1756,6 +1762,7 @@ directive-value = ""
      <li><span class="dfn-paneled" id="term-for-concept-request-client">client</span>
      <li><span class="dfn-paneled" id="term-for-concept-connection">connection</span>
      <li><span class="dfn-paneled" id="term-for-concept-connection-pool">connection pool</span>
+     <li><span class="dfn-paneled" id="term-for-concept-cors-check">cors check</span>
      <li><span class="dfn-paneled" id="term-for-concept-cache">cors-preflight cache</span>
      <li><span class="dfn-paneled" id="term-for-cors-preflight-fetch-0">cors-preflight fetch</span>
      <li><span class="dfn-paneled" id="term-for-cors-preflight-request">cors-preflight request</span>
