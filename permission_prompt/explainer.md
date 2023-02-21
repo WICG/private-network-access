@@ -1,4 +1,4 @@
-# Private Network Access Permission to relax mixed content 
+# Local Network Access Permission to relax mixed content 
 
 - **Author**: lyf@google.com
 - **Created**: 2022-06-22
@@ -6,13 +6,13 @@
 
 ## Introduction
 
-The Private Network Access specification aims to prevent the user agent from inadvertently enabling attacks on devices running on a user's local intranet, or services running on the user's machine directly. It used to be named "CORS-RFC1918", after [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), which provides a mechanism for securing websites against cross-origin requests, and [RFC 1918](https://tools.ietf.org/html/rfc1918), which describes IPv4 address ranges reserved for private networks.
+The Local Network Access specification aims to prevent the user agent from inadvertently enabling attacks on devices running on a user's local intranet, or services running on the user's machine directly. It used to be named "CORS-RFC1918", after [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), which provides a mechanism for securing websites against cross-origin requests, and [RFC 1918](https://tools.ietf.org/html/rfc1918), which describes IPv4 address ranges reserved for local networks.
 
-Preflights and secure-context restrictions have already been introduced. Here, we would like to introduce a new part of the specification: a way to allow plaintext HTTP requests on the private network to be made from an HTTPS page. This would require obtaining a new permission from users with a prompt. It is a way to allow websites to upgrade to HTTPS while relaxing mixed content restrictions and continuing to access specific targets on the private network over plaintext HTTP.
+Preflights and secure-context restrictions have already been introduced. Here, we would like to introduce a new part of the specification: a way to allow plaintext HTTP requests on the local network to be made from an HTTPS page. This would require obtaining a new permission from users with a prompt. It is a way to allow websites to upgrade to HTTPS while relaxing mixed content restrictions and continuing to access specific targets on the local network over plaintext HTTP.
 
 ## Goals
 
-The overarching goal is to prevent malicious websites from pivoting through the user agent's network position to attack endpoints on the private network. These endpoints might be devices or services which reasonably assumed they were unreachable from the Internet at large, by virtue of residing on the user’s local intranet or the user's machine.
+The overarching goal is to prevent malicious websites from pivoting through the user agent's network position to attack endpoints on the local network. These endpoints might be devices or services which reasonably assumed they were unreachable from the Internet at large, by virtue of residing on the user’s local intranet or the user's machine.
 
 For example, we wish to mitigate attacks on:
 
@@ -20,15 +20,15 @@ For example, we wish to mitigate attacks on:
 
 * Users' routers, as outlined in [SOHO Pharming](https://331.cybersec.fun/TeamCymruSOHOPharming.pdf). Note that status quo CORS protections don’t protect against the kinds of attacks discussed here as they rely only on [CORS-safelisted methods](https://fetch.spec.whatwg.org/#cors-safelisted-method) and [CORS-safelisted request-headers](https://fetch.spec.whatwg.org/#cors-safelisted-request-header). No preflight is triggered, and the attacker doesn’t actually care about reading the response, as the request itself is the CSRF attack.
 
-In this particular extension to the base Private Network Access specification, we focus on providing a secure mechanism to allow secure public websites to embed non-secure non-public resources without running into mixed content violations, by instead requesting permission from the user.
+In this particular extension to the base Local Network Access specification, we focus on providing a secure mechanism to allow secure public websites to embed non-secure non-public resources without running into mixed content violations, by instead requesting permission from the user.
 
 ### Secure context
 
-Private Network Access specifies that access to the private network is [restricted to secure contexts](https://wicg.github.io/private-network-access/#secure-context-restriction). However, extensive feedback from web developers has been received since then which caused this plan to be put on hold in Chrome. For detailed information, see [Private Network Access: Secure Context Restriction Launch delay](https://docs.google.com/document/d/1bpis0QwaA9ZrRFmpPW6LiaPmdwT0UhhUMNsEnU0zfLk/edit?usp=sharing).
+Local Network Access specifies that access to the local network is [restricted to secure contexts](https://wicg.github.io/local-network-access/#secure-context-restriction). However, extensive feedback from web developers has been received since then which caused this plan to be put on hold in Chrome. For detailed information, see [Private Network Access: Secure Context Restriction Launch delay](https://docs.google.com/document/d/1bpis0QwaA9ZrRFmpPW6LiaPmdwT0UhhUMNsEnU0zfLk/edit?usp=sharing).
 
-Briefly, the “[Plex](https://plex.tv) solution” consists of provisioning the private server with a certificate for `*.$user_id.foo.example`, then maintaining a DNS service that resolves `10-1-2-3.$user_id.foo.example` to `10.1.2.3`. This allows `https://bar.example` to stream a video from `https://10-1-2-3.$user_id.foo.example/titanic.mp4` directly over the private network. There are even services like [sslip.io](https://sslip.io) that provide this functionality to smaller web apps.
+Briefly, the “[Plex](https://plex.tv) solution” consists of provisioning the local server with a certificate for `*.$user_id.foo.example`, then maintaining a DNS service that resolves `10-1-2-3.$user_id.foo.example` to `10.1.2.3`. This allows `https://bar.example` to stream a video from `https://10-1-2-3.$user_id.foo.example/titanic.mp4` directly over the local network. There are even services like [sslip.io](https://sslip.io) that provide this functionality to smaller web apps.
 
-The DNS part of this setup breaks due to some routers (including [Google Wi-Fi](https://support.google.com/wifi/answer/9144137?hl=en)) filtering out DNS responses mapping public domain names to private IP addresses.
+The DNS part of this setup breaks due to some routers (including [Google Wi-Fi](https://support.google.com/wifi/answer/9144137?hl=en)) filtering out DNS responses mapping public domain names to local IP addresses.
 
 Beyond this, the main drawback of this approach is that it degrades system reliability and potentially security by introducing a dependency on the Web PKI and remote DNS servers. In case of DNS unavailability (e.g. in disconnected operation) this simply fails to work, preventing intranet apps from being served securely and making requests to localhost.
 
@@ -36,7 +36,7 @@ Beyond this, the main drawback of this approach is that it degrades system relia
 
 To solve the above problems, we proposed an alternative solution with [WebTransport](https://w3c.github.io/webtransport)’s `serverCertificateHashes` feature. This allows a secure context to establish a secure connection to a local server that only possesses a self-signed certificate.
 
-Unfortunately, it turns out that WebTransport is not a good replacement there. See [spec issue #23](https://github.com/WICG/private-network-access/issues/23).
+Unfortunately, it turns out that WebTransport is not a good replacement there. See [spec issue #23](https://github.com/WICG/local-network-access/issues/23).
 
 WebTransport `serverCertificateHashes` requires the website initiating the connection to know in advance the hash of the target server’s certificate. Somehow, they must both agree on the hash value.
 
@@ -52,19 +52,19 @@ Long story short, there does not seem to be a way to get out of this bind and ac
 
 ## A proposal
 
-The previous attempts motivated the switch to a permission-based alternative. We propose that secure contexts be allowed to fetch resources from private network servers over plaintext HTTP - circumventing mixed content restrictions - given express user permission.
+The previous attempts motivated the switch to a permission-based alternative. We propose that secure contexts be allowed to fetch resources from local network servers over plaintext HTTP - circumventing mixed content restrictions - given express user permission.
 
-At a high level, websites indicate their intention to access a private network server using a new API. The browser then queries the server for some identification information it can display to the user in a permission prompt. The user then chooses if they desire to allow the website to access the target server.
+At a high level, websites indicate their intention to access a local network server using a new API. The browser then queries the server for some identification information it can display to the user in a permission prompt. The user then chooses if they desire to allow the website to access the target server.
 
-This would mean that websites that wish to speak to private network devices must be served over HTTPS. The target device, however, would not have to serve HTTPS. It would only need to respond correctly to CORS preflights, and maybe to some kind of simple identification request.
+This would mean that websites that wish to speak to local network devices must be served over HTTPS. The target device, however, would not have to serve HTTPS. It would only need to respond correctly to CORS preflights, and maybe to some kind of simple identification request.
 
 ### Triggering
 
-Some kind of API to trigger the permission request when accessing a private network server for the first time is required. Here we propose adding a new parameter to the `fetch()` options bag. For example:
+Some kind of API to trigger the permission request when accessing a local network server for the first time is required. Here we propose adding a new parameter to the `fetch()` options bag. For example:
 
 ```
-fetch("http://router.private/ping", {
-  targetAddressSpace: "private",
+fetch("http://router.local/ping", {
+  targetAddressSpace: "local",
 });
 ```
 
@@ -77,15 +77,15 @@ If the remote IP address does not belong to the IP address space specified as th
 If it does belong, then a CORS preflight request is sent as specified today. The target server then responds with a CORS preflight response, augmented with the following two headers:
 
 ```
-Private-Network-Access-Name: <some human-readable device self-identification>
-Private-Network-Access-ID: <some unique and stable machine-readable ID, such as a MAC address>
+Local-Network-Access-Name: <some human-readable device self-identification>
+Local-Network-Access-ID: <some unique and stable machine-readable ID, such as a MAC address>
 ```
 
 For example:
 
 ```
-Private-Network-Access-Name: "My Smart Toothbrush"
-Private-Network-Access-ID: "01:23:45:67:89:0A"
+Local-Network-Access-Name: "My Smart Toothbrush"
+Local-Network-Access-ID: "01:23:45:67:89:0A"
 ```
 
 ### Gaining permission
@@ -106,16 +106,16 @@ The permission is then persisted. The next document belonging to the same initia
 ## What are the alternatives?
 ### Blanket permission prompt
 
-A simple "attacker.com wants to connect to the private network: allow/deny" prompt. This resembles [what is done in iOS today](https://support.apple.com/en-mk/HT211870).
+A simple "attacker.com wants to connect to the local network: allow/deny" prompt. This resembles [what is done in iOS today](https://support.apple.com/en-mk/HT211870).
 
-Such a prompt is hard to understand for users. What even is the private network? It also grants too much privilege at once. A single misclick or wrong judgment call (users often click away prompts to get back to what they were doing) means the website is free to scan the local network for attacks and fingerprinting purposes.
+Such a prompt is hard to understand for users. What even is the local network? It also grants too much privilege at once. A single misclick or wrong judgment call (users often click away prompts to get back to what they were doing) means the website is free to scan the local network for attacks and fingerprinting purposes.
 
 ### Fetch the device info differently
-One could imagine the name and ID of the device being served some other way, e.g. at a well-known URL: `/.well-known/private-network-access`. It would be fetched first, then the prompt displayed, then the CORS preflight would be sent if permission was granted.
+One could imagine the name and ID of the device being served some other way, e.g. at a well-known URL: `/.well-known/local-network-access`. It would be fetched first, then the prompt displayed, then the CORS preflight would be sent if permission was granted.
 
 In this model, the API used to trigger the permission prompt could be something else than `fetch()`.
 
-This seems to introduce more complexity for not much benefit. Private Network Access already mandates the use of preflights, two additional headers is the easiest for web developers to implement.
+This seems to introduce more complexity for not much benefit. Local Network Access already mandates the use of preflights, two additional headers is the easiest for web developers to implement.
 
 ### Identify the target differently
 
@@ -143,17 +143,17 @@ To prevent abuse of the permission prompt, we might also want to automatically d
 
 ### IDs
 
-The preflight request sent with plaintext HTTP can be hijacked which means that the `-ID` provided by the local device can be leaked to third-party attackers. However, this also means that the attacker is already in the private network. In this case, it doesn't matter whether the public page is allowed to make requests on the private network  since the attacker can make the request themselves.
+The preflight request sent with plaintext HTTP can be hijacked which means that the `-ID` provided by the local device can be leaked to third-party attackers. However, this also means that the attacker is already in the local network. In this case, it doesn't matter whether the public page is allowed to make requests on the local network  since the attacker can make the request themselves.
 
 ### Behavior of `targetAddressSpace` and fetch
 
-Requiring every single request to the private network to be issued with `fetch()` and the new `targetAddressSpace` might not support all developer use cases. We could improve this by only requiring it for the first request to the target origin. After a successful `fetch()` with `targetAddressSpace`, the browser could store a mapping from the target origin to the given `targetAddressSpace` for the remainder of the lifetime of the execution context. The execution context could then perform arbitrary fetches with media tags, XHRs, etc to the target origin.
+Requiring every single request to the local network to be issued with `fetch()` and the new `targetAddressSpace` might not support all developer use cases. We could improve this by only requiring it for the first request to the target origin. After a successful `fetch()` with `targetAddressSpace`, the browser could store a mapping from the target origin to the given `targetAddressSpace` for the remainder of the lifetime of the execution context. The execution context could then perform arbitrary fetches with media tags, XHRs, etc to the target origin.
 
 Note that this might cause problems if the DNS entry for the target domain changes to point to a different IP address space in the middle of an execution context's lifetime.
 
 Other alternative options we currently have are:
 * infer target address space when fetching from a raw IP address
-* do the above and restrict private network access to IP addresses only
+* do the above and restrict local network access to IP addresses only
 * add a new attribute `targetAddressSpace` to fetch elements such as iframe elements.
 * use a service worker to intercept requests.
 * create a blob after fetching and loading stuff from the blob URL.

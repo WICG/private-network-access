@@ -1,4 +1,4 @@
-# Security and Privacy Self-Review: Private Network Access
+# Security and Privacy Self-Review: Local Network Access
 
 Based on the W3C TAG's
 [questionnaire](https://www.w3.org/TR/security-privacy-questionnaire/).
@@ -6,8 +6,8 @@ Based on the W3C TAG's
 ## 1. What information might this feature expose to Web sites or other parties, and for what purposes is that exposure necessary?
 
 Documents might be able to infer whether they were loaded from `public`,
-`private` or `local` IP address by observing whether they can successfully load
-a well-known subresource from the private network or localhost. This is largely
+`local` or `loopback` IP address by observing whether they can successfully load
+a well-known subresource from the local network or localhost. This is largely
 unavoidable by design: this specification aims to alter user agent behavior
 differentially based on the IP address which served the main resource.
 
@@ -71,7 +71,7 @@ None.
 
 Third-party iframes are treated distinctly from the first party embedder: even
 if the first party is served from non-public address space, only the third
-party's address space is considered when applying private network request checks
+party's address space is considered when applying local network request checks
 to requests made by the third-party iframe.
 
 Third-party scripts are not treated distinctly. In the case of
