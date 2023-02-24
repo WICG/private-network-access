@@ -2,7 +2,7 @@
 # Local Network Access
 
 Note: This specification has been renamed from *Private Network Access* to
-*Local Network Access*.
+*Local Network Access*. It was also initially known as *CORS-RFC1918*.
 
 This is the repository for the Local Network Access specification. You're
 welcome to contribute! Let's make the Web rock our socks off!
