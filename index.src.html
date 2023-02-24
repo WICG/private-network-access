@@ -1,10 +1,10 @@
-<h1>Private Network Access</h1>
+<h1>Local Network Access</h1>
 <pre class="metadata">
 Status: CG-DRAFT
 Group: WICG
-ED: https://wicg.github.io/private-network-access/
-Repository: wicg/private-network-access
-Shortname: private-network-access
+ED: https://wicg.github.io/local-network-access/
+Repository: wicg/local-network-access
+Shortname: local-network-access
 Level: 1
 Editor: Titouan Rigoudy 124486, Google, titouan@google.com
 Former Editor: Mike West 56384, Google, mkwst@google.com
@@ -203,7 +203,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
     `router.local` will be resolved to the router's address via the magic of
     multicast DNS [[RFC6762]], and the user agent will note it as
-    [=IP address space/private=]. Since `csrf.attack` resolved to a
+    [=IP address space/local=]. Since `csrf.attack` resolved to a
     [=public address=], the request will trigger a [=CORS-preflight request=]:
 
 
@@ -211,7 +211,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       OPTIONS /set_dns?... HTTP/1.1
       Host: router.local
       <a http-header>Access-Control-Request-Method</a>: GET
-      <a http-header>Access-Control-Request-Private-Network</a>: true
+      <a http-header>Access-Control-Request-Local-Network</a>: true
       ...
       Origin: https://csrf.attack
     </pre>
@@ -224,7 +224,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
         be issued.
 
     *   If it does understand `OPTIONS`, it can neglect to include an
-        <a http-header>`Access-Control-Allow-Private-Network`</a> header in its
+        <a http-header>`Access-Control-Allow-Local-Network`</a> header in its
         response. This will cause the preflight to fail, and the actual `GET`
         will never be issued.
 
@@ -241,7 +241,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
     When a website on the public internet makes a request to the device, the
     user agent determines that the requestor is [=IP address space/public=], and
-    the router is [=IP address space/private=]. This means that requests will
+    the router is [=IP address space/local=]. This means that requests will
     trigger a [=CORS-preflight request=], just as above.
 
     The device can explicitly grant access by sending the right headers in its
@@ -254,7 +254,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       <a http-header>Access-Control-Allow-Origin</a>: https://public.example.com
       <a http-header>Access-Control-Allow-Methods</a>: GET
       <a http-header>Access-Control-Allow-Credentials</a>: true
-      <a http-header>Access-Control-Allow-Private-Network</a>: true
+      <a http-header>Access-Control-Allow-Local-Network</a>: true
       Content-Length: 0
       ...
     </pre>
@@ -270,19 +270,19 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
     Clicking `https://go/*` links from `https://mail.mega.corp/` will trigger a
     <a>CORS-preflight request</a>, as it is a request from a <a>public
-    address</a> to a <a>private address</a>:
+    address</a> to a <a>local address</a>:
 
     <pre>
       OPTIONS /short-links-are-short-after-shortening HTTP/1.1
       Host: go
       <a http-header>Access-Control-Request-Method</a>: GET
-      <a http-header>Access-Control-Request-Private-Network</a>: true
+      <a http-header>Access-Control-Request-Local-Network</a>: true
       ...
       Origin: https://mail.mega.corp
     </pre>
 
     In order to ensure that employees can continue to navigate such links as
-    expected, MegaCorp chooses to allow private network requests:
+    expected, MegaCorp chooses to allow local network requests:
 
     <pre>
       HTTP/1.1 200 OK
@@ -290,7 +290,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       <a http-header>Access-Control-Allow-Origin</a>: https://mail.mega.corp
       <a http-header>Access-Control-Allow-Methods</a>: GET
       <a http-header>Access-Control-Allow-Credentials</a>: true
-      <a http-header>Access-Control-Allow-Private-Network</a>: true
+      <a http-header>Access-Control-Allow-Local-Network</a>: true
       Content-Length: 0
       ...
     </pre>
@@ -333,10 +333,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <dfn export local-lt="address space">IP address space</dfn>, which can be one
   of three different values:
 
-  1.  <dfn for="IP address space" export>local</dfn>: contains the local
+  1.  <dfn for="IP address space" export>loopback</dfn>: contains the local
       host only. In other words, addresses whose target differs for every
       device.
-  1.  <dfn for="IP address space" export>private</dfn>: contains
+  1.  <dfn for="IP address space" export>local</dfn>: contains
       addresses that have meaning only within the current network. In other
       words, addresses whose target differs based on network position.
   1.  <dfn for="IP address space" export>public</dfn>: contains all
@@ -345,10 +345,10 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   For convenience, we additionally define the following terms:
 
-  1.  A <dfn>local address</dfn> is an IP address whose [=/IP address space=] is
-      [=IP address space/local=].
-  1.  A <dfn>private address</dfn> is an IP address whose [=/IP address space=]
-      is [=IP address space/private=].
+  1.  A <dfn>loopback address</dfn> is an IP address whose [=/IP address space=] is
+      [=IP address space/loopback=].
+  1.  A <dfn>local address</dfn> is an IP address whose [=/IP address space=]
+      is [=IP address space/local=].
   1.  A <dfn>public address</dfn> is an IP address whose [=/IP address space=]
       is [=IP address space/public=].
 
@@ -356,9 +356,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <dfn for="IP address space" export>less public</dfn> than an
   [=/IP address space=] |rhs| if any of the following conditions holds true:
 
-  1.  |lhs| is [=IP address space/local=] and |rhs| is either
-      [=IP address space/private=] or [=IP address space/public=].
-  1.  |lhs| is [=IP address space/private=] and |rhs| is
+  1.  |lhs| is [=IP address space/loopback=] and |rhs| is either
+      [=IP address space/local=] or [=IP address space/public=].
+  1.  |lhs| is [=IP address space/local=] and |rhs| is
       [=IP address space/public=].
 
   To <dfn export>determine the IP address space</dfn> of an IP address
@@ -388,55 +388,55 @@ spec:fetch; type:dfn; for:cache; text:cache match
         <td>`127.0.0.0/8`</td>
         <td>IPv4 Loopback</td>
         <td>[[RFC1122]]</td>
-        <td>[=IP address space/local=]</td>
+        <td>[=IP address space/loopback=]</td>
       </tr>
       <tr>
         <td>`10.0.0.0/8`</td>
         <td>Private Use</td>
         <td>[[RFC1918]]</td>
-        <td>[=IP address space/private=]</td>
+        <td>[=IP address space/local=]</td>
       </tr>
       <tr>
         <td>`100.64.0.0/10`</td>
         <td>Carrier-Grade NAT</td>
         <td>[[RFC6598]]</td>
-        <td>[=IP address space/private=]</td>
+        <td>[=IP address space/local=]</td>
       </tr>
       <tr>
         <td>`172.16.0.0/12`</td>
         <td>Private Use</td>
         <td>[[RFC1918]]</td>
-        <td>[=IP address space/private=]</td>
+        <td>[=IP address space/local=]</td>
       </tr>
       <tr>
         <td>`192.168.0.0/16`</td>
         <td>Private Use</td>
         <td>[[RFC1918]]</td>
-        <td>[=IP address space/private=]</td>
+        <td>[=IP address space/local=]</td>
       </tr>
       <tr>
         <td>`169.254.0.0/16`</td>
         <td>Link Local</td>
         <td>[[RFC3927]]</td>
-        <td>[=IP address space/private=]</td>
+        <td>[=IP address space/local=]</td>
       </tr>
       <tr>
         <td>`::1/128`</td>
         <td>IPv6 Loopback</td>
         <td>[[RFC4291]]</td>
-        <td>[=IP address space/local=]</td>
+        <td>[=IP address space/loopback=]</td>
       </tr>
       <tr>
         <td>`fc00::/7`</td>
         <td>Unique Local</td>
         <td>[[RFC4193]]</td>
-        <td>[=IP address space/private=]</td>
+        <td>[=IP address space/local=]</td>
       </tr>
       <tr>
         <td>`fe80::/10`</td>
         <td>Link-Local Unicast</td>
         <td>[[RFC4291]]</td>
-        <td>[=IP address space/private=]</td>
+        <td>[=IP address space/local=]</td>
       </tr>
       <tr>
         <td>`::ffff:0:0/96`</td>
@@ -451,26 +451,26 @@ spec:fetch; type:dfn; for:cache; text:cache match
   overridden through administrator or user configuration. This could prove
   useful to protect e.g. IPv6 intranets where most IP addresses are considered
   [=IP address space/public=] per the algorithm above, by instead configuring
-  user agents to treat the intranet as [=IP address space/private=].
+  user agents to treat the intranet as [=IP address space/local=].
 
   Note: Link-local IP addresses such as `169.254.0.0/16` are considered
-  [=IP address space/private=], since such addresses can identify the same
+  [=IP address space/local=], since such addresses can identify the same
   target for all devices on a network link. A previous version of this
-  specification considered them to be [=IP address space/local=] instead.
+  specification considered them to be [=IP address space/loopback=] instead.
 
   Note: The contents of each [=/IP address space=] were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
   ([[IPV4-REGISTRY]] and [[IPV6-REGISTRY]]) and the `Globally Reachable` bit
   defined therein. This turned out to be an inaccurate signal for our uses, as
   described in
-  [spec issue #50](https://github.com/WICG/private-network-access/issues/50).
+  [spec issue #50](https://github.com/WICG/local-network-access/issues/50).
 
   ISSUE(36): Remove the special case for IPv4-mapped IPv6 addresses once access
   to these addresses is blocked entirely.
 
-  <h3 id="private-network-request-heading">Private Network Request</h3>
+  <h3 id="local-network-request-heading">Local Network Request</h3>
 
-  A [=request=] (|request|) is a <dfn export>private network request</dfn>
+  A [=request=] (|request|) is a <dfn export>local network request</dfn>
   if |request|'s [=request/current url=]'s {{URL/host}} maps to an IP address
   whose [=/IP address space=] is [=IP address space/less public=] than
   |request|'s [=request/policy container=]'s
@@ -486,9 +486,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   - false positives: an intranet server with a [=public address=] might be able
     to directy issue requests to another server on the same intranet with a
-    [=private address=].
+    [=local address=].
   - false negatives: a client connected to two different
-    [=IP address space/private=] networks, say a home network and a VPN, might
+    [=IP address space/local=] networks, say a home network and a VPN, might
     allow a website served from the VPN to access devices on the home network.
     See also the issue below.
 
@@ -496,27 +496,31 @@ spec:fetch; type:dfn; for:cache; text:cache match
   issue that broadly affects most users of the Web whose network configurations
   are not so complex.
 
-  ISSUE(39): The definition of [=private network requests=] could be expanded to
+  ISSUE(39): The definition of [=local network requests=] could be expanded to
   cover all cross-origin requests for which the [=request/current url=]'s
   {{URL/host}} maps to an IP address whose [=/IP address space=] is not
   [=IP address space/public=]. This would prevent a malicious server on the
-  private network from attacking other servers. The effort require to ship such
+  local network from attacking other servers. The effort require to ship such
   a change is not deemed worth the payoff for now. This can be shipped as an
   incremental improvement later on.
 
   <h3 id="headers">Additional CORS Headers</h3>
 
-  The <dfn export http-header>`Access-Control-Request-Private-Network`</dfn>
-  indicates that the [=request=] is a [=private network request=].
+  The <dfn export http-header>`Access-Control-Request-Local-Network`</dfn>
+  indicates that the [=request=] is a [=local network request=].
 
-  The <dfn export http-header>`Access-Control-Allow-Private-Network`</dfn>
+  The <dfn export http-header>`Access-Control-Allow-Local-Network`</dfn>
   indicates that a resource can be safely shared with external networks.
+
+  Note: Previous versions of this spec spelled the headers as
+  `Access-Control-Request-Private-Network` and
+  `Access-Control-Allow-Private-Network`.
 
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
   The <dfn>treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a [=public address=], even if
-  it was actually served from a [=private address=] or a [=local address=]. That
+  it was actually served from a [=local address=] or a [=loopback address=]. That
   is, it is a mechanism by which non-public documents may drop the privilege to
   contact other non-public documents without a preflight.
 
@@ -544,7 +548,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   A previous version of this specification proposed adding an `addressSpace`
   enum property to {{Document}} and {{WorkerGlobalScope}}, but it was removed
   due to fingerprinting concerns (see
-  [issue #21](https://github.com/WICG/private-network-access/issues/21)).
+  [issue #21](https://github.com/WICG/local-network-access/issues/21)).
 
   Documents should not behave differently or not based on whether the UA
   implements this specification or not - all documents should assume it does.
@@ -565,7 +569,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
   This document proposes a few changes to Fetch, with the following implication:
-  [=private network requests=] are only allowed if their [=request/client=] is
+  [=local network requests=] are only allowed if their [=request/client=] is
   a [=secure context=] **and** a [=CORS-preflight request=] to the target origin
   is successful.
 
@@ -574,7 +578,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   Note: [[FETCH]] does not yet integrate the details of DNS resolution into the
   [=/Fetch=] algorithm, though it does define an [=obtain a connection=]
-  algorithm which is enough for this specification. Private Network Access
+  algorithm which is enough for this specification. Local Network Access
   checks are applied to the newly-obtained connection. Given complexities such
   as Happy Eyeballs ([[RFC6555 obsolete]], [[RFC8305]]), these checks might pass
   or fail non-deterministically for hosts with multiple IP addresses that
@@ -584,8 +588,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   UAs must not allow <a lt="secure context">non-secure</a>
   [=IP address space/public=] contexts to request resources from
-  [=private addresses=], even if the private server would opt-in to such a
-  request via a preflight. Making requests to [=IP address space/private=]
+  [=local addresses=], even if the local server would opt-in to such a
+  request via a preflight. Making requests to [=IP address space/local=]
   resources presents risks which are mitigated by ensuring the integrity of the
   [=request/client=] which initiates the request. In particular, network
   attackers should not be able to trivially exploit an endpoint's consent to a
@@ -611,7 +615,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
       <dfn export for="response">IP address space</dfn> property, whose value is
       an [=/IP address space=], initially null.
 
-  1.  Define a new <dfn export>Private Network Access check</dfn> algorithm.
+  1.  Define a new <dfn export>Local Network Access check</dfn> algorithm.
       Given a [=request=] |request| and a [=connection=] |connection|:
 
       1.  If |request|'s [=request/client=] is a [=non-secure context=]:
@@ -633,17 +637,17 @@ spec:fetch; type:dfn; for:cache; text:cache match
       1.  Set |response|'s [=response/IP address space=] to
           |connection|'s [=connection/IP address space=].
 
-      1.  Let |privateNetworkAccessCheckResult| be the result of running
-          [=Private Network Access check=] for |fetchParams|' [=request=]  and
+      1.  Let |localNetworkAccessCheckResult| be the result of running
+          [=Local Network Access check=] for |fetchParams|' [=request=]  and
           |connection|.
 
-      1.  If |privateNetworkAccessCheckResult| is a [=network error=], return
-          |privateNetworkAccessCheckResult|.
+      1.  If |localNetworkAccessCheckResult| is a [=network error=], return
+          |localNetworkAccessCheckResult|.
 
   <h4 id="cors-preflight">CORS preflight</h4>
 
   The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
-  triggered for all [=private network requests=] initiated from
+  triggered for all [=local network requests=] initiated from
   [=secure contexts=].
 
   The main issue here is again that the response's
@@ -654,7 +658,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   1.  Add a new <dfn for="request" export>target IP address space</dfn> property
       to the [=request=] struct, initially null.
 
-  1.  Amend the [=Private Network Access check=] algorithm to handle this new
+  1.  Amend the [=Local Network Access check=] algorithm to handle this new
       property and propagate the [=/IP address space=] of the newly-obtained
       [=connection=] to the caller of the [$HTTP-network fetch$] algorithm when
       the [=request/client=] is a [=secure context=]:
@@ -730,7 +734,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
               then:
 
               1.  [=header list/Set=]
-                  "<a http-header>`Access-Control-Request-Private-Network`</a>"
+                  "<a http-header>`Access-Control-Request-Local-Network`</a>"
                   to "`true`" in <var ignore>preflight</var>'s
                   [=request/header list=].
 
@@ -741,7 +745,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
               1.  Let |allow| be the result of [=extracting header list values=]
                   given
-                  "<a http-header>`Access-Control-Allow-Private-Network`</a>"
+                  "<a http-header>`Access-Control-Allow-Local-Network`</a>"
                   and |response|'s [=response/header list=].
 
               1.  If |allow| is not "`true`", return a [=network error=].
@@ -764,7 +768,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   <h4 id="forbidden-header-names">Forbidden header names</h4>
 
   A new entry is added to the list of [=forbidden header names=]:
-  <a http-header>`Access-Control-Request-Private-Network`</a>.
+  <a http-header>`Access-Control-Request-Local-Network`</a>.
 
   The user agent should have full control over this header, just as it does over
   other CORS headers.
@@ -816,11 +820,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
     [=policy container/IP address space=] property set to
     [=IP address space/public=].
 
-    If, on the other hand, `example.com` resolved to a [=local address=]
+    If, on the other hand, `example.com` resolved to a [=loopback address=]
     (say, `127.0.0.1`), then the {{Document}} created when navigating to
     `https://example.com/document.html` will have its
     [=Document/policy container=]'s [=policy container/IP address space=]
-    property set to [=IP address space/local=].
+    property set to [=IP address space/loopback=].
   </div>
 
   <h3 id="workers">Workers</h3>
@@ -841,15 +845,15 @@ spec:fetch; type:dfn; for:cache; text:cache match
     [=IP address space/public=].
 
     Any fetch [=request=] initiated by this worker that [=obtains a connection=]
-    to an IP address in the [=IP address space/private=] or
-    [=IP address space/local=] [=address spaces=] would then be a
-    [=private network request=].
+    to an IP address in the [=IP address space/local=] or
+    [=IP address space/loopback=] [=address spaces=] would then be a
+    [=local network request=].
   </div>
 
   ISSUE(83): The [=/Service Worker=] <a spec="service-workers">soft update</a>
   algorithm unfortunately sets a [=request/client|request client=] of `"null"`
   when [=fetching=] an updated script. This causes all sorts of issues, and
-  interferes with the [=private network access check=] algorithm laid out above.
+  interferes with the [=local network access check=] algorithm laid out above.
   Indeed, there is no [=request/client|request client=] from which to copy the
   [=request/policy container=] during [=fetch=].
 
@@ -860,13 +864,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="file-url">Where do `file` URLs fit?</h3>
 
-  It isn't entirely clear how `file` URLs fit into the public/private scheme
+  It isn't entirely clear how `file` URLs fit into the public/local scheme
   outlined above. It would be nice to prevent folks from harming themselves by
   opening a malicious HTML file locally, on the one hand, but on the other, code
   running locally is somewhat outside of any coherent threat model.
 
   For the moment, let's err on the side of treating `file` URLs as
-  [=IP address space/local=], as they seem to be just as much a part of the local
+  [=IP address space/loopback=], as they seem to be just as much a part of the loopback
   system as anything else on a loopback address.
 
   ISSUE: Reevaluate this after implementation experience.
@@ -880,26 +884,26 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <div class="example">
     If a {{Document}} served by `foo.example` on a [=public address=] is fetched
-    by the user agent via a proxy on a [=private address=], then the
+    by the user agent via a proxy on a [=local address=], then the
     {{Document}}'s [=Document/policy container=]'s
     [=policy container/IP address space=] is set to
-    [=IP address space/private=].
+    [=IP address space/local=].
 
     The {{Document}} will in turn be allowed to make requests to other
-    [=private addresses=] accessible to the browser.
+    [=local addresses=] accessible to the browser.
   </div>
 
   This can allow a website to learn that it was proxied by observing that it is
-  allowed to make requests to [=private addresses=], which is a privacy
+  allowed to make requests to [=local addresses=], which is a privacy
   information leak. While this requires correctly guessing the URL of a resource
-  on the private network, a single correct guess is sufficient.
+  on the local network, a single correct guess is sufficient.
 
   This is expected to be relatively rare and not warrant more mitigations. After
   all, in the status quo all websites can make requests to all IP addresses with
   no restrictions whatsoever.
 
   It would be interesting to explore a mechanism by which proxies could tell the
-  browser "please treat this resource as public/private anyway", thereby passing
+  browser "please treat this resource as public/local anyway", thereby passing
   on some information about the IP address behing the proxy. This might take the
   form of the <a href="#csp">CSP directive</a> discussed above, with some minor
   modifications.
@@ -928,18 +932,18 @@ spec:fetch; type:dfn; for:cache; text:cache match
     [=IP address space/public=].
 
     The user agent then restarts, and a new configuration is applied specifying
-    that `1.2.3.4` should be classified as a [=private address=] instead.
+    that `1.2.3.4` should be classified as a [=local address=] instead.
 
     The user agent navigates to `http://foo.example/` once more and loads the
     main resource from the HTTP cache. The resulting [=document=]'s
     [=Document/policy container=]'s [=policy container/IP address space=] is
-    now set to [=IP address space/private=].
+    now set to [=IP address space/local=].
   </div>
 
   <h4 id="http-cache-subresources">Subresources</h4>
 
   Subresources loaded from the HTTP cache are subject to the
-  [=Private Network Access check=]. This is not yet reflected in the algoritms
+  [=Local Network Access check=]. This is not yet reflected in the algoritms
   above, since that check is only applied in [$HTTP-network fetch$].
 
   ISSUE(75): Specify and explain Chromium's behavior here.
@@ -974,13 +978,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
   address in the `127.0.0.0/8` or `::1/128` blocks. See also the definition of
   [=potentially trustworthy origins=].
 
-  Developers who wish to fetch [=IP address space/private=] or
-  [=IP address space/local=] resources (from hosts other than the above
+  Developers who wish to fetch [=IP address space/local=] or
+  [=IP address space/loopback=] resources (from hosts other than the above
   exceptions) from [=IP address space/public=] pages MUST ensure that the
   connection is secure. This might involve a solution along the lines of
   [[PLEX]], where Web PKI certificates are issued to user-specific domain names
-  that then resolve to private IP addresses which only make sense on the user's
-  private network.
+  that then resolve to local IP addresses which only make sense on the user's
+  local network.
 
   ISSUE(23): Some consumer routers implement overly-aggressive protections
   against DNS rebinding attacks by simply blocking DNS responses that resolve to
@@ -1004,26 +1008,26 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h3 id="scope-mitigation">Scope of Mitigation</h3>
 
-  The proposal in this document merely mitigates attacks against private web
+  The proposal in this document merely mitigates attacks against local web
   services, it cannot fully solve them. For example, a router's
   web-based administration interface must be designed and implemented to defend
   against CSRF on its own, and should not rely on a UA that behaves as specified
   in this document. The mitigation this document specifies is necessary given
-  the reality of private web service implementation quality today, but vendors
+  the reality of local web service implementation quality today, but vendors
   should not consider themselves absolved of responsibility, even if all UAs
   implement this mitigation.
 
   <h3 id="cross-network-confusion">Cross-network confusion</h3>
 
-  Most private networks cannot communicate with each other, yet they are all
-  treated by this specification as belonging to the [=IP address space/private=]
-  [=/IP address space=]. Going further, [=private addresses=] have meaning only
-  on the private network where they are used. The same IP address might refer to
+  Most local networks cannot communicate with each other, yet they are all
+  treated by this specification as belonging to the [=IP address space/local=]
+  [=/IP address space=]. Going further, [=local addresses=] have meaning only
+  on the local network where they are used. The same IP address might refer to
   entirely different devices in two different networks.
 
   This opens the door to cross-network attacks:
 
-  -   A user connects to two different private networks: a home Wi-Fi network
+  -   A user connects to two different local networks: a home Wi-Fi network
       and a corporate VPN. Their smart fridge has been hacked. They open their
       smart fridge's web interface, which then performs CSRF attacks against
       corporate websites accessible via the VPN.
@@ -1059,7 +1063,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   Cached subresources are not currently protected by this specification, even
   though the HTTP cache remembers the source IP address which could be used in
-  the [=Private Network Access check=] algorithm during
+  the [=Local Network Access check=] algorithm during
   [$HTTP-network-or-cache fetch$].
 
   While it may be a good idea to fix this apparent discrepancy, it is not
@@ -1067,7 +1071,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   attacks.
 
   At most, a malicious public website might be able to determine whether a user
-  has visited particular private websites in the past. This attack on the user's
+  has visited particular local websites in the past. This attack on the user's
   privacy is no worse than the status quo.
 
   In addition, due to HTTP cache partitioning, a subresource can only be loaded
@@ -1090,7 +1094,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h4 id="http-cache-poisoning">HTTP cache poisoning</h4>
 
-  While this specification aims to protect private network servers from
+  While this specification aims to protect local network servers from
   receiving requests from public websites, DNS rebinding can be used to carry
   out a similar attack through cache poisoning of unauthenticated resources.
 
@@ -1102,7 +1106,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
   This attack is partially mitigated by cache partitioning,
   which makes it so that the attacker must navigate a top-level browsing context
   to `http://router.com/` before caching resources, which lacks subtlety. It is
-  also not specific to Private Network Access, rather being a symptom of
+  also not specific to Local Network Access, rather being a symptom of
   plaintext HTTP's lack of authentication and integrity protection.
 
 </section>

@@ -1,4 +1,4 @@
-# How to experiment with Private Network Access
+# How to experiment with Local Network Access
 
 ## Secure context restriction
 
@@ -27,7 +27,7 @@ a pair of command-line flags:
 1. `--enable-features=PrivateNetworkAccessSendPreflights`
 2. `--enable-features=PrivateNetworkAccessRespectPreflightResults`
 
-The former configures Chrome to send preflight requests ahead of private network
+The former configures Chrome to send preflight requests ahead of local network
 requests, but not does require the response to be successful. The latter enables
 enforcement: if the preflight request fails, then the request is not sent.
 
