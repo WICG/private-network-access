@@ -1,4 +1,4 @@
-# How to experiment with Private Network Access
+# How to experiment with Local Network Access
 
 ## Secure context restriction
 
