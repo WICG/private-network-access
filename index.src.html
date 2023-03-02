@@ -504,6 +504,9 @@ spec:fetch; type:dfn; for:cache; text:cache match
   a change is not deemed worth the payoff for now. This can be shipped as an
   incremental improvement later on.
 
+  NOTE: Some [=local network requests=] are more challenging to secure than
+  others. See [[#rollout-difficulties]] for more details.
+
   <h3 id="headers">Additional CORS Headers</h3>
 
   The <dfn export http-header>`Access-Control-Request-Local-Network`</dfn>
@@ -949,6 +952,22 @@ spec:fetch; type:dfn; for:cache; text:cache match
   ISSUE(75): Specify and explain Chromium's behavior here.
 
   See [[#http-cache-security]] for a discussion of security implications.
+
+  <h3 id="rollout-difficulties">Rollout difficulties</h3>
+
+  Local Network Access essentially deprecates direct access to the local network
+  in favor of more secure user-agent-mediated alternatives. Web deprecations are
+  hard. Chromium has encountered many stumbling blocks on the way to shipping
+  parts of this specification.
+
+  In particular, shipping restrictions on fetches from [=non-secure contexts=]
+  in the [=IP address space/local=] [=/IP address space=] to the
+  [=IP address space/loopback=] [=/IP address space=] has proven particularly
+  difficult, for a lower payoff. Indeed, exploiting such fetches requires
+  attackers to already have a foothold in the local network, which substantially
+  raises attack difficulty. As a result, Chromium exempted these fetches from
+  restrictions temporarily, choosing to focus on fetches from the
+  [=IP address space/public=] [=/IP address space=].
 
 </section>
 
