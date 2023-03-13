@@ -4,9 +4,9 @@
   <title>Local Network Access</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 79b02508e, updated Tue Feb 28 10:48:19 2023 -0800" name="generator">
+  <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
   <link href="https://wicg.github.io/local-network-access/" rel="canonical">
-  <meta content="250f177cc5585fb18b4bfa0c20f7c07ebd79ce71" name="document-revision">
+  <meta content="0baa96732aa63c9a201f6edc1953ccf016b36921" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -36,6 +36,7 @@
   }
 </style>
 <style>/* style-autolinks */
+
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
     font-size: inherit;
@@ -95,8 +96,7 @@ pre .property::before, pre .property::after {
 
 [data-link-type=biblio] {
     white-space: pre;
-}
-</style>
+}</style>
 <style>/* style-colors */
 
 /* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
@@ -205,9 +205,9 @@ pre .property::before, pre .property::after {
     --outdated-shadow: red;
 
     --editedrec-bg: darkorange;
-}
-</style>
+}</style>
 <style>/* style-counters */
+
 body {
     counter-reset: example figure issue;
 }
@@ -234,9 +234,9 @@ figcaption {
 }
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
-}
-</style>
+}</style>
 <style>/* style-dfn-panel */
+
 :root {
     --dfnpanel-bg: #ddd;
     --dfnpanel-text: var(--text);
@@ -244,10 +244,10 @@ figcaption:not(.no-marker)::before {
 .dfn-panel {
     position: absolute;
     z-index: 35;
-    width: 20em;
-    min-width: min-content;
-    max-width: 300px;
     height: auto;
+    width: -webkit-fit-content;
+    width: fit-content;
+    max-width: 300px;
     max-height: 500px;
     overflow: auto;
     padding: 0.5em 0.75em;
@@ -255,7 +255,6 @@ figcaption:not(.no-marker)::before {
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
-    white-space: normal; /* in case it's moved into a pre */
 }
 .dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
@@ -278,6 +277,7 @@ figcaption:not(.no-marker)::before {
 .dfn-paneled { cursor: pointer; }
 </style>
 <style>/* style-issues */
+
 a[href].issue-return {
     float: right;
     float: inline-end;
@@ -287,6 +287,7 @@ a[href].issue-return {
 }
 </style>
 <style>/* style-md-lists */
+
 /* This is a weird hack for me not yet following the commonmark spec
    regarding paragraph and lists. */
 [data-md] > :first-child {
@@ -294,8 +295,7 @@ a[href].issue-return {
 }
 [data-md] > :last-child {
     margin-bottom: 0;
-}
-</style>
+}</style>
 <style>/* style-selflinks */
 
 :root {
@@ -469,7 +469,6 @@ dfn > a.self-link::before      { content: "#"; }
        which is quite common in practice... */
     img { background: white; }
 }
-
 @media (prefers-color-scheme: dark) {
     :root {
         --selflink-text: black;
@@ -483,13 +482,12 @@ dfn > a.self-link::before      { content: "#"; }
         --dfnpanel-bg: #222;
         --dfnpanel-text: var(--text);
     }
-}
-</style>
+}</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Local Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-03-02">2 March 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-03-13">13 March 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1015,6 +1013,10 @@ directive-value = ""
   the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context③">secure context</a>:</p>
       <ol>
        <li data-md>
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin">origin</a> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin">potentially trustworthy
+ origin</a> and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url②">current URL</a>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin①">origin</a> is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin" id="ref-for-same-origin">same origin</a> with <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin②">origin</a>, then return
+ null.</p>
+       <li data-md>
         <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space">target IP address space</a> is not null, then:</p>
         <ol>
          <li data-md>
@@ -1270,7 +1272,7 @@ directive-value = ""
   CORS preflight request is necessary but not sufficient.</p>
     <p class="note" role="note"><span class="marker">Note:</span> <a data-link-type="biblio" href="#biblio-mixed-content-2" title="Mixed Content Level 2">[MIXED-CONTENT-2]</a> does not prevent secure contexts from fetching
   resources from <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin" id="ref-for-concept-origin">origins</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host" id="ref-for-concept-origin-host">host</a> is <code>localhost</code> or an IP
-  address in the <code>127.0.0.0/8</code> or <code>::1/128</code> blocks. See also the definition of <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin">potentially trustworthy origins</a>.</p>
+  address in the <code>127.0.0.0/8</code> or <code>::1/128</code> blocks. See also the definition of <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin①">potentially trustworthy origins</a>.</p>
     <p>Developers who wish to fetch <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local②⓪">local</a> or <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback⑨">loopback</a> resources (from hosts other than the above
   exceptions) from <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①⑤">public</a> pages MUST ensure that the
   connection is secure. This might involve a solution along the lines of <a data-link-type="biblio" href="#biblio-plex" title="How Plex is doing HTTPS for all its users">[PLEX]</a>, where Web PKI certificates are issued to user-specific domain names
@@ -1418,76 +1420,76 @@ directive-value = ""
    <li><a href="#request-target-ip-address-space">target IP address space</a><span>, in § 3.1.2</span>
    <li><a href="#treat-as-public-address">treat-as-public-address</a><span>, in § 2.4</span>
   </ul>
-  <aside aria-labelledby="infopaneltitle-for-8fd94bd63146fd93e56076b92d37fff5" class="dfn-panel" data-for="8fd94bd63146fd93e56076b92d37fff5" id="infopanel-for-8fd94bd63146fd93e56076b92d37fff5">
-   <span id="infopaneltitle-for-8fd94bd63146fd93e56076b92d37fff5" style="display:none">Info about the 'disposition' external reference.</span><a href="https://w3c.github.io/webappsec-csp/#policy-disposition">https://w3c.github.io/webappsec-csp/#policy-disposition</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-policy-disposition">
+   <a href="https://w3c.github.io/webappsec-csp/#policy-disposition">https://w3c.github.io/webappsec-csp/#policy-disposition</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-policy-disposition">2.4. The treat-as-public-address Content Security Policy Directive</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-985c42e2af63b3e74bd3b70d55668fd4" class="dfn-panel" data-for="985c42e2af63b3e74bd3b70d55668fd4" id="infopanel-for-985c42e2af63b3e74bd3b70d55668fd4">
-   <span id="infopaneltitle-for-985c42e2af63b3e74bd3b70d55668fd4" style="display:none">Info about the 'document' external reference.</span><a href="https://dom.spec.whatwg.org/#concept-document">https://dom.spec.whatwg.org/#concept-document</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-document">
+   <a href="https://dom.spec.whatwg.org/#concept-document">https://dom.spec.whatwg.org/#concept-document</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-document">4.3.1. Main resources</a> <a href="#ref-for-concept-document①">(2)</a> <a href="#ref-for-concept-document②">(3)</a> <a href="#ref-for-concept-document③">(4)</a> <a href="#ref-for-concept-document④">(5)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-86a30ab3069b2eed088c0f2a10d4e383" class="dfn-panel" data-for="86a30ab3069b2eed088c0f2a10d4e383" id="infopanel-for-86a30ab3069b2eed088c0f2a10d4e383">
-   <span id="infopaneltitle-for-86a30ab3069b2eed088c0f2a10d4e383" style="display:none">Info about the 'HTTP-network fetch' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-http-network-fetch">https://fetch.spec.whatwg.org/#concept-http-network-fetch</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-http-network-fetch">
+   <a href="https://fetch.spec.whatwg.org/#concept-http-network-fetch">https://fetch.spec.whatwg.org/#concept-http-network-fetch</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-http-network-fetch">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-concept-http-network-fetch①">3.1.2. CORS preflight</a> <a href="#ref-for-concept-http-network-fetch②">(2)</a>
     <li><a href="#ref-for-concept-http-network-fetch③">4.3.2. Subresources</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-0f7db9c5fcd081920f557d4f4bd30970" class="dfn-panel" data-for="0f7db9c5fcd081920f557d4f4bd30970" id="infopanel-for-0f7db9c5fcd081920f557d4f4bd30970">
-   <span id="infopaneltitle-for-0f7db9c5fcd081920f557d4f4bd30970" style="display:none">Info about the 'HTTP-network-or-cache fetch' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch">https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-http-network-or-cache-fetch">
+   <a href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch">https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-http-network-or-cache-fetch">3.1.2. CORS preflight</a> <a href="#ref-for-concept-http-network-or-cache-fetch①">(2)</a>
     <li><a href="#ref-for-concept-http-network-or-cache-fetch②">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-c95eca01532ba80a53e096fe3368501d" class="dfn-panel" data-for="c95eca01532ba80a53e096fe3368501d" id="infopanel-for-c95eca01532ba80a53e096fe3368501d">
-   <span id="infopaneltitle-for-c95eca01532ba80a53e096fe3368501d" style="display:none">Info about the 'access-control-allow-credentials' external reference.</span><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials">https://fetch.spec.whatwg.org/#http-access-control-allow-credentials</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-http-access-control-allow-credentials">
+   <a href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials">https://fetch.spec.whatwg.org/#http-access-control-allow-credentials</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-access-control-allow-credentials">1.2.2. Opting-In</a>
     <li><a href="#ref-for-http-access-control-allow-credentials①">1.2.3. Navigation</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-5c05e5354ba43f73b8fb3e527ad791a9" class="dfn-panel" data-for="5c05e5354ba43f73b8fb3e527ad791a9" id="infopanel-for-5c05e5354ba43f73b8fb3e527ad791a9">
-   <span id="infopaneltitle-for-5c05e5354ba43f73b8fb3e527ad791a9" style="display:none">Info about the 'access-control-allow-methods' external reference.</span><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">https://fetch.spec.whatwg.org/#http-access-control-allow-methods</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-http-access-control-allow-methods">
+   <a href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">https://fetch.spec.whatwg.org/#http-access-control-allow-methods</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-access-control-allow-methods">1.2.2. Opting-In</a>
     <li><a href="#ref-for-http-access-control-allow-methods①">1.2.3. Navigation</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-6ed8423ac66b3852ab6bf2ab037e2886" class="dfn-panel" data-for="6ed8423ac66b3852ab6bf2ab037e2886" id="infopanel-for-6ed8423ac66b3852ab6bf2ab037e2886">
-   <span id="infopaneltitle-for-6ed8423ac66b3852ab6bf2ab037e2886" style="display:none">Info about the 'access-control-allow-origin' external reference.</span><a href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">https://fetch.spec.whatwg.org/#http-access-control-allow-origin</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-http-access-control-allow-origin">
+   <a href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">https://fetch.spec.whatwg.org/#http-access-control-allow-origin</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-access-control-allow-origin">1.2.2. Opting-In</a>
     <li><a href="#ref-for-http-access-control-allow-origin①">1.2.3. Navigation</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-55703896bb7afa7ca34917d2a086dc2e" class="dfn-panel" data-for="55703896bb7afa7ca34917d2a086dc2e" id="infopanel-for-55703896bb7afa7ca34917d2a086dc2e">
-   <span id="infopaneltitle-for-55703896bb7afa7ca34917d2a086dc2e" style="display:none">Info about the 'access-control-request-method' external reference.</span><a href="https://fetch.spec.whatwg.org/#http-access-control-request-method">https://fetch.spec.whatwg.org/#http-access-control-request-method</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-http-access-control-request-method">
+   <a href="https://fetch.spec.whatwg.org/#http-access-control-request-method">https://fetch.spec.whatwg.org/#http-access-control-request-method</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-access-control-request-method">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-http-access-control-request-method①">1.2.3. Navigation</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-f5b0d4bbb9719ea4de9283613cb6d75c" class="dfn-panel" data-for="f5b0d4bbb9719ea4de9283613cb6d75c" id="infopanel-for-f5b0d4bbb9719ea4de9283613cb6d75c">
-   <span id="infopaneltitle-for-f5b0d4bbb9719ea4de9283613cb6d75c" style="display:none">Info about the 'cache entry' external reference.</span><a href="https://fetch.spec.whatwg.org/#cache-entry">https://fetch.spec.whatwg.org/#cache-entry</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-cache-entry">
+   <a href="https://fetch.spec.whatwg.org/#cache-entry">https://fetch.spec.whatwg.org/#cache-entry</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cache-entry">3.1.2. CORS preflight</a>
     <li><a href="#ref-for-cache-entry①">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-694eb45021f55b3922bfeb175b0fa406" class="dfn-panel" data-for="694eb45021f55b3922bfeb175b0fa406" id="infopanel-for-694eb45021f55b3922bfeb175b0fa406">
-   <span id="infopaneltitle-for-694eb45021f55b3922bfeb175b0fa406" style="display:none">Info about the 'cache entry match' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-cache-match">https://fetch.spec.whatwg.org/#concept-cache-match</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-cache-match">
+   <a href="https://fetch.spec.whatwg.org/#concept-cache-match">https://fetch.spec.whatwg.org/#concept-cache-match</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-cache-match">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-136f2700e84634abd2f3d42487ba7f41" class="dfn-panel" data-for="136f2700e84634abd2f3d42487ba7f41" id="infopanel-for-136f2700e84634abd2f3d42487ba7f41">
-   <span id="infopaneltitle-for-136f2700e84634abd2f3d42487ba7f41" style="display:none">Info about the 'client' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-request-client">https://fetch.spec.whatwg.org/#concept-request-client</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-request-client">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-client">https://fetch.spec.whatwg.org/#concept-request-client</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-request-client">3.1. Integration with Fetch</a>
     <li><a href="#ref-for-concept-request-client①">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-request-client②">(2)</a>
@@ -1495,40 +1497,40 @@ directive-value = ""
     <li><a href="#ref-for-concept-request-client⑤">3.4. Workers</a> <a href="#ref-for-concept-request-client⑥">(2)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-5f7b2d5bc786ffd3b771e92bc5359d51" class="dfn-panel" data-for="5f7b2d5bc786ffd3b771e92bc5359d51" id="infopanel-for-5f7b2d5bc786ffd3b771e92bc5359d51">
-   <span id="infopaneltitle-for-5f7b2d5bc786ffd3b771e92bc5359d51" style="display:none">Info about the 'connection' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-connection">https://fetch.spec.whatwg.org/#concept-connection</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-connection">
+   <a href="https://fetch.spec.whatwg.org/#concept-connection">https://fetch.spec.whatwg.org/#concept-connection</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-connection">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-connection①">(2)</a>
     <li><a href="#ref-for-concept-connection②">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-8337131171de42dc05ebec2994643520" class="dfn-panel" data-for="8337131171de42dc05ebec2994643520" id="infopanel-for-8337131171de42dc05ebec2994643520">
-   <span id="infopaneltitle-for-8337131171de42dc05ebec2994643520" style="display:none">Info about the 'connection pool' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-connection-pool">https://fetch.spec.whatwg.org/#concept-connection-pool</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-connection-pool">
+   <a href="https://fetch.spec.whatwg.org/#concept-connection-pool">https://fetch.spec.whatwg.org/#concept-connection-pool</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-connection-pool">3.1.1. Secure context restriction</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-9529a982bddb7f3e812caa27ee73e9a5" class="dfn-panel" data-for="9529a982bddb7f3e812caa27ee73e9a5" id="infopanel-for-9529a982bddb7f3e812caa27ee73e9a5">
-   <span id="infopaneltitle-for-9529a982bddb7f3e812caa27ee73e9a5" style="display:none">Info about the 'cors check' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-cors-check">https://fetch.spec.whatwg.org/#concept-cors-check</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-cors-check">
+   <a href="https://fetch.spec.whatwg.org/#concept-cors-check">https://fetch.spec.whatwg.org/#concept-cors-check</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-cors-check">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-377784d98bb425dd903a99184e101eb2" class="dfn-panel" data-for="377784d98bb425dd903a99184e101eb2" id="infopanel-for-377784d98bb425dd903a99184e101eb2">
-   <span id="infopaneltitle-for-377784d98bb425dd903a99184e101eb2" style="display:none">Info about the 'cors-preflight cache' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-cache">https://fetch.spec.whatwg.org/#concept-cache</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-cache">
+   <a href="https://fetch.spec.whatwg.org/#concept-cache">https://fetch.spec.whatwg.org/#concept-cache</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-cache">3.1.2. CORS preflight</a>
     <li><a href="#ref-for-concept-cache①">5.3. DNS Rebinding</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-4147c0b62eae4d176e312771a9094df4" class="dfn-panel" data-for="4147c0b62eae4d176e312771a9094df4" id="infopanel-for-4147c0b62eae4d176e312771a9094df4">
-   <span id="infopaneltitle-for-4147c0b62eae4d176e312771a9094df4" style="display:none">Info about the 'cors-preflight fetch' external reference.</span><a href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0">https://fetch.spec.whatwg.org/#cors-preflight-fetch-0</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-cors-preflight-fetch-0">
+   <a href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0">https://fetch.spec.whatwg.org/#cors-preflight-fetch-0</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cors-preflight-fetch-0">3.1.2. CORS preflight</a> <a href="#ref-for-cors-preflight-fetch-0①">(2)</a> <a href="#ref-for-cors-preflight-fetch-0②">(3)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-34154f551d34c9b4237d1dccaab27d3e" class="dfn-panel" data-for="34154f551d34c9b4237d1dccaab27d3e" id="infopanel-for-34154f551d34c9b4237d1dccaab27d3e">
-   <span id="infopaneltitle-for-34154f551d34c9b4237d1dccaab27d3e" style="display:none">Info about the 'cors-preflight request' external reference.</span><a href="https://fetch.spec.whatwg.org/#cors-preflight-request">https://fetch.spec.whatwg.org/#cors-preflight-request</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-cors-preflight-request">
+   <a href="https://fetch.spec.whatwg.org/#cors-preflight-request">https://fetch.spec.whatwg.org/#cors-preflight-request</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cors-preflight-request">1.2.1. Secure by Default</a> <a href="#ref-for-cors-preflight-request①">(2)</a>
     <li><a href="#ref-for-cors-preflight-request②">1.2.2. Opting-In</a> <a href="#ref-for-cors-preflight-request③">(2)</a>
@@ -1536,85 +1538,92 @@ directive-value = ""
     <li><a href="#ref-for-cors-preflight-request⑤">3.1. Integration with Fetch</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-aaafcaa05a0a100cfcb140bc2b9be8de" class="dfn-panel" data-for="aaafcaa05a0a100cfcb140bc2b9be8de" id="infopanel-for-aaafcaa05a0a100cfcb140bc2b9be8de">
-   <span id="infopaneltitle-for-aaafcaa05a0a100cfcb140bc2b9be8de" style="display:none">Info about the 'cors-safelisted method' external reference.</span><a href="https://fetch.spec.whatwg.org/#cors-safelisted-method">https://fetch.spec.whatwg.org/#cors-safelisted-method</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-cors-safelisted-method">
+   <a href="https://fetch.spec.whatwg.org/#cors-safelisted-method">https://fetch.spec.whatwg.org/#cors-safelisted-method</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cors-safelisted-method">1.1. Goals</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-f12721381920680a6660faf27ba7b23d" class="dfn-panel" data-for="f12721381920680a6660faf27ba7b23d" id="infopanel-for-f12721381920680a6660faf27ba7b23d">
-   <span id="infopaneltitle-for-f12721381920680a6660faf27ba7b23d" style="display:none">Info about the 'cors-safelisted request-header' external reference.</span><a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header">https://fetch.spec.whatwg.org/#cors-safelisted-request-header</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-cors-safelisted-request-header">
+   <a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header">https://fetch.spec.whatwg.org/#cors-safelisted-request-header</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cors-safelisted-request-header">1.1. Goals</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-58030ebbaf6d32883def2f776a5238ba" class="dfn-panel" data-for="58030ebbaf6d32883def2f776a5238ba" id="infopanel-for-58030ebbaf6d32883def2f776a5238ba">
-   <span id="infopaneltitle-for-58030ebbaf6d32883def2f776a5238ba" style="display:none">Info about the 'create a new cache entry' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-cache-create-entry">https://fetch.spec.whatwg.org/#concept-cache-create-entry</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-cache-create-entry">
+   <a href="https://fetch.spec.whatwg.org/#concept-cache-create-entry">https://fetch.spec.whatwg.org/#concept-cache-create-entry</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-cache-create-entry">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-f82af8baf203f1b0578ed1442dd2d24b" class="dfn-panel" data-for="f82af8baf203f1b0578ed1442dd2d24b" id="infopanel-for-f82af8baf203f1b0578ed1442dd2d24b">
-   <span id="infopaneltitle-for-f82af8baf203f1b0578ed1442dd2d24b" style="display:none">Info about the 'current url' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-request-current-url">https://fetch.spec.whatwg.org/#concept-request-current-url</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-request-current-url">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-current-url">https://fetch.spec.whatwg.org/#concept-request-current-url</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-request-current-url">2.2. Local Network Request</a> <a href="#ref-for-concept-request-current-url①">(2)</a>
+    <li><a href="#ref-for-concept-request-current-url②">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-1c1a3f28e653c3c068c5e2aa7d3ecebb" class="dfn-panel" data-for="1c1a3f28e653c3c068c5e2aa7d3ecebb" id="infopanel-for-1c1a3f28e653c3c068c5e2aa7d3ecebb">
-   <span id="infopaneltitle-for-1c1a3f28e653c3c068c5e2aa7d3ecebb" style="display:none">Info about the 'extracting header list values' external reference.</span><a href="https://fetch.spec.whatwg.org/#extract-header-list-values">https://fetch.spec.whatwg.org/#extract-header-list-values</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-extract-header-list-values">
+   <a href="https://fetch.spec.whatwg.org/#extract-header-list-values">https://fetch.spec.whatwg.org/#extract-header-list-values</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-extract-header-list-values">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-0bae0f8d0fc019614ef3bb69c15d5311" class="dfn-panel" data-for="0bae0f8d0fc019614ef3bb69c15d5311" id="infopanel-for-0bae0f8d0fc019614ef3bb69c15d5311">
-   <span id="infopaneltitle-for-0bae0f8d0fc019614ef3bb69c15d5311" style="display:none">Info about the 'fetch' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-fetch">https://fetch.spec.whatwg.org/#concept-fetch</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-fetch">
+   <a href="https://fetch.spec.whatwg.org/#concept-fetch">https://fetch.spec.whatwg.org/#concept-fetch</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-fetch">3.1. Integration with Fetch</a>
     <li><a href="#ref-for-concept-fetch①">3.2. Integration with WebSockets</a>
     <li><a href="#ref-for-concept-fetch②">3.4. Workers</a> <a href="#ref-for-concept-fetch③">(2)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-4fd8d1762cd9c874700296c854598fda" class="dfn-panel" data-for="4fd8d1762cd9c874700296c854598fda" id="infopanel-for-4fd8d1762cd9c874700296c854598fda">
-   <span id="infopaneltitle-for-4fd8d1762cd9c874700296c854598fda" style="display:none">Info about the 'header list (for request)' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-request-header-list">https://fetch.spec.whatwg.org/#concept-request-header-list</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-request-header-list">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-header-list">https://fetch.spec.whatwg.org/#concept-request-header-list</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-request-header-list">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-d94cb5e6252c9158478ebbe8a624e99c" class="dfn-panel" data-for="d94cb5e6252c9158478ebbe8a624e99c" id="infopanel-for-d94cb5e6252c9158478ebbe8a624e99c">
-   <span id="infopaneltitle-for-d94cb5e6252c9158478ebbe8a624e99c" style="display:none">Info about the 'header list (for response)' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-response-header-list">https://fetch.spec.whatwg.org/#concept-response-header-list</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-response-header-list">
+   <a href="https://fetch.spec.whatwg.org/#concept-response-header-list">https://fetch.spec.whatwg.org/#concept-response-header-list</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-response-header-list">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-e094c825ead002ca7d4383f2aba777f9" class="dfn-panel" data-for="e094c825ead002ca7d4383f2aba777f9" id="infopanel-for-e094c825ead002ca7d4383f2aba777f9">
-   <span id="infopaneltitle-for-e094c825ead002ca7d4383f2aba777f9" style="display:none">Info about the 'http fetch' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-http-fetch">https://fetch.spec.whatwg.org/#concept-http-fetch</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-http-fetch">
+   <a href="https://fetch.spec.whatwg.org/#concept-http-fetch">https://fetch.spec.whatwg.org/#concept-http-fetch</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-http-fetch">3.1.2. CORS preflight</a> <a href="#ref-for-concept-http-fetch①">(2)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-92488b0d05da99120fd8466a06ec480f" class="dfn-panel" data-for="92488b0d05da99120fd8466a06ec480f" id="infopanel-for-92488b0d05da99120fd8466a06ec480f">
-   <span id="infopaneltitle-for-92488b0d05da99120fd8466a06ec480f" style="display:none">Info about the 'network error' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-network-error">https://fetch.spec.whatwg.org/#concept-network-error</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-network-error">
+   <a href="https://fetch.spec.whatwg.org/#concept-network-error">https://fetch.spec.whatwg.org/#concept-network-error</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-network-error">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-network-error①">(2)</a>
     <li><a href="#ref-for-concept-network-error②">3.1.2. CORS preflight</a> <a href="#ref-for-concept-network-error③">(2)</a> <a href="#ref-for-concept-network-error④">(3)</a> <a href="#ref-for-concept-network-error⑤">(4)</a> <a href="#ref-for-concept-network-error⑥">(5)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-856cacc5c59d3a55a487a1aa0ab2814a" class="dfn-panel" data-for="856cacc5c59d3a55a487a1aa0ab2814a" id="infopanel-for-856cacc5c59d3a55a487a1aa0ab2814a">
-   <span id="infopaneltitle-for-856cacc5c59d3a55a487a1aa0ab2814a" style="display:none">Info about the 'network partition key' external reference.</span><a href="https://fetch.spec.whatwg.org/#network-partition-key">https://fetch.spec.whatwg.org/#network-partition-key</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-network-partition-key">
+   <a href="https://fetch.spec.whatwg.org/#network-partition-key">https://fetch.spec.whatwg.org/#network-partition-key</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-network-partition-key">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-88e99e5d3f7144fd45a305df416dc396" class="dfn-panel" data-for="88e99e5d3f7144fd45a305df416dc396" id="infopanel-for-88e99e5d3f7144fd45a305df416dc396">
-   <span id="infopaneltitle-for-88e99e5d3f7144fd45a305df416dc396" style="display:none">Info about the 'obtain a connection' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-connection-obtain">https://fetch.spec.whatwg.org/#concept-connection-obtain</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-connection-obtain">
+   <a href="https://fetch.spec.whatwg.org/#concept-connection-obtain">https://fetch.spec.whatwg.org/#concept-connection-obtain</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-connection-obtain">3.1. Integration with Fetch</a>
     <li><a href="#ref-for-concept-connection-obtain①">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-concept-connection-obtain②">3.4. Workers</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-371e12a3aa3170d7aca44c7ac90937c0" class="dfn-panel" data-for="371e12a3aa3170d7aca44c7ac90937c0" id="infopanel-for-371e12a3aa3170d7aca44c7ac90937c0">
-   <span id="infopaneltitle-for-371e12a3aa3170d7aca44c7ac90937c0" style="display:none">Info about the 'policy container' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-request-policy-container">https://fetch.spec.whatwg.org/#concept-request-policy-container</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-request-origin">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-origin">https://fetch.spec.whatwg.org/#concept-request-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-request-origin">3.1.2. CORS preflight</a> <a href="#ref-for-concept-request-origin①">(2)</a> <a href="#ref-for-concept-request-origin②">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-request-policy-container">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-policy-container">https://fetch.spec.whatwg.org/#concept-request-policy-container</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-request-policy-container">2.2. Local Network Request</a>
     <li><a href="#ref-for-concept-request-policy-container①">3.1.1. Secure context restriction</a>
@@ -1622,8 +1631,8 @@ directive-value = ""
     <li><a href="#ref-for-concept-request-policy-container③">3.4. Workers</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-69d3eea236f0ecac9892beb2a2ac6dc1" class="dfn-panel" data-for="69d3eea236f0ecac9892beb2a2ac6dc1" id="infopanel-for-69d3eea236f0ecac9892beb2a2ac6dc1">
-   <span id="infopaneltitle-for-69d3eea236f0ecac9892beb2a2ac6dc1" style="display:none">Info about the 'request' external reference.</span><a href="https://fetch.spec.whatwg.org/#fetch-params-request">https://fetch.spec.whatwg.org/#fetch-params-request</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-fetch-params-request">
+   <a href="https://fetch.spec.whatwg.org/#fetch-params-request">https://fetch.spec.whatwg.org/#fetch-params-request</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-fetch-params-request">2.2. Local Network Request</a>
     <li><a href="#ref-for-fetch-params-request①">2.3. Additional CORS Headers</a>
@@ -1632,144 +1641,151 @@ directive-value = ""
     <li><a href="#ref-for-fetch-params-request⑤">3.4. Workers</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-d203414c2b48c23fddab90ef753bb7cf" class="dfn-panel" data-for="d203414c2b48c23fddab90ef753bb7cf" id="infopanel-for-d203414c2b48c23fddab90ef753bb7cf">
-   <span id="infopaneltitle-for-d203414c2b48c23fddab90ef753bb7cf" style="display:none">Info about the 'response' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-response">https://fetch.spec.whatwg.org/#concept-response</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-response">
+   <a href="https://fetch.spec.whatwg.org/#concept-response">https://fetch.spec.whatwg.org/#concept-response</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-response">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-concept-response①">4.3.1. Main resources</a> <a href="#ref-for-concept-response②">(2)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-c92a6a04d5edd0548c96b946dabec975" class="dfn-panel" data-for="c92a6a04d5edd0548c96b946dabec975" id="infopanel-for-c92a6a04d5edd0548c96b946dabec975">
-   <span id="infopaneltitle-for-c92a6a04d5edd0548c96b946dabec975" style="display:none">Info about the 'set' external reference.</span><a href="https://fetch.spec.whatwg.org/#concept-header-list-set">https://fetch.spec.whatwg.org/#concept-header-list-set</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-header-list-set">
+   <a href="https://fetch.spec.whatwg.org/#concept-header-list-set">https://fetch.spec.whatwg.org/#concept-header-list-set</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-header-list-set">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-cf6c9268ff2ee92c6b4ac547cc7504e2" class="dfn-panel" data-for="cf6c9268ff2ee92c6b4ac547cc7504e2" id="infopanel-for-cf6c9268ff2ee92c6b4ac547cc7504e2">
-   <span id="infopaneltitle-for-cf6c9268ff2ee92c6b4ac547cc7504e2" style="display:none">Info about the 'Document' external reference.</span><a href="https://html.spec.whatwg.org/#document">https://html.spec.whatwg.org/#document</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-document">
+   <a href="https://html.spec.whatwg.org/#document">https://html.spec.whatwg.org/#document</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-document">2.5. Feature Detection</a>
     <li><a href="#ref-for-document①">3.3. Integration with HTML</a> <a href="#ref-for-document②">(2)</a> <a href="#ref-for-document③">(3)</a> <a href="#ref-for-document④">(4)</a>
     <li><a href="#ref-for-document⑤">4.2. Proxies</a> <a href="#ref-for-document⑥">(2)</a> <a href="#ref-for-document⑦">(3)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-569dd106ffc76704c49d49a9087ebb4e" class="dfn-panel" data-for="569dd106ffc76704c49d49a9087ebb4e" id="infopanel-for-569dd106ffc76704c49d49a9087ebb4e">
-   <span id="infopaneltitle-for-569dd106ffc76704c49d49a9087ebb4e" style="display:none">Info about the 'WorkerGlobalScope' external reference.</span><a href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-workerglobalscope">
+   <a href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-workerglobalscope">2.5. Feature Detection</a>
     <li><a href="#ref-for-workerglobalscope①">3.4. Workers</a> <a href="#ref-for-workerglobalscope②">(2)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-9372cc393e81caa198985dc23ceb2f9b" class="dfn-panel" data-for="9372cc393e81caa198985dc23ceb2f9b" id="infopanel-for-9372cc393e81caa198985dc23ceb2f9b">
-   <span id="infopaneltitle-for-9372cc393e81caa198985dc23ceb2f9b" style="display:none">Info about the 'clone a policy container' external reference.</span><a href="https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container">https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-clone-a-policy-container">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container">https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-clone-a-policy-container">3.3. Integration with HTML</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-4408955a3711255bfb2147e9957c365a" class="dfn-panel" data-for="4408955a3711255bfb2147e9957c365a" id="infopanel-for-4408955a3711255bfb2147e9957c365a">
-   <span id="infopaneltitle-for-4408955a3711255bfb2147e9957c365a" style="display:none">Info about the 'creating a policy container from a fetch response' external reference.</span><a href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response">https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-creating-a-policy-container-from-a-fetch-response">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response">https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-creating-a-policy-container-from-a-fetch-response">3.3. Integration with HTML</a>
     <li><a href="#ref-for-creating-a-policy-container-from-a-fetch-response①">3.4. Workers</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-d815dc723d8b4fe4b1166e2013ec62b7" class="dfn-panel" data-for="d815dc723d8b4fe4b1166e2013ec62b7" id="infopanel-for-d815dc723d8b4fe4b1166e2013ec62b7">
-   <span id="infopaneltitle-for-d815dc723d8b4fe4b1166e2013ec62b7" style="display:none">Info about the 'environment settings object' external reference.</span><a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-environment-settings-object">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-environment-settings-object">2.4. The treat-as-public-address Content Security Policy Directive</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-0a8d192cb885d336f16ead79b570c196" class="dfn-panel" data-for="0a8d192cb885d336f16ead79b570c196" id="infopanel-for-0a8d192cb885d336f16ead79b570c196">
-   <span id="infopaneltitle-for-0a8d192cb885d336f16ead79b570c196" style="display:none">Info about the 'host' external reference.</span><a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host">https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-origin-host">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host">https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-origin-host">5.2. Mixed Content</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-a1de73f42319e83daae5aeb30180f409" class="dfn-panel" data-for="a1de73f42319e83daae5aeb30180f409" id="infopanel-for-a1de73f42319e83daae5aeb30180f409">
-   <span id="infopaneltitle-for-a1de73f42319e83daae5aeb30180f409" style="display:none">Info about the 'meta' external reference.</span><a href="https://html.spec.whatwg.org/multipage/semantics.html#meta">https://html.spec.whatwg.org/multipage/semantics.html#meta</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-meta">
+   <a href="https://html.spec.whatwg.org/multipage/semantics.html#meta">https://html.spec.whatwg.org/multipage/semantics.html#meta</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-meta">2.4. The treat-as-public-address Content Security Policy Directive</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-70c69bbcbd08b31b203829b89f9a4571" class="dfn-panel" data-for="70c69bbcbd08b31b203829b89f9a4571" id="infopanel-for-70c69bbcbd08b31b203829b89f9a4571">
-   <span id="infopaneltitle-for-70c69bbcbd08b31b203829b89f9a4571" style="display:none">Info about the 'non-secure context' external reference.</span><a href="https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context">https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-non-secure-context">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context">https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-non-secure-context">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-non-secure-context①">4.4. Rollout difficulties</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-e66f9f7d45934e77669cb907bd0c7636" class="dfn-panel" data-for="e66f9f7d45934e77669cb907bd0c7636" id="infopanel-for-e66f9f7d45934e77669cb907bd0c7636">
-   <span id="infopaneltitle-for-e66f9f7d45934e77669cb907bd0c7636" style="display:none">Info about the 'origin' external reference.</span><a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">https://html.spec.whatwg.org/multipage/browsers.html#concept-origin</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-origin">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">https://html.spec.whatwg.org/multipage/browsers.html#concept-origin</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-origin">5.2. Mixed Content</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-ccb2df03c48189525c2bb989846522f0" class="dfn-panel" data-for="ccb2df03c48189525c2bb989846522f0" id="infopanel-for-ccb2df03c48189525c2bb989846522f0">
-   <span id="infopaneltitle-for-ccb2df03c48189525c2bb989846522f0" style="display:none">Info about the 'policy container' external reference.</span><a href="https://html.spec.whatwg.org/multipage/browsers.html#policy-container">https://html.spec.whatwg.org/multipage/browsers.html#policy-container</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-policy-container">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#policy-container">https://html.spec.whatwg.org/multipage/browsers.html#policy-container</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-policy-container">3.3. Integration with HTML</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-c347d27e1964141a379e6573882af9ee" class="dfn-panel" data-for="c347d27e1964141a379e6573882af9ee" id="infopanel-for-c347d27e1964141a379e6573882af9ee">
-   <span id="infopaneltitle-for-c347d27e1964141a379e6573882af9ee" style="display:none">Info about the 'policy container (for Document)' external reference.</span><a href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container">https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-document-policy-container">
+   <a href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container">https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-document-policy-container">3.3. Integration with HTML</a> <a href="#ref-for-concept-document-policy-container①">(2)</a> <a href="#ref-for-concept-document-policy-container②">(3)</a>
     <li><a href="#ref-for-concept-document-policy-container③">4.2. Proxies</a>
     <li><a href="#ref-for-concept-document-policy-container④">4.3.1. Main resources</a> <a href="#ref-for-concept-document-policy-container⑤">(2)</a> <a href="#ref-for-concept-document-policy-container⑥">(3)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-ba3482a1cfc0d259ee07b70ce8d47c09" class="dfn-panel" data-for="ba3482a1cfc0d259ee07b70ce8d47c09" id="infopanel-for-ba3482a1cfc0d259ee07b70ce8d47c09">
-   <span id="infopaneltitle-for-ba3482a1cfc0d259ee07b70ce8d47c09" style="display:none">Info about the 'policy container (for WorkerGlobalScope)' external reference.</span><a href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container">https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-workerglobalscope-policy-container">
+   <a href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container">https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-workerglobalscope-policy-container">3.4. Workers</a> <a href="#ref-for-concept-workerglobalscope-policy-container①">(2)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-e93a78788abc2a21fe65a07c52280d82" class="dfn-panel" data-for="e93a78788abc2a21fe65a07c52280d82" id="infopanel-for-e93a78788abc2a21fe65a07c52280d82">
-   <span id="infopaneltitle-for-e93a78788abc2a21fe65a07c52280d82" style="display:none">Info about the 'policy container (for environment settings object)' external reference.</span><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-concept-settings-object-policy-container">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-settings-object-policy-container">2.4. The treat-as-public-address Content Security Policy Directive</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-613400696de3e8f8a5001430db03abe8" class="dfn-panel" data-for="613400696de3e8f8a5001430db03abe8" id="infopanel-for-613400696de3e8f8a5001430db03abe8">
-   <span id="infopaneltitle-for-613400696de3e8f8a5001430db03abe8" style="display:none">Info about the 'secure context' external reference.</span><a href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context">https://html.spec.whatwg.org/multipage/webappapis.html#secure-context</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-same-origin">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">https://html.spec.whatwg.org/multipage/browsers.html#same-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-same-origin">3.1.2. CORS preflight</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-secure-context">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context">https://html.spec.whatwg.org/multipage/webappapis.html#secure-context</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-secure-context">3.1. Integration with Fetch</a>
     <li><a href="#ref-for-secure-context①">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-secure-context②">3.1.2. CORS preflight</a> <a href="#ref-for-secure-context③">(2)</a> <a href="#ref-for-secure-context④">(3)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-3ee316b93eb2dbe81d01a666cce50f9b" class="dfn-panel" data-for="3ee316b93eb2dbe81d01a666cce50f9b" id="infopanel-for-3ee316b93eb2dbe81d01a666cce50f9b">
-   <span id="infopaneltitle-for-3ee316b93eb2dbe81d01a666cce50f9b" style="display:none">Info about the 'struct' external reference.</span><a href="https://infra.spec.whatwg.org/#struct">https://infra.spec.whatwg.org/#struct</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-struct">
+   <a href="https://infra.spec.whatwg.org/#struct">https://infra.spec.whatwg.org/#struct</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-struct">3.3. Integration with HTML</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-7590d35e429ef1a479df5e6691a60e74" class="dfn-panel" data-for="7590d35e429ef1a479df5e6691a60e74" id="infopanel-for-7590d35e429ef1a479df5e6691a60e74">
-   <span id="infopaneltitle-for-7590d35e429ef1a479df5e6691a60e74" style="display:none">Info about the 'initialization' external reference.</span><a href="https://w3c.github.io/miniapp-lifecycle/#dfn-initialization">https://w3c.github.io/miniapp-lifecycle/#dfn-initialization</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-dfn-initialization">
+   <a href="https://w3c.github.io/miniapp-lifecycle/#dfn-initialization">https://w3c.github.io/miniapp-lifecycle/#dfn-initialization</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dfn-initialization">2.4. The treat-as-public-address Content Security Policy Directive</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-7681ab11c75a55e6b34d4abc7604c144" class="dfn-panel" data-for="7681ab11c75a55e6b34d4abc7604c144" id="infopanel-for-7681ab11c75a55e6b34d4abc7604c144">
-   <span id="infopaneltitle-for-7681ab11c75a55e6b34d4abc7604c144" style="display:none">Info about the 'potentially trustworthy origin' external reference.</span><a href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin">https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-potentially-trustworthy-origin">
+   <a href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin">https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-potentially-trustworthy-origin">5.2. Mixed Content</a>
+    <li><a href="#ref-for-potentially-trustworthy-origin">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-potentially-trustworthy-origin①">5.2. Mixed Content</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-3fb87a9e0473a0511b3ee1d296e19260" class="dfn-panel" data-for="3fb87a9e0473a0511b3ee1d296e19260" id="infopanel-for-3fb87a9e0473a0511b3ee1d296e19260">
-   <span id="infopaneltitle-for-3fb87a9e0473a0511b3ee1d296e19260" style="display:none">Info about the 'service worker' external reference.</span><a href="https://w3c.github.io/ServiceWorker/#dfn-service-worker">https://w3c.github.io/ServiceWorker/#dfn-service-worker</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-dfn-service-worker">
+   <a href="https://w3c.github.io/ServiceWorker/#dfn-service-worker">https://w3c.github.io/ServiceWorker/#dfn-service-worker</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dfn-service-worker">3.4. Workers</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-17f3be8afd2ce04032b6b943a4ea1a88" class="dfn-panel" data-for="17f3be8afd2ce04032b6b943a4ea1a88" id="infopanel-for-17f3be8afd2ce04032b6b943a4ea1a88">
-   <span id="infopaneltitle-for-17f3be8afd2ce04032b6b943a4ea1a88" style="display:none">Info about the 'soft update' external reference.</span><a href="https://w3c.github.io/ServiceWorker/#soft-update">https://w3c.github.io/ServiceWorker/#soft-update</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-soft-update">
+   <a href="https://w3c.github.io/ServiceWorker/#soft-update">https://w3c.github.io/ServiceWorker/#soft-update</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-soft-update">3.4. Workers</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-58b9f7ed4b4170afe768f7d9b86c0005" class="dfn-panel" data-for="58b9f7ed4b4170afe768f7d9b86c0005" id="infopanel-for-58b9f7ed4b4170afe768f7d9b86c0005">
-   <span id="infopaneltitle-for-58b9f7ed4b4170afe768f7d9b86c0005" style="display:none">Info about the 'host' external reference.</span><a href="https://url.spec.whatwg.org/#dom-url-host">https://url.spec.whatwg.org/#dom-url-host</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-dom-url-host">
+   <a href="https://url.spec.whatwg.org/#dom-url-host">https://url.spec.whatwg.org/#dom-url-host</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-url-host">2.2. Local Network Request</a> <a href="#ref-for-dom-url-host①">(2)</a>
    </ul>
@@ -1779,91 +1795,93 @@ directive-value = ""
    <li>
     <a data-link-type="biblio">[CSP3]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="8fd94bd63146fd93e56076b92d37fff5">disposition</span>
+     <li><span class="dfn-paneled" id="term-for-policy-disposition">disposition</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="985c42e2af63b3e74bd3b70d55668fd4">document</span>
+     <li><span class="dfn-paneled" id="term-for-concept-document">document</span>
     </ul>
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="86a30ab3069b2eed088c0f2a10d4e383">HTTP-network fetch</span>
-     <li><span class="dfn-paneled" id="0f7db9c5fcd081920f557d4f4bd30970">HTTP-network-or-cache fetch</span>
-     <li><span class="dfn-paneled" id="c95eca01532ba80a53e096fe3368501d">access-control-allow-credentials</span>
-     <li><span class="dfn-paneled" id="5c05e5354ba43f73b8fb3e527ad791a9">access-control-allow-methods</span>
-     <li><span class="dfn-paneled" id="6ed8423ac66b3852ab6bf2ab037e2886">access-control-allow-origin</span>
-     <li><span class="dfn-paneled" id="55703896bb7afa7ca34917d2a086dc2e">access-control-request-method</span>
-     <li><span class="dfn-paneled" id="f5b0d4bbb9719ea4de9283613cb6d75c">cache entry</span>
-     <li><span class="dfn-paneled" id="694eb45021f55b3922bfeb175b0fa406">cache entry match</span>
-     <li><span class="dfn-paneled" id="136f2700e84634abd2f3d42487ba7f41">client</span>
-     <li><span class="dfn-paneled" id="5f7b2d5bc786ffd3b771e92bc5359d51">connection</span>
-     <li><span class="dfn-paneled" id="8337131171de42dc05ebec2994643520">connection pool</span>
-     <li><span class="dfn-paneled" id="9529a982bddb7f3e812caa27ee73e9a5">cors check</span>
-     <li><span class="dfn-paneled" id="377784d98bb425dd903a99184e101eb2">cors-preflight cache</span>
-     <li><span class="dfn-paneled" id="4147c0b62eae4d176e312771a9094df4">cors-preflight fetch</span>
-     <li><span class="dfn-paneled" id="34154f551d34c9b4237d1dccaab27d3e">cors-preflight request</span>
-     <li><span class="dfn-paneled" id="aaafcaa05a0a100cfcb140bc2b9be8de">cors-safelisted method</span>
-     <li><span class="dfn-paneled" id="f12721381920680a6660faf27ba7b23d">cors-safelisted request-header</span>
-     <li><span class="dfn-paneled" id="58030ebbaf6d32883def2f776a5238ba">create a new cache entry</span>
-     <li><span class="dfn-paneled" id="f82af8baf203f1b0578ed1442dd2d24b">current url</span>
-     <li><span class="dfn-paneled" id="1c1a3f28e653c3c068c5e2aa7d3ecebb">extracting header list values</span>
-     <li><span class="dfn-paneled" id="0bae0f8d0fc019614ef3bb69c15d5311">fetch</span>
-     <li><span class="dfn-paneled" id="4fd8d1762cd9c874700296c854598fda">header list <small>(for request)</small></span>
-     <li><span class="dfn-paneled" id="d94cb5e6252c9158478ebbe8a624e99c">header list <small>(for response)</small></span>
-     <li><span class="dfn-paneled" id="e094c825ead002ca7d4383f2aba777f9">http fetch</span>
-     <li><span class="dfn-paneled" id="92488b0d05da99120fd8466a06ec480f">network error</span>
-     <li><span class="dfn-paneled" id="856cacc5c59d3a55a487a1aa0ab2814a">network partition key</span>
-     <li><span class="dfn-paneled" id="88e99e5d3f7144fd45a305df416dc396">obtain a connection</span>
-     <li><span class="dfn-paneled" id="371e12a3aa3170d7aca44c7ac90937c0">policy container</span>
-     <li><span class="dfn-paneled" id="69d3eea236f0ecac9892beb2a2ac6dc1">request</span>
-     <li><span class="dfn-paneled" id="d203414c2b48c23fddab90ef753bb7cf">response</span>
-     <li><span class="dfn-paneled" id="c92a6a04d5edd0548c96b946dabec975">set</span>
+     <li><span class="dfn-paneled" id="term-for-concept-http-network-fetch">HTTP-network fetch</span>
+     <li><span class="dfn-paneled" id="term-for-concept-http-network-or-cache-fetch">HTTP-network-or-cache fetch</span>
+     <li><span class="dfn-paneled" id="term-for-http-access-control-allow-credentials">access-control-allow-credentials</span>
+     <li><span class="dfn-paneled" id="term-for-http-access-control-allow-methods">access-control-allow-methods</span>
+     <li><span class="dfn-paneled" id="term-for-http-access-control-allow-origin">access-control-allow-origin</span>
+     <li><span class="dfn-paneled" id="term-for-http-access-control-request-method">access-control-request-method</span>
+     <li><span class="dfn-paneled" id="term-for-cache-entry">cache entry</span>
+     <li><span class="dfn-paneled" id="term-for-concept-cache-match">cache entry match</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-client">client</span>
+     <li><span class="dfn-paneled" id="term-for-concept-connection">connection</span>
+     <li><span class="dfn-paneled" id="term-for-concept-connection-pool">connection pool</span>
+     <li><span class="dfn-paneled" id="term-for-concept-cors-check">cors check</span>
+     <li><span class="dfn-paneled" id="term-for-concept-cache">cors-preflight cache</span>
+     <li><span class="dfn-paneled" id="term-for-cors-preflight-fetch-0">cors-preflight fetch</span>
+     <li><span class="dfn-paneled" id="term-for-cors-preflight-request">cors-preflight request</span>
+     <li><span class="dfn-paneled" id="term-for-cors-safelisted-method">cors-safelisted method</span>
+     <li><span class="dfn-paneled" id="term-for-cors-safelisted-request-header">cors-safelisted request-header</span>
+     <li><span class="dfn-paneled" id="term-for-concept-cache-create-entry">create a new cache entry</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-current-url">current url</span>
+     <li><span class="dfn-paneled" id="term-for-extract-header-list-values">extracting header list values</span>
+     <li><span class="dfn-paneled" id="term-for-concept-fetch">fetch</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-header-list">header list <small>(for request)</small></span>
+     <li><span class="dfn-paneled" id="term-for-concept-response-header-list">header list <small>(for response)</small></span>
+     <li><span class="dfn-paneled" id="term-for-concept-http-fetch">http fetch</span>
+     <li><span class="dfn-paneled" id="term-for-concept-network-error">network error</span>
+     <li><span class="dfn-paneled" id="term-for-network-partition-key">network partition key</span>
+     <li><span class="dfn-paneled" id="term-for-concept-connection-obtain">obtain a connection</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-origin">origin</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-policy-container">policy container</span>
+     <li><span class="dfn-paneled" id="term-for-fetch-params-request">request</span>
+     <li><span class="dfn-paneled" id="term-for-concept-response">response</span>
+     <li><span class="dfn-paneled" id="term-for-concept-header-list-set">set</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="cf6c9268ff2ee92c6b4ac547cc7504e2">Document</span>
-     <li><span class="dfn-paneled" id="569dd106ffc76704c49d49a9087ebb4e">WorkerGlobalScope</span>
-     <li><span class="dfn-paneled" id="9372cc393e81caa198985dc23ceb2f9b">clone a policy container</span>
-     <li><span class="dfn-paneled" id="4408955a3711255bfb2147e9957c365a">creating a policy container from a fetch response</span>
-     <li><span class="dfn-paneled" id="d815dc723d8b4fe4b1166e2013ec62b7">environment settings object</span>
-     <li><span class="dfn-paneled" id="0a8d192cb885d336f16ead79b570c196">host</span>
-     <li><span class="dfn-paneled" id="a1de73f42319e83daae5aeb30180f409">meta</span>
-     <li><span class="dfn-paneled" id="70c69bbcbd08b31b203829b89f9a4571">non-secure context</span>
-     <li><span class="dfn-paneled" id="e66f9f7d45934e77669cb907bd0c7636">origin</span>
-     <li><span class="dfn-paneled" id="ccb2df03c48189525c2bb989846522f0">policy container</span>
-     <li><span class="dfn-paneled" id="c347d27e1964141a379e6573882af9ee">policy container <small>(for Document)</small></span>
-     <li><span class="dfn-paneled" id="ba3482a1cfc0d259ee07b70ce8d47c09">policy container <small>(for WorkerGlobalScope)</small></span>
-     <li><span class="dfn-paneled" id="e93a78788abc2a21fe65a07c52280d82">policy container <small>(for environment settings object)</small></span>
-     <li><span class="dfn-paneled" id="613400696de3e8f8a5001430db03abe8">secure context</span>
+     <li><span class="dfn-paneled" id="term-for-document">Document</span>
+     <li><span class="dfn-paneled" id="term-for-workerglobalscope">WorkerGlobalScope</span>
+     <li><span class="dfn-paneled" id="term-for-clone-a-policy-container">clone a policy container</span>
+     <li><span class="dfn-paneled" id="term-for-creating-a-policy-container-from-a-fetch-response">creating a policy container from a fetch response</span>
+     <li><span class="dfn-paneled" id="term-for-environment-settings-object">environment settings object</span>
+     <li><span class="dfn-paneled" id="term-for-concept-origin-host">host</span>
+     <li><span class="dfn-paneled" id="term-for-meta">meta</span>
+     <li><span class="dfn-paneled" id="term-for-non-secure-context">non-secure context</span>
+     <li><span class="dfn-paneled" id="term-for-concept-origin">origin</span>
+     <li><span class="dfn-paneled" id="term-for-policy-container">policy container</span>
+     <li><span class="dfn-paneled" id="term-for-concept-document-policy-container">policy container <small>(for Document)</small></span>
+     <li><span class="dfn-paneled" id="term-for-concept-workerglobalscope-policy-container">policy container <small>(for WorkerGlobalScope)</small></span>
+     <li><span class="dfn-paneled" id="term-for-concept-settings-object-policy-container">policy container <small>(for environment settings object)</small></span>
+     <li><span class="dfn-paneled" id="term-for-same-origin">same origin</span>
+     <li><span class="dfn-paneled" id="term-for-secure-context">secure context</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="3ee316b93eb2dbe81d01a666cce50f9b">struct</span>
+     <li><span class="dfn-paneled" id="term-for-struct">struct</span>
     </ul>
    <li>
     <a data-link-type="biblio">[MINIAPP-LIFECYCLE]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="7590d35e429ef1a479df5e6691a60e74">initialization</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-initialization">initialization</span>
     </ul>
    <li>
     <a data-link-type="biblio">[SECURE-CONTEXTS]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="7681ab11c75a55e6b34d4abc7604c144">potentially trustworthy origin</span>
+     <li><span class="dfn-paneled" id="term-for-potentially-trustworthy-origin">potentially trustworthy origin</span>
     </ul>
    <li>
     <a data-link-type="biblio">[SERVICE-WORKERS]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="3fb87a9e0473a0511b3ee1d296e19260">service worker</span>
-     <li><span class="dfn-paneled" id="17f3be8afd2ce04032b6b943a4ea1a88">soft update</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-service-worker">service worker</span>
+     <li><span class="dfn-paneled" id="term-for-soft-update">soft update</span>
     </ul>
    <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="58b9f7ed4b4170afe768f7d9b86c0005">host</span>
+     <li><span class="dfn-paneled" id="term-for-dom-url-host">host</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -1883,6 +1901,8 @@ directive-value = ""
    <dd>Qing An; Haoyang Xu. <a href="https://w3c.github.io/miniapp-lifecycle/"><cite>MiniApp Lifecycle</cite></a>. URL: <a href="https://w3c.github.io/miniapp-lifecycle/">https://w3c.github.io/miniapp-lifecycle/</a>
    <dt id="biblio-rfc7762">[RFC7762]
    <dd>M. West. <a href="https://www.rfc-editor.org/rfc/rfc7762"><cite>Initial Assignment for the Content Security Policy Directives Registry</cite></a>. January 2016. Informational. URL: <a href="https://www.rfc-editor.org/rfc/rfc7762">https://www.rfc-editor.org/rfc/rfc7762</a>
+   <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
+   <dd>Mike West. <a href="https://w3c.github.io/webappsec-secure-contexts/"><cite>Secure Contexts</cite></a>. URL: <a href="https://w3c.github.io/webappsec-secure-contexts/">https://w3c.github.io/webappsec-secure-contexts/</a>
    <dt id="biblio-service-workers">[SERVICE-WORKERS]
    <dd>Jake Archibald; Marijn Kruisselbrink. <a href="https://w3c.github.io/ServiceWorker/"><cite>Service Workers</cite></a>. URL: <a href="https://w3c.github.io/ServiceWorker/">https://w3c.github.io/ServiceWorker/</a>
    <dt id="biblio-url">[URL]
@@ -1922,8 +1942,6 @@ directive-value = ""
    <dd>S. Cheshire; M. Krochmal. <a href="https://www.rfc-editor.org/rfc/rfc6762"><cite>Multicast DNS</cite></a>. February 2013. Proposed Standard. URL: <a href="https://www.rfc-editor.org/rfc/rfc6762">https://www.rfc-editor.org/rfc/rfc6762</a>
    <dt id="biblio-rfc8305">[RFC8305]
    <dd>D. Schinazi; T. Pauly. <a href="https://www.rfc-editor.org/rfc/rfc8305"><cite>Happy Eyeballs Version 2: Better Connectivity Using Concurrency</cite></a>. December 2017. Proposed Standard. URL: <a href="https://www.rfc-editor.org/rfc/rfc8305">https://www.rfc-editor.org/rfc/rfc8305</a>
-   <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
-   <dd>Mike West. <a href="https://w3c.github.io/webappsec-secure-contexts/"><cite>Secure Contexts</cite></a>. URL: <a href="https://w3c.github.io/webappsec-secure-contexts/">https://w3c.github.io/webappsec-secure-contexts/</a>
    <dt id="biblio-secure-local-communication">[SECURE-LOCAL-COMMUNICATION]
    <dd><a href="http://www.w3.org/2015/10/28-local-minutes.html"><cite>Minutes from 'Secure communication with local network devices': TPAC, 2015</cite></a>. URL: <a href="http://www.w3.org/2015/10/28-local-minutes.html">http://www.w3.org/2015/10/28-local-minutes.html</a>
    <dt id="biblio-soho-pharming">[SOHO-PHARMING]
@@ -1961,8 +1979,8 @@ directive-value = ""
   revealed that integrating with the cache was useful even in protecting
   network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/local-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-dfc740be" title="Jump to section">↵</a></div>
   </div>
-  <aside aria-labelledby="infopaneltitle-for-ip-address-space" class="dfn-panel" data-for="ip-address-space" id="infopanel-for-ip-address-space">
-   <span id="infopaneltitle-for-ip-address-space" style="display:none">Info about the 'IP address space' definition.</span><b><a href="#ip-address-space">#ip-address-space</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="ip-address-space">
+   <b><a href="#ip-address-space">#ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-ip-address-space">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space①">(2)</a> <a href="#ref-for-ip-address-space②">(3)</a> <a href="#ref-for-ip-address-space③">(4)</a> <a href="#ref-for-ip-address-space④">(5)</a> <a href="#ref-for-ip-address-space⑤">(6)</a> <a href="#ref-for-ip-address-space⑥">(7)</a>
     <li><a href="#ref-for-ip-address-space⑦">2.2. Local Network Request</a> <a href="#ref-for-ip-address-space⑧">(2)</a> <a href="#ref-for-ip-address-space⑨">(3)</a>
@@ -1978,8 +1996,8 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space②④">5.6.2. HTTP cache poisoning</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-ip-address-space-loopback" class="dfn-panel" data-for="ip-address-space-loopback" id="infopanel-for-ip-address-space-loopback">
-   <span id="infopaneltitle-for-ip-address-space-loopback" style="display:none">Info about the 'loopback' definition.</span><b><a href="#ip-address-space-loopback">#ip-address-space-loopback</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="ip-address-space-loopback">
+   <b><a href="#ip-address-space-loopback">#ip-address-space-loopback</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-ip-address-space-loopback">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-loopback①">(2)</a> <a href="#ref-for-ip-address-space-loopback②">(3)</a> <a href="#ref-for-ip-address-space-loopback③">(4)</a> <a href="#ref-for-ip-address-space-loopback④">(5)</a>
     <li><a href="#ref-for-ip-address-space-loopback⑤">3.3. Integration with HTML</a>
@@ -1989,8 +2007,8 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-loopback⑨">5.2. Mixed Content</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-ip-address-space-local" class="dfn-panel" data-for="ip-address-space-local" id="infopanel-for-ip-address-space-local">
-   <span id="infopaneltitle-for-ip-address-space-local" style="display:none">Info about the 'local' definition.</span><b><a href="#ip-address-space-local">#ip-address-space-local</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="ip-address-space-local">
+   <b><a href="#ip-address-space-local">#ip-address-space-local</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-ip-address-space-local">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-ip-address-space-local①">1.2.2. Opting-In</a>
@@ -2005,8 +2023,8 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-local②①">5.5. Cross-network confusion</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-ip-address-space-public" class="dfn-panel" data-for="ip-address-space-public" id="infopanel-for-ip-address-space-public">
-   <span id="infopaneltitle-for-ip-address-space-public" style="display:none">Info about the 'public' definition.</span><b><a href="#ip-address-space-public">#ip-address-space-public</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="ip-address-space-public">
+   <b><a href="#ip-address-space-public">#ip-address-space-public</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-ip-address-space-public">1.2.2. Opting-In</a>
     <li><a href="#ref-for-ip-address-space-public①">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-public②">(2)</a> <a href="#ref-for-ip-address-space-public③">(3)</a> <a href="#ref-for-ip-address-space-public④">(4)</a> <a href="#ref-for-ip-address-space-public⑤">(5)</a>
@@ -2020,15 +2038,15 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-public①⑤">5.2. Mixed Content</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-loopback-address" class="dfn-panel" data-for="loopback-address" id="infopanel-for-loopback-address">
-   <span id="infopaneltitle-for-loopback-address" style="display:none">Info about the 'loopback address' definition.</span><b><a href="#loopback-address">#loopback-address</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="loopback-address">
+   <b><a href="#loopback-address">#loopback-address</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-loopback-address">2.4. The treat-as-public-address Content Security Policy Directive</a>
     <li><a href="#ref-for-loopback-address①">3.3. Integration with HTML</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-local-address" class="dfn-panel" data-for="local-address" id="infopanel-for-local-address">
-   <span id="infopaneltitle-for-local-address" style="display:none">Info about the 'local address' definition.</span><b><a href="#local-address">#local-address</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="local-address">
+   <b><a href="#local-address">#local-address</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-local-address">1.2.3. Navigation</a>
     <li><a href="#ref-for-local-address①">2.2. Local Network Request</a>
@@ -2039,8 +2057,8 @@ directive-value = ""
     <li><a href="#ref-for-local-address⑧">5.5. Cross-network confusion</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-public-address" class="dfn-panel" data-for="public-address" id="infopanel-for-public-address">
-   <span id="infopaneltitle-for-public-address" style="display:none">Info about the 'public address' definition.</span><b><a href="#public-address">#public-address</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="public-address">
+   <b><a href="#public-address">#public-address</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-public-address">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-public-address①">1.2.3. Navigation</a> <a href="#ref-for-public-address②">(2)</a>
@@ -2051,8 +2069,8 @@ directive-value = ""
     <li><a href="#ref-for-public-address⑦">4.2. Proxies</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-ip-address-space-less-public" class="dfn-panel" data-for="ip-address-space-less-public" id="infopanel-for-ip-address-space-less-public">
-   <span id="infopaneltitle-for-ip-address-space-less-public" style="display:none">Info about the 'less public' definition.</span><b><a href="#ip-address-space-less-public">#ip-address-space-less-public</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="ip-address-space-less-public">
+   <b><a href="#ip-address-space-less-public">#ip-address-space-less-public</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-ip-address-space-less-public">2.2. Local Network Request</a>
     <li><a href="#ref-for-ip-address-space-less-public①">3.1.1. Secure context restriction</a>
@@ -2060,14 +2078,14 @@ directive-value = ""
     <li><a href="#ref-for-ip-address-space-less-public③">5.6.2. HTTP cache poisoning</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-determine-the-ip-address-space" class="dfn-panel" data-for="determine-the-ip-address-space" id="infopanel-for-determine-the-ip-address-space">
-   <span id="infopaneltitle-for-determine-the-ip-address-space" style="display:none">Info about the 'determine the IP address space' definition.</span><b><a href="#determine-the-ip-address-space">#determine-the-ip-address-space</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="determine-the-ip-address-space">
+   <b><a href="#determine-the-ip-address-space">#determine-the-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-determine-the-ip-address-space">3.1.1. Secure context restriction</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-local-network-request" class="dfn-panel" data-for="local-network-request" id="infopanel-for-local-network-request">
-   <span id="infopaneltitle-for-local-network-request" style="display:none">Info about the 'local network request' definition.</span><b><a href="#local-network-request">#local-network-request</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="local-network-request">
+   <b><a href="#local-network-request">#local-network-request</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-local-network-request">2.2. Local Network Request</a> <a href="#ref-for-local-network-request①">(2)</a>
     <li><a href="#ref-for-local-network-request②">2.3. Additional CORS Headers</a>
@@ -2076,8 +2094,8 @@ directive-value = ""
     <li><a href="#ref-for-local-network-request⑤">3.4. Workers</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-http-headerdef-access-control-request-local-network" class="dfn-panel" data-for="http-headerdef-access-control-request-local-network" id="infopanel-for-http-headerdef-access-control-request-local-network">
-   <span id="infopaneltitle-for-http-headerdef-access-control-request-local-network" style="display:none">Info about the 'Access-Control-Request-Local-Network' definition.</span><b><a href="#http-headerdef-access-control-request-local-network">#http-headerdef-access-control-request-local-network</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="http-headerdef-access-control-request-local-network">
+   <b><a href="#http-headerdef-access-control-request-local-network">#http-headerdef-access-control-request-local-network</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-headerdef-access-control-request-local-network">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-http-headerdef-access-control-request-local-network①">1.2.3. Navigation</a>
@@ -2085,8 +2103,8 @@ directive-value = ""
     <li><a href="#ref-for-http-headerdef-access-control-request-local-network③">3.1.3. Forbidden header names</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-http-headerdef-access-control-allow-local-network" class="dfn-panel" data-for="http-headerdef-access-control-allow-local-network" id="infopanel-for-http-headerdef-access-control-allow-local-network">
-   <span id="infopaneltitle-for-http-headerdef-access-control-allow-local-network" style="display:none">Info about the 'Access-Control-Allow-Local-Network' definition.</span><b><a href="#http-headerdef-access-control-allow-local-network">#http-headerdef-access-control-allow-local-network</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="http-headerdef-access-control-allow-local-network">
+   <b><a href="#http-headerdef-access-control-allow-local-network">#http-headerdef-access-control-allow-local-network</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-headerdef-access-control-allow-local-network">1.2.1. Secure by Default</a>
     <li><a href="#ref-for-http-headerdef-access-control-allow-local-network①">1.2.2. Opting-In</a>
@@ -2094,29 +2112,29 @@ directive-value = ""
     <li><a href="#ref-for-http-headerdef-access-control-allow-local-network③">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-treat-as-public-address" class="dfn-panel" data-for="treat-as-public-address" id="infopanel-for-treat-as-public-address">
-   <span id="infopaneltitle-for-treat-as-public-address" style="display:none">Info about the 'treat-as-public-address' definition.</span><b><a href="#treat-as-public-address">#treat-as-public-address</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="treat-as-public-address">
+   <b><a href="#treat-as-public-address">#treat-as-public-address</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-treat-as-public-address">6. IANA Considerations</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-connection-ip-address-space" class="dfn-panel" data-for="connection-ip-address-space" id="infopanel-for-connection-ip-address-space">
-   <span id="infopaneltitle-for-connection-ip-address-space" style="display:none">Info about the 'IP address space' definition.</span><b><a href="#connection-ip-address-space">#connection-ip-address-space</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="connection-ip-address-space">
+   <b><a href="#connection-ip-address-space">#connection-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-connection-ip-address-space">3.1.1. Secure context restriction</a> <a href="#ref-for-connection-ip-address-space①">(2)</a> <a href="#ref-for-connection-ip-address-space②">(3)</a>
     <li><a href="#ref-for-connection-ip-address-space③">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-response-ip-address-space" class="dfn-panel" data-for="response-ip-address-space" id="infopanel-for-response-ip-address-space">
-   <span id="infopaneltitle-for-response-ip-address-space" style="display:none">Info about the 'IP address space' definition.</span><b><a href="#response-ip-address-space">#response-ip-address-space</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="response-ip-address-space">
+   <b><a href="#response-ip-address-space">#response-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-response-ip-address-space">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-response-ip-address-space①">3.1.2. CORS preflight</a> <a href="#ref-for-response-ip-address-space②">(2)</a> <a href="#ref-for-response-ip-address-space③">(3)</a> <a href="#ref-for-response-ip-address-space④">(4)</a> <a href="#ref-for-response-ip-address-space⑤">(5)</a> <a href="#ref-for-response-ip-address-space⑥">(6)</a> <a href="#ref-for-response-ip-address-space⑦">(7)</a> <a href="#ref-for-response-ip-address-space⑧">(8)</a>
     <li><a href="#ref-for-response-ip-address-space⑨">3.3. Integration with HTML</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-local-network-access-check" class="dfn-panel" data-for="local-network-access-check" id="infopanel-for-local-network-access-check">
-   <span id="infopaneltitle-for-local-network-access-check" style="display:none">Info about the 'Local Network Access check' definition.</span><b><a href="#local-network-access-check">#local-network-access-check</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="local-network-access-check">
+   <b><a href="#local-network-access-check">#local-network-access-check</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-local-network-access-check">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-local-network-access-check①">3.1.2. CORS preflight</a>
@@ -2125,26 +2143,26 @@ directive-value = ""
     <li><a href="#ref-for-local-network-access-check④">5.6.1. Applying checks to subresources</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-request-target-ip-address-space" class="dfn-panel" data-for="request-target-ip-address-space" id="infopanel-for-request-target-ip-address-space">
-   <span id="infopaneltitle-for-request-target-ip-address-space" style="display:none">Info about the 'target IP address space' definition.</span><b><a href="#request-target-ip-address-space">#request-target-ip-address-space</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="request-target-ip-address-space">
+   <b><a href="#request-target-ip-address-space">#request-target-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-request-target-ip-address-space">3.1.2. CORS preflight</a> <a href="#ref-for-request-target-ip-address-space①">(2)</a> <a href="#ref-for-request-target-ip-address-space②">(3)</a> <a href="#ref-for-request-target-ip-address-space③">(4)</a> <a href="#ref-for-request-target-ip-address-space④">(5)</a> <a href="#ref-for-request-target-ip-address-space⑤">(6)</a> <a href="#ref-for-request-target-ip-address-space⑥">(7)</a> <a href="#ref-for-request-target-ip-address-space⑦">(8)</a> <a href="#ref-for-request-target-ip-address-space⑧">(9)</a> <a href="#ref-for-request-target-ip-address-space⑨">(10)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-http-no-service-worker-fetch" class="dfn-panel" data-for="http-no-service-worker-fetch" id="infopanel-for-http-no-service-worker-fetch">
-   <span id="infopaneltitle-for-http-no-service-worker-fetch" style="display:none">Info about the 'HTTP-no-service-worker fetch' definition.</span><b><a href="#http-no-service-worker-fetch">#http-no-service-worker-fetch</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="http-no-service-worker-fetch">
+   <b><a href="#http-no-service-worker-fetch">#http-no-service-worker-fetch</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-no-service-worker-fetch">3.1.2. CORS preflight</a> <a href="#ref-for-http-no-service-worker-fetch①">(2)</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-cache-entry-ip-address-space" class="dfn-panel" data-for="cache-entry-ip-address-space" id="infopanel-for-cache-entry-ip-address-space">
-   <span id="infopaneltitle-for-cache-entry-ip-address-space" style="display:none">Info about the 'IP address space' definition.</span><b><a href="#cache-entry-ip-address-space">#cache-entry-ip-address-space</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="cache-entry-ip-address-space">
+   <b><a href="#cache-entry-ip-address-space">#cache-entry-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-cache-entry-ip-address-space">3.1.2. CORS preflight</a>
    </ul>
   </aside>
-  <aside aria-labelledby="infopaneltitle-for-policy-container-ip-address-space" class="dfn-panel" data-for="policy-container-ip-address-space" id="infopanel-for-policy-container-ip-address-space">
-   <span id="infopaneltitle-for-policy-container-ip-address-space" style="display:none">Info about the 'IP address space' definition.</span><b><a href="#policy-container-ip-address-space">#policy-container-ip-address-space</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="policy-container-ip-address-space">
+   <b><a href="#policy-container-ip-address-space">#policy-container-ip-address-space</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-policy-container-ip-address-space">2.2. Local Network Request</a>
     <li><a href="#ref-for-policy-container-ip-address-space①">2.4. The treat-as-public-address Content Security Policy Directive</a>
@@ -2157,112 +2175,58 @@ directive-value = ""
    </ul>
   </aside>
 <script>/* script-dfn-panel */
-"use strict";
-{
-    function queryAll(sel) {
-        return [].slice.call(document.querySelectorAll(sel));
+
+document.body.addEventListener("click", function(e) {
+    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+    // Find the dfn element or panel, if any, that was clicked on.
+    var el = e.target;
+    var target;
+    var hitALink = false;
+    while(el.parentElement) {
+        if(el.tagName == "A") {
+            // Clicking on a link in a <dfn> shouldn't summon the panel
+            hitALink = true;
+        }
+        if(el.classList.contains("dfn-paneled")) {
+            target = "dfn";
+            break;
+        }
+        if(el.classList.contains("dfn-panel")) {
+            target = "dfn-panel";
+            break;
+        }
+        el = el.parentElement;
     }
-
-    // Add popup behavior to all dfns to show the corresponding dfn-panel.
-    var dfns = document.querySelectorAll('.dfn-paneled');
-    for (let dfn of dfns) { insertDfnPopupAction(dfn); }
-
-    document.body.addEventListener("click", (e) => {
-        // If not handled already, just hide all dfn panels.
-        hideAllDfnPanels();
-    });
-
-    function hideAllDfnPanels() {
+    if(target != "dfn-panel") {
         // Turn off any currently "on" or "activated" panels.
-        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>hideDfnPanel(el));
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
+            el.classList.remove("on");
+            el.classList.remove("activated");
+        });
     }
-
-    function showDfnPanel(dfnPanel, dfn) {
-        hideAllDfnPanels(); // Only display one at this time.
-        dfn.setAttribute("aria-expanded", "true");
-        dfnPanel.classList.add("on");
-        dfnPanel.style.left = "5px";
-        dfnPanel.style.top = "0px";
-        const panelRect = dfnPanel.getBoundingClientRect();
-        const panelWidth = panelRect.right - panelRect.left;
-        if (panelRect.right > document.body.scrollWidth) {
-            // Panel's overflowing the screen.
-            // Just drop it below the dfn and flip it rightward instead.
-            // This still wont' fix things if the screen is *really* wide,
-            // but fixing that's a lot harder without 'anchor()'.
-            dfnPanel.style.top = "1.5em";
-            dfnPanel.style.left = "auto";
-            dfnPanel.style.right = "0px";
+    if(target == "dfn" && !hitALink) {
+        // open the panel
+        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
+        if(dfnPanel) {
+            dfnPanel.classList.add("on");
+            var rect = el.getBoundingClientRect();
+            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
+            dfnPanel.style.top = window.scrollY + rect.top + "px";
+            var panelRect = dfnPanel.getBoundingClientRect();
+            var panelWidth = panelRect.right - panelRect.left;
+            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
+                // Reposition, because the panel is overflowing
+                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+            }
+        } else {
+            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
         }
-    }
-
-    function pinDfnPanel(dfnPanel) {
+    } else if(target == "dfn-panel") {
         // Switch it to "activated" state, which pins it.
-        dfnPanel.classList.add("activated");
-        dfnPanel.style.left = null;
-        dfnPanel.style.top = null;
+        el.classList.add("activated");
+        el.style.left = null;
+        el.style.top = null;
     }
 
-    function hideDfnPanel(dfnPanel, dfn) {
-        if(!dfn) {
-            dfn = document.getElementById(dfnPanel.getAttribute("data-for"));
-        }
-        dfn.setAttribute("aria-expanded", "false")
-        dfnPanel.classList.remove("on");
-        dfnPanel.classList.remove("activated");
-    }
-
-    function toggleDfnPanel(dfnPanel, dfn) {
-        if(dfnPanel.classList.contains("on")) {
-            hideDfnPanel(dfnPanel, dfn);
-        } else {
-            showDfnPanel(dfnPanel, dfn);
-        }
-    }
-
-    function insertDfnPopupAction(dfn) {
-        // Find dfn panel
-        const dfnPanel = document.querySelector(`.dfn-panel[data-for='${dfn.id}']`);
-        if (dfnPanel) {
-            const panelWrapper = document.createElement('span');
-            panelWrapper.appendChild(dfnPanel);
-            panelWrapper.style.position = "relative";
-            panelWrapper.style.height = "0px";
-            dfn.insertAdjacentElement("afterend", panelWrapper);
-            dfn.setAttribute('role', 'button');
-            dfn.setAttribute('aria-expanded', 'false')
-            dfn.tabIndex = 0;
-            dfn.classList.add('has-dfn-panel');
-            dfn.addEventListener('click', (event) => {
-                showDfnPanel(dfnPanel, dfn);
-                event.stopPropagation();
-            });
-            dfn.addEventListener('keypress', (event) => {
-                const kc = event.keyCode;
-                // 32->Space, 13->Enter
-                if(kc == 32 || kc == 13) {
-                    toggleDfnPanel(dfnPanel, dfn);
-                    event.stopPropagation();
-                    event.preventDefault();
-                }
-            });
-
-            dfnPanel.addEventListener('click', (event) => {
-                pinDfnPanel(dfnPanel);
-                event.stopPropagation();
-            });
-
-            dfnPanel.addEventListener('keydown', (event) => {
-                if(event.keyCode == 27) { // Escape key
-                    hideDfnPanel(dfnPanel, dfn);
-                    event.stopPropagation();
-                    event.preventDefault();
-                }
-            })
-
-        } else {
-            console.log("Couldn't find .dfn-panel[data-for='" + dfn.id + "']");
-        }
-    }
-}
+});
 </script>

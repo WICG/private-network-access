@@ -666,6 +666,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
       [=connection=] to the caller of the [$HTTP-network fetch$] algorithm when
       the [=request/client=] is a [=secure context=]:
 
+      1. If |request|'s [=request/origin=] is a [=potentially trustworthy
+         origin=] and |request|’s [=request/current URL=]’s [=request/origin=]
+         is [=same origin=] with |request|’s [=request/origin=], then return
+         null.
+
       1.  If |request|'s [=request/target IP address space=] is not null, then:
 
           1.  If |connection|'s [=connection/IP address space=] is not equal to
