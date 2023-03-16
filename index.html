@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
   <link href="https://wicg.github.io/local-network-access/" rel="canonical">
-  <meta content="0baa96732aa63c9a201f6edc1953ccf016b36921" name="document-revision">
+  <meta content="3f02199bf11d77b7b06ac66a6fcd01d7e3a688fc" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -487,7 +487,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Local Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-03-13">13 March 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-03-16">16 March 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -974,6 +974,10 @@ directive-value = ""
   Given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request②">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection" id="ref-for-concept-connection①">connection</a> <var>connection</var>:</p>
       <ol>
        <li data-md>
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin">origin</a> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin">potentially trustworthy
+ origin</a> and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url②">current URL</a>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin①">origin</a> is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin" id="ref-for-same-origin">same origin</a> with <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin②">origin</a>, then return
+ null.</p>
+       <li data-md>
         <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client②">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context" id="ref-for-non-secure-context">non-secure context</a>:</p>
         <ol>
          <li data-md>
@@ -1012,10 +1016,6 @@ directive-value = ""
   property and propagate the <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①②">IP address space</a> of the newly-obtained <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection" id="ref-for-concept-connection②">connection</a> to the caller of the <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-fetch" id="ref-for-concept-http-network-fetch②">HTTP-network fetch</a> algorithm when
   the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context③">secure context</a>:</p>
       <ol>
-       <li data-md>
-        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin">origin</a> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin" id="ref-for-potentially-trustworthy-origin">potentially trustworthy
- origin</a> and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url②">current URL</a>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin①">origin</a> is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin" id="ref-for-same-origin">same origin</a> with <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-origin" id="ref-for-concept-request-origin②">origin</a>, then return
- null.</p>
        <li data-md>
         <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space">target IP address space</a> is not null, then:</p>
         <ol>
@@ -1560,7 +1560,7 @@ directive-value = ""
    <a href="https://fetch.spec.whatwg.org/#concept-request-current-url">https://fetch.spec.whatwg.org/#concept-request-current-url</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-request-current-url">2.2. Local Network Request</a> <a href="#ref-for-concept-request-current-url①">(2)</a>
-    <li><a href="#ref-for-concept-request-current-url②">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-concept-request-current-url②">3.1.1. Secure context restriction</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-extract-header-list-values">
@@ -1619,7 +1619,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-concept-request-origin">
    <a href="https://fetch.spec.whatwg.org/#concept-request-origin">https://fetch.spec.whatwg.org/#concept-request-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-origin">3.1.2. CORS preflight</a> <a href="#ref-for-concept-request-origin①">(2)</a> <a href="#ref-for-concept-request-origin②">(3)</a>
+    <li><a href="#ref-for-concept-request-origin">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-request-origin①">(2)</a> <a href="#ref-for-concept-request-origin②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-policy-container">
@@ -1742,7 +1742,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-same-origin">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">https://html.spec.whatwg.org/multipage/browsers.html#same-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-same-origin">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-same-origin">3.1.1. Secure context restriction</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-secure-context">
@@ -1768,7 +1768,7 @@ directive-value = ""
   <aside class="dfn-panel" data-for="term-for-potentially-trustworthy-origin">
    <a href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin">https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-potentially-trustworthy-origin">3.1.2. CORS preflight</a>
+    <li><a href="#ref-for-potentially-trustworthy-origin">3.1.1. Secure context restriction</a>
     <li><a href="#ref-for-potentially-trustworthy-origin①">5.2. Mixed Content</a>
    </ul>
   </aside>

@@ -621,6 +621,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
   1.  Define a new <dfn export>Local Network Access check</dfn> algorithm.
       Given a [=request=] |request| and a [=connection=] |connection|:
 
+      1. If |request|'s [=request/origin=] is a [=potentially trustworthy
+         origin=] and |request|’s [=request/current URL=]’s [=request/origin=]
+         is [=same origin=] with |request|’s [=request/origin=], then return
+         null.
+
       1.  If |request|'s [=request/client=] is a [=non-secure context=]:
 
           1.  Let |clientAddressSpace| be |request|'s
@@ -665,11 +670,6 @@ spec:fetch; type:dfn; for:cache; text:cache match
       property and propagate the [=/IP address space=] of the newly-obtained
       [=connection=] to the caller of the [$HTTP-network fetch$] algorithm when
       the [=request/client=] is a [=secure context=]:
-
-      1. If |request|'s [=request/origin=] is a [=potentially trustworthy
-         origin=] and |request|’s [=request/current URL=]’s [=request/origin=]
-         is [=same origin=] with |request|’s [=request/origin=], then return
-         null.
 
       1.  If |request|'s [=request/target IP address space=] is not null, then:
 
