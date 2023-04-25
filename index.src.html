@@ -43,7 +43,6 @@ spec:fetch; type:dfn; for:/; text:cors check
 spec:fetch; type:dfn; for:/; text:cors-preflight fetch
 spec:fetch; type:dfn; for:/; text:cors-preflight cache
 spec:fetch; type:dfn; for:/; text:create a new cache entry
-spec:fetch; type:dfn; for:/; text:establish a websocket connection
 spec:fetch; type:dfn; for:/; text:fetch params
 spec:fetch; type:dfn; for:/; text:network partition key
 spec:fetch; type:dfn; for:/; text:obtain a connection
@@ -51,6 +50,7 @@ spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dfn; for:/; text:response
 spec:fetch; type:dfn; for:fetch params; text:request
 spec:fetch; type:dfn; for:cache; text:cache match
+spec:websockets; type:dfn; for:/; text:establish a websocket connection
 </pre>
 <pre class="biblio">
 {
@@ -543,8 +543,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
   delivered in a `Content-Security-Policy-Report-Only` header, or within
   a <{meta}> element.
 
-  This directive's [=initialization=] algorithm is as follows. Given an
-  [=environment settings object=] (|context|), a `Response` (|response|), and
+  This directive's [=directive/initialization=] algorithm is as follows. Given
+  an [=environment settings object=] (|context|), a `Response` (|response|), and
   a `policy` (|policy|):
 
   1.  Set |context|'s [=environment settings object/policy container=]'s
@@ -780,7 +780,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h4 id="forbidden-header-names">Forbidden header names</h4>
 
-  A new entry is added to the list of [=forbidden header names=]:
+  A new entry is added to the list of [=forbidden request-header=] names:
   <a http-header>`Access-Control-Request-Local-Network`</a>.
 
   The user agent should have full control over this header, just as it does over
