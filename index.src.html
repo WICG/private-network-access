@@ -458,6 +458,11 @@ spec:fetch; type:dfn; for:cache; text:cache match
   target for all devices on a network link. A previous version of this
   specification considered them to be [=IP address space/loopback=] instead.
 
+  Note: Link-local IP addresses lose their meaning if shared across links. This
+  is not fundamentally different from non-public IP addresses, which all have
+  some degree of locality beyond which they become ambiguous, but it does
+  present a particular risk of confused deputy issues.
+
   Note: The contents of each [=/IP address space=] were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
   ([[IPV4-REGISTRY]] and [[IPV6-REGISTRY]]) and the `Globally Reachable` bit
