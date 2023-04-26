@@ -4,9 +4,9 @@
   <title>Local Network Access</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
+  <meta content="Bikeshed version bf22245b8, updated Tue Apr 18 15:53:37 2023 -0700" name="generator">
   <link href="https://wicg.github.io/local-network-access/" rel="canonical">
-  <meta content="3f02199bf11d77b7b06ac66a6fcd01d7e3a688fc" name="document-revision">
+  <meta content="83ec3f958e542c2aba6b724802b259b67f54467c" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -36,7 +36,6 @@
   }
 </style>
 <style>/* style-autolinks */
-
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
     font-size: inherit;
@@ -96,7 +95,8 @@ pre .property::before, pre .property::after {
 
 [data-link-type=biblio] {
     white-space: pre;
-}</style>
+}
+</style>
 <style>/* style-colors */
 
 /* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
@@ -205,9 +205,9 @@ pre .property::before, pre .property::after {
     --outdated-shadow: red;
 
     --editedrec-bg: darkorange;
-}</style>
+}
+</style>
 <style>/* style-counters */
-
 body {
     counter-reset: example figure issue;
 }
@@ -234,9 +234,9 @@ figcaption {
 }
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
-}</style>
+}
+</style>
 <style>/* style-dfn-panel */
-
 :root {
     --dfnpanel-bg: #ddd;
     --dfnpanel-text: var(--text);
@@ -244,10 +244,9 @@ figcaption:not(.no-marker)::before {
 .dfn-panel {
     position: absolute;
     z-index: 35;
+    width: 20em;
+    width: 300px;
     height: auto;
-    width: -webkit-fit-content;
-    width: fit-content;
-    max-width: 300px;
     max-height: 500px;
     overflow: auto;
     padding: 0.5em 0.75em;
@@ -255,6 +254,7 @@ figcaption:not(.no-marker)::before {
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
+    white-space: normal; /* in case it's moved into a pre */
 }
 .dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
@@ -262,8 +262,15 @@ figcaption:not(.no-marker)::before {
 .dfn-panel a { color: var(--dfnpanel-text); }
 .dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
 .dfn-panel > b + b { margin-top: 0.25em; }
-.dfn-panel ul { padding: 0; }
-.dfn-panel li { list-style: inside; }
+.dfn-panel ul { padding: 0 0 0 1em; list-style: none; }
+.dfn-panel li a {
+    white-space: pre;
+    display: inline-block;
+    max-width: calc(300px - 1.5em - 1em);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .dfn-panel.activated {
     display: inline-block;
     position: fixed;
@@ -274,10 +281,9 @@ figcaption:not(.no-marker)::before {
     max-height: 30vh;
 }
 
-.dfn-paneled { cursor: pointer; }
+.dfn-paneled[role="button"] { cursor: pointer; }
 </style>
 <style>/* style-issues */
-
 a[href].issue-return {
     float: right;
     float: inline-end;
@@ -287,7 +293,6 @@ a[href].issue-return {
 }
 </style>
 <style>/* style-md-lists */
-
 /* This is a weird hack for me not yet following the commonmark spec
    regarding paragraph and lists. */
 [data-md] > :first-child {
@@ -295,7 +300,8 @@ a[href].issue-return {
 }
 [data-md] > :last-child {
     margin-bottom: 0;
-}</style>
+}
+</style>
 <style>/* style-selflinks */
 
 :root {
@@ -469,6 +475,7 @@ dfn > a.self-link::before      { content: "#"; }
        which is quite common in practice... */
     img { background: white; }
 }
+
 @media (prefers-color-scheme: dark) {
     :root {
         --selflink-text: black;
@@ -482,12 +489,13 @@ dfn > a.self-link::before      { content: "#"; }
         --dfnpanel-bg: #222;
         --dfnpanel-text: var(--text);
     }
-}</style>
+}
+</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Local Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-03-16">16 March 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-04-26">26 April 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -864,6 +872,11 @@ Location: https://sekrits/super-sekrit-project-with-super-sekrit-partner
     <p class="note" role="note"><span class="marker">Note:</span> Link-local IP addresses such as <code>169.254.0.0/16</code> are considered <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local①③">local</a>, since such addresses can identify the same
   target for all devices on a network link. A previous version of this
   specification considered them to be <a data-link-type="dfn" href="#ip-address-space-loopback" id="ref-for-ip-address-space-loopback④">loopback</a> instead.</p>
+    <p class="note" role="note"><span class="marker">Note:</span> Link-local IP addresses lose their meaning if shared across links. This
+  is not fundamentally different from non-public IP addresses, which all have
+  some degree of locality beyond which they become ambiguous, but it does
+  present a particular risk of confused deputy issues. <a data-link-type="biblio" href="#biblio-link-local-uri" title="Representing IPv6 Zone Identifiers in Address Literals and Uniform Resource Identifiers">[LINK-LOCAL-URI]</a> attempts to solve this problem by defining a syntax for link-local IP
+  addresses in URIs.</p>
     <p class="note" role="note"><span class="marker">Note:</span> The contents of each <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space⑥">IP address space</a> were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
   (<a data-link-type="biblio" href="#biblio-ipv4-registry" title="IANA IPv4 Special-Purpose Address Registry">[IPV4-REGISTRY]</a> and <a data-link-type="biblio" href="#biblio-ipv6-registry" title="IANA IPv6 Special-Purpose Address Registry">[IPV6-REGISTRY]</a>) and the <code>Globally Reachable</code> bit
@@ -916,7 +929,8 @@ directive-value = ""
     <p>This directive has no reporting requirements; it will be ignored entirely when
   delivered in a <code>Content-Security-Policy-Report-Only</code> header, or within
   a <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/semantics.html#meta" id="ref-for-meta">meta</a></code> element.</p>
-    <p>This directive’s <a data-link-type="dfn" href="https://w3c.github.io/miniapp-lifecycle/#dfn-initialization" id="ref-for-dfn-initialization">initialization</a> algorithm is as follows. Given an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> (<var>context</var>), a <code>Response</code> (<var>response</var>), and
+    <p>This directive’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#directive-initialization" id="ref-for-directive-initialization">initialization</a> algorithm is as follows. Given
+  an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> (<var>context</var>), a <code>Response</code> (<var>response</var>), and
   a <code>policy</code> (<var>policy</var>):</p>
     <ol>
      <li data-md>
@@ -1133,14 +1147,14 @@ directive-value = ""
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.1.3" id="forbidden-header-names"><span class="secno">3.1.3. </span><span class="content">Forbidden header names</span><a class="self-link" href="#forbidden-header-names"></a></h4>
-    <p>A new entry is added to the list of <a data-link-type="dfn">forbidden header names</a>: <a data-link-type="http-header" href="#http-headerdef-access-control-request-local-network" id="ref-for-http-headerdef-access-control-request-local-network③"><code>Access-Control-Request-Local-Network</code></a>.</p>
+    <p>A new entry is added to the list of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#forbidden-request-header" id="ref-for-forbidden-request-header">forbidden request-header</a> names: <a data-link-type="http-header" href="#http-headerdef-access-control-request-local-network" id="ref-for-http-headerdef-access-control-request-local-network③"><code>Access-Control-Request-Local-Network</code></a>.</p>
     <p>The user agent should have full control over this header, just as it does over
   other CORS headers.</p>
     <h3 class="heading settled" data-level="3.2" id="integration-websockets"><span class="secno">3.2. </span><span class="content">Integration with WebSockets</span><a class="self-link" href="#integration-websockets"></a></h3>
     <p class="issue" id="issue-5a78ae74"><a class="self-link" href="#issue-5a78ae74"></a> Preflight requests should probably be sent ahead of WebSocket
   handshakes, given that WebSocket handshakes have roughly the same capabilities
   as <code>&lt;img></code> tags. This might require no additional work to specify given that
-  the <a data-link-type="dfn">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch①">Fetch</a> algorithm. <a href="https://github.com/wicg/local-network-access/issues/14">[Issue #14]</a></p>
+  the <a data-link-type="dfn" href="https://websockets.spec.whatwg.org/#concept-websocket-establish" id="ref-for-concept-websocket-establish">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch①">Fetch</a> algorithm. <a href="https://github.com/wicg/local-network-access/issues/14">[Issue #14]</a></p>
     <p>A previous version of this specification proposed simply adding the new
   headers (see <a href="#headers">§ 2.3 Additional CORS Headers</a>) to the WebSocket handshake. This would not be
   sufficient to fully guard against CSRF attacks, however.</p>
@@ -1420,468 +1434,100 @@ directive-value = ""
    <li><a href="#request-target-ip-address-space">target IP address space</a><span>, in § 3.1.2</span>
    <li><a href="#treat-as-public-address">treat-as-public-address</a><span>, in § 2.4</span>
   </ul>
-  <aside class="dfn-panel" data-for="term-for-policy-disposition">
-   <a href="https://w3c.github.io/webappsec-csp/#policy-disposition">https://w3c.github.io/webappsec-csp/#policy-disposition</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-policy-disposition">2.4. The treat-as-public-address Content Security Policy Directive</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-document">
-   <a href="https://dom.spec.whatwg.org/#concept-document">https://dom.spec.whatwg.org/#concept-document</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-document">4.3.1. Main resources</a> <a href="#ref-for-concept-document①">(2)</a> <a href="#ref-for-concept-document②">(3)</a> <a href="#ref-for-concept-document③">(4)</a> <a href="#ref-for-concept-document④">(5)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-http-network-fetch">
-   <a href="https://fetch.spec.whatwg.org/#concept-http-network-fetch">https://fetch.spec.whatwg.org/#concept-http-network-fetch</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-http-network-fetch">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-concept-http-network-fetch①">3.1.2. CORS preflight</a> <a href="#ref-for-concept-http-network-fetch②">(2)</a>
-    <li><a href="#ref-for-concept-http-network-fetch③">4.3.2. Subresources</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-http-network-or-cache-fetch">
-   <a href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch">https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-http-network-or-cache-fetch">3.1.2. CORS preflight</a> <a href="#ref-for-concept-http-network-or-cache-fetch①">(2)</a>
-    <li><a href="#ref-for-concept-http-network-or-cache-fetch②">5.6.1. Applying checks to subresources</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-http-access-control-allow-credentials">
-   <a href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials">https://fetch.spec.whatwg.org/#http-access-control-allow-credentials</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-http-access-control-allow-credentials">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-http-access-control-allow-credentials①">1.2.3. Navigation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-http-access-control-allow-methods">
-   <a href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods">https://fetch.spec.whatwg.org/#http-access-control-allow-methods</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-http-access-control-allow-methods">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-http-access-control-allow-methods①">1.2.3. Navigation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-http-access-control-allow-origin">
-   <a href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin">https://fetch.spec.whatwg.org/#http-access-control-allow-origin</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-http-access-control-allow-origin">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-http-access-control-allow-origin①">1.2.3. Navigation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-http-access-control-request-method">
-   <a href="https://fetch.spec.whatwg.org/#http-access-control-request-method">https://fetch.spec.whatwg.org/#http-access-control-request-method</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-http-access-control-request-method">1.2.1. Secure by Default</a>
-    <li><a href="#ref-for-http-access-control-request-method①">1.2.3. Navigation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-cache-entry">
-   <a href="https://fetch.spec.whatwg.org/#cache-entry">https://fetch.spec.whatwg.org/#cache-entry</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-cache-entry">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-cache-entry①">5.6.1. Applying checks to subresources</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-cache-match">
-   <a href="https://fetch.spec.whatwg.org/#concept-cache-match">https://fetch.spec.whatwg.org/#concept-cache-match</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-cache-match">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-request-client">
-   <a href="https://fetch.spec.whatwg.org/#concept-request-client">https://fetch.spec.whatwg.org/#concept-request-client</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-request-client">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-concept-request-client①">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-request-client②">(2)</a>
-    <li><a href="#ref-for-concept-request-client③">3.1.2. CORS preflight</a> <a href="#ref-for-concept-request-client④">(2)</a>
-    <li><a href="#ref-for-concept-request-client⑤">3.4. Workers</a> <a href="#ref-for-concept-request-client⑥">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-connection">
-   <a href="https://fetch.spec.whatwg.org/#concept-connection">https://fetch.spec.whatwg.org/#concept-connection</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-connection">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-connection①">(2)</a>
-    <li><a href="#ref-for-concept-connection②">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-connection-pool">
-   <a href="https://fetch.spec.whatwg.org/#concept-connection-pool">https://fetch.spec.whatwg.org/#concept-connection-pool</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-connection-pool">3.1.1. Secure context restriction</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-cors-check">
-   <a href="https://fetch.spec.whatwg.org/#concept-cors-check">https://fetch.spec.whatwg.org/#concept-cors-check</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-cors-check">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-cache">
-   <a href="https://fetch.spec.whatwg.org/#concept-cache">https://fetch.spec.whatwg.org/#concept-cache</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-cache">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-concept-cache①">5.3. DNS Rebinding</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-cors-preflight-fetch-0">
-   <a href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0">https://fetch.spec.whatwg.org/#cors-preflight-fetch-0</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-cors-preflight-fetch-0">3.1.2. CORS preflight</a> <a href="#ref-for-cors-preflight-fetch-0①">(2)</a> <a href="#ref-for-cors-preflight-fetch-0②">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-cors-preflight-request">
-   <a href="https://fetch.spec.whatwg.org/#cors-preflight-request">https://fetch.spec.whatwg.org/#cors-preflight-request</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-cors-preflight-request">1.2.1. Secure by Default</a> <a href="#ref-for-cors-preflight-request①">(2)</a>
-    <li><a href="#ref-for-cors-preflight-request②">1.2.2. Opting-In</a> <a href="#ref-for-cors-preflight-request③">(2)</a>
-    <li><a href="#ref-for-cors-preflight-request④">1.2.3. Navigation</a>
-    <li><a href="#ref-for-cors-preflight-request⑤">3.1. Integration with Fetch</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-cors-safelisted-method">
-   <a href="https://fetch.spec.whatwg.org/#cors-safelisted-method">https://fetch.spec.whatwg.org/#cors-safelisted-method</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-cors-safelisted-method">1.1. Goals</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-cors-safelisted-request-header">
-   <a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header">https://fetch.spec.whatwg.org/#cors-safelisted-request-header</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-cors-safelisted-request-header">1.1. Goals</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-cache-create-entry">
-   <a href="https://fetch.spec.whatwg.org/#concept-cache-create-entry">https://fetch.spec.whatwg.org/#concept-cache-create-entry</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-cache-create-entry">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-request-current-url">
-   <a href="https://fetch.spec.whatwg.org/#concept-request-current-url">https://fetch.spec.whatwg.org/#concept-request-current-url</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-request-current-url">2.2. Local Network Request</a> <a href="#ref-for-concept-request-current-url①">(2)</a>
-    <li><a href="#ref-for-concept-request-current-url②">3.1.1. Secure context restriction</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-extract-header-list-values">
-   <a href="https://fetch.spec.whatwg.org/#extract-header-list-values">https://fetch.spec.whatwg.org/#extract-header-list-values</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-extract-header-list-values">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-fetch">
-   <a href="https://fetch.spec.whatwg.org/#concept-fetch">https://fetch.spec.whatwg.org/#concept-fetch</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-fetch">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-concept-fetch①">3.2. Integration with WebSockets</a>
-    <li><a href="#ref-for-concept-fetch②">3.4. Workers</a> <a href="#ref-for-concept-fetch③">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-request-header-list">
-   <a href="https://fetch.spec.whatwg.org/#concept-request-header-list">https://fetch.spec.whatwg.org/#concept-request-header-list</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-request-header-list">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-response-header-list">
-   <a href="https://fetch.spec.whatwg.org/#concept-response-header-list">https://fetch.spec.whatwg.org/#concept-response-header-list</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-response-header-list">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-http-fetch">
-   <a href="https://fetch.spec.whatwg.org/#concept-http-fetch">https://fetch.spec.whatwg.org/#concept-http-fetch</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-http-fetch">3.1.2. CORS preflight</a> <a href="#ref-for-concept-http-fetch①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-network-error">
-   <a href="https://fetch.spec.whatwg.org/#concept-network-error">https://fetch.spec.whatwg.org/#concept-network-error</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-network-error">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-network-error①">(2)</a>
-    <li><a href="#ref-for-concept-network-error②">3.1.2. CORS preflight</a> <a href="#ref-for-concept-network-error③">(2)</a> <a href="#ref-for-concept-network-error④">(3)</a> <a href="#ref-for-concept-network-error⑤">(4)</a> <a href="#ref-for-concept-network-error⑥">(5)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-network-partition-key">
-   <a href="https://fetch.spec.whatwg.org/#network-partition-key">https://fetch.spec.whatwg.org/#network-partition-key</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-network-partition-key">5.6.1. Applying checks to subresources</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-connection-obtain">
-   <a href="https://fetch.spec.whatwg.org/#concept-connection-obtain">https://fetch.spec.whatwg.org/#concept-connection-obtain</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-connection-obtain">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-concept-connection-obtain①">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-concept-connection-obtain②">3.4. Workers</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-request-origin">
-   <a href="https://fetch.spec.whatwg.org/#concept-request-origin">https://fetch.spec.whatwg.org/#concept-request-origin</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-request-origin">3.1.1. Secure context restriction</a> <a href="#ref-for-concept-request-origin①">(2)</a> <a href="#ref-for-concept-request-origin②">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-request-policy-container">
-   <a href="https://fetch.spec.whatwg.org/#concept-request-policy-container">https://fetch.spec.whatwg.org/#concept-request-policy-container</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-request-policy-container">2.2. Local Network Request</a>
-    <li><a href="#ref-for-concept-request-policy-container①">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-concept-request-policy-container②">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-concept-request-policy-container③">3.4. Workers</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-fetch-params-request">
-   <a href="https://fetch.spec.whatwg.org/#fetch-params-request">https://fetch.spec.whatwg.org/#fetch-params-request</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-fetch-params-request">2.2. Local Network Request</a>
-    <li><a href="#ref-for-fetch-params-request①">2.3. Additional CORS Headers</a>
-    <li><a href="#ref-for-fetch-params-request②">3.1.1. Secure context restriction</a> <a href="#ref-for-fetch-params-request③">(2)</a>
-    <li><a href="#ref-for-fetch-params-request④">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-fetch-params-request⑤">3.4. Workers</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-response">
-   <a href="https://fetch.spec.whatwg.org/#concept-response">https://fetch.spec.whatwg.org/#concept-response</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-response">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-concept-response①">4.3.1. Main resources</a> <a href="#ref-for-concept-response②">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-header-list-set">
-   <a href="https://fetch.spec.whatwg.org/#concept-header-list-set">https://fetch.spec.whatwg.org/#concept-header-list-set</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-header-list-set">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-document">
-   <a href="https://html.spec.whatwg.org/#document">https://html.spec.whatwg.org/#document</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-document">2.5. Feature Detection</a>
-    <li><a href="#ref-for-document①">3.3. Integration with HTML</a> <a href="#ref-for-document②">(2)</a> <a href="#ref-for-document③">(3)</a> <a href="#ref-for-document④">(4)</a>
-    <li><a href="#ref-for-document⑤">4.2. Proxies</a> <a href="#ref-for-document⑥">(2)</a> <a href="#ref-for-document⑦">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-workerglobalscope">
-   <a href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope">https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-workerglobalscope">2.5. Feature Detection</a>
-    <li><a href="#ref-for-workerglobalscope①">3.4. Workers</a> <a href="#ref-for-workerglobalscope②">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-clone-a-policy-container">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container">https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-clone-a-policy-container">3.3. Integration with HTML</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-creating-a-policy-container-from-a-fetch-response">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response">https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-creating-a-policy-container-from-a-fetch-response">3.3. Integration with HTML</a>
-    <li><a href="#ref-for-creating-a-policy-container-from-a-fetch-response①">3.4. Workers</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-environment-settings-object">
-   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-environment-settings-object">2.4. The treat-as-public-address Content Security Policy Directive</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-origin-host">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host">https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-origin-host">5.2. Mixed Content</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-meta">
-   <a href="https://html.spec.whatwg.org/multipage/semantics.html#meta">https://html.spec.whatwg.org/multipage/semantics.html#meta</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-meta">2.4. The treat-as-public-address Content Security Policy Directive</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-non-secure-context">
-   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context">https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-non-secure-context">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-non-secure-context①">4.4. Rollout difficulties</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-origin">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">https://html.spec.whatwg.org/multipage/browsers.html#concept-origin</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-origin">5.2. Mixed Content</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-policy-container">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#policy-container">https://html.spec.whatwg.org/multipage/browsers.html#policy-container</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-policy-container">3.3. Integration with HTML</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-document-policy-container">
-   <a href="https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container">https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-document-policy-container">3.3. Integration with HTML</a> <a href="#ref-for-concept-document-policy-container①">(2)</a> <a href="#ref-for-concept-document-policy-container②">(3)</a>
-    <li><a href="#ref-for-concept-document-policy-container③">4.2. Proxies</a>
-    <li><a href="#ref-for-concept-document-policy-container④">4.3.1. Main resources</a> <a href="#ref-for-concept-document-policy-container⑤">(2)</a> <a href="#ref-for-concept-document-policy-container⑥">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-workerglobalscope-policy-container">
-   <a href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container">https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-workerglobalscope-policy-container">3.4. Workers</a> <a href="#ref-for-concept-workerglobalscope-policy-container①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-settings-object-policy-container">
-   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-settings-object-policy-container">2.4. The treat-as-public-address Content Security Policy Directive</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-same-origin">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">https://html.spec.whatwg.org/multipage/browsers.html#same-origin</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-same-origin">3.1.1. Secure context restriction</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-secure-context">
-   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context">https://html.spec.whatwg.org/multipage/webappapis.html#secure-context</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-secure-context">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-secure-context①">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-secure-context②">3.1.2. CORS preflight</a> <a href="#ref-for-secure-context③">(2)</a> <a href="#ref-for-secure-context④">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-struct">
-   <a href="https://infra.spec.whatwg.org/#struct">https://infra.spec.whatwg.org/#struct</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-struct">3.3. Integration with HTML</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-initialization">
-   <a href="https://w3c.github.io/miniapp-lifecycle/#dfn-initialization">https://w3c.github.io/miniapp-lifecycle/#dfn-initialization</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dfn-initialization">2.4. The treat-as-public-address Content Security Policy Directive</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-potentially-trustworthy-origin">
-   <a href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin">https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-potentially-trustworthy-origin">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-potentially-trustworthy-origin①">5.2. Mixed Content</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-service-worker">
-   <a href="https://w3c.github.io/ServiceWorker/#dfn-service-worker">https://w3c.github.io/ServiceWorker/#dfn-service-worker</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dfn-service-worker">3.4. Workers</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-soft-update">
-   <a href="https://w3c.github.io/ServiceWorker/#soft-update">https://w3c.github.io/ServiceWorker/#soft-update</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-soft-update">3.4. Workers</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dom-url-host">
-   <a href="https://url.spec.whatwg.org/#dom-url-host">https://url.spec.whatwg.org/#dom-url-host</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-url-host">2.2. Local Network Request</a> <a href="#ref-for-dom-url-host①">(2)</a>
-   </ul>
-  </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
     <a data-link-type="biblio">[CSP3]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-policy-disposition">disposition</span>
+     <li><span class="dfn-paneled" id="4582ec82">disposition</span>
+     <li><span class="dfn-paneled" id="2e14a243">initialization</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-concept-document">document</span>
+     <li><span class="dfn-paneled" id="a973e0fe">document</span>
     </ul>
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-concept-http-network-fetch">HTTP-network fetch</span>
-     <li><span class="dfn-paneled" id="term-for-concept-http-network-or-cache-fetch">HTTP-network-or-cache fetch</span>
-     <li><span class="dfn-paneled" id="term-for-http-access-control-allow-credentials">access-control-allow-credentials</span>
-     <li><span class="dfn-paneled" id="term-for-http-access-control-allow-methods">access-control-allow-methods</span>
-     <li><span class="dfn-paneled" id="term-for-http-access-control-allow-origin">access-control-allow-origin</span>
-     <li><span class="dfn-paneled" id="term-for-http-access-control-request-method">access-control-request-method</span>
-     <li><span class="dfn-paneled" id="term-for-cache-entry">cache entry</span>
-     <li><span class="dfn-paneled" id="term-for-concept-cache-match">cache entry match</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-client">client</span>
-     <li><span class="dfn-paneled" id="term-for-concept-connection">connection</span>
-     <li><span class="dfn-paneled" id="term-for-concept-connection-pool">connection pool</span>
-     <li><span class="dfn-paneled" id="term-for-concept-cors-check">cors check</span>
-     <li><span class="dfn-paneled" id="term-for-concept-cache">cors-preflight cache</span>
-     <li><span class="dfn-paneled" id="term-for-cors-preflight-fetch-0">cors-preflight fetch</span>
-     <li><span class="dfn-paneled" id="term-for-cors-preflight-request">cors-preflight request</span>
-     <li><span class="dfn-paneled" id="term-for-cors-safelisted-method">cors-safelisted method</span>
-     <li><span class="dfn-paneled" id="term-for-cors-safelisted-request-header">cors-safelisted request-header</span>
-     <li><span class="dfn-paneled" id="term-for-concept-cache-create-entry">create a new cache entry</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-current-url">current url</span>
-     <li><span class="dfn-paneled" id="term-for-extract-header-list-values">extracting header list values</span>
-     <li><span class="dfn-paneled" id="term-for-concept-fetch">fetch</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-header-list">header list <small>(for request)</small></span>
-     <li><span class="dfn-paneled" id="term-for-concept-response-header-list">header list <small>(for response)</small></span>
-     <li><span class="dfn-paneled" id="term-for-concept-http-fetch">http fetch</span>
-     <li><span class="dfn-paneled" id="term-for-concept-network-error">network error</span>
-     <li><span class="dfn-paneled" id="term-for-network-partition-key">network partition key</span>
-     <li><span class="dfn-paneled" id="term-for-concept-connection-obtain">obtain a connection</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-origin">origin</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-policy-container">policy container</span>
-     <li><span class="dfn-paneled" id="term-for-fetch-params-request">request</span>
-     <li><span class="dfn-paneled" id="term-for-concept-response">response</span>
-     <li><span class="dfn-paneled" id="term-for-concept-header-list-set">set</span>
+     <li><span class="dfn-paneled" id="e2a3d65d">HTTP-network fetch</span>
+     <li><span class="dfn-paneled" id="f4cb4c20">HTTP-network-or-cache fetch</span>
+     <li><span class="dfn-paneled" id="82748635">access-control-allow-credentials</span>
+     <li><span class="dfn-paneled" id="a6a3b229">access-control-allow-methods</span>
+     <li><span class="dfn-paneled" id="eed8e0e4">access-control-allow-origin</span>
+     <li><span class="dfn-paneled" id="8db43a5c">access-control-request-method</span>
+     <li><span class="dfn-paneled" id="dbbacb0c">cache entry</span>
+     <li><span class="dfn-paneled" id="a4ff76ba">cache entry match</span>
+     <li><span class="dfn-paneled" id="857d5516">client</span>
+     <li><span class="dfn-paneled" id="697965b2">connection</span>
+     <li><span class="dfn-paneled" id="f9649676">connection pool</span>
+     <li><span class="dfn-paneled" id="fdb35d97">cors check</span>
+     <li><span class="dfn-paneled" id="e119682f">cors-preflight cache</span>
+     <li><span class="dfn-paneled" id="0105c79c">cors-preflight fetch</span>
+     <li><span class="dfn-paneled" id="4d7b724c">cors-preflight request</span>
+     <li><span class="dfn-paneled" id="98f9d698">cors-safelisted method</span>
+     <li><span class="dfn-paneled" id="99f492fd">cors-safelisted request-header</span>
+     <li><span class="dfn-paneled" id="585e7a08">create a new cache entry</span>
+     <li><span class="dfn-paneled" id="3f2ca4de">current url</span>
+     <li><span class="dfn-paneled" id="3be1d4ac">extracting header list values</span>
+     <li><span class="dfn-paneled" id="a33db89a">fetch</span>
+     <li><span class="dfn-paneled" id="ad6ec3ab">forbidden request-header</span>
+     <li><span class="dfn-paneled" id="6ee0eab1">header list <small>(for request)</small></span>
+     <li><span class="dfn-paneled" id="f7b00a8b">header list <small>(for response)</small></span>
+     <li><span class="dfn-paneled" id="2aaa2f42">http fetch</span>
+     <li><span class="dfn-paneled" id="eb1b1af3">network error</span>
+     <li><span class="dfn-paneled" id="7cf440ca">network partition key</span>
+     <li><span class="dfn-paneled" id="8e1fb11c">obtain a connection</span>
+     <li><span class="dfn-paneled" id="f78d5b5c">origin</span>
+     <li><span class="dfn-paneled" id="86efadaf">policy container</span>
+     <li><span class="dfn-paneled" id="5695c146">request</span>
+     <li><span class="dfn-paneled" id="ee7bba09">response</span>
+     <li><span class="dfn-paneled" id="d9f4dab1">set</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-document">Document</span>
-     <li><span class="dfn-paneled" id="term-for-workerglobalscope">WorkerGlobalScope</span>
-     <li><span class="dfn-paneled" id="term-for-clone-a-policy-container">clone a policy container</span>
-     <li><span class="dfn-paneled" id="term-for-creating-a-policy-container-from-a-fetch-response">creating a policy container from a fetch response</span>
-     <li><span class="dfn-paneled" id="term-for-environment-settings-object">environment settings object</span>
-     <li><span class="dfn-paneled" id="term-for-concept-origin-host">host</span>
-     <li><span class="dfn-paneled" id="term-for-meta">meta</span>
-     <li><span class="dfn-paneled" id="term-for-non-secure-context">non-secure context</span>
-     <li><span class="dfn-paneled" id="term-for-concept-origin">origin</span>
-     <li><span class="dfn-paneled" id="term-for-policy-container">policy container</span>
-     <li><span class="dfn-paneled" id="term-for-concept-document-policy-container">policy container <small>(for Document)</small></span>
-     <li><span class="dfn-paneled" id="term-for-concept-workerglobalscope-policy-container">policy container <small>(for WorkerGlobalScope)</small></span>
-     <li><span class="dfn-paneled" id="term-for-concept-settings-object-policy-container">policy container <small>(for environment settings object)</small></span>
-     <li><span class="dfn-paneled" id="term-for-same-origin">same origin</span>
-     <li><span class="dfn-paneled" id="term-for-secure-context">secure context</span>
+     <li><span class="dfn-paneled" id="07cd5a09">Document</span>
+     <li><span class="dfn-paneled" id="83c59a3a">WorkerGlobalScope</span>
+     <li><span class="dfn-paneled" id="00c57527">clone a policy container</span>
+     <li><span class="dfn-paneled" id="cfb6031b">creating a policy container from a fetch response</span>
+     <li><span class="dfn-paneled" id="3e12e042">environment settings object</span>
+     <li><span class="dfn-paneled" id="77a2ee6e">host</span>
+     <li><span class="dfn-paneled" id="64b89595">meta</span>
+     <li><span class="dfn-paneled" id="5155c2d3">non-secure context</span>
+     <li><span class="dfn-paneled" id="086e3aff">origin</span>
+     <li><span class="dfn-paneled" id="b33787b2">policy container</span>
+     <li><span class="dfn-paneled" id="08639fbc">policy container <small>(for Document)</small></span>
+     <li><span class="dfn-paneled" id="432147ee">policy container <small>(for WorkerGlobalScope)</small></span>
+     <li><span class="dfn-paneled" id="bd1db03d">policy container <small>(for environment settings object)</small></span>
+     <li><span class="dfn-paneled" id="7393da89">same origin</span>
+     <li><span class="dfn-paneled" id="65181da8">secure context</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-struct">struct</span>
-    </ul>
-   <li>
-    <a data-link-type="biblio">[MINIAPP-LIFECYCLE]</a> defines the following terms:
-    <ul>
-     <li><span class="dfn-paneled" id="term-for-dfn-initialization">initialization</span>
+     <li><span class="dfn-paneled" id="984221ca">struct</span>
     </ul>
    <li>
     <a data-link-type="biblio">[SECURE-CONTEXTS]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-potentially-trustworthy-origin">potentially trustworthy origin</span>
+     <li><span class="dfn-paneled" id="96dabee7">potentially trustworthy origin</span>
     </ul>
    <li>
     <a data-link-type="biblio">[SERVICE-WORKERS]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-dfn-service-worker">service worker</span>
-     <li><span class="dfn-paneled" id="term-for-soft-update">soft update</span>
+     <li><span class="dfn-paneled" id="c60ed63a">service worker</span>
+     <li><span class="dfn-paneled" id="8dbcc37d">soft update</span>
     </ul>
    <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-dom-url-host">host</span>
+     <li><span class="dfn-paneled" id="5718c334">host</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[WEBSOCKETS]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="22b84272">establish a websocket connection</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -1897,8 +1543,6 @@ directive-value = ""
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-infra">[INFRA]
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
-   <dt id="biblio-miniapp-lifecycle">[MINIAPP-LIFECYCLE]
-   <dd>Qing An; Haoyang Xu. <a href="https://w3c.github.io/miniapp-lifecycle/"><cite>MiniApp Lifecycle</cite></a>. URL: <a href="https://w3c.github.io/miniapp-lifecycle/">https://w3c.github.io/miniapp-lifecycle/</a>
    <dt id="biblio-rfc7762">[RFC7762]
    <dd>M. West. <a href="https://www.rfc-editor.org/rfc/rfc7762"><cite>Initial Assignment for the Content Security Policy Directives Registry</cite></a>. January 2016. Informational. URL: <a href="https://www.rfc-editor.org/rfc/rfc7762">https://www.rfc-editor.org/rfc/rfc7762</a>
    <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
@@ -1907,6 +1551,8 @@ directive-value = ""
    <dd>Jake Archibald; Marijn Kruisselbrink. <a href="https://w3c.github.io/ServiceWorker/"><cite>Service Workers</cite></a>. URL: <a href="https://w3c.github.io/ServiceWorker/">https://w3c.github.io/ServiceWorker/</a>
    <dt id="biblio-url">[URL]
    <dd>Anne van Kesteren. <a href="https://url.spec.whatwg.org/"><cite>URL Standard</cite></a>. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a>
+   <dt id="biblio-websockets">[WEBSOCKETS]
+   <dd>Adam Rice. <a href="https://websockets.spec.whatwg.org/"><cite>WebSockets Standard</cite></a>. Living Standard. URL: <a href="https://websockets.spec.whatwg.org/">https://websockets.spec.whatwg.org/</a>
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
@@ -1920,6 +1566,8 @@ directive-value = ""
    <dd><a href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml"><cite>IANA IPv4 Special-Purpose Address Registry</cite></a>. URL: <a href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml">https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml</a>
    <dt id="biblio-ipv6-registry">[IPV6-REGISTRY]
    <dd><a href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml"><cite>IANA IPv6 Special-Purpose Address Registry</cite></a>. URL: <a href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml">https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml</a>
+   <dt id="biblio-link-local-uri">[LINK-LOCAL-URI]
+   <dd>B. Carpenter; S. Cheshire; R. Hinden. <a href="https://www.ietf.org/archive/id/draft-ietf-6man-rfc6874bis-07.html"><cite>Representing IPv6 Zone Identifiers in Address Literals and Uniform Resource Identifiers</cite></a>. 12 April 2023. Internet-Draft. URL: <a href="https://www.ietf.org/archive/id/draft-ietf-6man-rfc6874bis-07.html">https://www.ietf.org/archive/id/draft-ietf-6man-rfc6874bis-07.html</a>
    <dt id="biblio-mixed-content-2">[MIXED-CONTENT-2]
    <dd>Emily Stark; Mike West; Carlos Ibarra Lopez. <a href="https://w3c.github.io/webappsec-mixed-content/level2.html"><cite>Mixed Content Level 2</cite></a>. 14 October 2020. W3C First Public Working Draft. URL: <a href="https://w3c.github.io/webappsec-mixed-content/level2.html">https://w3c.github.io/webappsec-mixed-content/level2.html</a>
    <dt id="biblio-plex">[PLEX]
@@ -1962,7 +1610,7 @@ directive-value = ""
    <div class="issue"> Preflight requests should probably be sent ahead of WebSocket
   handshakes, given that WebSocket handshakes have roughly the same capabilities
   as <code>&lt;img></code> tags. This might require no additional work to specify given that
-  the <a data-link-type="dfn">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">Fetch</a> algorithm. <a href="https://github.com/wicg/local-network-access/issues/14">[Issue #14]</a> <a class="issue-return" href="#issue-5a78ae74" title="Jump to section">↵</a></div>
+  the <a data-link-type="dfn" href="https://websockets.spec.whatwg.org/#concept-websocket-establish">establish a WebSocket connection</a> depends on the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">Fetch</a> algorithm. <a href="https://github.com/wicg/local-network-access/issues/14">[Issue #14]</a> <a class="issue-return" href="#issue-5a78ae74" title="Jump to section">↵</a></div>
    <div class="issue"> The <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#dfn-service-worker">Service Worker</a> <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#soft-update">soft update</a> algorithm unfortunately sets a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">request client</a> of <code>"null"</code> when <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">fetching</a> an updated script. This causes all sorts of issues, and
   interferes with the <a data-link-type="dfn" href="#local-network-access-check">local network access check</a> algorithm laid out above.
   Indeed, there is no <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">request client</a> from which to copy the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container">policy container</a> during <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch">fetch</a>. <a href="https://github.com/wicg/local-network-access/issues/83">[Issue #83]</a> <a class="issue-return" href="#issue-c268a57d" title="Jump to section">↵</a></div>
@@ -1979,254 +1627,430 @@ directive-value = ""
   revealed that integrating with the cache was useful even in protecting
   network resources against CSRF attacks. This section needs to be rewritten. <a href="https://github.com/wicg/local-network-access/issues/75">[Issue #75]</a> <a class="issue-return" href="#issue-dfc740be" title="Jump to section">↵</a></div>
   </div>
-  <aside class="dfn-panel" data-for="ip-address-space">
-   <b><a href="#ip-address-space">#ip-address-space</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-ip-address-space">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space①">(2)</a> <a href="#ref-for-ip-address-space②">(3)</a> <a href="#ref-for-ip-address-space③">(4)</a> <a href="#ref-for-ip-address-space④">(5)</a> <a href="#ref-for-ip-address-space⑤">(6)</a> <a href="#ref-for-ip-address-space⑥">(7)</a>
-    <li><a href="#ref-for-ip-address-space⑦">2.2. Local Network Request</a> <a href="#ref-for-ip-address-space⑧">(2)</a> <a href="#ref-for-ip-address-space⑨">(3)</a>
-    <li><a href="#ref-for-ip-address-space①⓪">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-ip-address-space①①">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-ip-address-space①②">3.1.2. CORS preflight</a> <a href="#ref-for-ip-address-space①③">(2)</a> <a href="#ref-for-ip-address-space①④">(3)</a>
-    <li><a href="#ref-for-ip-address-space①⑤">3.3. Integration with HTML</a>
-    <li><a href="#ref-for-ip-address-space①⑥">3.4. Workers</a>
-    <li><a href="#ref-for-ip-address-space①⑦">4.2. Proxies</a>
-    <li><a href="#ref-for-ip-address-space①⑧">4.3.1. Main resources</a> <a href="#ref-for-ip-address-space①⑨">(2)</a>
-    <li><a href="#ref-for-ip-address-space②⓪">4.4. Rollout difficulties</a> <a href="#ref-for-ip-address-space②①">(2)</a> <a href="#ref-for-ip-address-space②②">(3)</a>
-    <li><a href="#ref-for-ip-address-space②③">5.5. Cross-network confusion</a>
-    <li><a href="#ref-for-ip-address-space②④">5.6.2. HTTP cache poisoning</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="ip-address-space-loopback">
-   <b><a href="#ip-address-space-loopback">#ip-address-space-loopback</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-ip-address-space-loopback">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-loopback①">(2)</a> <a href="#ref-for-ip-address-space-loopback②">(3)</a> <a href="#ref-for-ip-address-space-loopback③">(4)</a> <a href="#ref-for-ip-address-space-loopback④">(5)</a>
-    <li><a href="#ref-for-ip-address-space-loopback⑤">3.3. Integration with HTML</a>
-    <li><a href="#ref-for-ip-address-space-loopback⑥">3.4. Workers</a>
-    <li><a href="#ref-for-ip-address-space-loopback⑦">4.1. Where do file URLs fit?</a>
-    <li><a href="#ref-for-ip-address-space-loopback⑧">4.4. Rollout difficulties</a>
-    <li><a href="#ref-for-ip-address-space-loopback⑨">5.2. Mixed Content</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="ip-address-space-local">
-   <b><a href="#ip-address-space-local">#ip-address-space-local</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-ip-address-space-local">1.2.1. Secure by Default</a>
-    <li><a href="#ref-for-ip-address-space-local①">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-ip-address-space-local②">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-local③">(2)</a> <a href="#ref-for-ip-address-space-local④">(3)</a> <a href="#ref-for-ip-address-space-local⑤">(4)</a> <a href="#ref-for-ip-address-space-local⑥">(5)</a> <a href="#ref-for-ip-address-space-local⑦">(6)</a> <a href="#ref-for-ip-address-space-local⑧">(7)</a> <a href="#ref-for-ip-address-space-local⑨">(8)</a> <a href="#ref-for-ip-address-space-local①⓪">(9)</a> <a href="#ref-for-ip-address-space-local①①">(10)</a> <a href="#ref-for-ip-address-space-local①②">(11)</a> <a href="#ref-for-ip-address-space-local①③">(12)</a>
-    <li><a href="#ref-for-ip-address-space-local①④">2.2. Local Network Request</a>
-    <li><a href="#ref-for-ip-address-space-local①⑤">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-ip-address-space-local①⑥">3.4. Workers</a>
-    <li><a href="#ref-for-ip-address-space-local①⑦">4.2. Proxies</a>
-    <li><a href="#ref-for-ip-address-space-local①⑧">4.3.1. Main resources</a>
-    <li><a href="#ref-for-ip-address-space-local①⑨">4.4. Rollout difficulties</a>
-    <li><a href="#ref-for-ip-address-space-local②⓪">5.2. Mixed Content</a>
-    <li><a href="#ref-for-ip-address-space-local②①">5.5. Cross-network confusion</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="ip-address-space-public">
-   <b><a href="#ip-address-space-public">#ip-address-space-public</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-ip-address-space-public">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-ip-address-space-public①">2.1. IP Address Space</a> <a href="#ref-for-ip-address-space-public②">(2)</a> <a href="#ref-for-ip-address-space-public③">(3)</a> <a href="#ref-for-ip-address-space-public④">(4)</a> <a href="#ref-for-ip-address-space-public⑤">(5)</a>
-    <li><a href="#ref-for-ip-address-space-public⑥">2.2. Local Network Request</a>
-    <li><a href="#ref-for-ip-address-space-public⑦">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-ip-address-space-public⑧">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-ip-address-space-public⑨">3.3. Integration with HTML</a> <a href="#ref-for-ip-address-space-public①⓪">(2)</a> <a href="#ref-for-ip-address-space-public①①">(3)</a>
-    <li><a href="#ref-for-ip-address-space-public①②">3.4. Workers</a>
-    <li><a href="#ref-for-ip-address-space-public①③">4.3.1. Main resources</a>
-    <li><a href="#ref-for-ip-address-space-public①④">4.4. Rollout difficulties</a>
-    <li><a href="#ref-for-ip-address-space-public①⑤">5.2. Mixed Content</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="loopback-address">
-   <b><a href="#loopback-address">#loopback-address</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-loopback-address">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-loopback-address①">3.3. Integration with HTML</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="local-address">
-   <b><a href="#local-address">#local-address</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-local-address">1.2.3. Navigation</a>
-    <li><a href="#ref-for-local-address①">2.2. Local Network Request</a>
-    <li><a href="#ref-for-local-address②">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-local-address③">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-local-address④">4.2. Proxies</a> <a href="#ref-for-local-address⑤">(2)</a> <a href="#ref-for-local-address⑥">(3)</a>
-    <li><a href="#ref-for-local-address⑦">4.3.1. Main resources</a>
-    <li><a href="#ref-for-local-address⑧">5.5. Cross-network confusion</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="public-address">
-   <b><a href="#public-address">#public-address</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-public-address">1.2.1. Secure by Default</a>
-    <li><a href="#ref-for-public-address①">1.2.3. Navigation</a> <a href="#ref-for-public-address②">(2)</a>
-    <li><a href="#ref-for-public-address③">2.2. Local Network Request</a>
-    <li><a href="#ref-for-public-address④">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-public-address⑤">3.3. Integration with HTML</a>
-    <li><a href="#ref-for-public-address⑥">3.4. Workers</a>
-    <li><a href="#ref-for-public-address⑦">4.2. Proxies</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="ip-address-space-less-public">
-   <b><a href="#ip-address-space-less-public">#ip-address-space-less-public</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-ip-address-space-less-public">2.2. Local Network Request</a>
-    <li><a href="#ref-for-ip-address-space-less-public①">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-ip-address-space-less-public②">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-ip-address-space-less-public③">5.6.2. HTTP cache poisoning</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="determine-the-ip-address-space">
-   <b><a href="#determine-the-ip-address-space">#determine-the-ip-address-space</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-determine-the-ip-address-space">3.1.1. Secure context restriction</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="local-network-request">
-   <b><a href="#local-network-request">#local-network-request</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-local-network-request">2.2. Local Network Request</a> <a href="#ref-for-local-network-request①">(2)</a>
-    <li><a href="#ref-for-local-network-request②">2.3. Additional CORS Headers</a>
-    <li><a href="#ref-for-local-network-request③">3.1. Integration with Fetch</a>
-    <li><a href="#ref-for-local-network-request④">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-local-network-request⑤">3.4. Workers</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="http-headerdef-access-control-request-local-network">
-   <b><a href="#http-headerdef-access-control-request-local-network">#http-headerdef-access-control-request-local-network</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-http-headerdef-access-control-request-local-network">1.2.1. Secure by Default</a>
-    <li><a href="#ref-for-http-headerdef-access-control-request-local-network①">1.2.3. Navigation</a>
-    <li><a href="#ref-for-http-headerdef-access-control-request-local-network②">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-http-headerdef-access-control-request-local-network③">3.1.3. Forbidden header names</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="http-headerdef-access-control-allow-local-network">
-   <b><a href="#http-headerdef-access-control-allow-local-network">#http-headerdef-access-control-allow-local-network</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-http-headerdef-access-control-allow-local-network">1.2.1. Secure by Default</a>
-    <li><a href="#ref-for-http-headerdef-access-control-allow-local-network①">1.2.2. Opting-In</a>
-    <li><a href="#ref-for-http-headerdef-access-control-allow-local-network②">1.2.3. Navigation</a>
-    <li><a href="#ref-for-http-headerdef-access-control-allow-local-network③">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="treat-as-public-address">
-   <b><a href="#treat-as-public-address">#treat-as-public-address</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-treat-as-public-address">6. IANA Considerations</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="connection-ip-address-space">
-   <b><a href="#connection-ip-address-space">#connection-ip-address-space</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-connection-ip-address-space">3.1.1. Secure context restriction</a> <a href="#ref-for-connection-ip-address-space①">(2)</a> <a href="#ref-for-connection-ip-address-space②">(3)</a>
-    <li><a href="#ref-for-connection-ip-address-space③">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="response-ip-address-space">
-   <b><a href="#response-ip-address-space">#response-ip-address-space</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-response-ip-address-space">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-response-ip-address-space①">3.1.2. CORS preflight</a> <a href="#ref-for-response-ip-address-space②">(2)</a> <a href="#ref-for-response-ip-address-space③">(3)</a> <a href="#ref-for-response-ip-address-space④">(4)</a> <a href="#ref-for-response-ip-address-space⑤">(5)</a> <a href="#ref-for-response-ip-address-space⑥">(6)</a> <a href="#ref-for-response-ip-address-space⑦">(7)</a> <a href="#ref-for-response-ip-address-space⑧">(8)</a>
-    <li><a href="#ref-for-response-ip-address-space⑨">3.3. Integration with HTML</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="local-network-access-check">
-   <b><a href="#local-network-access-check">#local-network-access-check</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-local-network-access-check">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-local-network-access-check①">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-local-network-access-check②">3.4. Workers</a>
-    <li><a href="#ref-for-local-network-access-check③">4.3.2. Subresources</a>
-    <li><a href="#ref-for-local-network-access-check④">5.6.1. Applying checks to subresources</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="request-target-ip-address-space">
-   <b><a href="#request-target-ip-address-space">#request-target-ip-address-space</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-request-target-ip-address-space">3.1.2. CORS preflight</a> <a href="#ref-for-request-target-ip-address-space①">(2)</a> <a href="#ref-for-request-target-ip-address-space②">(3)</a> <a href="#ref-for-request-target-ip-address-space③">(4)</a> <a href="#ref-for-request-target-ip-address-space④">(5)</a> <a href="#ref-for-request-target-ip-address-space⑤">(6)</a> <a href="#ref-for-request-target-ip-address-space⑥">(7)</a> <a href="#ref-for-request-target-ip-address-space⑦">(8)</a> <a href="#ref-for-request-target-ip-address-space⑧">(9)</a> <a href="#ref-for-request-target-ip-address-space⑨">(10)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="http-no-service-worker-fetch">
-   <b><a href="#http-no-service-worker-fetch">#http-no-service-worker-fetch</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-http-no-service-worker-fetch">3.1.2. CORS preflight</a> <a href="#ref-for-http-no-service-worker-fetch①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="cache-entry-ip-address-space">
-   <b><a href="#cache-entry-ip-address-space">#cache-entry-ip-address-space</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-cache-entry-ip-address-space">3.1.2. CORS preflight</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="policy-container-ip-address-space">
-   <b><a href="#policy-container-ip-address-space">#policy-container-ip-address-space</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-policy-container-ip-address-space">2.2. Local Network Request</a>
-    <li><a href="#ref-for-policy-container-ip-address-space①">2.4. The treat-as-public-address Content Security Policy Directive</a>
-    <li><a href="#ref-for-policy-container-ip-address-space②">3.1.1. Secure context restriction</a>
-    <li><a href="#ref-for-policy-container-ip-address-space③">3.1.2. CORS preflight</a>
-    <li><a href="#ref-for-policy-container-ip-address-space④">3.3. Integration with HTML</a> <a href="#ref-for-policy-container-ip-address-space⑤">(2)</a> <a href="#ref-for-policy-container-ip-address-space⑥">(3)</a> <a href="#ref-for-policy-container-ip-address-space⑦">(4)</a> <a href="#ref-for-policy-container-ip-address-space⑧">(5)</a> <a href="#ref-for-policy-container-ip-address-space⑨">(6)</a>
-    <li><a href="#ref-for-policy-container-ip-address-space①⓪">3.4. Workers</a>
-    <li><a href="#ref-for-policy-container-ip-address-space①①">4.2. Proxies</a>
-    <li><a href="#ref-for-policy-container-ip-address-space①②">4.3.1. Main resources</a> <a href="#ref-for-policy-container-ip-address-space①③">(2)</a> <a href="#ref-for-policy-container-ip-address-space①④">(3)</a>
-   </ul>
-  </aside>
 <script>/* script-dfn-panel */
+"use strict";
+{
+    const dfnsJson = window.dfnsJson || {};
 
-document.body.addEventListener("click", function(e) {
-    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
-    // Find the dfn element or panel, if any, that was clicked on.
-    var el = e.target;
-    var target;
-    var hitALink = false;
-    while(el.parentElement) {
-        if(el.tagName == "A") {
-            // Clicking on a link in a <dfn> shouldn't summon the panel
-            hitALink = true;
-        }
-        if(el.classList.contains("dfn-paneled")) {
-            target = "dfn";
-            break;
-        }
-        if(el.classList.contains("dfn-panel")) {
-            target = "dfn-panel";
-            break;
-        }
-        el = el.parentElement;
+    function genDfnPanel({dfnID, url, dfnText, refSections, external}) {
+        return mk.aside({
+            class: "dfn-panel",
+            id: `infopanel-for-${dfnID}`,
+            "data-for": dfnID,
+            "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+            },
+            mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
+                `Info about the '${dfnText}' ${external?"external":""} reference.`),
+            mk.a({href:url}, url),
+            mk.b({}, "Referenced in:"),
+            mk.ul({},
+                ...refSections.map(section=>
+                    mk.li({},
+                        ...section.refs.map((ref, refI)=>
+                            [
+                                mk.a({
+                                    href: `#${ref.id}`
+                                    },
+                                    (refI == 0) ? section.title : `(${refI + 1})`
+                                ),
+                                " ",
+                            ]
+                        ),
+                    ),
+                ),
+            ),
+        );
     }
-    if(target != "dfn-panel") {
-        // Turn off any currently "on" or "activated" panels.
-        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
-            el.classList.remove("on");
-            el.classList.remove("activated");
-        });
-    }
-    if(target == "dfn" && !hitALink) {
-        // open the panel
-        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
-        if(dfnPanel) {
-            dfnPanel.classList.add("on");
-            var rect = el.getBoundingClientRect();
-            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
-            dfnPanel.style.top = window.scrollY + rect.top + "px";
-            var panelRect = dfnPanel.getBoundingClientRect();
-            var panelWidth = panelRect.right - panelRect.left;
-            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
-                // Reposition, because the panel is overflowing
-                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+
+    function genAllDfnPanels() {
+        for(const panelData of Object.values(window.dfnpanelData)) {
+            const dfnID = panelData.dfnID;
+            const dfn = document.getElementById(dfnID);
+            if(!dfn) {
+                console.log(`Can't find dfn#${dfnID}.`, panelData);
+            } else {
+                const panel = genDfnPanel(panelData);
+                append(document.body, panel);
+                insertDfnPopupAction(dfn, panel)
             }
-        } else {
-            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
         }
-    } else if(target == "dfn-panel") {
-        // Switch it to "activated" state, which pins it.
-        el.classList.add("activated");
-        el.style.left = null;
-        el.style.top = null;
     }
 
-});
+    document.addEventListener("DOMContentLoaded", ()=>{
+        genAllDfnPanels();
+
+        // Add popup behavior to all dfns to show the corresponding dfn-panel.
+        var dfns = queryAll('.dfn-paneled');
+        for(let dfn of dfns) { ; }
+
+        document.body.addEventListener("click", (e) => {
+            // If not handled already, just hide all dfn panels.
+            hideAllDfnPanels();
+        });
+    })
+
+
+    function hideAllDfnPanels() {
+        // Turn off any currently "on" or "activated" panels.
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>hideDfnPanel(el));
+    }
+
+    function showDfnPanel(dfnPanel, dfn) {
+        hideAllDfnPanels(); // Only display one at this time.
+        dfn.setAttribute("aria-expanded", "true");
+        dfnPanel.classList.add("on");
+        dfnPanel.style.left = "5px";
+        dfnPanel.style.top = "0px";
+        const panelRect = dfnPanel.getBoundingClientRect();
+        const panelWidth = panelRect.right - panelRect.left;
+        if (panelRect.right > document.body.scrollWidth) {
+            // Panel's overflowing the screen.
+            // Just drop it below the dfn and flip it rightward instead.
+            // This still wont' fix things if the screen is *really* wide,
+            // but fixing that's a lot harder without 'anchor()'.
+            dfnPanel.style.top = "1.5em";
+            dfnPanel.style.left = "auto";
+            dfnPanel.style.right = "0px";
+        }
+    }
+
+    function pinDfnPanel(dfnPanel) {
+        // Switch it to "activated" state, which pins it.
+        dfnPanel.classList.add("activated");
+        dfnPanel.style.left = null;
+        dfnPanel.style.top = null;
+    }
+
+    function hideDfnPanel(dfnPanel, dfn) {
+        if(!dfn) {
+            dfn = document.getElementById(dfnPanel.getAttribute("data-for"));
+        }
+        dfn.setAttribute("aria-expanded", "false")
+        dfnPanel.classList.remove("on");
+        dfnPanel.classList.remove("activated");
+    }
+
+    function toggleDfnPanel(dfnPanel, dfn) {
+        if(dfnPanel.classList.contains("on")) {
+            hideDfnPanel(dfnPanel, dfn);
+        } else {
+            showDfnPanel(dfnPanel, dfn);
+        }
+    }
+
+    function insertDfnPopupAction(dfn, dfnPanel) {
+        // Find dfn panel
+        const panelWrapper = document.createElement('span');
+        panelWrapper.appendChild(dfnPanel);
+        panelWrapper.style.position = "relative";
+        panelWrapper.style.height = "0px";
+        dfn.insertAdjacentElement("afterend", panelWrapper);
+        dfn.setAttribute('role', 'button');
+        dfn.setAttribute('aria-expanded', 'false')
+        dfn.tabIndex = 0;
+        dfn.classList.add('has-dfn-panel');
+        dfn.addEventListener('click', (event) => {
+            showDfnPanel(dfnPanel, dfn);
+            event.stopPropagation();
+        });
+        dfn.addEventListener('keypress', (event) => {
+            const kc = event.keyCode;
+            // 32->Space, 13->Enter
+            if(kc == 32 || kc == 13) {
+                toggleDfnPanel(dfnPanel, dfn);
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        });
+
+        dfnPanel.addEventListener('click', (event) => {
+            if (event.target.nodeName == 'A') {
+                pinDfnPanel(dfnPanel);
+            }
+            event.stopPropagation();
+        });
+
+        dfnPanel.addEventListener('keydown', (event) => {
+            if(event.keyCode == 27) { // Escape key
+                hideDfnPanel(dfnPanel, dfn);
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        })
+    }
+}
 </script>
+<script>/* script-dfn-panel-json */
+window.dfnpanelData = {};
+window.dfnpanelData['4582ec82'] = {"dfnID": "4582ec82", "url": "https://w3c.github.io/webappsec-csp/#policy-disposition", "dfnText": "disposition", "refSections": [{"refs": [{"id": "ref-for-policy-disposition"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}], "external": true};
+window.dfnpanelData['2e14a243'] = {"dfnID": "2e14a243", "url": "https://w3c.github.io/webappsec-csp/#directive-initialization", "dfnText": "initialization", "refSections": [{"refs": [{"id": "ref-for-directive-initialization"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}], "external": true};
+window.dfnpanelData['a973e0fe'] = {"dfnID": "a973e0fe", "url": "https://dom.spec.whatwg.org/#concept-document", "dfnText": "document", "refSections": [{"refs": [{"id": "ref-for-concept-document"}, {"id": "ref-for-concept-document\u2460"}, {"id": "ref-for-concept-document\u2461"}, {"id": "ref-for-concept-document\u2462"}, {"id": "ref-for-concept-document\u2463"}], "title": "4.3.1. Main resources"}], "external": true};
+window.dfnpanelData['e2a3d65d'] = {"dfnID": "e2a3d65d", "url": "https://fetch.spec.whatwg.org/#concept-http-network-fetch", "dfnText": "HTTP-network fetch", "refSections": [{"refs": [{"id": "ref-for-concept-http-network-fetch"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-http-network-fetch\u2460"}, {"id": "ref-for-concept-http-network-fetch\u2461"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-concept-http-network-fetch\u2462"}], "title": "4.3.2. Subresources"}], "external": true};
+window.dfnpanelData['f4cb4c20'] = {"dfnID": "f4cb4c20", "url": "https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch", "dfnText": "HTTP-network-or-cache fetch", "refSections": [{"refs": [{"id": "ref-for-concept-http-network-or-cache-fetch"}, {"id": "ref-for-concept-http-network-or-cache-fetch\u2460"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-concept-http-network-or-cache-fetch\u2461"}], "title": "5.6.1. Applying checks to subresources"}], "external": true};
+window.dfnpanelData['82748635'] = {"dfnID": "82748635", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-credentials", "dfnText": "access-control-allow-credentials", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-credentials"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-credentials\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
+window.dfnpanelData['a6a3b229'] = {"dfnID": "a6a3b229", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-methods", "dfnText": "access-control-allow-methods", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-methods"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-methods\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
+window.dfnpanelData['eed8e0e4'] = {"dfnID": "eed8e0e4", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-origin", "dfnText": "access-control-allow-origin", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-origin"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-origin\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
+window.dfnpanelData['8db43a5c'] = {"dfnID": "8db43a5c", "url": "https://fetch.spec.whatwg.org/#http-access-control-request-method", "dfnText": "access-control-request-method", "refSections": [{"refs": [{"id": "ref-for-http-access-control-request-method"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-access-control-request-method\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
+window.dfnpanelData['dbbacb0c'] = {"dfnID": "dbbacb0c", "url": "https://fetch.spec.whatwg.org/#cache-entry", "dfnText": "cache entry", "refSections": [{"refs": [{"id": "ref-for-cache-entry"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-cache-entry\u2460"}], "title": "5.6.1. Applying checks to subresources"}], "external": true};
+window.dfnpanelData['a4ff76ba'] = {"dfnID": "a4ff76ba", "url": "https://fetch.spec.whatwg.org/#concept-cache-match", "dfnText": "cache entry match", "refSections": [{"refs": [{"id": "ref-for-concept-cache-match"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['857d5516'] = {"dfnID": "857d5516", "url": "https://fetch.spec.whatwg.org/#concept-request-client", "dfnText": "client", "refSections": [{"refs": [{"id": "ref-for-concept-request-client"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-concept-request-client\u2460"}, {"id": "ref-for-concept-request-client\u2461"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-request-client\u2462"}, {"id": "ref-for-concept-request-client\u2463"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-concept-request-client\u2464"}, {"id": "ref-for-concept-request-client\u2465"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['697965b2'] = {"dfnID": "697965b2", "url": "https://fetch.spec.whatwg.org/#concept-connection", "dfnText": "connection", "refSections": [{"refs": [{"id": "ref-for-concept-connection"}, {"id": "ref-for-concept-connection\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-connection\u2461"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['f9649676'] = {"dfnID": "f9649676", "url": "https://fetch.spec.whatwg.org/#concept-connection-pool", "dfnText": "connection pool", "refSections": [{"refs": [{"id": "ref-for-concept-connection-pool"}], "title": "3.1.1. Secure context restriction"}], "external": true};
+window.dfnpanelData['fdb35d97'] = {"dfnID": "fdb35d97", "url": "https://fetch.spec.whatwg.org/#concept-cors-check", "dfnText": "cors check", "refSections": [{"refs": [{"id": "ref-for-concept-cors-check"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['e119682f'] = {"dfnID": "e119682f", "url": "https://fetch.spec.whatwg.org/#concept-cache", "dfnText": "cors-preflight cache", "refSections": [{"refs": [{"id": "ref-for-concept-cache"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-concept-cache\u2460"}], "title": "5.3. DNS Rebinding"}], "external": true};
+window.dfnpanelData['0105c79c'] = {"dfnID": "0105c79c", "url": "https://fetch.spec.whatwg.org/#cors-preflight-fetch-0", "dfnText": "cors-preflight fetch", "refSections": [{"refs": [{"id": "ref-for-cors-preflight-fetch-0"}, {"id": "ref-for-cors-preflight-fetch-0\u2460"}, {"id": "ref-for-cors-preflight-fetch-0\u2461"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['4d7b724c'] = {"dfnID": "4d7b724c", "url": "https://fetch.spec.whatwg.org/#cors-preflight-request", "dfnText": "cors-preflight request", "refSections": [{"refs": [{"id": "ref-for-cors-preflight-request"}, {"id": "ref-for-cors-preflight-request\u2460"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-cors-preflight-request\u2461"}, {"id": "ref-for-cors-preflight-request\u2462"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-cors-preflight-request\u2463"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-cors-preflight-request\u2464"}], "title": "3.1. Integration with Fetch"}], "external": true};
+window.dfnpanelData['98f9d698'] = {"dfnID": "98f9d698", "url": "https://fetch.spec.whatwg.org/#cors-safelisted-method", "dfnText": "cors-safelisted method", "refSections": [{"refs": [{"id": "ref-for-cors-safelisted-method"}], "title": "1.1. Goals"}], "external": true};
+window.dfnpanelData['99f492fd'] = {"dfnID": "99f492fd", "url": "https://fetch.spec.whatwg.org/#cors-safelisted-request-header", "dfnText": "cors-safelisted request-header", "refSections": [{"refs": [{"id": "ref-for-cors-safelisted-request-header"}], "title": "1.1. Goals"}], "external": true};
+window.dfnpanelData['585e7a08'] = {"dfnID": "585e7a08", "url": "https://fetch.spec.whatwg.org/#concept-cache-create-entry", "dfnText": "create a new cache entry", "refSections": [{"refs": [{"id": "ref-for-concept-cache-create-entry"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['3f2ca4de'] = {"dfnID": "3f2ca4de", "url": "https://fetch.spec.whatwg.org/#concept-request-current-url", "dfnText": "current url", "refSections": [{"refs": [{"id": "ref-for-concept-request-current-url"}, {"id": "ref-for-concept-request-current-url\u2460"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-concept-request-current-url\u2461"}], "title": "3.1.1. Secure context restriction"}], "external": true};
+window.dfnpanelData['3be1d4ac'] = {"dfnID": "3be1d4ac", "url": "https://fetch.spec.whatwg.org/#extract-header-list-values", "dfnText": "extracting header list values", "refSections": [{"refs": [{"id": "ref-for-extract-header-list-values"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['a33db89a'] = {"dfnID": "a33db89a", "url": "https://fetch.spec.whatwg.org/#concept-fetch", "dfnText": "fetch", "refSections": [{"refs": [{"id": "ref-for-concept-fetch"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-concept-fetch\u2460"}], "title": "3.2. Integration with WebSockets"}, {"refs": [{"id": "ref-for-concept-fetch\u2461"}, {"id": "ref-for-concept-fetch\u2462"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['ad6ec3ab'] = {"dfnID": "ad6ec3ab", "url": "https://fetch.spec.whatwg.org/#forbidden-request-header", "dfnText": "forbidden request-header", "refSections": [{"refs": [{"id": "ref-for-forbidden-request-header"}], "title": "3.1.3. Forbidden header names"}], "external": true};
+window.dfnpanelData['6ee0eab1'] = {"dfnID": "6ee0eab1", "url": "https://fetch.spec.whatwg.org/#concept-request-header-list", "dfnText": "header list (for request)", "refSections": [{"refs": [{"id": "ref-for-concept-request-header-list"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['f7b00a8b'] = {"dfnID": "f7b00a8b", "url": "https://fetch.spec.whatwg.org/#concept-response-header-list", "dfnText": "header list (for response)", "refSections": [{"refs": [{"id": "ref-for-concept-response-header-list"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['2aaa2f42'] = {"dfnID": "2aaa2f42", "url": "https://fetch.spec.whatwg.org/#concept-http-fetch", "dfnText": "http fetch", "refSections": [{"refs": [{"id": "ref-for-concept-http-fetch"}, {"id": "ref-for-concept-http-fetch\u2460"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['eb1b1af3'] = {"dfnID": "eb1b1af3", "url": "https://fetch.spec.whatwg.org/#concept-network-error", "dfnText": "network error", "refSections": [{"refs": [{"id": "ref-for-concept-network-error"}, {"id": "ref-for-concept-network-error\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-network-error\u2461"}, {"id": "ref-for-concept-network-error\u2462"}, {"id": "ref-for-concept-network-error\u2463"}, {"id": "ref-for-concept-network-error\u2464"}, {"id": "ref-for-concept-network-error\u2465"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['7cf440ca'] = {"dfnID": "7cf440ca", "url": "https://fetch.spec.whatwg.org/#network-partition-key", "dfnText": "network partition key", "refSections": [{"refs": [{"id": "ref-for-network-partition-key"}], "title": "5.6.1. Applying checks to subresources"}], "external": true};
+window.dfnpanelData['8e1fb11c'] = {"dfnID": "8e1fb11c", "url": "https://fetch.spec.whatwg.org/#concept-connection-obtain", "dfnText": "obtain a connection", "refSections": [{"refs": [{"id": "ref-for-concept-connection-obtain"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-concept-connection-obtain\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-connection-obtain\u2461"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['f78d5b5c'] = {"dfnID": "f78d5b5c", "url": "https://fetch.spec.whatwg.org/#concept-request-origin", "dfnText": "origin", "refSections": [{"refs": [{"id": "ref-for-concept-request-origin"}, {"id": "ref-for-concept-request-origin\u2460"}, {"id": "ref-for-concept-request-origin\u2461"}], "title": "3.1.1. Secure context restriction"}], "external": true};
+window.dfnpanelData['86efadaf'] = {"dfnID": "86efadaf", "url": "https://fetch.spec.whatwg.org/#concept-request-policy-container", "dfnText": "policy container", "refSections": [{"refs": [{"id": "ref-for-concept-request-policy-container"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-concept-request-policy-container\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-request-policy-container\u2461"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-concept-request-policy-container\u2462"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['5695c146'] = {"dfnID": "5695c146", "url": "https://fetch.spec.whatwg.org/#fetch-params-request", "dfnText": "request", "refSections": [{"refs": [{"id": "ref-for-fetch-params-request"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-fetch-params-request\u2460"}], "title": "2.3. Additional CORS Headers"}, {"refs": [{"id": "ref-for-fetch-params-request\u2461"}, {"id": "ref-for-fetch-params-request\u2462"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-fetch-params-request\u2463"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-fetch-params-request\u2464"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['ee7bba09'] = {"dfnID": "ee7bba09", "url": "https://fetch.spec.whatwg.org/#concept-response", "dfnText": "response", "refSections": [{"refs": [{"id": "ref-for-concept-response"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-response\u2460"}, {"id": "ref-for-concept-response\u2461"}], "title": "4.3.1. Main resources"}], "external": true};
+window.dfnpanelData['d9f4dab1'] = {"dfnID": "d9f4dab1", "url": "https://fetch.spec.whatwg.org/#concept-header-list-set", "dfnText": "set", "refSections": [{"refs": [{"id": "ref-for-concept-header-list-set"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['07cd5a09'] = {"dfnID": "07cd5a09", "url": "https://html.spec.whatwg.org/#document", "dfnText": "Document", "refSections": [{"refs": [{"id": "ref-for-document"}], "title": "2.5. Feature Detection"}, {"refs": [{"id": "ref-for-document\u2460"}, {"id": "ref-for-document\u2461"}, {"id": "ref-for-document\u2462"}, {"id": "ref-for-document\u2463"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-document\u2464"}, {"id": "ref-for-document\u2465"}, {"id": "ref-for-document\u2466"}], "title": "4.2. Proxies"}], "external": true};
+window.dfnpanelData['83c59a3a'] = {"dfnID": "83c59a3a", "url": "https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope", "dfnText": "WorkerGlobalScope", "refSections": [{"refs": [{"id": "ref-for-workerglobalscope"}], "title": "2.5. Feature Detection"}, {"refs": [{"id": "ref-for-workerglobalscope\u2460"}, {"id": "ref-for-workerglobalscope\u2461"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['00c57527'] = {"dfnID": "00c57527", "url": "https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container", "dfnText": "clone a policy container", "refSections": [{"refs": [{"id": "ref-for-clone-a-policy-container"}], "title": "3.3. Integration with HTML"}], "external": true};
+window.dfnpanelData['cfb6031b'] = {"dfnID": "cfb6031b", "url": "https://html.spec.whatwg.org/multipage/browsers.html#creating-a-policy-container-from-a-fetch-response", "dfnText": "creating a policy container from a fetch response", "refSections": [{"refs": [{"id": "ref-for-creating-a-policy-container-from-a-fetch-response"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-creating-a-policy-container-from-a-fetch-response\u2460"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['3e12e042'] = {"dfnID": "3e12e042", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object", "dfnText": "environment settings object", "refSections": [{"refs": [{"id": "ref-for-environment-settings-object"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}], "external": true};
+window.dfnpanelData['77a2ee6e'] = {"dfnID": "77a2ee6e", "url": "https://html.spec.whatwg.org/multipage/browsers.html#concept-origin-host", "dfnText": "host", "refSections": [{"refs": [{"id": "ref-for-concept-origin-host"}], "title": "5.2. Mixed Content"}], "external": true};
+window.dfnpanelData['64b89595'] = {"dfnID": "64b89595", "url": "https://html.spec.whatwg.org/multipage/semantics.html#meta", "dfnText": "meta", "refSections": [{"refs": [{"id": "ref-for-meta"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}], "external": true};
+window.dfnpanelData['5155c2d3'] = {"dfnID": "5155c2d3", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#non-secure-context", "dfnText": "non-secure context", "refSections": [{"refs": [{"id": "ref-for-non-secure-context"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-non-secure-context\u2460"}], "title": "4.4. Rollout difficulties"}], "external": true};
+window.dfnpanelData['086e3aff'] = {"dfnID": "086e3aff", "url": "https://html.spec.whatwg.org/multipage/browsers.html#concept-origin", "dfnText": "origin", "refSections": [{"refs": [{"id": "ref-for-concept-origin"}], "title": "5.2. Mixed Content"}], "external": true};
+window.dfnpanelData['b33787b2'] = {"dfnID": "b33787b2", "url": "https://html.spec.whatwg.org/multipage/browsers.html#policy-container", "dfnText": "policy container", "refSections": [{"refs": [{"id": "ref-for-policy-container"}], "title": "3.3. Integration with HTML"}], "external": true};
+window.dfnpanelData['08639fbc'] = {"dfnID": "08639fbc", "url": "https://html.spec.whatwg.org/multipage/dom.html#concept-document-policy-container", "dfnText": "policy container (for Document)", "refSections": [{"refs": [{"id": "ref-for-concept-document-policy-container"}, {"id": "ref-for-concept-document-policy-container\u2460"}, {"id": "ref-for-concept-document-policy-container\u2461"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-concept-document-policy-container\u2462"}], "title": "4.2. Proxies"}, {"refs": [{"id": "ref-for-concept-document-policy-container\u2463"}, {"id": "ref-for-concept-document-policy-container\u2464"}, {"id": "ref-for-concept-document-policy-container\u2465"}], "title": "4.3.1. Main resources"}], "external": true};
+window.dfnpanelData['432147ee'] = {"dfnID": "432147ee", "url": "https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container", "dfnText": "policy container (for WorkerGlobalScope)", "refSections": [{"refs": [{"id": "ref-for-concept-workerglobalscope-policy-container"}, {"id": "ref-for-concept-workerglobalscope-policy-container\u2460"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['bd1db03d'] = {"dfnID": "bd1db03d", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container", "dfnText": "policy container (for environment settings object)", "refSections": [{"refs": [{"id": "ref-for-concept-settings-object-policy-container"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}], "external": true};
+window.dfnpanelData['7393da89'] = {"dfnID": "7393da89", "url": "https://html.spec.whatwg.org/multipage/browsers.html#same-origin", "dfnText": "same origin", "refSections": [{"refs": [{"id": "ref-for-same-origin"}], "title": "3.1.1. Secure context restriction"}], "external": true};
+window.dfnpanelData['65181da8'] = {"dfnID": "65181da8", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#secure-context", "dfnText": "secure context", "refSections": [{"refs": [{"id": "ref-for-secure-context"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-secure-context\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-secure-context\u2461"}, {"id": "ref-for-secure-context\u2462"}, {"id": "ref-for-secure-context\u2463"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['984221ca'] = {"dfnID": "984221ca", "url": "https://infra.spec.whatwg.org/#struct", "dfnText": "struct", "refSections": [{"refs": [{"id": "ref-for-struct"}], "title": "3.3. Integration with HTML"}], "external": true};
+window.dfnpanelData['96dabee7'] = {"dfnID": "96dabee7", "url": "https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin", "dfnText": "potentially trustworthy origin", "refSections": [{"refs": [{"id": "ref-for-potentially-trustworthy-origin"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-potentially-trustworthy-origin\u2460"}], "title": "5.2. Mixed Content"}], "external": true};
+window.dfnpanelData['c60ed63a'] = {"dfnID": "c60ed63a", "url": "https://w3c.github.io/ServiceWorker/#dfn-service-worker", "dfnText": "service worker", "refSections": [{"refs": [{"id": "ref-for-dfn-service-worker"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['8dbcc37d'] = {"dfnID": "8dbcc37d", "url": "https://w3c.github.io/ServiceWorker/#soft-update", "dfnText": "soft update", "refSections": [{"refs": [{"id": "ref-for-soft-update"}], "title": "3.4. Workers"}], "external": true};
+window.dfnpanelData['5718c334'] = {"dfnID": "5718c334", "url": "https://url.spec.whatwg.org/#dom-url-host", "dfnText": "host", "refSections": [{"refs": [{"id": "ref-for-dom-url-host"}, {"id": "ref-for-dom-url-host\u2460"}], "title": "2.2. Local Network Request"}], "external": true};
+window.dfnpanelData['22b84272'] = {"dfnID": "22b84272", "url": "https://websockets.spec.whatwg.org/#concept-websocket-establish", "dfnText": "establish a websocket connection", "refSections": [{"refs": [{"id": "ref-for-concept-websocket-establish"}], "title": "3.2. Integration with WebSockets"}], "external": true};
+window.dfnpanelData['ip-address-space'] = {"dfnID": "ip-address-space", "url": "#ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-ip-address-space"}, {"id": "ref-for-ip-address-space\u2460"}, {"id": "ref-for-ip-address-space\u2461"}, {"id": "ref-for-ip-address-space\u2462"}, {"id": "ref-for-ip-address-space\u2463"}, {"id": "ref-for-ip-address-space\u2464"}, {"id": "ref-for-ip-address-space\u2465"}], "title": "2.1. IP Address Space"}, {"refs": [{"id": "ref-for-ip-address-space\u2466"}, {"id": "ref-for-ip-address-space\u2467"}, {"id": "ref-for-ip-address-space\u2468"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-ip-address-space\u2460\u24ea"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-ip-address-space\u2460\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-ip-address-space\u2460\u2461"}, {"id": "ref-for-ip-address-space\u2460\u2462"}, {"id": "ref-for-ip-address-space\u2460\u2463"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-ip-address-space\u2460\u2464"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-ip-address-space\u2460\u2465"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-ip-address-space\u2460\u2466"}], "title": "4.2. Proxies"}, {"refs": [{"id": "ref-for-ip-address-space\u2460\u2467"}, {"id": "ref-for-ip-address-space\u2460\u2468"}], "title": "4.3.1. Main resources"}, {"refs": [{"id": "ref-for-ip-address-space\u2461\u24ea"}, {"id": "ref-for-ip-address-space\u2461\u2460"}, {"id": "ref-for-ip-address-space\u2461\u2461"}], "title": "4.4. Rollout difficulties"}, {"refs": [{"id": "ref-for-ip-address-space\u2461\u2462"}], "title": "5.5. Cross-network confusion"}, {"refs": [{"id": "ref-for-ip-address-space\u2461\u2463"}], "title": "5.6.2. HTTP cache poisoning"}], "external": false};
+window.dfnpanelData['ip-address-space-loopback'] = {"dfnID": "ip-address-space-loopback", "url": "#ip-address-space-loopback", "dfnText": "loopback", "refSections": [{"refs": [{"id": "ref-for-ip-address-space-loopback"}, {"id": "ref-for-ip-address-space-loopback\u2460"}, {"id": "ref-for-ip-address-space-loopback\u2461"}, {"id": "ref-for-ip-address-space-loopback\u2462"}, {"id": "ref-for-ip-address-space-loopback\u2463"}], "title": "2.1. IP Address Space"}, {"refs": [{"id": "ref-for-ip-address-space-loopback\u2464"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-ip-address-space-loopback\u2465"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-ip-address-space-loopback\u2466"}], "title": "4.1. Where do file URLs fit?"}, {"refs": [{"id": "ref-for-ip-address-space-loopback\u2467"}], "title": "4.4. Rollout difficulties"}, {"refs": [{"id": "ref-for-ip-address-space-loopback\u2468"}], "title": "5.2. Mixed Content"}], "external": false};
+window.dfnpanelData['ip-address-space-local'] = {"dfnID": "ip-address-space-local", "url": "#ip-address-space-local", "dfnText": "local", "refSections": [{"refs": [{"id": "ref-for-ip-address-space-local"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2460"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2461"}, {"id": "ref-for-ip-address-space-local\u2462"}, {"id": "ref-for-ip-address-space-local\u2463"}, {"id": "ref-for-ip-address-space-local\u2464"}, {"id": "ref-for-ip-address-space-local\u2465"}, {"id": "ref-for-ip-address-space-local\u2466"}, {"id": "ref-for-ip-address-space-local\u2467"}, {"id": "ref-for-ip-address-space-local\u2468"}, {"id": "ref-for-ip-address-space-local\u2460\u24ea"}, {"id": "ref-for-ip-address-space-local\u2460\u2460"}, {"id": "ref-for-ip-address-space-local\u2460\u2461"}, {"id": "ref-for-ip-address-space-local\u2460\u2462"}], "title": "2.1. IP Address Space"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2460\u2463"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2460\u2464"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2460\u2465"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2460\u2466"}], "title": "4.2. Proxies"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2460\u2467"}], "title": "4.3.1. Main resources"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2460\u2468"}], "title": "4.4. Rollout difficulties"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2461\u24ea"}], "title": "5.2. Mixed Content"}, {"refs": [{"id": "ref-for-ip-address-space-local\u2461\u2460"}], "title": "5.5. Cross-network confusion"}], "external": false};
+window.dfnpanelData['ip-address-space-public'] = {"dfnID": "ip-address-space-public", "url": "#ip-address-space-public", "dfnText": "public", "refSections": [{"refs": [{"id": "ref-for-ip-address-space-public"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2460"}, {"id": "ref-for-ip-address-space-public\u2461"}, {"id": "ref-for-ip-address-space-public\u2462"}, {"id": "ref-for-ip-address-space-public\u2463"}, {"id": "ref-for-ip-address-space-public\u2464"}], "title": "2.1. IP Address Space"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2465"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2466"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2467"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2468"}, {"id": "ref-for-ip-address-space-public\u2460\u24ea"}, {"id": "ref-for-ip-address-space-public\u2460\u2460"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2460\u2461"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2460\u2462"}], "title": "4.3.1. Main resources"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2460\u2463"}], "title": "4.4. Rollout difficulties"}, {"refs": [{"id": "ref-for-ip-address-space-public\u2460\u2464"}], "title": "5.2. Mixed Content"}], "external": false};
+window.dfnpanelData['loopback-address'] = {"dfnID": "loopback-address", "url": "#loopback-address", "dfnText": "loopback address", "refSections": [{"refs": [{"id": "ref-for-loopback-address"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}, {"refs": [{"id": "ref-for-loopback-address\u2460"}], "title": "3.3. Integration with HTML"}], "external": false};
+window.dfnpanelData['local-address'] = {"dfnID": "local-address", "url": "#local-address", "dfnText": "local address", "refSections": [{"refs": [{"id": "ref-for-local-address"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-local-address\u2460"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-local-address\u2461"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}, {"refs": [{"id": "ref-for-local-address\u2462"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-local-address\u2463"}, {"id": "ref-for-local-address\u2464"}, {"id": "ref-for-local-address\u2465"}], "title": "4.2. Proxies"}, {"refs": [{"id": "ref-for-local-address\u2466"}], "title": "4.3.1. Main resources"}, {"refs": [{"id": "ref-for-local-address\u2467"}], "title": "5.5. Cross-network confusion"}], "external": false};
+window.dfnpanelData['public-address'] = {"dfnID": "public-address", "url": "#public-address", "dfnText": "public address", "refSections": [{"refs": [{"id": "ref-for-public-address"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-public-address\u2460"}, {"id": "ref-for-public-address\u2461"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-public-address\u2462"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-public-address\u2463"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}, {"refs": [{"id": "ref-for-public-address\u2464"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-public-address\u2465"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-public-address\u2466"}], "title": "4.2. Proxies"}], "external": false};
+window.dfnpanelData['ip-address-space-less-public'] = {"dfnID": "ip-address-space-less-public", "url": "#ip-address-space-less-public", "dfnText": "less public", "refSections": [{"refs": [{"id": "ref-for-ip-address-space-less-public"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-ip-address-space-less-public\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-ip-address-space-less-public\u2461"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-ip-address-space-less-public\u2462"}], "title": "5.6.2. HTTP cache poisoning"}], "external": false};
+window.dfnpanelData['determine-the-ip-address-space'] = {"dfnID": "determine-the-ip-address-space", "url": "#determine-the-ip-address-space", "dfnText": "determine the IP address space", "refSections": [{"refs": [{"id": "ref-for-determine-the-ip-address-space"}], "title": "3.1.1. Secure context restriction"}], "external": false};
+window.dfnpanelData['local-network-request'] = {"dfnID": "local-network-request", "url": "#local-network-request", "dfnText": "local network request", "refSections": [{"refs": [{"id": "ref-for-local-network-request"}, {"id": "ref-for-local-network-request\u2460"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-local-network-request\u2461"}], "title": "2.3. Additional CORS Headers"}, {"refs": [{"id": "ref-for-local-network-request\u2462"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-local-network-request\u2463"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-local-network-request\u2464"}], "title": "3.4. Workers"}], "external": false};
+window.dfnpanelData['http-headerdef-access-control-request-local-network'] = {"dfnID": "http-headerdef-access-control-request-local-network", "url": "#http-headerdef-access-control-request-local-network", "dfnText": "Access-Control-Request-Local-Network", "refSections": [{"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network\u2460"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network\u2461"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network\u2462"}], "title": "3.1.3. Forbidden header names"}], "external": false};
+window.dfnpanelData['http-headerdef-access-control-allow-local-network'] = {"dfnID": "http-headerdef-access-control-allow-local-network", "url": "#http-headerdef-access-control-allow-local-network", "dfnText": "Access-Control-Allow-Local-Network", "refSections": [{"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network\u2460"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network\u2461"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network\u2462"}], "title": "3.1.2. CORS preflight"}], "external": false};
+window.dfnpanelData['treat-as-public-address'] = {"dfnID": "treat-as-public-address", "url": "#treat-as-public-address", "dfnText": "treat-as-public-address", "refSections": [{"refs": [{"id": "ref-for-treat-as-public-address"}], "title": "6. IANA Considerations"}], "external": false};
+window.dfnpanelData['connection-ip-address-space'] = {"dfnID": "connection-ip-address-space", "url": "#connection-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-connection-ip-address-space"}, {"id": "ref-for-connection-ip-address-space\u2460"}, {"id": "ref-for-connection-ip-address-space\u2461"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-connection-ip-address-space\u2462"}], "title": "3.1.2. CORS preflight"}], "external": false};
+window.dfnpanelData['response-ip-address-space'] = {"dfnID": "response-ip-address-space", "url": "#response-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-response-ip-address-space"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-response-ip-address-space\u2460"}, {"id": "ref-for-response-ip-address-space\u2461"}, {"id": "ref-for-response-ip-address-space\u2462"}, {"id": "ref-for-response-ip-address-space\u2463"}, {"id": "ref-for-response-ip-address-space\u2464"}, {"id": "ref-for-response-ip-address-space\u2465"}, {"id": "ref-for-response-ip-address-space\u2466"}, {"id": "ref-for-response-ip-address-space\u2467"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-response-ip-address-space\u2468"}], "title": "3.3. Integration with HTML"}], "external": false};
+window.dfnpanelData['local-network-access-check'] = {"dfnID": "local-network-access-check", "url": "#local-network-access-check", "dfnText": "Local Network Access check", "refSections": [{"refs": [{"id": "ref-for-local-network-access-check"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-local-network-access-check\u2460"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-local-network-access-check\u2461"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-local-network-access-check\u2462"}], "title": "4.3.2. Subresources"}, {"refs": [{"id": "ref-for-local-network-access-check\u2463"}], "title": "5.6.1. Applying checks to subresources"}], "external": false};
+window.dfnpanelData['request-target-ip-address-space'] = {"dfnID": "request-target-ip-address-space", "url": "#request-target-ip-address-space", "dfnText": "target IP address space", "refSections": [{"refs": [{"id": "ref-for-request-target-ip-address-space"}, {"id": "ref-for-request-target-ip-address-space\u2460"}, {"id": "ref-for-request-target-ip-address-space\u2461"}, {"id": "ref-for-request-target-ip-address-space\u2462"}, {"id": "ref-for-request-target-ip-address-space\u2463"}, {"id": "ref-for-request-target-ip-address-space\u2464"}, {"id": "ref-for-request-target-ip-address-space\u2465"}, {"id": "ref-for-request-target-ip-address-space\u2466"}, {"id": "ref-for-request-target-ip-address-space\u2467"}, {"id": "ref-for-request-target-ip-address-space\u2468"}], "title": "3.1.2. CORS preflight"}], "external": false};
+window.dfnpanelData['http-no-service-worker-fetch'] = {"dfnID": "http-no-service-worker-fetch", "url": "#http-no-service-worker-fetch", "dfnText": "HTTP-no-service-worker fetch", "refSections": [{"refs": [{"id": "ref-for-http-no-service-worker-fetch"}, {"id": "ref-for-http-no-service-worker-fetch\u2460"}], "title": "3.1.2. CORS preflight"}], "external": false};
+window.dfnpanelData['cache-entry-ip-address-space'] = {"dfnID": "cache-entry-ip-address-space", "url": "#cache-entry-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-cache-entry-ip-address-space"}], "title": "3.1.2. CORS preflight"}], "external": false};
+window.dfnpanelData['policy-container-ip-address-space'] = {"dfnID": "policy-container-ip-address-space", "url": "#policy-container-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-policy-container-ip-address-space"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2461"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2462"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2463"}, {"id": "ref-for-policy-container-ip-address-space\u2464"}, {"id": "ref-for-policy-container-ip-address-space\u2465"}, {"id": "ref-for-policy-container-ip-address-space\u2466"}, {"id": "ref-for-policy-container-ip-address-space\u2467"}, {"id": "ref-for-policy-container-ip-address-space\u2468"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460\u24ea"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460\u2460"}], "title": "4.2. Proxies"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460\u2461"}, {"id": "ref-for-policy-container-ip-address-space\u2460\u2462"}, {"id": "ref-for-policy-container-ip-address-space\u2460\u2463"}], "title": "4.3.1. Main resources"}], "external": false};</script>
+<script>/* script-dom-helper */
+function query(sel) { return document.querySelector(sel); }
+
+function queryAll(sel) { return [...document.querySelectorAll(sel)]; }
+
+function iter(obj) {
+	if(!obj) return [];
+	var it = obj[Symbol.iterator];
+	if(it) return it;
+	return Object.entries(obj);
+}
+
+function mk(tagname, attrs, ...children) {
+	const el = document.createElement(tagname);
+	for(const [k,v] of iter(attrs)) {
+		if(k.slice(0,3) == "_on") {
+			const eventName = k.slice(3);
+			el.addEventListener(eventName, v);
+		} else if(k[0] == "_") {
+			// property, not attribute
+			el[k.slice(1)] = v;
+		} else {
+			if(v === false || v == null) {
+        continue;
+      } else if(v === true) {
+        el.setAttribute(k, "");
+        continue;
+      } else {
+  			el.setAttribute(k, v);
+      }
+		}
+	}
+	append(el, children);
+	return el;
+}
+
+/* Create shortcuts for every known HTML element */
+[
+  "a",
+  "abbr",
+  "acronym",
+  "address",
+  "applet",
+  "area",
+  "article",
+  "aside",
+  "audio",
+  "b",
+  "base",
+  "basefont",
+  "bdo",
+  "big",
+  "blockquote",
+  "body",
+  "br",
+  "button",
+  "canvas",
+  "caption",
+  "center",
+  "cite",
+  "code",
+  "col",
+  "colgroup",
+  "datalist",
+  "dd",
+  "del",
+  "details",
+  "dfn",
+  "dialog",
+  "div",
+  "dl",
+  "dt",
+  "em",
+  "embed",
+  "fieldset",
+  "figcaption",
+  "figure",
+  "font",
+  "footer",
+  "form",
+  "frame",
+  "frameset",
+  "head",
+  "header",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "hr",
+  "html",
+  "i",
+  "iframe",
+  "img",
+  "input",
+  "ins",
+  "kbd",
+  "label",
+  "legend",
+  "li",
+  "link",
+  "main",
+  "map",
+  "mark",
+  "meta",
+  "meter",
+  "nav",
+  "nobr",
+  "noscript",
+  "object",
+  "ol",
+  "optgroup",
+  "option",
+  "output",
+  "p",
+  "param",
+  "pre",
+  "progress",
+  "q",
+  "s",
+  "samp",
+  "script",
+  "section",
+  "select",
+  "small",
+  "source",
+  "span",
+  "strike",
+  "strong",
+  "style",
+  "sub",
+  "summary",
+  "sup",
+  "table",
+  "tbody",
+  "td",
+  "template",
+  "textarea",
+  "tfoot",
+  "th",
+  "thead",
+  "time",
+  "title",
+  "tr",
+  "u",
+  "ul",
+  "var",
+  "video",
+  "wbr",
+  "xmp",
+].forEach(tagname=>{
+	mk[tagname] = (...args) => mk(tagname, ...args);
+});
+
+function* nodesFromChildList(children) {
+	for(const child of children.flat(Infinity)) {
+		if(child instanceof Node) {
+			yield child;
+		} else {
+			yield new Text(child);
+		}
+	}
+}
+function append(el, ...children) {
+	for(const child of nodesFromChildList(children)) {
+		if(el instanceof Node) el.appendChild(child);
+		else el.push(child);
+	}
+	return el;
+}
+
+function insertAfter(el, ...children) {
+	for(const child of nodesFromChildList(children)) {
+		el.parentNode.insertBefore(child, el.nextSibling);
+	}
+	return el;
+}
+
+function clearContents(el) {
+	el.innerHTML = "";
+	return el;
+}
+
+function parseHTML(markup) {
+	if(markup.toLowerCase().trim().indexOf('<!doctype') === 0) {
+		const doc = document.implementation.createHTMLDocument("");
+		doc.documentElement.innerHTML = markup;
+		return doc;
+	} else {
+		const el = mk.template({});
+		el.innerHTML = markup;
+		return el.content;
+	}
+}</script>

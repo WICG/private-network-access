@@ -43,7 +43,6 @@ spec:fetch; type:dfn; for:/; text:cors check
 spec:fetch; type:dfn; for:/; text:cors-preflight fetch
 spec:fetch; type:dfn; for:/; text:cors-preflight cache
 spec:fetch; type:dfn; for:/; text:create a new cache entry
-spec:fetch; type:dfn; for:/; text:establish a websocket connection
 spec:fetch; type:dfn; for:/; text:fetch params
 spec:fetch; type:dfn; for:/; text:network partition key
 spec:fetch; type:dfn; for:/; text:obtain a connection
@@ -51,6 +50,7 @@ spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dfn; for:/; text:response
 spec:fetch; type:dfn; for:fetch params; text:request
 spec:fetch; type:dfn; for:cache; text:cache match
+spec:websockets; type:dfn; for:/; text:establish a websocket connection
 </pre>
 <pre class="biblio">
 {
@@ -103,6 +103,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
     "authors": ["Emily Stark", "Mike West", "Carlos Ibarra Lopez"],
     "status": "W3C First Public Working Draft",
     "date": "14 October 2020"
+  },
+  "LINK-LOCAL-URI": {
+    "href": "https://www.ietf.org/archive/id/draft-ietf-6man-rfc6874bis-07.html",
+    "title": "Representing IPv6 Zone Identifiers in Address Literals and Uniform Resource Identifiers",
+    "authors": ["B. Carpenter", "S. Cheshire", "R. Hinden"],
+    "status": "Internet-Draft",
+    "date": "12 April 2023"
   }
 }
 </pre>
@@ -458,6 +465,13 @@ spec:fetch; type:dfn; for:cache; text:cache match
   target for all devices on a network link. A previous version of this
   specification considered them to be [=IP address space/loopback=] instead.
 
+  Note: Link-local IP addresses lose their meaning if shared across links. This
+  is not fundamentally different from non-public IP addresses, which all have
+  some degree of locality beyond which they become ambiguous, but it does
+  present a particular risk of confused deputy issues. [[LINK-LOCAL-URI]]
+  attempts to solve this problem by defining a syntax for link-local IP
+  addresses in URIs.
+
   Note: The contents of each [=/IP address space=] were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
   ([[IPV4-REGISTRY]] and [[IPV6-REGISTRY]]) and the `Globally Reachable` bit
@@ -538,8 +552,8 @@ spec:fetch; type:dfn; for:cache; text:cache match
   delivered in a `Content-Security-Policy-Report-Only` header, or within
   a <{meta}> element.
 
-  This directive's [=initialization=] algorithm is as follows. Given an
-  [=environment settings object=] (|context|), a `Response` (|response|), and
+  This directive's [=directive/initialization=] algorithm is as follows. Given
+  an [=environment settings object=] (|context|), a `Response` (|response|), and
   a `policy` (|policy|):
 
   1.  Set |context|'s [=environment settings object/policy container=]'s
@@ -775,7 +789,7 @@ spec:fetch; type:dfn; for:cache; text:cache match
 
   <h4 id="forbidden-header-names">Forbidden header names</h4>
 
-  A new entry is added to the list of [=forbidden header names=]:
+  A new entry is added to the list of [=forbidden request-header=] names:
   <a http-header>`Access-Control-Request-Local-Network`</a>.
 
   The user agent should have full control over this header, just as it does over
