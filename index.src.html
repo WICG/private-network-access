@@ -103,6 +103,13 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
     "authors": ["Emily Stark", "Mike West", "Carlos Ibarra Lopez"],
     "status": "W3C First Public Working Draft",
     "date": "14 October 2020"
+  },
+  "LINK-LOCAL-URI": {
+    "href": "https://www.ietf.org/archive/id/draft-ietf-6man-rfc6874bis-07.html",
+    "title": "Representing IPv6 Zone Identifiers in Address Literals and Uniform Resource Identifiers",
+    "authors": ["B. Carpenter", "S. Cheshire", "R. Hinden"],
+    "status": "Internet-Draft",
+    "date": "12 April 2023"
   }
 }
 </pre>
@@ -461,7 +468,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   Note: Link-local IP addresses lose their meaning if shared across links. This
   is not fundamentally different from non-public IP addresses, which all have
   some degree of locality beyond which they become ambiguous, but it does
-  present a particular risk of confused deputy issues.
+  present a particular risk of confused deputy issues. [[LINK-LOCAL-URI]]
+  attempts to solve this problem by defining a syntax for link-local IP
+  addresses in URIs.
 
   Note: The contents of each [=/IP address space=] were at one point determined
   in accordance with the IANA Special-Purpose Address Registries
