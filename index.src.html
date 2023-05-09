@@ -218,7 +218,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       OPTIONS /set_dns?... HTTP/1.1
       Host: router.local
       <a http-header>Access-Control-Request-Method</a>: GET
-      <a http-header>Access-Control-Request-Local-Network</a>: true
+      <a http-header>Access-Control-Request-Private-Network</a>: true
       ...
       Origin: https://csrf.attack
     </pre>
@@ -231,7 +231,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
         be issued.
 
     *   If it does understand `OPTIONS`, it can neglect to include an
-        <a http-header>`Access-Control-Allow-Local-Network`</a> header in its
+        <a http-header>`Access-Control-Allow-Private-Network`</a> header in its
         response. This will cause the preflight to fail, and the actual `GET`
         will never be issued.
 
@@ -261,7 +261,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       <a http-header>Access-Control-Allow-Origin</a>: https://public.example.com
       <a http-header>Access-Control-Allow-Methods</a>: GET
       <a http-header>Access-Control-Allow-Credentials</a>: true
-      <a http-header>Access-Control-Allow-Local-Network</a>: true
+      <a http-header>Access-Control-Allow-Private-Network</a>: true
       Content-Length: 0
       ...
     </pre>
@@ -283,7 +283,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       OPTIONS /short-links-are-short-after-shortening HTTP/1.1
       Host: go
       <a http-header>Access-Control-Request-Method</a>: GET
-      <a http-header>Access-Control-Request-Local-Network</a>: true
+      <a http-header>Access-Control-Request-Private-Network</a>: true
       ...
       Origin: https://mail.mega.corp
     </pre>
@@ -297,7 +297,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       <a http-header>Access-Control-Allow-Origin</a>: https://mail.mega.corp
       <a http-header>Access-Control-Allow-Methods</a>: GET
       <a http-header>Access-Control-Allow-Credentials</a>: true
-      <a http-header>Access-Control-Allow-Local-Network</a>: true
+      <a http-header>Access-Control-Allow-Private-Network</a>: true
       Content-Length: 0
       ...
     </pre>
@@ -523,15 +523,18 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   <h3 id="headers">Additional CORS Headers</h3>
 
-  The <dfn export http-header>`Access-Control-Request-Local-Network`</dfn>
+  The <dfn export http-header>`Access-Control-Request-Private-Network`</dfn>
   indicates that the [=request=] is a [=local network request=].
 
-  The <dfn export http-header>`Access-Control-Allow-Local-Network`</dfn>
+  The <dfn export http-header>`Access-Control-Allow-Private-Network`</dfn>
   indicates that a resource can be safely shared with external networks.
 
-  Note: Previous versions of this spec spelled the headers as
-  `Access-Control-Request-Private-Network` and
-  `Access-Control-Allow-Private-Network`.
+  Note: These headers were briefly specified as
+  `Access-Control-Request-Local-Network` and
+  `Access-Control-Allow-Local-Network`, but this decision was reversed due to
+  its compatibility impact. See
+  [issue #91](https://github.com/WICG/local-network-access/issues/91) for
+  details.
 
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
@@ -756,7 +759,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
               then:
 
               1.  [=header list/Set=]
-                  "<a http-header>`Access-Control-Request-Local-Network`</a>"
+                  "<a http-header>`Access-Control-Request-Private-Network`</a>"
                   to "`true`" in <var ignore>preflight</var>'s
                   [=request/header list=].
 
@@ -767,7 +770,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
               1.  Let |allow| be the result of [=extracting header list values=]
                   given
-                  "<a http-header>`Access-Control-Allow-Local-Network`</a>"
+                  "<a http-header>`Access-Control-Allow-Private-Network`</a>"
                   and |response|'s [=response/header list=].
 
               1.  If |allow| is not "`true`", return a [=network error=].
@@ -790,7 +793,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   <h4 id="forbidden-header-names">Forbidden header names</h4>
 
   A new entry is added to the list of [=forbidden request-header=] names:
-  <a http-header>`Access-Control-Request-Local-Network`</a>.
+  <a http-header>`Access-Control-Request-Private-Network`</a>.
 
   The user agent should have full control over this header, just as it does over
   other CORS headers.

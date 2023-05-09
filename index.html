@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version bf22245b8, updated Tue Apr 18 15:53:37 2023 -0700" name="generator">
   <link href="https://wicg.github.io/local-network-access/" rel="canonical">
-  <meta content="83ec3f958e542c2aba6b724802b259b67f54467c" name="document-revision">
+  <meta content="a8be5f8161dde44bbf79b24a97e7c18555c58ff4" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -495,7 +495,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Local Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-04-26">26 April 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-05-09">9 May 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -648,8 +648,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     </ul>
     <h3 class="heading settled" data-level="1.2" id="examples"><span class="secno">1.2. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
     <h4 class="heading settled" data-level="1.2.1" id="example-deny-by-default"><span class="secno">1.2.1. </span><span class="content">Secure by Default</span><a class="self-link" href="#example-deny-by-default"></a></h4>
-    <div class="example" id="example-c022efd0">
-     <a class="self-link" href="#example-c022efd0"></a> MegaCorp Inc’s routers have a fairly serious CSRF vulnerability which allows
+    <div class="example" id="example-ab20844c">
+     <a class="self-link" href="#example-ab20844c"></a> MegaCorp Inc’s routers have a fairly serious CSRF vulnerability which allows
     their DNS settings to be altered by navigating to <code>http://admin:admin@router.local/set_dns</code> and passing in various GET
     parameters. Oh noes! 
      <p>Happily, MegaCorp Inc’s routers don’t have any interest in requests from the
@@ -666,7 +666,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
 <pre>OPTIONS /set_dns?... HTTP/1.1
 Host: router.local
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-request-method" id="ref-for-http-access-control-request-method">Access-Control-Request-Method</a>: GET
-<a data-link-type="http-header" href="#http-headerdef-access-control-request-local-network" id="ref-for-http-headerdef-access-control-request-local-network">Access-Control-Request-Local-Network</a>: true
+<a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network">Access-Control-Request-Private-Network</a>: true
 ...
 Origin: https://csrf.attack
 </pre>
@@ -678,15 +678,15 @@ Origin: https://csrf.attack
   This will cause the preflight to fail, and the actual <code>GET</code> will never
   be issued.</p>
       <li data-md>
-       <p>If it does understand <code>OPTIONS</code>, it can neglect to include an <a data-link-type="http-header" href="#http-headerdef-access-control-allow-local-network" id="ref-for-http-headerdef-access-control-allow-local-network"><code>Access-Control-Allow-Local-Network</code></a> header in its
+       <p>If it does understand <code>OPTIONS</code>, it can neglect to include an <a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network"><code>Access-Control-Allow-Private-Network</code></a> header in its
   response. This will cause the preflight to fail, and the actual <code>GET</code> will never be issued.</p>
       <li data-md>
        <p>It can crash. Crashing is fairly safe, if inelegant.</p>
      </ul>
     </div>
     <h4 class="heading settled" data-level="1.2.2" id="example-opt-in"><span class="secno">1.2.2. </span><span class="content">Opting-In</span><a class="self-link" href="#example-opt-in"></a></h4>
-    <div class="example" id="example-d7731846">
-     <a class="self-link" href="#example-d7731846"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
+    <div class="example" id="example-c1a1a3d3">
+     <a class="self-link" href="#example-c1a1a3d3"></a> Some of MegaCorp Inc’s devices actually need to talk to the public internet
     for various reasons. They can explicitly opt-in to receiving requests from
     the internet by sending proper CORS headers in response to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-request" id="ref-for-cors-preflight-request②">CORS-preflight request</a>. 
      <p>When a website on the public internet makes a request to the device, the
@@ -701,14 +701,14 @@ Origin: https://csrf.attack
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin" id="ref-for-http-access-control-allow-origin">Access-Control-Allow-Origin</a>: https://public.example.com
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods" id="ref-for-http-access-control-allow-methods">Access-Control-Allow-Methods</a>: GET
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials" id="ref-for-http-access-control-allow-credentials">Access-Control-Allow-Credentials</a>: true
-<a data-link-type="http-header" href="#http-headerdef-access-control-allow-local-network" id="ref-for-http-headerdef-access-control-allow-local-network①">Access-Control-Allow-Local-Network</a>: true
+<a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network①">Access-Control-Allow-Private-Network</a>: true
 Content-Length: 0
 ...
 </pre>
     </div>
     <h4 class="heading settled" data-level="1.2.3" id="shortlinks"><span class="secno">1.2.3. </span><span class="content">Navigation</span><a class="self-link" href="#shortlinks"></a></h4>
-    <div class="example" id="example-53452ff5">
-     <a class="self-link" href="#example-53452ff5"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
+    <div class="example" id="example-a6faed4f">
+     <a class="self-link" href="#example-a6faed4f"></a> MegaCorp Inc. runs an internal link shortening service at <code>https://go/</code>, and
     its employees often email such links to each other. The email server is
     hosted at a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address①">public address</a> in order to ensure that employees can work
     even when they’re not at the office. How considerate! 
@@ -717,7 +717,7 @@ Content-Length: 0
 <pre>OPTIONS /short-links-are-short-after-shortening HTTP/1.1
 Host: go
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-request-method" id="ref-for-http-access-control-request-method①">Access-Control-Request-Method</a>: GET
-<a data-link-type="http-header" href="#http-headerdef-access-control-request-local-network" id="ref-for-http-headerdef-access-control-request-local-network①">Access-Control-Request-Local-Network</a>: true
+<a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network①">Access-Control-Request-Private-Network</a>: true
 ...
 Origin: https://mail.mega.corp
 </pre>
@@ -728,7 +728,7 @@ Origin: https://mail.mega.corp
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-origin" id="ref-for-http-access-control-allow-origin①">Access-Control-Allow-Origin</a>: https://mail.mega.corp
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-methods" id="ref-for-http-access-control-allow-methods①">Access-Control-Allow-Methods</a>: GET
 <a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials" id="ref-for-http-access-control-allow-credentials①">Access-Control-Allow-Credentials</a>: true
-<a data-link-type="http-header" href="#http-headerdef-access-control-allow-local-network" id="ref-for-http-headerdef-access-control-allow-local-network②">Access-Control-Allow-Local-Network</a>: true
+<a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network②">Access-Control-Allow-Private-Network</a>: true
 Content-Length: 0
 ...
 </pre>
@@ -913,9 +913,11 @@ See also the issue below.</p>
     <p class="note" role="note"><span class="marker">NOTE:</span> Some <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request①">local network requests</a> are more challenging to secure than
   others. See <a href="#rollout-difficulties">§ 4.4 Rollout difficulties</a> for more details.</p>
     <h3 class="heading settled" data-level="2.3" id="headers"><span class="secno">2.3. </span><span class="content">Additional CORS Headers</span><a class="self-link" href="#headers"></a></h3>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-request-local-network"><code>Access-Control-Request-Local-Network</code></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request①">request</a> is a <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request②">local network request</a>.</p>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-allow-local-network"><code>Access-Control-Allow-Local-Network</code></dfn> indicates that a resource can be safely shared with external networks.</p>
-    <p class="note" role="note"><span class="marker">Note:</span> Previous versions of this spec spelled the headers as <code>Access-Control-Request-Private-Network</code> and <code>Access-Control-Allow-Private-Network</code>.</p>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-request-private-network"><code>Access-Control-Request-Private-Network</code></dfn> indicates that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request①">request</a> is a <a data-link-type="dfn" href="#local-network-request" id="ref-for-local-network-request②">local network request</a>.</p>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-access-control-allow-private-network"><code>Access-Control-Allow-Private-Network</code></dfn> indicates that a resource can be safely shared with external networks.</p>
+    <p class="note" role="note"><span class="marker">Note:</span> These headers were briefly specified as <code>Access-Control-Request-Local-Network</code> and <code>Access-Control-Allow-Local-Network</code>, but this decision was reversed due to
+  its compatibility impact. See <a href="https://github.com/WICG/local-network-access/issues/91">issue #91</a> for
+  details.</p>
     <h3 class="heading settled" data-level="2.4" id="csp"><span class="secno">2.4. </span><span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="treat-as-public-address">treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address④">public address</a>, even if
@@ -1109,7 +1111,7 @@ directive-value = ""
   then:</p>
           <ol>
            <li data-md>
-            <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-set" id="ref-for-concept-header-list-set">Set</a> "<a data-link-type="http-header" href="#http-headerdef-access-control-request-local-network" id="ref-for-http-headerdef-access-control-request-local-network②"><code>Access-Control-Request-Local-Network</code></a>"
+            <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-set" id="ref-for-concept-header-list-set">Set</a> "<a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network②"><code>Access-Control-Request-Private-Network</code></a>"
   to "<code>true</code>" in <var>preflight</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list">header list</a>.</p>
           </ol>
         </ol>
@@ -1122,7 +1124,7 @@ directive-value = ""
           <ol>
            <li data-md>
             <p>Let <var>allow</var> be the result of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#extract-header-list-values" id="ref-for-extract-header-list-values">extracting header list values</a> given
-  "<a data-link-type="http-header" href="#http-headerdef-access-control-allow-local-network" id="ref-for-http-headerdef-access-control-allow-local-network③"><code>Access-Control-Allow-Local-Network</code></a>"
+  "<a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network③"><code>Access-Control-Allow-Private-Network</code></a>"
   and <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list">header list</a>.</p>
            <li data-md>
             <p>If <var>allow</var> is not "<code>true</code>", return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑥">network error</a>.</p>
@@ -1147,7 +1149,7 @@ directive-value = ""
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.1.3" id="forbidden-header-names"><span class="secno">3.1.3. </span><span class="content">Forbidden header names</span><a class="self-link" href="#forbidden-header-names"></a></h4>
-    <p>A new entry is added to the list of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#forbidden-request-header" id="ref-for-forbidden-request-header">forbidden request-header</a> names: <a data-link-type="http-header" href="#http-headerdef-access-control-request-local-network" id="ref-for-http-headerdef-access-control-request-local-network③"><code>Access-Control-Request-Local-Network</code></a>.</p>
+    <p>A new entry is added to the list of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#forbidden-request-header" id="ref-for-forbidden-request-header">forbidden request-header</a> names: <a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network③"><code>Access-Control-Request-Private-Network</code></a>.</p>
     <p>The user agent should have full control over this header, just as it does over
   other CORS headers.</p>
     <h3 class="heading settled" data-level="3.2" id="integration-websockets"><span class="secno">3.2. </span><span class="content">Integration with WebSockets</span><a class="self-link" href="#integration-websockets"></a></h3>
@@ -1408,8 +1410,8 @@ directive-value = ""
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#http-headerdef-access-control-allow-local-network">Access-Control-Allow-Local-Network</a><span>, in § 2.3</span>
-   <li><a href="#http-headerdef-access-control-request-local-network">Access-Control-Request-Local-Network</a><span>, in § 2.3</span>
+   <li><a href="#http-headerdef-access-control-allow-private-network">Access-Control-Allow-Private-Network</a><span>, in § 2.3</span>
+   <li><a href="#http-headerdef-access-control-request-private-network">Access-Control-Request-Private-Network</a><span>, in § 2.3</span>
    <li><a href="#ip-address-space">address space</a><span>, in § 2.1</span>
    <li><a href="#determine-the-ip-address-space">determine the IP address space</a><span>, in § 2.1</span>
    <li><a href="#http-no-service-worker-fetch">HTTP-no-service-worker fetch</a><span>, in § 3.1.2</span>
@@ -1849,8 +1851,8 @@ window.dfnpanelData['public-address'] = {"dfnID": "public-address", "url": "#pub
 window.dfnpanelData['ip-address-space-less-public'] = {"dfnID": "ip-address-space-less-public", "url": "#ip-address-space-less-public", "dfnText": "less public", "refSections": [{"refs": [{"id": "ref-for-ip-address-space-less-public"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-ip-address-space-less-public\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-ip-address-space-less-public\u2461"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-ip-address-space-less-public\u2462"}], "title": "5.6.2. HTTP cache poisoning"}], "external": false};
 window.dfnpanelData['determine-the-ip-address-space'] = {"dfnID": "determine-the-ip-address-space", "url": "#determine-the-ip-address-space", "dfnText": "determine the IP address space", "refSections": [{"refs": [{"id": "ref-for-determine-the-ip-address-space"}], "title": "3.1.1. Secure context restriction"}], "external": false};
 window.dfnpanelData['local-network-request'] = {"dfnID": "local-network-request", "url": "#local-network-request", "dfnText": "local network request", "refSections": [{"refs": [{"id": "ref-for-local-network-request"}, {"id": "ref-for-local-network-request\u2460"}], "title": "2.2. Local Network Request"}, {"refs": [{"id": "ref-for-local-network-request\u2461"}], "title": "2.3. Additional CORS Headers"}, {"refs": [{"id": "ref-for-local-network-request\u2462"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-local-network-request\u2463"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-local-network-request\u2464"}], "title": "3.4. Workers"}], "external": false};
-window.dfnpanelData['http-headerdef-access-control-request-local-network'] = {"dfnID": "http-headerdef-access-control-request-local-network", "url": "#http-headerdef-access-control-request-local-network", "dfnText": "Access-Control-Request-Local-Network", "refSections": [{"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network\u2460"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network\u2461"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-local-network\u2462"}], "title": "3.1.3. Forbidden header names"}], "external": false};
-window.dfnpanelData['http-headerdef-access-control-allow-local-network'] = {"dfnID": "http-headerdef-access-control-allow-local-network", "url": "#http-headerdef-access-control-allow-local-network", "dfnText": "Access-Control-Allow-Local-Network", "refSections": [{"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network\u2460"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network\u2461"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-local-network\u2462"}], "title": "3.1.2. CORS preflight"}], "external": false};
+window.dfnpanelData['http-headerdef-access-control-request-private-network'] = {"dfnID": "http-headerdef-access-control-request-private-network", "url": "#http-headerdef-access-control-request-private-network", "dfnText": "Access-Control-Request-Private-Network", "refSections": [{"refs": [{"id": "ref-for-http-headerdef-access-control-request-private-network"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-private-network\u2460"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-private-network\u2461"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-request-private-network\u2462"}], "title": "3.1.3. Forbidden header names"}], "external": false};
+window.dfnpanelData['http-headerdef-access-control-allow-private-network'] = {"dfnID": "http-headerdef-access-control-allow-private-network", "url": "#http-headerdef-access-control-allow-private-network", "dfnText": "Access-Control-Allow-Private-Network", "refSections": [{"refs": [{"id": "ref-for-http-headerdef-access-control-allow-private-network"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-private-network\u2460"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-private-network\u2461"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-http-headerdef-access-control-allow-private-network\u2462"}], "title": "3.1.2. CORS preflight"}], "external": false};
 window.dfnpanelData['treat-as-public-address'] = {"dfnID": "treat-as-public-address", "url": "#treat-as-public-address", "dfnText": "treat-as-public-address", "refSections": [{"refs": [{"id": "ref-for-treat-as-public-address"}], "title": "6. IANA Considerations"}], "external": false};
 window.dfnpanelData['connection-ip-address-space'] = {"dfnID": "connection-ip-address-space", "url": "#connection-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-connection-ip-address-space"}, {"id": "ref-for-connection-ip-address-space\u2460"}, {"id": "ref-for-connection-ip-address-space\u2461"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-connection-ip-address-space\u2462"}], "title": "3.1.2. CORS preflight"}], "external": false};
 window.dfnpanelData['response-ip-address-space'] = {"dfnID": "response-ip-address-space", "url": "#response-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-response-ip-address-space"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-response-ip-address-space\u2460"}, {"id": "ref-for-response-ip-address-space\u2461"}, {"id": "ref-for-response-ip-address-space\u2462"}, {"id": "ref-for-response-ip-address-space\u2463"}, {"id": "ref-for-response-ip-address-space\u2464"}, {"id": "ref-for-response-ip-address-space\u2465"}, {"id": "ref-for-response-ip-address-space\u2466"}, {"id": "ref-for-response-ip-address-space\u2467"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-response-ip-address-space\u2468"}], "title": "3.3. Integration with HTML"}], "external": false};
