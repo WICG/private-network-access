@@ -1,0 +1,14 @@
+name: Validate PRs
+on:
+  pull_request: {}
+jobs:
+  main:
+    name: Build and Validate
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: w3c/spec-prod@v2
+        with:
+          TOOLCHAIN: bikeshed
+          SOURCE: index.src.html
+          DESTINATION: index.html
