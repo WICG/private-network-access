@@ -21,3 +21,14 @@ You may be interested in reading:
    - the security & privacy self-review:
    [`./permission_prompt/security_privacy_self_review.md`](https://github.com/WICG/local-network-access/blob/master/permission_prompt/security_privacy_self_review.md)
 
+## How to build
+
+Ensure you have [pipenv](https://github.com/pypa/pipenv) installed, then:
+
+```sh
+$ make
+```
+
+While this is useful when editing the spec locally, do not commit the generated
+HTML file to the `main` branch. That is taken care of automatically upon pushing
+to `main` by a github workflow.
