@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5fcd28d6d, updated Tue May 30 13:12:11 2023 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="5fbcad75dfffafd633d0b1e4b69c02bf6fcb4e36" name="document-revision">
+  <meta content="b3404b196deecd452177deda08ed1647721c5db0" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -982,8 +982,7 @@ See also the issue below.</p>
   its compatibility impact. See <a href="https://github.com/WICG/private-network-access/issues/91">issue #91</a> for
   details.</p>
     <p>The <a data-link-type="http-header" href="#http-headerdef-private-network-access-name" id="ref-for-http-headerdef-private-network-access-name"><code>Private-Network-Access-Name</code></a> attempts to provide users
-  a human friendly name in the <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt">private network access permission prompt</a> (will
-  simply use the content permission prompt below).</p>
+  a human friendly name in the <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt">private network access permission prompt</a>.</p>
     <h3 class="heading settled" data-level="2.4" id="csp"><span class="secno">2.4. </span><span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="treat-as-public-address">treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address④">public address</a>, even if
@@ -1034,9 +1033,9 @@ directive-value = ""
   attackers should not be able to trivially exploit an endpoint’s consent to a
   non-secure origin.</p>
     <p>Mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content-2" title="Mixed Content Level 2">[MIXED-CONTENT-2]</a> prevent secure contexts from making
-	requests over HTTP, so this restriction would seem to require that local network
-	servers migrate to HTTPS. This is often difficult to impossible. A new <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt①">permission prompt</a> is introduced to allow secure contexts to make requests
-	over HTTP to the private network anyway, given user consent.</p>
+  requests over HTTP, so this restriction would seem to require that local network
+  servers migrate to HTTPS. This is often difficult to impossible. A new <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt①">permission prompt</a> is introduced to allow secure contexts to make requests
+  over HTTP to the private network anyway, given user consent.</p>
     <p>To that end:</p>
     <ol>
      <li data-md>
@@ -1069,18 +1068,17 @@ directive-value = ""
          <li data-md>
           <p>Let <var>clientAddressSpace</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space②">IP address space</a>.</p>
          <li data-md>
-          <p>If <var>connection</var>’s <a data-link-type="dfn" href="#connection-ip-address-space" id="ref-for-connection-ip-address-space①">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public①">less public</a> than <var>clientAddressSpace</var>.</p>
+          <p>If <var>connection</var>’s <a data-link-type="dfn" href="#connection-ip-address-space" id="ref-for-connection-ip-address-space①">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public①">less public</a> than <var>clientAddressSpace</var>, then
+  return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error">network error</a>.</p>
+         <li data-md>
+          <p>Return null.</p>
         </ol>
-       <li data-md>
-        <p>Return null.</p>
-      </ol>
-      <p class="note" role="note"><span class="marker">NOTE:</span> If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container②">policy container</a> is null, then PNA checks
+        <p class="note" role="note"><span class="marker">NOTE:</span> If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container②">policy container</a> is null, then PNA checks
   do not apply to <var>request</var>. Users of the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch①">fetch</a> algorithm should take
   care to either set <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a> to an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> with a non-null <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container" id="ref-for-concept-settings-object-policy-container①">policy container</a> and let <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch②">fetch</a> initialize <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container③">policy container</a> accordingly, or to
   directly set <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container④">policy container</a> to a non-null value.</p>
-      <ol>
        <li data-md>
-        <p>else:</p>
+        <p>Otherwise:</p>
         <ol>
          <li data-md>
           <p>Let <var>clientAddressSpace</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-policy-container" id="ref-for-concept-request-policy-container⑤">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space③">IP address space</a>.</p>
@@ -1092,11 +1090,9 @@ directive-value = ""
           <p>If <var>permission</var>’s result is:</p>
           <ol>
            <li data-md>
-            <p><a href="https://www.w3.org/TR/permissions/#:~:text=following%20states%3A-,Denied,-%3A">Deniel</a>,
-  then return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error">network error</a>.</p>
+            <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-denied" id="ref-for-dfn-denied">Denied</a>, then return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error①">network error</a>.</p>
            <li data-md>
-            <p><a href="https://www.w3.org/TR/permissions/#:~:text=use%20the%20feature.-,Granted,-%3A">Granted</a>,
-  then return null.</p>
+            <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-granted" id="ref-for-dfn-granted">Granted</a>, then return null.</p>
           </ol>
         </ol>
       </ol>
@@ -1110,7 +1106,7 @@ directive-value = ""
        <li data-md>
         <p>Let <var>privateNetworkAccessCheckResult</var> be the result of running <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check">Private Network Access check</a> for <var>fetchParams</var>’ <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request③">request</a> and <var>connection</var>.</p>
        <li data-md>
-        <p>If <var>privateNetworkAccessCheckResult</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error①">network error</a>, return <var>privateNetworkAccessCheckResult</var>.</p>
+        <p>If <var>privateNetworkAccessCheckResult</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error②">network error</a>, return <var>privateNetworkAccessCheckResult</var>.</p>
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.1.2" id="cors-preflight"><span class="secno">3.1.2. </span><span class="content">CORS preflight</span><a class="self-link" href="#cors-preflight"></a></h4>
@@ -1133,7 +1129,7 @@ directive-value = ""
          <li data-md>
           <p>If <var>connection</var>’s <a data-link-type="dfn" href="#connection-ip-address-space" id="ref-for-connection-ip-address-space④">IP address space</a> is not equal to
   then <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①">target IP address space</a>, then return
-  a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error②">network error</a>.</p>
+  a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error③">network error</a>.</p>
          <li data-md>
           <p>Return null.</p>
         </ol>
@@ -1143,7 +1139,7 @@ directive-value = ""
         <p>If <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space②">IP address space</a> is <a data-link-type="dfn" href="#ip-address-space-less-public" id="ref-for-ip-address-space-less-public③">less public</a> than <var>clientAddressSpace</var>, then:</p>
         <ol>
          <li data-md>
-          <p>Let <var>error</var> be a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error③">network error</a>.</p>
+          <p>Let <var>error</var> be a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error④">network error</a>.</p>
          <li data-md>
           <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">client</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context⑤">secure context</a>,
   then set <var>error</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space③">IP address space</a> property to <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space④">IP address space</a>.</p>
@@ -1168,7 +1164,7 @@ directive-value = ""
         <p>Immediately after running <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0①">CORS-preflight fetch</a>:</p>
         <ol>
          <li data-md>
-          <p>If <var>preflightResponse</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error④">network error</a>:</p>
+          <p>If <var>preflightResponse</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑤">network error</a>:</p>
           <ol>
            <li data-md>
             <p>If <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑤">IP address space</a> is
@@ -1183,7 +1179,7 @@ directive-value = ""
         <p>Immediately after running <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch" id="ref-for-concept-http-network-or-cache-fetch">HTTP-network-or-cache fetch</a>:</p>
         <ol>
          <li data-md>
-          <p>If <var>response</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑤">network error</a> and <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑦">IP address space</a> is non-null, then:</p>
+          <p>If <var>response</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑥">network error</a> and <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑦">IP address space</a> is non-null, then:</p>
           <ol>
            <li data-md>
             <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space④">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑧">IP address space</a>.</p>
@@ -1222,7 +1218,7 @@ directive-value = ""
   "<a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network③"><code>Access-Control-Allow-Private-Network</code></a>"
   and <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list">header list</a>.</p>
            <li data-md>
-            <p>If <var>allow</var> is not "<code>true</code>", return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑥">network error</a>.</p>
+            <p>If <var>allow</var> is not "<code>true</code>", return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑦">network error</a>.</p>
           </ol>
         </ol>
       </ol>
@@ -1318,11 +1314,11 @@ directive-value = ""
     <p>The states of the private network access permission can be one of the three:</p>
     <ul>
      <li data-md>
-      <p><dfn data-dfn-type="dfn" data-export id="denied">Denied<a class="self-link" href="#denied"></a></dfn>:</p>
+      <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-denied" id="ref-for-dfn-denied①">Denied</a></p>
      <li data-md>
-      <p><dfn data-dfn-type="dfn" data-export id="granted">Granted<a class="self-link" href="#granted"></a></dfn>:</p>
+      <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-granted" id="ref-for-dfn-granted①">Granted</a></p>
      <li data-md>
-      <p><dfn data-dfn-type="dfn" data-export id="prompt">Prompt<a class="self-link" href="#prompt"></a></dfn>:</p>
+      <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-prompt" id="ref-for-dfn-prompt">Prompt</a></p>
     </ul>
     <h3 class="heading settled" data-level="4.4" id="permission-store"><span class="secno">4.4. </span><span class="content">Store</span><a class="self-link" href="#permission-store"></a></h3>
     <p>The user agent maintains a single permission store which is a list of permission
@@ -1541,9 +1537,7 @@ directive-value = ""
    <li><a href="#http-headerdef-access-control-allow-private-network">Access-Control-Allow-Private-Network</a><span>, in § 2.3</span>
    <li><a href="#http-headerdef-access-control-request-private-network">Access-Control-Request-Private-Network</a><span>, in § 2.3</span>
    <li><a href="#ip-address-space">address space</a><span>, in § 2.1</span>
-   <li><a href="#denied">Denied</a><span>, in § 4.3</span>
    <li><a href="#determine-the-ip-address-space">determine the IP address space</a><span>, in § 2.1</span>
-   <li><a href="#granted">Granted</a><span>, in § 4.3</span>
    <li><a href="#http-no-service-worker-fetch">HTTP-no-service-worker fetch</a><span>, in § 3.1.2</span>
    <li>
     IP address space
@@ -1564,7 +1558,6 @@ directive-value = ""
    <li><a href="#http-headerdef-private-network-access-name">Private-Network-Access-Name</a><span>, in § 4.2</span>
    <li><a href="#private-network-access-permission-prompt">private network access permission prompt</a><span>, in § 4</span>
    <li><a href="#private-network-request">private network request</a><span>, in § 2.2</span>
-   <li><a href="#prompt">Prompt</a><span>, in § 4.3</span>
    <li><a href="#ip-address-space-public">public</a><span>, in § 2.1</span>
    <li><a href="#public-address">public address</a><span>, in § 2.1</span>
    <li><a href="#request-target-ip-address-space">target IP address space</a><span>, in § 3.1.2</span>
@@ -1652,7 +1645,10 @@ directive-value = ""
    <li>
     <a data-link-type="biblio">[PERMISSIONS]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="fb4878d7">denied</span>
+     <li><span class="dfn-paneled" id="6821ab89">granted</span>
      <li><span class="dfn-paneled" id="3f5a365a">permission</span>
+     <li><span class="dfn-paneled" id="b2915302">prompt</span>
     </ul>
    <li>
     <a data-link-type="biblio">[SECURE-CONTEXTS]</a> defines the following terms:
@@ -2115,7 +2111,7 @@ window.dfnpanelData['ad6ec3ab'] = {"dfnID": "ad6ec3ab", "url": "https://fetch.sp
 window.dfnpanelData['6ee0eab1'] = {"dfnID": "6ee0eab1", "url": "https://fetch.spec.whatwg.org/#concept-request-header-list", "dfnText": "header list (for request)", "refSections": [{"refs": [{"id": "ref-for-concept-request-header-list"}], "title": "3.1.2. CORS preflight"}], "external": true};
 window.dfnpanelData['f7b00a8b'] = {"dfnID": "f7b00a8b", "url": "https://fetch.spec.whatwg.org/#concept-response-header-list", "dfnText": "header list (for response)", "refSections": [{"refs": [{"id": "ref-for-concept-response-header-list"}], "title": "3.1.2. CORS preflight"}], "external": true};
 window.dfnpanelData['2aaa2f42'] = {"dfnID": "2aaa2f42", "url": "https://fetch.spec.whatwg.org/#concept-http-fetch", "dfnText": "http fetch", "refSections": [{"refs": [{"id": "ref-for-concept-http-fetch"}, {"id": "ref-for-concept-http-fetch\u2460"}], "title": "3.1.2. CORS preflight"}], "external": true};
-window.dfnpanelData['eb1b1af3'] = {"dfnID": "eb1b1af3", "url": "https://fetch.spec.whatwg.org/#concept-network-error", "dfnText": "network error", "refSections": [{"refs": [{"id": "ref-for-concept-network-error"}, {"id": "ref-for-concept-network-error\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-network-error\u2461"}, {"id": "ref-for-concept-network-error\u2462"}, {"id": "ref-for-concept-network-error\u2463"}, {"id": "ref-for-concept-network-error\u2464"}, {"id": "ref-for-concept-network-error\u2465"}], "title": "3.1.2. CORS preflight"}], "external": true};
+window.dfnpanelData['eb1b1af3'] = {"dfnID": "eb1b1af3", "url": "https://fetch.spec.whatwg.org/#concept-network-error", "dfnText": "network error", "refSections": [{"refs": [{"id": "ref-for-concept-network-error"}, {"id": "ref-for-concept-network-error\u2460"}, {"id": "ref-for-concept-network-error\u2461"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-network-error\u2462"}, {"id": "ref-for-concept-network-error\u2463"}, {"id": "ref-for-concept-network-error\u2464"}, {"id": "ref-for-concept-network-error\u2465"}, {"id": "ref-for-concept-network-error\u2466"}], "title": "3.1.2. CORS preflight"}], "external": true};
 window.dfnpanelData['7cf440ca'] = {"dfnID": "7cf440ca", "url": "https://fetch.spec.whatwg.org/#network-partition-key", "dfnText": "network partition key", "refSections": [{"refs": [{"id": "ref-for-network-partition-key"}], "title": "6.6.1. Applying checks to subresources"}], "external": true};
 window.dfnpanelData['8e1fb11c'] = {"dfnID": "8e1fb11c", "url": "https://fetch.spec.whatwg.org/#concept-connection-obtain", "dfnText": "obtain a connection", "refSections": [{"refs": [{"id": "ref-for-concept-connection-obtain"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-concept-connection-obtain\u2460"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-concept-connection-obtain\u2461"}], "title": "3.4. Workers"}], "external": true};
 window.dfnpanelData['f78d5b5c'] = {"dfnID": "f78d5b5c", "url": "https://fetch.spec.whatwg.org/#concept-request-origin", "dfnText": "origin", "refSections": [{"refs": [{"id": "ref-for-concept-request-origin"}, {"id": "ref-for-concept-request-origin\u2460"}, {"id": "ref-for-concept-request-origin\u2461"}], "title": "3.1.1. Secure context restriction"}], "external": true};
@@ -2140,7 +2136,10 @@ window.dfnpanelData['7393da89'] = {"dfnID": "7393da89", "url": "https://html.spe
 window.dfnpanelData['65181da8'] = {"dfnID": "65181da8", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#secure-context", "dfnText": "secure context", "refSections": [{"refs": [{"id": "ref-for-secure-context"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-secure-context\u2460"}, {"id": "ref-for-secure-context\u2461"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-secure-context\u2462"}, {"id": "ref-for-secure-context\u2463"}, {"id": "ref-for-secure-context\u2464"}], "title": "3.1.2. CORS preflight"}], "external": true};
 window.dfnpanelData['984221ca'] = {"dfnID": "984221ca", "url": "https://infra.spec.whatwg.org/#struct", "dfnText": "struct", "refSections": [{"refs": [{"id": "ref-for-struct"}], "title": "3.3. Integration with HTML"}], "external": true};
 window.dfnpanelData['4eec4201'] = {"dfnID": "4eec4201", "url": "https://wicg.github.io/local-network-access/#local-network-request", "dfnText": "local network request", "refSections": [{"refs": [{"id": "ref-for-local-network-request"}], "title": "2.2. Private Network Request"}], "external": true};
+window.dfnpanelData['fb4878d7'] = {"dfnID": "fb4878d7", "url": "https://w3c.github.io/permissions/#dfn-denied", "dfnText": "denied", "refSections": [{"refs": [{"id": "ref-for-dfn-denied"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-dfn-denied\u2460"}], "title": "4.3. States"}], "external": true};
+window.dfnpanelData['6821ab89'] = {"dfnID": "6821ab89", "url": "https://w3c.github.io/permissions/#dfn-granted", "dfnText": "granted", "refSections": [{"refs": [{"id": "ref-for-dfn-granted"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-dfn-granted\u2460"}], "title": "4.3. States"}], "external": true};
 window.dfnpanelData['3f5a365a'] = {"dfnID": "3f5a365a", "url": "https://w3c.github.io/permissions/#dfn-permission", "dfnText": "permission", "refSections": [{"refs": [{"id": "ref-for-dfn-permission"}], "title": "4. Permission Prompt"}], "external": true};
+window.dfnpanelData['b2915302'] = {"dfnID": "b2915302", "url": "https://w3c.github.io/permissions/#dfn-prompt", "dfnText": "prompt", "refSections": [{"refs": [{"id": "ref-for-dfn-prompt"}], "title": "4.3. States"}], "external": true};
 window.dfnpanelData['96dabee7'] = {"dfnID": "96dabee7", "url": "https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin", "dfnText": "potentially trustworthy origin", "refSections": [{"refs": [{"id": "ref-for-potentially-trustworthy-origin"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-potentially-trustworthy-origin\u2460"}], "title": "6.2. Mixed Content"}], "external": true};
 window.dfnpanelData['c60ed63a'] = {"dfnID": "c60ed63a", "url": "https://w3c.github.io/ServiceWorker/#dfn-service-worker", "dfnText": "service worker", "refSections": [{"refs": [{"id": "ref-for-dfn-service-worker"}], "title": "3.4. Workers"}], "external": true};
 window.dfnpanelData['8dbcc37d'] = {"dfnID": "8dbcc37d", "url": "https://w3c.github.io/ServiceWorker/#soft-update", "dfnText": "soft update", "refSections": [{"refs": [{"id": "ref-for-soft-update"}], "title": "3.4. Workers"}], "external": true};
