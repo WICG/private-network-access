@@ -1,32 +1,32 @@
-# Explainer: Local Network Access
+# Explainer: Private Network Access
 
 ## Quick links
 
-- [Specification](https://wicg.github.io/local-network-access)
-- [Repository](https://github.com/WICG/local-network-access)
-- [Issue tracker](https://github.com/WICG/local-network-access/issues)
+- [Specification](https://wicg.github.io/private-network-access)
+- [Repository](https://github.com/WICG/private-network-access)
+- [Issue tracker](https://github.com/WICG/private-network-access/issues)
 
 ## Introduction
 
-Local Network Access is a web specification which aims to protect websites
-accessed over the local network (either on localhost or a local IP address)
-from malicious requests from websites located outside the local network.
+Private Network Access is a web specification which aims to protect websites
+accessed over the private network (either on localhost or a private IP address)
+from malicious requests from websites located outside the private network.
 
 Say you visit evil.com, we want to prevent it from using your browser as a
 springboard to hack your printer. Perhaps surprisingly, evil.com can easily
 accomplish that in most browsers today (given a web-accessible printer
 exploit).
 
-This specification only affects requests from a public IP address to a local
-IP address or localhost, and requests from a local IP address to localhost.
-This may change to cover all cross-origin requests to the local network in
-the future, see [issue #39](https://github.com/WICG/local-network-access/issues/39).
+This specification only affects requests from a public IP address to a private
+IP address or localhost, and requests from a private IP address to localhost.
+This may change to cover all cross-origin requests to the private network in
+the future, see [issue #39](https://github.com/WICG/private-network-access/issues/39).
 
 This specification used to be named "CORS-RFC1918" , after
 [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), which
 provides a mechanism for securing websites against cross-origin requests,
 and [RFC 1918](https://tools.ietf.org/html/rfc1918), which describes IPv4
-address ranges reserved for local networks.
+address ranges reserved for private networks.
 
 ## Goals
 
@@ -60,7 +60,7 @@ running on the local network or the user’s machine. This piece is missing to
 allow secure public websites to embed non-public resources without running into
 mixed content violations, with the exception of `http://localhost` which is
 embeddable. While a useful goal, and maybe even a necessary one in order to
-deploy Local Network Access more widely, it is out of scope of this
+deploy Private Network Access more widely, it is out of scope of this
 specification.
 
 ## Proposed design
@@ -70,34 +70,34 @@ specification.
 We extend the [RFC 1918](https://tools.ietf.org/html/rfc1918) concept of
 private IP addresses to build a model of network privacy. In this model,
 there are 3 main layers to an IP network from the point of view of a node,
-which we organize from most to least local:
+which we organize from most to least private:
 
 - Localhost - accessible only to the node itself, by default
-- Local IP addresses - accessible only to the members of the local network
+- Private IP addresses - accessible only to the members of the private network
 - Public IP addresses - accessible to anyone
 
-We call these layers **address spaces**: `loopback`, `local`, and `public`.
+We call these layers **address spaces**: `local`, `private`, and `public`.
 
 The mapping from IP address to address space is defined [in the specification](
-https://wicg.github.io/local-network-access/#ip-address-space), and may be
+https://wicg.github.io/private-network-access/#ip-address-space), and may be
 overridden by user agents through user or administrator configuration.
 
 It might also be useful to consider web origins when determining address spaces.
 For example, the `.local.` top-level DNS domain (see
 [RFC 6762](https://tools.ietf.org/html/rfc6762)) might be always be considered
-`local`. See this
-[discussion](https://github.com/WICG/local-network-access/issues/4).
+`private`. See this
+[discussion](https://github.com/WICG/private-network-access/issues/4).
 
 #### Proxies
 
 Proxies influence the address space of resources they proxy. If `foo.example`,
-served on a public IP address, is accessed by a browser via a proxy on a local
+served on a public IP address, is accessed by a browser via a proxy on a private
 IP address (e.g. `192.168.1.123`), then the resource will be considered to have
-been fetched from a local IP address. The resource will in turn be allowed to
-make requests to other local IP addresses accessible to the browser. This can
+been fetched from a private IP address. The resource will in turn be allowed to
+make requests to other private IP addresses accessible to the browser. This can
 allow `foo.example` to learn that it was proxied by observing that it is allowed
-to make requests to local addresses, which is a privacy information leak.
-While this requires correctly guessing the URL of a resource on the local
+to make requests to private addresses, which is a privacy information leak.
+While this requires correctly guessing the URL of a resource on the private
 network, a single correct guess is sufficient.
 
 This is expected to be relatively rare and not warrant more mitigations. After
@@ -105,30 +105,30 @@ all, in the status quo all websites can make requests to all IP addresses with
 no restrictions whatsoever.
 
 It would be interesting to explore a mechanism by which proxies could tell the
-browser "please treat this resource as public/local anyway", thereby passing
+browser "please treat this resource as public/private anyway", thereby passing
 on some information about the IP address behing the proxy. This might take the
 form of the CSP directive discussed below, with some minor modifications.
 
-### Local network requests
+### Private network requests
 
 The address space concept and accompanying model of IP address privacy lets us
 define the class of requests we wish to secure.
 
-We define a **local network request** as a request crossing an address space
-boundary to a more-local address space.
+We define a **private network request** as a request crossing an address space
+boundary to a more-private address space.
 
-Concretely, there are 3 kinds of local network requests:
+Concretely, there are 3 kinds of private network requests:
 
-1. `public` -> `local`
-2. `public` -> `loopback`
-3. `local` -> `loopback`
+1. `public` -> `private`
+2. `public` -> `local`
+3. `private` -> `local`
 
-Note that `local` -> `local` is not a local network request, as well as
-`loopback` -> anything.
+Note that `private` -> `private` is not a private network request, as well as
+`local` -> anything.
 
 ### Integration with Fetch
 
-Local network requests are handled differently than others, like so:
+Private network requests are handled differently than others, like so:
 
 - If the client is not in a
   [secure context](https://www.w3.org/TR/secure-contexts/), the request is
@@ -137,12 +137,12 @@ Local network requests are handled differently than others, like so:
   [CORS pre-flight request](https://fetch.spec.whatwg.org/#cors-preflight-request).
   - There are no exceptions for CORS safelisting.
   - The pre-flight request carries an additional
-    `Access-Control-Request-Local-Network: true` header.
+    `Access-Control-Request-Private-Network: true` header.
   - The response must carry an additional
-    `Access-Control-Allow-Local-Network: true` header.
+    `Access-Control-Allow-Private-Network: true` header.
 
 The Fetch spec does not yet integrate the details of DNS resolution,
-only defining an **obtain a connection** algorithm, thus Local Network Access
+only defining an **obtain a connection** algorithm, thus Private Network Access
 checks are applied to the newly-obtained connection. Given complexities such as
 Happy Eyeballs ([RFC6555](https://datatracker.ietf.org/doc/html/rfc6555),
 [RFC8305](https://datatracker.ietf.org/doc/html/rfc8305), these checks might
@@ -163,7 +163,7 @@ directive, then its address space is set to `public` unconditionally.
 A previous version of this specification introduced a new `addressSpace`
 attribute to `Document` and `WorkerGlobalScope` to allow for introspection from
 Javascript. This was removed over security and privacy concerns, see issue
-[#21](https://github.com/wicg/local-network-access/issues/21).
+[#21](https://github.com/wicg/private-network-access/issues/21).
 
 ### Integration with WebSockets
 
@@ -171,7 +171,7 @@ Preflight requests should be sent ahead of WebSocket handshakes, given that said
 handshakes have roughly the same capabilities for CSRF as `<img>` tags. This
 might require no additional work to specify given that the **establish a
 WebSocket connection** algorithm depends on the **Fetch** algorithm. See also
-issue [#14](https://github.com/wicg/local-network-access/issues/14).
+issue [#14](https://github.com/wicg/private-network-access/issues/14).
 
 A previous version of this specification proposed simply adding the new CORS
 headers to the WebSocket handshake. This would not be sufficient to fully guard
@@ -185,7 +185,7 @@ See also `./security_privacy_self_review.md`.
 
 Documents restored from the HTTP cache are placed in the same IP address space
 as the original document loaded from the network. This avoids trivially
-bypassing Local Network Access checks by round-tripping a document through the
+bypassing Private Network Access checks by round-tripping a document through the
 HTTP cache.
 
 Note that if the browser's configuration changes in between loads and the new
@@ -193,7 +193,7 @@ configuration states that the original IP address should be placed in a
 different IP address space, then the restored document will not belong to the
 same IP address space as the original document.
 
-Subresources loaded from the HTTP cache are subject to the same Local Network
+Subresources loaded from the HTTP cache are subject to the same Private Network
 Access checks as if they were loaded from the origin IP address. This does not
 immediately prevent CSRF attacks, yet is included for coherence.
 
@@ -201,8 +201,8 @@ immediately prevent CSRF attacks, yet is included for coherence.
 
 ### Cover all cross-origin requests targeting the local network
 
-Define **local network request** instead as: any request targeting an IP
-address in the loopback or local address spaces, regardless of the requestor’s
+Define **private network request** instead as: any request targeting an IP
+address in the local or private address spaces, regardless of the requestor’s
 address space.
 
 This definition is strictly broader than the one we are currently working

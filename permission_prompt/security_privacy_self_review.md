@@ -1,4 +1,4 @@
-# Security and Privacy Self-Review: Local Network Access Permission Prompt
+# Security and Privacy Self-Review: Private Network Access Permission Prompt
 
 Based on the W3C TAG's
 [questionnaire](https://www.w3.org/TR/security-privacy-questionnaire/).
@@ -6,8 +6,8 @@ Based on the W3C TAG's
 ## 1. What information might this feature expose to Web sites or other parties, and for what purposes is that exposure necessary?
 
 Documents might be able to infer whether they were loaded from `public`,
-`local` or `loopback` IP address by observing whether they can successfully load
-a well-known subresource from the local network or localhost. This is largely
+`private` or `local` IP address by observing whether they can successfully load
+a well-known subresource from the private network or localhost. This is largely
 unavoidable by design: this specification aims to alter user agent behavior
 differentially based on the IP address which served the main resource.
 
@@ -21,7 +21,7 @@ such as:
 Timing attacks might also be possible, though no concrete scenario has yet been
 laid out.
 
-See [#41](https://github.com/WICG/local-network-access/issues/41) for a
+See [#41](https://github.com/WICG/private-network-access/issues/41) for a
 discussion of these points.
 
 ## 2. Do features in your specification expose the minimum amount of information necessary to enable their intended uses? 
@@ -39,7 +39,7 @@ It does not.
 ## 5. Do the features in your specification introduce new state for an origin that persists across browsing sessions?
 
 Yes, the permission status which allows a certain public webpage to access a
-certain local/loopback service.
+certain private/local service.
 
 ## 6. Do the features in your specification expose information about the underlying platform to origins?
 
@@ -59,7 +59,7 @@ No.
 
 ## 10. Do features in this specification allow an origin to access other devices?
 
-Compared to the previous version of Local Network Access, this feature relaxes
+Compared to the previous version of Private Network Access, this feature relaxes
 mixed content check and allows access to devices via plaintext.
 
 However, compared to the current state of the web, it restricts the capabilities
@@ -82,7 +82,7 @@ be able to request the permission by default. However, third-party contexts (e.g
 not be allowed.
 
 In the future, it might make sense to allow top-level documents to control its
-permission with permission policy and even allow the local network access
+permission with permission policy and even allow the private network access
 permission to be delegated to third-party contexts. In that case, the third-party
 context should be the one taken into account for the permission.
 
