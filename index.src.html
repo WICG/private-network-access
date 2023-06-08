@@ -596,6 +596,31 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   integrations are outlined here for clarity, but the external documents are the
   normative references.
 
+  <h3 id="integration-permissions">Integration with Permissions </h3>
+
+  This document defines a [=powerful feature=] identified by the [=powerful
+  feature/name=] "<dfn export permission><code>
+  mixed-content-private-network-access</code></dfn>". It overrides the
+  following type:
+
+  <dl>
+    <dt>[=powerful feature/permission descriptor type=]</dt>
+    <dd>
+      The [=powerful feature/permission descriptor type=] of the "
+      <a permission><code>mixed-content-private-network-access</code></a>"
+      feature is defined by the following WebIDL interface that
+      [=dictionary/inherits=] from the default [=powerful feature/permission
+      descriptor type=]:
+      <pre class="idl">
+        dictionary MixedContentPrivateNetworkAccessPermissionDescriptor
+            : PermissionDescriptor {
+          DOMString deviceId;
+          DOMString ipAddress;
+        };
+      </pre>
+    </dd>
+  </dl>
+
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
   This document proposes a few changes to Fetch, with the following implication:
