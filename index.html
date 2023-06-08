@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 5fcd28d6d, updated Tue May 30 13:12:11 2023 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="b3404b196deecd452177deda08ed1647721c5db0" name="document-revision">
+  <meta content="7629ed8c6477287659815e043aec357084b6a5a2" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -626,9 +626,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <a href="#premission-prompt"><span class="secno">4</span> <span class="content">Permission Prompt</span></a>
      <ol class="toc">
       <li><a href="#permission-goals"><span class="secno">4.1</span> <span class="content">Goals</span></a>
-      <li><a href="#permission-header"><span class="secno">4.2</span> <span class="content">Additional CORS Headers</span></a>
-      <li><a href="#permission-states"><span class="secno">4.3</span> <span class="content">States</span></a>
-      <li><a href="#permission-store"><span class="secno">4.4</span> <span class="content">Store</span></a>
+      <li><a href="#permission-store"><span class="secno">4.2</span> <span class="content">Store</span></a>
      </ol>
     <li>
      <a href="#implementation-considerations"><span class="secno">5</span> <span class="content">Implementation Considerations</span></a>
@@ -981,8 +979,9 @@ See also the issue below.</p>
     <p class="note" role="note"><span class="marker">Note:</span> These headers were briefly specified as <code>Access-Control-Request-Local-Network</code> and <code>Access-Control-Allow-Local-Network</code>, but this decision was reversed due to
   its compatibility impact. See <a href="https://github.com/WICG/private-network-access/issues/91">issue #91</a> for
   details.</p>
-    <p>The <a data-link-type="http-header" href="#http-headerdef-private-network-access-name" id="ref-for-http-headerdef-private-network-access-name"><code>Private-Network-Access-Name</code></a> attempts to provide users
-  a human friendly name in the <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt">private network access permission prompt</a>.</p>
+    <p>The <dfn data-dfn-type="http-header" data-export id="http-headerdef-private-network-access-name"><code>Private-Network-Access-Name</code><a class="self-link" href="#http-headerdef-private-network-access-name"></a></dfn> attempts to
+  provide users a human friendly name in the <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt">private network access
+  permission prompt</a>.</p>
     <h3 class="heading settled" data-level="2.4" id="csp"><span class="secno">2.4. </span><span class="content">The <code>treat-as-public-address</code> Content Security Policy Directive</span><a class="self-link" href="#csp"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="treat-as-public-address">treat-as-public-address</dfn> directive instructs the user agent to
   treat a document as though it was served from a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address④">public address</a>, even if
@@ -1033,9 +1032,10 @@ directive-value = ""
   attackers should not be able to trivially exploit an endpoint’s consent to a
   non-secure origin.</p>
     <p>Mixed content checks <a data-link-type="biblio" href="#biblio-mixed-content-2" title="Mixed Content Level 2">[MIXED-CONTENT-2]</a> prevent secure contexts from making
-  requests over HTTP, so this restriction would seem to require that local network
-  servers migrate to HTTPS. This is often difficult to impossible. A new <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt①">permission prompt</a> is introduced to allow secure contexts to make requests
-  over HTTP to the private network anyway, given user consent.</p>
+  requests over HTTP, so this restriction would seem to require that private
+  network servers migrate to HTTPS. This is often difficult to impossible. A
+  new <a data-link-type="dfn" href="#private-network-access-permission-prompt" id="ref-for-private-network-access-permission-prompt①">permission prompt</a> is introduced to allow secure contexts to make
+  requests over HTTP to the private network anyway, given user consent.</p>
     <p>To that end:</p>
     <ol>
      <li data-md>
@@ -1299,33 +1299,20 @@ directive-value = ""
    <section>
     <h2 class="heading settled" data-level="4" id="premission-prompt"><span class="secno">4. </span><span class="content">Permission Prompt</span><a class="self-link" href="#premission-prompt"></a></h2>
     <p><em>This section is not normative.</em></p>
-    <p>According to the discutions <a href="https://github.com/WICG/private-network-access/issues/23">[Issue#23</a>], the <dfn class="dfn-paneled" data-dfn-type="dfn" data-export data-local-lt="permission prompt" data-lt="private network access permission prompt" id="private-network-access-permission-prompt">private network access permission
+    <p>Following the discussions in <a href="https://github.com/WICG/private-network-access/issues/23">[Issue#23</a>], the <dfn class="dfn-paneled" data-dfn-type="dfn" data-export data-local-lt="permission prompt" data-lt="private network access permission prompt" id="private-network-access-permission-prompt">private network access permission
   prompt</dfn> is introduced to relax mixed-content checks.</p>
-    <p>Private network access permission prompt is a <a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-permission" id="ref-for-dfn-permission">permission</a>.</p>
+    <p>Private network access permission is a <a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-permission" id="ref-for-dfn-permission">permission</a>.</p>
     <h3 class="heading settled" data-level="4.1" id="permission-goals"><span class="secno">4.1. </span><span class="content">Goals</span><a class="self-link" href="#permission-goals"></a></h3>
-    <p>The overarching goal is to provide a way for private devices which are not able
-  and not welling to directly talk to any public servers including TLS certificate
-  authorities and not able to apply secure contexts to relax mixed-content checks.</p>
-    <h3 class="heading settled" data-level="4.2" id="permission-header"><span class="secno">4.2. </span><span class="content">Additional CORS Headers</span><a class="self-link" href="#permission-header"></a></h3>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="http-header" data-export id="http-headerdef-private-network-access-name"><code>Private-Network-Access-Name</code></dfn> attempt to
-  provide users a human friendly name in the private network access permission
-  prompt.</p>
-    <h3 class="heading settled" data-level="4.3" id="permission-states"><span class="secno">4.3. </span><span class="content">States</span><a class="self-link" href="#permission-states"></a></h3>
-    <p>The states of the private network access permission can be one of the three:</p>
-    <ul>
-     <li data-md>
-      <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-denied" id="ref-for-dfn-denied①">Denied</a></p>
-     <li data-md>
-      <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-granted" id="ref-for-dfn-granted①">Granted</a></p>
-     <li data-md>
-      <p><a data-link-type="dfn" href="https://w3c.github.io/permissions/#dfn-prompt" id="ref-for-dfn-prompt">Prompt</a></p>
-    </ul>
-    <h3 class="heading settled" data-level="4.4" id="permission-store"><span class="secno">4.4. </span><span class="content">Store</span><a class="self-link" href="#permission-store"></a></h3>
+    <p>The goal of the permission is to allow communication from public websites to
+  local network servers over HTTP, which would otherwise be prevented by the <a href="#secure-context-restriction">secure context restriction</a> and mixed
+  content checks. Migrating private network servers to HTTPS has indeed proven to
+  be often difficult, even sometimes impossible.</p>
+    <h3 class="heading settled" data-level="4.2" id="permission-store"><span class="secno">4.2. </span><span class="content">Store</span><a class="self-link" href="#permission-store"></a></h3>
     <p>The user agent maintains a single permission store which is a list of permission
   store entries. Each particular entry denoted by its descriptor and key can only
   appear at most once in the list.</p>
     <p>The <var>key</var> for the entries should be the IP address of local devices.</p>
-    <p>The <var>discriptor</var> woule contains the list of origin which gained user permission
+    <p>The <var>discriptor</var> would contains the list of origins which gained user permission
   for the key IP address, the optional name for the entry and the optional id for
   the entry.</p>
    </section>
@@ -1555,7 +1542,7 @@ directive-value = ""
    <li><a href="#ip-address-space-private">private</a><span>, in § 2.1</span>
    <li><a href="#private-address">private address</a><span>, in § 2.1</span>
    <li><a href="#private-network-access-check">Private Network Access check</a><span>, in § 3.1.1</span>
-   <li><a href="#http-headerdef-private-network-access-name">Private-Network-Access-Name</a><span>, in § 4.2</span>
+   <li><a href="#http-headerdef-private-network-access-name">Private-Network-Access-Name</a><span>, in § 2.3</span>
    <li><a href="#private-network-access-permission-prompt">private network access permission prompt</a><span>, in § 4</span>
    <li><a href="#private-network-request">private network request</a><span>, in § 2.2</span>
    <li><a href="#ip-address-space-public">public</a><span>, in § 2.1</span>
@@ -1648,7 +1635,6 @@ directive-value = ""
      <li><span class="dfn-paneled" id="fb4878d7">denied</span>
      <li><span class="dfn-paneled" id="6821ab89">granted</span>
      <li><span class="dfn-paneled" id="3f5a365a">permission</span>
-     <li><span class="dfn-paneled" id="b2915302">prompt</span>
     </ul>
    <li>
     <a data-link-type="biblio">[SECURE-CONTEXTS]</a> defines the following terms:
@@ -2136,10 +2122,9 @@ window.dfnpanelData['7393da89'] = {"dfnID": "7393da89", "url": "https://html.spe
 window.dfnpanelData['65181da8'] = {"dfnID": "65181da8", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#secure-context", "dfnText": "secure context", "refSections": [{"refs": [{"id": "ref-for-secure-context"}], "title": "3.1. Integration with Fetch"}, {"refs": [{"id": "ref-for-secure-context\u2460"}, {"id": "ref-for-secure-context\u2461"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-secure-context\u2462"}, {"id": "ref-for-secure-context\u2463"}, {"id": "ref-for-secure-context\u2464"}], "title": "3.1.2. CORS preflight"}], "external": true};
 window.dfnpanelData['984221ca'] = {"dfnID": "984221ca", "url": "https://infra.spec.whatwg.org/#struct", "dfnText": "struct", "refSections": [{"refs": [{"id": "ref-for-struct"}], "title": "3.3. Integration with HTML"}], "external": true};
 window.dfnpanelData['4eec4201'] = {"dfnID": "4eec4201", "url": "https://wicg.github.io/local-network-access/#local-network-request", "dfnText": "local network request", "refSections": [{"refs": [{"id": "ref-for-local-network-request"}], "title": "2.2. Private Network Request"}], "external": true};
-window.dfnpanelData['fb4878d7'] = {"dfnID": "fb4878d7", "url": "https://w3c.github.io/permissions/#dfn-denied", "dfnText": "denied", "refSections": [{"refs": [{"id": "ref-for-dfn-denied"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-dfn-denied\u2460"}], "title": "4.3. States"}], "external": true};
-window.dfnpanelData['6821ab89'] = {"dfnID": "6821ab89", "url": "https://w3c.github.io/permissions/#dfn-granted", "dfnText": "granted", "refSections": [{"refs": [{"id": "ref-for-dfn-granted"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-dfn-granted\u2460"}], "title": "4.3. States"}], "external": true};
+window.dfnpanelData['fb4878d7'] = {"dfnID": "fb4878d7", "url": "https://w3c.github.io/permissions/#dfn-denied", "dfnText": "denied", "refSections": [{"refs": [{"id": "ref-for-dfn-denied"}], "title": "3.1.1. Secure context restriction"}], "external": true};
+window.dfnpanelData['6821ab89'] = {"dfnID": "6821ab89", "url": "https://w3c.github.io/permissions/#dfn-granted", "dfnText": "granted", "refSections": [{"refs": [{"id": "ref-for-dfn-granted"}], "title": "3.1.1. Secure context restriction"}], "external": true};
 window.dfnpanelData['3f5a365a'] = {"dfnID": "3f5a365a", "url": "https://w3c.github.io/permissions/#dfn-permission", "dfnText": "permission", "refSections": [{"refs": [{"id": "ref-for-dfn-permission"}], "title": "4. Permission Prompt"}], "external": true};
-window.dfnpanelData['b2915302'] = {"dfnID": "b2915302", "url": "https://w3c.github.io/permissions/#dfn-prompt", "dfnText": "prompt", "refSections": [{"refs": [{"id": "ref-for-dfn-prompt"}], "title": "4.3. States"}], "external": true};
 window.dfnpanelData['96dabee7'] = {"dfnID": "96dabee7", "url": "https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-origin", "dfnText": "potentially trustworthy origin", "refSections": [{"refs": [{"id": "ref-for-potentially-trustworthy-origin"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-potentially-trustworthy-origin\u2460"}], "title": "6.2. Mixed Content"}], "external": true};
 window.dfnpanelData['c60ed63a'] = {"dfnID": "c60ed63a", "url": "https://w3c.github.io/ServiceWorker/#dfn-service-worker", "dfnText": "service worker", "refSections": [{"refs": [{"id": "ref-for-dfn-service-worker"}], "title": "3.4. Workers"}], "external": true};
 window.dfnpanelData['8dbcc37d'] = {"dfnID": "8dbcc37d", "url": "https://w3c.github.io/ServiceWorker/#soft-update", "dfnText": "soft update", "refSections": [{"refs": [{"id": "ref-for-soft-update"}], "title": "3.4. Workers"}], "external": true};
@@ -2166,7 +2151,6 @@ window.dfnpanelData['http-no-service-worker-fetch'] = {"dfnID": "http-no-service
 window.dfnpanelData['cache-entry-ip-address-space'] = {"dfnID": "cache-entry-ip-address-space", "url": "#cache-entry-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-cache-entry-ip-address-space"}], "title": "3.1.2. CORS preflight"}], "external": false};
 window.dfnpanelData['policy-container-ip-address-space'] = {"dfnID": "policy-container-ip-address-space", "url": "#policy-container-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-policy-container-ip-address-space"}], "title": "2.2. Private Network Request"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2461"}, {"id": "ref-for-policy-container-ip-address-space\u2462"}], "title": "3.1.1. Secure context restriction"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2463"}], "title": "3.1.2. CORS preflight"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2464"}, {"id": "ref-for-policy-container-ip-address-space\u2465"}, {"id": "ref-for-policy-container-ip-address-space\u2466"}, {"id": "ref-for-policy-container-ip-address-space\u2467"}, {"id": "ref-for-policy-container-ip-address-space\u2468"}, {"id": "ref-for-policy-container-ip-address-space\u2460\u24ea"}], "title": "3.3. Integration with HTML"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460\u2460"}], "title": "3.4. Workers"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460\u2461"}], "title": "5.2. Proxies"}, {"refs": [{"id": "ref-for-policy-container-ip-address-space\u2460\u2462"}, {"id": "ref-for-policy-container-ip-address-space\u2460\u2463"}, {"id": "ref-for-policy-container-ip-address-space\u2460\u2464"}], "title": "5.3.1. Main resources"}], "external": false};
 window.dfnpanelData['private-network-access-permission-prompt'] = {"dfnID": "private-network-access-permission-prompt", "url": "#private-network-access-permission-prompt", "dfnText": "private network access permission\n  prompt", "refSections": [{"refs": [{"id": "ref-for-private-network-access-permission-prompt"}], "title": "2.3. Additional CORS Headers"}, {"refs": [{"id": "ref-for-private-network-access-permission-prompt\u2460"}, {"id": "ref-for-private-network-access-permission-prompt\u2461"}], "title": "3.1.1. Secure context restriction"}], "external": false};
-window.dfnpanelData['http-headerdef-private-network-access-name'] = {"dfnID": "http-headerdef-private-network-access-name", "url": "#http-headerdef-private-network-access-name", "dfnText": "Private-Network-Access-Name", "refSections": [{"refs": [{"id": "ref-for-http-headerdef-private-network-access-name"}], "title": "2.3. Additional CORS Headers"}], "external": false};
 </script>
 <script>/* Boilerplate: script-dom-helper */
 function query(sel) { return document.querySelector(sel); }
