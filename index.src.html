@@ -625,10 +625,10 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   non-secure origin.
 
   Mixed content checks [[MIXED-CONTENT-2]] prevent secure contexts from making
-  requests over HTTP, so this restriction would seem to require that local network
-  servers migrate to HTTPS. This is often difficult to impossible. A new
-  [=permission prompt=] is introduced to allow secure contexts to make requests
-  over HTTP to the private network anyway, given user consent.
+  requests over HTTP, so this restriction would seem to require that private
+  network servers migrate to HTTPS. This is often difficult to impossible. A
+  new [=permission prompt=] is introduced to allow secure contexts to make
+  requests over HTTP to the private network anyway, given user consent.
 
   To that end:
 
@@ -929,34 +929,20 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   <em>This section is not normative.</em>
 
-  According to the discutions
+  Following the discussions in
   [[Issue#23](https://github.com/WICG/private-network-access/issues/23)], the
   <dfn export local-lt="permission prompt">private network access permission
   prompt</dfn> is introduced to relax mixed-content checks.
 
-  Private network access permission prompt is a <a spec="permissions">permission</a>.
+  Private network access permission is a <a spec="permissions">permission</a>.
 
   <h3 id="permission-goals">Goals</h3>
 
-  The overarching goal is to provide a way for private devices which are not able
-  and not welling to directly talk to any public servers including TLS certificate
-  authorities and not able to apply secure contexts to relax mixed-content checks.
-
-  <h3 id="permission-header">Additional CORS Headers</h3>
-
-  The <dfn export http-header>`Private-Network-Access-Name`</dfn> attempt to
-  provide users a human friendly name in the private network access permission
-  prompt.
-
-  <h3 id="permission-states">States</h3>
-
-  The states of the private network access permission can be one of the three:
-
-  * [=Denied=]
-
-  * [=Granted=]
-
-  * [=Prompt=]
+  The goal of the permission is to allow communication from public websites to
+  local network servers over HTTP, which would otherwise be prevented by the <a
+  href="#secure-context-restriction">secure context restriction</a> and mixed
+  content checks. Migrating private network servers to HTTPS has indeed proven to
+  be often difficult, even sometimes impossible.
 
   <h3 id="permission-store">Store</h3>
 
@@ -966,7 +952,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   The |key| for the entries should be the IP address of local devices.
 
-  The |discriptor| woule contains the list of origin which gained user permission
+  The |discriptor| would contains the list of origins which gained user permission
   for the key IP address, the optional name for the entry and the optional id for
   the entry.
 
