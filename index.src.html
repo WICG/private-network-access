@@ -621,6 +621,14 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
     </dd>
   </dl>
 
+  <h3 id="integration-mixed-content">Integration with Mixed Content</h3>
+  The [=Should fetching request be blocked as mixed content?=] is amended to add
+  the following condition to one of the <strong>allowed</strong> conditions:
+
+  1.  |request|'s [=request/URL=]'s [=url/scheme=] is <code>https</code>, and
+      |request|'s [=request/target IP address space=] is <code>private</code> or
+      <code>local</code>.
+
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
   This document proposes a few changes to Fetch, with the following implication:
