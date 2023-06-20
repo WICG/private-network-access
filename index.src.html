@@ -677,7 +677,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   [=response/IP address space=] is not known until a connection is obtained in
   [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
 
-  <h4 id="potential-solution">Potential Solution</h4>
+  <h4 id="fetching">Fetching</h4>
+
   What follows is a sketch of a potential solution:
 
   1.  [=Connection=] objects are given a new
@@ -876,6 +877,30 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
           1.  <var ignore>entry</var>'s [=cache entry/IP address space=] is
               equal to |request|'s [=request/target IP address space=].
+
+  <h4 id="fetch-api">Fetch API</h4>
+
+  The Fetch API needs to be adjusted as well.
+
+  - Append an optional [=map/entry=] to {{RequestInfo}}, whose [=map/key=] is
+    <dfn export>targetAddressSpace</dfn>, and [=map/value=] is a
+    {{RequestTargetAddressSpace}}.
+      <pre class="idl">
+        dictionary RequestInit {
+          // ...
+          RequestTargetAddressSpace targetAddressSpace;
+        };
+      </pre>
+  - Define {{RequestTargetAddressSpace}} as follows.
+      <pre class="idl">
+        enum RequestTargetAddressSpace { "private", "local" };
+      </pre>
+  - The <a constructor for=Request lt="Request(input, init)"><code>new
+    Request(<var ignore=''>input</var>, |init|)</code></a> is
+    appended with the following step right before setting [=this=]'s [=request=]
+    to |request|:
+    1.  If |init|["{{RequestInit/targetAddressSpace}}"] exists, set |request|'s
+        [=target IP address space=] to it.
 
   <h4 id="forbidden-header-names">Forbidden header names</h4>
 
