@@ -599,6 +599,23 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   integrations are outlined here for clarity, but the external documents are the
   normative references.
 
+  <h4 id="secure-context-restriction">Secure context restriction</h4>
+
+  UAs must not allow <a lt="secure context">non-secure</a>
+  [=IP address space/public=] contexts to request resources from
+  [=private addresses=], even if the private server would opt-in to such a
+  request via a preflight. Making requests to [=IP address space/private=]
+  resources presents risks which are mitigated by ensuring the integrity of the
+  [=request/client=] which initiates the request. In particular, network
+  attackers should not be able to trivially exploit an endpoint's consent to a
+  non-secure origin.
+
+  Mixed content checks [[MIXED-CONTENT-2]] prevent secure contexts from making
+  requests over HTTP, so this restriction would seem to require that private
+  network servers migrate to HTTPS. This is often difficult to impossible. A
+  new [=permission prompt=] is introduced to allow secure contexts to make
+  requests over HTTP to the private network anyway, given user consent.
+
   <h3 id="integration-permissions">Integration with Permissions </h3>
 
   This document defines a [=powerful feature=] identified by the [=powerful
@@ -631,6 +648,16 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       |request|'s [=request/target IP address space=] is <code>private</code> or
       <code>local</code>.
 
+  <h4 id="cors-preflight">CORS preflight</h4>
+
+  The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
+  triggered for all [=private network requests=] initiated from
+  [=secure contexts=].
+
+  The main issue here is again that the response's
+  [=response/IP address space=] is not known until a connection is obtained in
+  [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
+
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
   This document proposes a few changes to Fetch, with the following implication:
@@ -648,33 +675,6 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   as Happy Eyeballs ([[RFC6555 obsolete]], [[RFC8305]]), these checks might pass
   or fail non-deterministically for hosts with multiple IP addresses that
   straddle [=/IP address space=] boundaries.
-
-  <h4 id="secure-context-restriction">Secure context restriction</h4>
-
-  UAs must not allow <a lt="secure context">non-secure</a>
-  [=IP address space/public=] contexts to request resources from
-  [=private addresses=], even if the private server would opt-in to such a
-  request via a preflight. Making requests to [=IP address space/private=]
-  resources presents risks which are mitigated by ensuring the integrity of the
-  [=request/client=] which initiates the request. In particular, network
-  attackers should not be able to trivially exploit an endpoint's consent to a
-  non-secure origin.
-
-  Mixed content checks [[MIXED-CONTENT-2]] prevent secure contexts from making
-  requests over HTTP, so this restriction would seem to require that private
-  network servers migrate to HTTPS. This is often difficult to impossible. A
-  new [=permission prompt=] is introduced to allow secure contexts to make
-  requests over HTTP to the private network anyway, given user consent.
-
-  <h4 id="cors-preflight">CORS preflight</h4>
-
-  The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
-  triggered for all [=private network requests=] initiated from
-  [=secure contexts=].
-
-  The main issue here is again that the response's
-  [=response/IP address space=] is not known until a connection is obtained in
-  [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
 
   <h4 id="fetching">Fetching</h4>
 
