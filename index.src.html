@@ -648,22 +648,13 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       |request|'s [=request/target IP address space=] is <code>private</code> or
       <code>local</code>.
 
-  <h3 id="cors-preflight">CORS preflight</h4>
-
-  The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
-  triggered for all [=private network requests=] initiated from
-  [=secure contexts=].
-
-  The main issue here is again that the response's
-  [=response/IP address space=] is not known until a connection is obtained in
-  [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
-
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
   This document proposes a few changes to Fetch, with the following implication:
   [=private network requests=] are only allowed if their [=request/client=] is
   a [=secure context=] **and** a [=CORS-preflight request=] to the target origin
-  is successful.
+  is successful. If the request would have been blocked as mixed content, it can
+  be allowed as long as users give permission.
 
   Note: This includes navigations. These can indeed be used to trigger CSRF
   attacks, albeit with less subtlety than with subresource requests.
@@ -675,6 +666,16 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   as Happy Eyeballs ([[RFC6555 obsolete]], [[RFC8305]]), these checks might pass
   or fail non-deterministically for hosts with multiple IP addresses that
   straddle [=/IP address space=] boundaries.
+
+  <h4 id="cors-preflight">CORS preflight</h4>
+
+  The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
+  triggered for all [=private network requests=] initiated from
+  [=secure contexts=].
+
+  The main issue here is again that the response's
+  [=response/IP address space=] is not known until a connection is obtained in
+  [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
 
   <h4 id="fetching">Fetching</h4>
 
