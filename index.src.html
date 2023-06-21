@@ -599,7 +599,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   integrations are outlined here for clarity, but the external documents are the
   normative references.
 
-  <h4 id="secure-context-restriction">Secure context restriction</h4>
+  <h3 id="secure-context-restriction">Secure context restriction</h4>
 
   UAs must not allow <a lt="secure context">non-secure</a>
   [=IP address space/public=] contexts to request resources from
@@ -644,11 +644,11 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   The [=Should fetching request be blocked as mixed content?=] is amended to add
   the following condition to one of the <strong>allowed</strong> conditions:
 
-  1.  |request|'s [=request/URL=]'s [=url/scheme=] is <code>https</code>, and
+  1.  |request|'s [=request/URL=]'s [=url/scheme=] is <code>http</code>, and
       |request|'s [=request/target IP address space=] is <code>private</code> or
       <code>local</code>.
 
-  <h4 id="cors-preflight">CORS preflight</h4>
+  <h3 id="cors-preflight">CORS preflight</h4>
 
   The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
   triggered for all [=private network requests=] initiated from
