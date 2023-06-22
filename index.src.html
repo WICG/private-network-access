@@ -547,7 +547,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   permission prompt=].
 
   The <dfn export http-header>`Private-Network-Access-ID`</dfn> header is used
-  to key the permission and recognize the device across IP addresses.
+  in the {{PrivateNetworkAccessPermissionDescriptor}} to identify identical
+  devices across IP addresses.
 
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
@@ -619,20 +620,18 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   <h3 id="integration-permissions">Integration with Permissions </h3>
 
   This document defines a [=powerful feature=] identified by the [=powerful
-  feature/name=] <dfn export permission><code>
-  "mixed-content-private-network-access"</code></dfn>". It overrides the
-  following type:
+  feature/name=] <dfn export permission>`"private-network-access"`</dfn>. It
+  overrides the following type:
 
   <dl>
     <dt>[=powerful feature/permission descriptor type=]</dt>
     <dd>
       The [=powerful feature/permission descriptor type=] of the
-      <a permission><code>"mixed-content-private-network-access"</code></a>
-      feature is defined by the following WebIDL interface that
-      [=dictionary/inherits=] from the default [=powerful feature/permission
-      descriptor type=]:
+      <a permission>`"private-network-access"`</a> feature is defined by the
+      following WebIDL interface that [=dictionary/inherits=] from the
+      default [=powerful feature/permission descriptor type=]:
       <pre class="idl">
-        dictionary MixedContentPrivateNetworkAccessPermissionDescriptor
+        dictionary PrivateNetworkAccessPermissionDescriptor
             : PermissionDescriptor {
           DOMString id;
         };
@@ -642,11 +641,10 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   <h3 id="integration-mixed-content">Integration with Mixed Content</h3>
   The [=Should fetching request be blocked as mixed content?=] is amended to add
-  the following condition to one of the <strong>allowed</strong> conditions:
+  the following condition to one of the **allowed** conditions:
 
-  1.  |request|'s [=request/URL=]'s [=url/scheme=] is <code>http</code>, and
-      |request|'s [=request/target IP address space=] is <code>private</code> or
-      <code>local</code>.
+  1.  |request|'s [=request/URL=]'s [=url/scheme=] is `http`, and |request|'s
+      [=request/target IP address space=] is `private` or `local`.
 
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
@@ -705,35 +703,28 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   1.  Define a new <dfn export>Private Network Access check</dfn> algorithm.
       Given a [=request=] |request| and a [=connection=] |connection|:
 
-      1. If |request|'s [=request/origin=] is a [=potentially trustworthy
-         origin=] and |request|’s [=request/current URL=]’s [=request/origin=]
-         is [=same origin=] with |request|’s [=request/origin=], then return
-         null.
+      1.  If |request|'s [=request/origin=] is a [=potentially trustworthy
+          origin=] and |request|’s [=request/current URL=]’s [=request/origin=]
+          is [=same origin=] with |request|’s [=request/origin=], then return
+          null.
+
+      1.  If |request|'s [=request/policy container=] is null, then return null.
+
+          NOTE: If |request|'s [=request/policy container=] is null, then PNA
+          checks do not apply to |request|. Users of the [=fetch=] algorithm
+          should take care to either set |request|'s [=request/client=] to an
+          [=environment settings object=] with a non-null [=environment settings
+          object/policy container=] and let [=fetch=] initialize |request|'s
+          [=request/policy container=] accordingly, or to directly set
+          |request|'s [=request/policy container=] to a non-null value.
+
+      1.  Let |clientAddressSpace| be |request|'s [=request/policy container=]'s
+          [=policy container/IP address space=]
 
       1.  If |request|'s [=request/client=] is not a [=secure context=]
-          (including if it is null):
-
-          1.  Let |clientAddressSpace| be |request|'s
-              [=request/policy container=]'s
-              [=policy container/IP address space=].
-
-          1.  If |connection|'s [=connection/IP address space=] is
-              [=IP address space/less public=] than |clientAddressSpace|, then
-              return a [=network error=].
-
-          1.  Return null.
-
-          NOTE: If |request|'s [=request/policy container=] is null, then PNA checks
-          do not apply to |request|. Users of the [=fetch=] algorithm should take
-          care to either set |request|'s [=request/client=] to an
-          [=environment settings object=] with a non-null
-          [=environment settings object/policy container=] and let [=fetch=]
-          initialize |request|'s [=request/policy container=] accordingly, or to
-          directly set |request|'s [=request/policy container=] to a non-null value.
-
-      1.  Let |clientAddressSpace| be |request|'s
-          [=request/policy container=]'s
-          [=policy container/IP address space=].
+          (including if it is null), and |connection|'s [=connection/IP address
+          space=] is [=IP address space/less public=] than |clientAddressSpace|,
+          then return a [=network error=].
 
       1.  If |request|'s [=request/target IP address space=] is not null, then:
 
@@ -741,37 +732,46 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
               then |request|'s [=request/target IP address space=], then return
               a [=network error=].
 
-          1.  If |response|'s [=response/IP address space=] is not
-              [=IP address space/less public=] than |clientAddressSpace|, then
-              return a [=network error=].
-
           1.  Return null.
 
-      1.  If |response|'s [=response/IP address space=] is
+      1.  If |connection|'s [=connection/IP address space=] is
           [=IP address space/less public=] than |clientAddressSpace|, then:
 
               1.  Let |error| be a [=network error=].
 
-              1.  Set |error|'s [=response/IP address space=] property to
-                  |response|'s [=response/IP address space=].
+              1.  Set |error|'s [=connection/IP address space=] property to
+                  |connection|'s [=connection/IP address space=].
 
               1.  Return |error|.
 
       1.  Return null.
 
-  1.  The [$HTTP-network fetch$] algorithm is amended to add 3 new steps right
-      after checking that the newly-obtained <var ignore>connection</var> is not
-      failure:
+  1.  The [$HTTP-network fetch$] algorithm is amended as follows:
 
-      1.  Set |response|'s [=response/IP address space=] to
-          |connection|'s [=connection/IP address space=].
+      1.  Immediately after |request| is defined:
 
-      1.  Let |privateNetworkAccessCheckResult| be the result of running
-          [=Private Network Access check=] for |fetchParams|' [=request=]  and
-          |connection|.
+          1.  If all of the following are true
+              - |request|'s [=request/target IP address space=] is not null
+              - |request|'s [=request/policy container=] is not null
+              - |request|'s [=request/target IP address space=] is
+                not [=IP address space/less public=] than |request|'s
+                [=request/policy container=]'s [=policy container/IP address
+                space=]
 
-      1.  If |privateNetworkAccessCheckResult| is a [=network error=], return
-          |privateNetworkAccessCheckResult|.
+              then return a [=network error=].
+
+      1.  Right after checking that the newly-obtained
+          <var ignore>connection</var> is not failure:
+
+          1.  Set |response|'s [=response/IP address space=] to
+              |connection|'s [=connection/IP address space=].
+
+          1.  Let |privateNetworkAccessCheckResult| be the result of running
+              [=Private Network Access check=] for |fetchParams|' [=request=]  and
+              |connection|.
+
+          1.  If |privateNetworkAccessCheckResult| is a [=network error=], return
+              |privateNetworkAccessCheckResult|.
 
   1.  Define a new algorithm called <dfn>HTTP-no-service-worker fetch</dfn>
       based on the existing steps in [=HTTP fetch=] that are run if |response|
@@ -849,14 +849,23 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
                   "<a http-header>`Private-Network-Access-ID`</a>" and
                   |response|'s [=response/header list=].
 
-              1.  [=Request permission to use=] the following descriptor:
+              1.  if |targetId| is null or empty, return a [=network error=].
+
+              1.  Let |targetName| be the result of [=extracting header list
+                  values=] given
+                  "<a http-header>`Private-Network-Access-Name`</a>" and
+                  |response|'s [=response/header list=].
+
+              1.  if |targetName| is null or empty, return a [=network error=].
+
+              1.  Let |state| be the result of [=requesting permission to use=]
+                  the following descriptor:
                   <pre highlight="js">
                     {
-                      name: <a permission>"mixed-content-private-network-access"</a>,
+                      name: <a permission>`"private-network-access"`</a>,
                       id: <var>targetId</var>,
                     }
                   </pre>
-                  Let |state| be the result.
 
               1.  If |state| is {{PermissionState/"denied"}}, return a [=network
                   error=].
