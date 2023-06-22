@@ -587,6 +587,62 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   Documents should not behave differently or not based on whether the UA
   implements this specification or not - all documents should assume it does.
 
+  <h3 id="premission-prompt">Permission Prompt</h3>
+
+  Following the discussions in
+  [[Issue#23](https://github.com/WICG/private-network-access/issues/23)], the
+  private network access permission prompt is introduced to relax mixed content
+  checks.
+
+  The goal of the permission is to allow communication from public websites to
+  local network servers over HTTP, which would otherwise be prevented by the
+  <a href="#secure-context-restriction">secure context restriction</a> and mixed
+  content checks. Migrating private network servers to HTTPS has indeed proven
+  to be often difficult, even sometimes impossible.
+
+  We propose adding a new parameter to the `fetch()` options bag. For example:
+  <pre highlight="js">
+    fetch("http://router.local/ping", {
+      targetAddressSpace: "private",
+    });
+  </pre>
+
+  This would instruct the browser to allow the fetch even though the scheme is
+  non-secure and obtain a connection to the target server. This ensures the
+  feature cannot be abused to bypass mixed content in general.
+
+  If the remote IP address does not belong to the IP address space specified as
+  the `targetAddressSpace` option value, then the request is failed. If it does
+  belong, then a CORS preflight request is sent as specified today. The target
+  server then responds with a CORS preflight response, augmented with the
+  following two headers:
+  <pre>
+    Private-Network-Access-Name: &lt;some human-readable device self-identification&gt;
+    Private-Network-Access-ID: &lt;some unique and stable machine-readable ID, such as a MAC address&gt;
+  </pre>
+
+  For example:
+  <pre>
+    Private-Network-Access-Name: "My Smart Toothbrush"
+    Private-Network-Access-ID: "01:23:45:67:89:0A"
+  </pre>
+
+  A prompt is then shown to the user asking for permission to access the target
+  device. The `-Name` header is used to present a friendly string to the user
+  instead of, or in addition to, an origin (often a raw IP literal). The `-ID`
+  header is used to key the permission and recognize the device across IP
+  addresses. Indeed, widespread use of DHCP means that devices are likely to
+  change IP addresses regularly, and we would like to avoid both cross-device
+  confusion and permission fatigue.
+
+  If the user decides to grant the permission, then the fetch continues. If not,
+  it fails. The permission is then persisted. The next document belonging to the
+  same initiator origin that declares its intent to access the same server
+  (perhaps at a different origin, if using a raw IP address) does not trigger a
+  permission prompt. The initial CORS preflight response carries the same ID,
+  and the browser recognizes that the document already has permission to access
+  the server.
+
 </section>
 
 <!-- Big Text: Integrations -->
@@ -1002,28 +1058,6 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   interferes with the [=private network access check=] algorithm laid out above.
   Indeed, there is no [=request/client|request client=] from which to copy the
   [=request/policy container=] during [=fetch=].
-
-</section>
-
-<section>
-  <h2 id="premission-prompt">Permission Prompt</h2>
-
-  <em>This section is not normative.</em>
-
-  Following the discussions in
-  [[Issue#23](https://github.com/WICG/private-network-access/issues/23)], the
-  <dfn export local-lt="permission prompt">private network access permission
-  prompt</dfn> is introduced to relax mixed-content checks.
-
-  Private network access permission is a <a spec="permissions">permission</a>.
-
-  <h3 id="permission-goals">Goals</h3>
-
-  The goal of the permission is to allow communication from public websites to
-  local network servers over HTTP, which would otherwise be prevented by the <a
-  href="#secure-context-restriction">secure context restriction</a> and mixed
-  content checks. Migrating private network servers to HTTPS has indeed proven to
-  be often difficult, even sometimes impossible.
 
 </section>
 
