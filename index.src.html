@@ -31,6 +31,9 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
     text: run a worker; url: multipage/workers.html#run-a-worker
 spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: abstract-op
+    text: fetch; url: #concept-fetch
+spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
+  type: abstract-op
     text: HTTP-network fetch; url: #concept-http-network-fetch
 spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: abstract-op
@@ -543,8 +546,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   details.
 
   The <dfn export http-header>`Private-Network-Access-Name`</dfn> attempts to
-  provide users a human friendly name in the [=private network access
-  permission prompt=].
+  provide users a human friendly name in the private network access
+  permission prompt.
 
   The <dfn export http-header>`Private-Network-Access-ID`</dfn> header is used
   in the {{PrivateNetworkAccessPermissionDescriptor}} to identify identical
@@ -587,7 +590,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   Documents should not behave differently or not based on whether the UA
   implements this specification or not - all documents should assume it does.
 
-  <h3 id="premission-prompt">Permission Prompt</h3>
+  <h3 id="permission-prompt">Permission Prompt</h3>
 
   Following the discussions in
   [[Issue#23](https://github.com/WICG/private-network-access/issues/23)], the
@@ -600,22 +603,21 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   content checks. Migrating private network servers to HTTPS has indeed proven
   to be often difficult, even sometimes impossible.
 
-  We propose adding a new parameter to the `fetch()` options bag. For example:
+  A new parameter is added to the `fetch()` options bag:
   <pre highlight="js">
     fetch("http://router.local/ping", {
       targetAddressSpace: "private",
     });
   </pre>
+  This instructs the browser to allow the fetch even though the scheme is
+  non-secure and obtain a connection to the target server. The new `fetch()` API
+  is backward-compatible.
 
-  This would instruct the browser to allow the fetch even though the scheme is
-  non-secure and obtain a connection to the target server. This ensures the
-  feature cannot be abused to bypass mixed content in general.
-
+  This ensures the feature cannot be abused to bypass mixed content in general.
   If the remote IP address does not belong to the IP address space specified as
   the `targetAddressSpace` option value, then the request is failed. If it does
-  belong, then a CORS preflight request is sent as specified today. The target
-  server then responds with a CORS preflight response, augmented with the
-  following two headers:
+  belong, then a CORS preflight request is sent. The target server then responds
+  with a CORS preflight response, augmented with the following two headers:
   <pre>
     Private-Network-Access-Name: &lt;some human-readable device self-identification&gt;
     Private-Network-Access-ID: &lt;some unique and stable machine-readable ID, such as a MAC address&gt;
@@ -670,7 +672,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   Mixed content checks [[MIXED-CONTENT-2]] prevent secure contexts from making
   requests over HTTP, so this restriction would seem to require that private
   network servers migrate to HTTPS. This is often difficult to impossible. A
-  new [=permission prompt=] is introduced to allow secure contexts to make
+  new permission prompt is introduced to allow secure contexts to make
   requests over HTTP to the private network anyway, given user consent.
 
   <h3 id="integration-permissions">Integration with Permissions </h3>
@@ -700,7 +702,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   the following condition to one of the **allowed** conditions:
 
   1.  |request|'s [=request/URL=]'s [=url/scheme=] is `http`, and |request|'s
-      [=request/target IP address space=] is `private` or `local`.
+      [=request/target IP address space=] is [=IP address space/private=] or
+      [=IP address space/local=].
 
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
@@ -708,7 +711,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   [=private network requests=] are only allowed if their [=request/client=] is
   a [=secure context=] **and** a [=CORS-preflight request=] to the target origin
   is successful. If the request would have been blocked as mixed content, it can
-  be allowed as long as users give permission.
+  be allowed as long as the website states its intention to access the private
+  network, and users give permission.
 
   Note: This includes navigations. These can indeed be used to trigger CSRF
   attacks, albeit with less subtlety than with subresource requests.
@@ -774,15 +778,11 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
           [=request/policy container=] accordingly, or to directly set
           |request|'s [=request/policy container=] to a non-null value.
 
-      1.  Let |clientAddressSpace| be |request|'s [=request/policy container=]'s
-          [=policy container/IP address space=]
-
-      1.  If |request|'s [=request/client=] is not a [=secure context=]
-          (including if it is null), and |connection|'s [=connection/IP address
-          space=] is [=IP address space/less public=] than |clientAddressSpace|,
-          then return a [=network error=].
-
       1.  If |request|'s [=request/target IP address space=] is not null, then:
+
+          1. [=Assert=]: |request|'s [=request/target IP address space=] is
+             [=IP address space/less public=] than |request|'s [=request/policy
+             container=]'s [=policy container/IP address space=].
 
           1.  If |connection|'s [=connection/IP address space=] is not equal to
               then |request|'s [=request/target IP address space=], then return
@@ -791,20 +791,23 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
           1.  Return null.
 
       1.  If |connection|'s [=connection/IP address space=] is
-          [=IP address space/less public=] than |clientAddressSpace|, then:
+          [=IP address space/less public=] than |request|'s [=request/policy
+          container=]'s [=policy container/IP address space=], then:
 
               1.  Let |error| be a [=network error=].
 
-              1.  Set |error|'s [=connection/IP address space=] property to
+              1.  If |request|'s [=request/client=] is not a [=secure context=]
+                  (including if it is null), then return |error|.
+
+              1.  Set |error|'s [=response/IP address space=] property to
                   |connection|'s [=connection/IP address space=].
 
               1.  Return |error|.
 
       1.  Return null.
 
-  1.  The [$HTTP-network fetch$] algorithm is amended as follows:
-
-      1.  Immediately after |request| is defined:
+  1.  The [$fetch$] algorithm is amended to add the following step immediately
+      after |request|'s [=request/policy container=] is set:
 
           1.  If all of the following are true
               - |request|'s [=request/target IP address space=] is not null
@@ -816,8 +819,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
               then return a [=network error=].
 
-      1.  Right after checking that the newly-obtained
-          <var ignore>connection</var> is not failure:
+  1.  The [$HTTP-network fetch$] algorithm is amended to add 3 new steps right
+      after checking that the newly-obtained <var ignore>connection</var> is not
+      failure:
 
           1.  Set |response|'s [=response/IP address space=] to
               |connection|'s [=connection/IP address space=].
@@ -964,8 +968,18 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
     Request(<var ignore=''>input</var>, |init|)</code></a> is
     appended with the following step right before setting [=this=]'s [=request=]
     to |request|:
-    1.  If |init|["{{RequestInit/targetAddressSpace}}"] exists, set |request|'s
-        [=target IP address space=] to it.
+    1.  If |init|["{{RequestInit/targetAddressSpace}}"] [=map/exists=], and
+        |request|'s [=request/client=] is a [=secure context=], then switch on
+        |init|["{{RequestInit/targetAddressSpace}}"]:
+        <dl class=switch>
+          <dt>private
+          <dd>Set |request|'s [=target IP address space=] to [=IP address
+            space/private=]
+
+          <dt>local
+          <dd>Set |request|'s [=target IP address space=] to [=IP address
+            space/local=]
+        </dl>
 
   <h4 id="forbidden-header-names">Forbidden header names</h4>
 
