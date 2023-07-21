@@ -31,6 +31,9 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/
     text: run a worker; url: multipage/workers.html#run-a-worker
 spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: abstract-op
+    text: fetch; url: #concept-fetch
+spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
+  type: abstract-op
     text: HTTP-network fetch; url: #concept-http-network-fetch
 spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: abstract-op
@@ -542,6 +545,14 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   [issue #91](https://github.com/WICG/private-network-access/issues/91) for
   details.
 
+  The <dfn export http-header>`Private-Network-Access-Name`</dfn> attempts to
+  provide users a human friendly name in the private network access
+  permission prompt.
+
+  The <dfn export http-header>`Private-Network-Access-ID`</dfn> header is used
+  in the {{PrivateNetworkAccessPermissionDescriptor}} to identify identical
+  devices across IP addresses.
+
   <h3 id="csp">The `treat-as-public-address` Content Security Policy Directive</h3>
 
   The <dfn>treat-as-public-address</dfn> directive instructs the user agent to
@@ -579,6 +590,61 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   Documents should not behave differently or not based on whether the UA
   implements this specification or not - all documents should assume it does.
 
+  <h3 id="permission-prompt">Permission Prompt</h3>
+
+  Following the discussions in
+  [[Issue#23](https://github.com/WICG/private-network-access/issues/23)], the
+  private network access permission prompt is introduced to relax mixed content
+  checks.
+
+  The goal of the permission is to allow communication from public websites to
+  local network servers over HTTP, which would otherwise be prevented by the
+  <a href="#secure-context-restriction">secure context restriction</a> and mixed
+  content checks. Migrating private network servers to HTTPS has indeed proven
+  to be often difficult, even sometimes impossible.
+
+  A new parameter is added to the `fetch()` options bag:
+  <pre highlight="js">
+    fetch("http://router.local/ping", {
+      targetAddressSpace: "private",
+    });
+  </pre>
+  This instructs the browser to allow the fetch even though the scheme is
+  non-secure and obtain a connection to the target server. The new `fetch()` API
+  is backward-compatible.
+
+  Note that this feature cannot be abused to bypass mixed content in general.
+  If the remote IP address does not belong to the IP address space specified as
+  the `targetAddressSpace` option value, then the request is failed. If it does
+  belong, then a CORS preflight request is sent. The target server then responds
+  with a CORS preflight response, augmented with the following two headers:
+  <pre>
+    Private-Network-Access-Name: &lt;some human-readable device self-identification&gt;
+    Private-Network-Access-ID: &lt;some unique and stable machine-readable ID, such as a MAC address&gt;
+  </pre>
+
+  For example:
+  <pre>
+    Private-Network-Access-Name: "My Smart Toothbrush"
+    Private-Network-Access-ID: "01:23:45:67:89:0A"
+  </pre>
+
+  A prompt is then shown to the user asking for permission to access the target
+  device. The `-Name` header is used to present a friendly string to the user
+  instead of, or in addition to, an origin (often a raw IP literal). The `-ID`
+  header is used to key the permission and recognize the device across IP
+  addresses. Indeed, widespread use of DHCP means that devices are likely to
+  change IP addresses regularly, and we would like to avoid both cross-device
+  confusion and permission fatigue.
+
+  If the user decides to grant the permission, then the fetch continues. If not,
+  it fails. The permission is then persisted. The next document belonging to the
+  same initiator origin that declares its intent to access the same server
+  (perhaps at a different origin, if using a raw IP address) does not trigger a
+  permission prompt. The initial CORS preflight response carries the same ID,
+  and the browser recognizes that the document already has permission to access
+  the server.
+
 </section>
 
 <!-- Big Text: Integrations -->
@@ -592,12 +658,61 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   integrations are outlined here for clarity, but the external documents are the
   normative references.
 
+  <h3 id="secure-context-restriction">Secure context restriction</h4>
+
+  UAs must not allow <a lt="secure context">non-secure</a>
+  [=IP address space/public=] contexts to request resources from
+  [=private addresses=], even if the private server would opt-in to such a
+  request via a preflight. Making requests to [=IP address space/private=]
+  resources presents risks which are mitigated by ensuring the integrity of the
+  [=request/client=] which initiates the request. In particular, network
+  attackers should not be able to trivially exploit an endpoint's consent to a
+  non-secure origin.
+
+  Mixed content checks [[MIXED-CONTENT-2]] prevent secure contexts from making
+  requests over HTTP, so this restriction would seem to require that private
+  network servers migrate to HTTPS. This is often difficult to impossible. A
+  new permission prompt is introduced to allow secure contexts to make
+  requests over HTTP to the private network anyway, given user consent.
+
+  <h3 id="integration-permissions">Integration with Permissions </h3>
+
+  This document defines a [=powerful feature=] identified by the [=powerful
+  feature/name=] <dfn export permission>`"private-network-access"`</dfn>. It
+  overrides the following type:
+
+  <dl>
+    <dt>[=powerful feature/permission descriptor type=]</dt>
+    <dd>
+      The [=powerful feature/permission descriptor type=] of the
+      <a permission>`"private-network-access"`</a> feature is defined by the
+      following WebIDL interface that [=dictionary/inherits=] from the
+      default [=powerful feature/permission descriptor type=]:
+      <pre class="idl">
+        dictionary PrivateNetworkAccessPermissionDescriptor
+            : PermissionDescriptor {
+          DOMString id;
+        };
+      </pre>
+    </dd>
+  </dl>
+
+  <h3 id="integration-mixed-content">Integration with Mixed Content</h3>
+  The [=Should fetching request be blocked as mixed content?=] is amended to add
+  the following condition to one of the **allowed** conditions:
+
+  1.  |request|'s [=request/URL=]'s [=url/scheme=] is `http`, and |request|'s
+      [=request/target IP address space=] is [=IP address space/private=] or
+      [=IP address space/local=].
+
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
   This document proposes a few changes to Fetch, with the following implication:
   [=private network requests=] are only allowed if their [=request/client=] is
   a [=secure context=] **and** a [=CORS-preflight request=] to the target origin
-  is successful.
+  is successful. If the request would have been blocked as mixed content, it can
+  be allowed as long as the website states its intention to access the private
+  network, and users give permission.
 
   Note: This includes navigations. These can indeed be used to trigger CSRF
   attacks, albeit with less subtlety than with subresource requests.
@@ -610,18 +725,19 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   or fail non-deterministically for hosts with multiple IP addresses that
   straddle [=/IP address space=] boundaries.
 
-  <h4 id="secure-context-restriction">Secure context restriction</h4>
+  <h4 id="cors-preflight">CORS preflight</h4>
 
-  UAs must not allow <a lt="secure context">non-secure</a>
-  [=IP address space/public=] contexts to request resources from
-  [=private addresses=], even if the private server would opt-in to such a
-  request via a preflight. Making requests to [=IP address space/private=]
-  resources presents risks which are mitigated by ensuring the integrity of the
-  [=request/client=] which initiates the request. In particular, network
-  attackers should not be able to trivially exploit an endpoint's consent to a
-  non-secure origin.
+  The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
+  triggered for all [=private network requests=] initiated from
+  [=secure contexts=].
 
-  To that end:
+  The main issue here is again that the response's
+  [=response/IP address space=] is not known until a connection is obtained in
+  [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
+
+  <h4 id="fetching">Fetching</h4>
+
+  What follows is a sketch of a potential solution:
 
   1.  [=Connection=] objects are given a new
       <dfn export for="connection">IP address space</dfn> property, initially
@@ -637,6 +753,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
           ISSUE(33): The remote endpoint concept is not specified in [[FETCH]]
           yet, hence this is still handwaving to some extent.
 
+  1.  [=Request=] objects are given a new <dfn for="request" export>target IP
+      address space</dfn> property, initially null.
+
   1.  [=Response=] objects are given a new
       <dfn export for="response">IP address space</dfn> property, whose value is
       an [=/IP address space=], initially null.
@@ -644,66 +763,25 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   1.  Define a new <dfn export>Private Network Access check</dfn> algorithm.
       Given a [=request=] |request| and a [=connection=] |connection|:
 
-      1. If |request|'s [=request/origin=] is a [=potentially trustworthy
-         origin=] and |request|’s [=request/current URL=]’s [=request/origin=]
-         is [=same origin=] with |request|’s [=request/origin=], then return
-         null.
+      1.  If |request|'s [=request/origin=] is a [=potentially trustworthy
+          origin=] and |request|’s [=request/current URL=]’s [=request/origin=]
+          is [=same origin=] with |request|’s [=request/origin=], then return
+          null.
 
-      1.  If |request|'s [=request/client=] is not a [=secure context=]
-          (including if it is null):
+      1.  If |request|'s [=request/policy container=] is null, then return null.
 
-          1.  Let |clientAddressSpace| be |request|'s
-              [=request/policy container=]'s
-              [=policy container/IP address space=].
-
-          1.  If |connection|'s [=connection/IP address space=] is
-              [=IP address space/less public=] than |clientAddressSpace|, then
-              return a [=network error=].
-
-      1.  Return null.
-
-      NOTE: If |request|'s [=request/policy container=] is null, then PNA checks
-      do not apply to |request|. Users of the [=fetch=] algorithm should take
-      care to either set |request|'s [=request/client=] to an
-      [=environment settings object=] with a non-null
-      [=environment settings object/policy container=] and let [=fetch=]
-      initialize |request|'s [=request/policy container=] accordingly, or to
-      directly set |request|'s [=request/policy container=] to a non-null value.
-
-  1.  The [$HTTP-network fetch$] algorithm is amended to add 3 new steps right
-      after checking that the newly-obtained <var ignore>connection</var> is not
-      failure:
-
-      1.  Set |response|'s [=response/IP address space=] to
-          |connection|'s [=connection/IP address space=].
-
-      1.  Let |privateNetworkAccessCheckResult| be the result of running
-          [=Private Network Access check=] for |fetchParams|' [=request=]  and
-          |connection|.
-
-      1.  If |privateNetworkAccessCheckResult| is a [=network error=], return
-          |privateNetworkAccessCheckResult|.
-
-  <h4 id="cors-preflight">CORS preflight</h4>
-
-  The [=HTTP fetch=] algorithm should be adjusted to ensure that a preflight is
-  triggered for all [=private network requests=] initiated from
-  [=secure contexts=].
-
-  The main issue here is again that the response's
-  [=response/IP address space=] is not known until a connection is obtained in
-  [$HTTP-network fetch$], which is layered under [=CORS-preflight fetch=].
-  What follows is a sketch of a potential solution:
-
-  1.  Add a new <dfn for="request" export>target IP address space</dfn> property
-      to the [=request=] struct, initially null.
-
-  1.  Amend the [=Private Network Access check=] algorithm to handle this new
-      property and propagate the [=/IP address space=] of the newly-obtained
-      [=connection=] to the caller of the [$HTTP-network fetch$] algorithm when
-      the [=request/client=] is a [=secure context=]:
+          NOTE: If |request|'s [=request/policy container=] is null, then PNA
+          checks do not apply to |request|. Users of the [=fetch=] algorithm
+          should take care to either set |request|'s [=request/client=] to an
+          [=environment settings object=] with a non-null [=environment settings
+          object/policy container=] and let [=fetch=] initialize |request|'s
+          [=request/policy container=] accordingly, or to directly set
+          |request|'s [=request/policy container=] to a non-null value.
 
       1.  If |request|'s [=request/target IP address space=] is not null, then:
+
+          1.  [=Assert=]: |request|'s [=request/target IP address space=] is not
+              [=IP address space/public=].
 
           1.  If |connection|'s [=connection/IP address space=] is not equal to
               then |request|'s [=request/target IP address space=], then return
@@ -711,22 +789,41 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
           1.  Return null.
 
-      1.  Let |clientAddressSpace| be |request|'s
-          [=request/policy container=]'s
-          [=policy container/IP address space=].
-
-      1.  If |response|'s [=response/IP address space=] is
-          [=IP address space/less public=] than |clientAddressSpace|, then:
+      1.  If |connection|'s [=connection/IP address space=] is
+          [=IP address space/less public=] than |request|'s [=request/policy
+          container=]'s [=policy container/IP address space=], then:
 
               1.  Let |error| be a [=network error=].
 
-              1.  If |request|'s [=request/client=] is a [=secure context=],
-                  then set |error|'s [=response/IP address space=] property to
-                  |response|'s [=response/IP address space=].
+              1.  If |request|'s [=request/client=] is not a [=secure context=]
+                  (including if it is null), then return |error|.
+
+              1.  Set |error|'s [=response/IP address space=] property to
+                  |connection|'s [=connection/IP address space=].
 
               1.  Return |error|.
 
       1.  Return null.
+
+  1.  The [$fetch$] algorithm is amended to add the following step immediately
+      after |request|'s [=request/policy container=] is set:
+
+          1.  If |request|'s [=request/target IP address space=] is [=IP address
+              space/public=], then return a [=network error=].
+
+  1.  The [$HTTP-network fetch$] algorithm is amended to add 3 new steps right
+      after checking that the newly-obtained <var ignore>connection</var> is not
+      failure:
+
+          1.  Set |response|'s [=response/IP address space=] to
+              |connection|'s [=connection/IP address space=].
+
+          1.  Let |privateNetworkAccessCheckResult| be the result of running
+              [=Private Network Access check=] for |fetchParams|' [=request=]  and
+              |connection|.
+
+          1.  If |privateNetworkAccessCheckResult| is a [=network error=], return
+              |privateNetworkAccessCheckResult|.
 
   1.  Define a new algorithm called <dfn>HTTP-no-service-worker fetch</dfn>
       based on the existing steps in [=HTTP fetch=] that are run if |response|
@@ -790,6 +887,43 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
               1.  If |allow| is not "`true`", return a [=network error=].
 
+              1.  Let |requestWithoutTargetIpAddressSpace| be a copy of |request|
+                  but set its [=request/target IP address space=] to be null.
+
+              1.  If
+                  <a lt="should fetching request be blocked as mixed content?">
+                    should fetching |requestWithoutTargetIpAddressSpace| be
+                    blocked as mixed content
+                  </a> returns **allowed**, return null.
+
+              1.  Let |targetId| be the result of [=extracting header list
+                  values=] given
+                  "<a http-header>`Private-Network-Access-ID`</a>" and
+                  |response|'s [=response/header list=].
+
+              1.  if |targetId| is null or empty, return a [=network error=].
+
+              1.  Let |targetName| be the result of [=extracting header list
+                  values=] given
+                  "<a http-header>`Private-Network-Access-Name`</a>" and
+                  |response|'s [=response/header list=].
+
+              1.  if |targetName| is null or empty, return a [=network error=].
+
+              1.  Let |state| be the result of [=requesting permission to use=]
+                  the following descriptor:
+                  <pre highlight="js">
+                    {
+                      name: <a permission>`"private-network-access"`</a>,
+                      id: <var>targetId</var>,
+                    }
+                  </pre>
+
+              1.  If |state| is {{PermissionState/"denied"}}, return a [=network
+                  error=].
+
+              1. Return null.
+
   1.  Finally, to mitigate the impact of DNS rebinding attacks (see
       [[#dns-rebinding]]), the [=CORS-preflight cache=] is adjusted to take
       [=/IP address space=] information into account:
@@ -804,6 +938,40 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
           1.  <var ignore>entry</var>'s [=cache entry/IP address space=] is
               equal to |request|'s [=request/target IP address space=].
+
+  <h4 id="fetch-api">Fetch API</h4>
+
+  The Fetch API needs to be adjusted as well.
+
+  - Append an optional [=map/entry=] to {{RequestInfo}}, whose [=map/key=] is
+    <dfn export>targetAddressSpace</dfn>, and [=map/value=] is a
+    {{RequestTargetAddressSpace}}.
+      <pre class="idl">
+        dictionary RequestInit {
+          // ...
+          RequestTargetAddressSpace targetAddressSpace;
+        };
+      </pre>
+  - Define {{RequestTargetAddressSpace}} as follows.
+      <pre class="idl">
+        enum RequestTargetAddressSpace { "private", "local" };
+      </pre>
+  - The <a constructor for=Request lt="Request(input, init)"><code>new
+    Request(<var ignore=''>input</var>, |init|)</code></a> is
+    appended with the following step right before setting [=this=]'s [=request=]
+    to |request|:
+    1.  If |init|["{{RequestInit/targetAddressSpace}}"] [=map/exists=], and
+        |request|'s [=request/client=] is a [=secure context=], then switch on
+        |init|["{{RequestInit/targetAddressSpace}}"]:
+        <dl class=switch>
+          <dt>private
+          <dd>Set |request|'s [=target IP address space=] to [=IP address
+            space/private=]
+
+          <dt>local
+          <dd>Set |request|'s [=target IP address space=] to [=IP address
+            space/local=]
+        </dl>
 
   <h4 id="forbidden-header-names">Forbidden header names</h4>
 
