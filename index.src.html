@@ -613,7 +613,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   non-secure and obtain a connection to the target server. The new `fetch()` API
   is backward-compatible.
 
-  This ensures the feature cannot be abused to bypass mixed content in general.
+  Note that this feature cannot be abused to bypass mixed content in general.
   If the remote IP address does not belong to the IP address space specified as
   the `targetAddressSpace` option value, then the request is failed. If it does
   belong, then a CORS preflight request is sent. The target server then responds
@@ -780,9 +780,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
       1.  If |request|'s [=request/target IP address space=] is not null, then:
 
-          1. [=Assert=]: |request|'s [=request/target IP address space=] is
-             [=IP address space/less public=] than |request|'s [=request/policy
-             container=]'s [=policy container/IP address space=].
+          1.  [=Assert=]: |request|'s [=request/target IP address space=] is not
+              [=IP address space/public=].
 
           1.  If |connection|'s [=connection/IP address space=] is not equal to
               then |request|'s [=request/target IP address space=], then return
@@ -809,15 +808,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   1.  The [$fetch$] algorithm is amended to add the following step immediately
       after |request|'s [=request/policy container=] is set:
 
-          1.  If all of the following are true
-              - |request|'s [=request/target IP address space=] is not null
-              - |request|'s [=request/policy container=] is not null
-              - |request|'s [=request/target IP address space=] is
-                not [=IP address space/less public=] than |request|'s
-                [=request/policy container=]'s [=policy container/IP address
-                space=]
-
-              then return a [=network error=].
+          1.  If |request|'s [=request/target IP address space=] is [=IP address
+              space/public=], then return a [=network error=].
 
   1.  The [$HTTP-network fetch$] algorithm is amended to add 3 new steps right
       after checking that the newly-obtained <var ignore>connection</var> is not
