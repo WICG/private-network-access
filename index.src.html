@@ -947,8 +947,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
     <dfn export>targetAddressSpace</dfn>, and [=map/value=] is a
     {{RequestTargetAddressSpace}}.
       <pre class="idl">
-        dictionary RequestInit {
-          // ...
+        partial dictionary RequestInit {
           RequestTargetAddressSpace targetAddressSpace;
         };
       </pre>
