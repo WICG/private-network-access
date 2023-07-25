@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version d29f71adb, updated Wed Jul 19 11:08:56 2023 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="2ce524a33cbeddeeadf8004951ba4d7464b24f17" name="document-revision">
+  <meta content="893e8fbcbb0e31793a5cd36a37fdfde511b7476b" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -675,7 +675,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-07-21">21 July 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-07-25">25 July 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1444,8 +1444,7 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
     <ul>
      <li data-md>
       <p>Append an optional <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-entry" id="ref-for-map-entry">entry</a> to <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#requestinfo" id="ref-for-requestinfo">RequestInfo</a></code>, whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-key" id="ref-for-map-key">key</a> is <dfn data-dfn-type="dfn" data-export id="targetaddressspace">targetAddressSpace<a class="self-link" href="#targetaddressspace"></a></dfn>, and <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-value" id="ref-for-map-value">value</a> is a <code class="idl"><a data-link-type="idl" href="#enumdef-requesttargetaddressspace" id="ref-for-enumdef-requesttargetaddressspace">RequestTargetAddressSpace</a></code>.</p>
-<pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="idl-code" data-dfn-type="dictionary" data-export id="dictdef-requestinit"><code><c- g>RequestInit</c-></code><a class="self-link" href="#dictdef-requestinit"></a></dfn> {
-  // ...
+<pre class="idl highlight def"><c- b>partial</c-> <c- b>dictionary</c-> <a class="idl-code" data-link-type="dictionary" href="https://fetch.spec.whatwg.org/#requestinit" id="ref-for-requestinit"><c- g>RequestInit</c-></a> {
   <a data-link-type="idl-name" href="#enumdef-requesttargetaddressspace" id="ref-for-enumdef-requesttargetaddressspace①"><c- n>RequestTargetAddressSpace</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="RequestInit" data-dfn-type="dict-member" data-export data-type="RequestTargetAddressSpace " id="dom-requestinit-targetaddressspace"><code><c- g>targetAddressSpace</c-></code></dfn>;
 };
 </pre>
@@ -1760,7 +1759,6 @@ appended with the following step right before setting <a data-link-type="dfn" hr
    <li><a href="#private-network-request">private network request</a><span>, in § 2.2</span>
    <li><a href="#ip-address-space-public">public</a><span>, in § 2.1</span>
    <li><a href="#public-address">public address</a><span>, in § 2.1</span>
-   <li><a href="#dictdef-requestinit">RequestInit</a><span>, in § 3.4.3</span>
    <li><a href="#enumdef-requesttargetaddressspace">RequestTargetAddressSpace</a><span>, in § 3.4.3</span>
    <li>
     targetAddressSpace
@@ -1791,6 +1789,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
      <li><span class="dfn-paneled" id="f4cb4c20">HTTP-network-or-cache fetch</span>
      <li><span class="dfn-paneled" id="9a5575e3">Request(input, init)</span>
      <li><span class="dfn-paneled" id="8ba500d2">RequestInfo</span>
+     <li><span class="dfn-paneled" id="0dcd4ad9">RequestInit</span>
      <li><span class="dfn-paneled" id="82748635">access-control-allow-credentials</span>
      <li><span class="dfn-paneled" id="a6a3b229">access-control-allow-methods</span>
      <li><span class="dfn-paneled" id="eed8e0e4">access-control-allow-origin</span>
@@ -1979,8 +1978,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-privatenetworkaccesspermissiondescriptor-id"><code><c- g>id</c-></code></a>;
 };
 
-<c- b>dictionary</c-> <a href="#dictdef-requestinit"><code><c- g>RequestInit</c-></code></a> {
-  // ...
+<c- b>partial</c-> <c- b>dictionary</c-> <a class="idl-code" data-link-type="dictionary" href="https://fetch.spec.whatwg.org/#requestinit"><c- g>RequestInit</c-></a> {
   <a data-link-type="idl-name" href="#enumdef-requesttargetaddressspace"><c- n>RequestTargetAddressSpace</c-></a> <a data-type="RequestTargetAddressSpace " href="#dom-requestinit-targetaddressspace"><code><c- g>targetAddressSpace</c-></code></a>;
 };
 
@@ -2332,6 +2330,7 @@ window.dfnpanelData['e2a3d65d'] = {"dfnID": "e2a3d65d", "url": "https://fetch.sp
 window.dfnpanelData['f4cb4c20'] = {"dfnID": "f4cb4c20", "url": "https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch", "dfnText": "HTTP-network-or-cache fetch", "refSections": [{"refs": [{"id": "ref-for-concept-http-network-or-cache-fetch"}, {"id": "ref-for-concept-http-network-or-cache-fetch\u2460"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-concept-http-network-or-cache-fetch\u2461"}], "title": "5.6.1. Applying checks to subresources"}], "external": true};
 window.dfnpanelData['9a5575e3'] = {"dfnID": "9a5575e3", "url": "https://fetch.spec.whatwg.org/#dom-request", "dfnText": "Request(input, init)", "refSections": [{"refs": [{"id": "ref-for-dom-request"}], "title": "3.4.3. Fetch API"}], "external": true};
 window.dfnpanelData['8ba500d2'] = {"dfnID": "8ba500d2", "url": "https://fetch.spec.whatwg.org/#requestinfo", "dfnText": "RequestInfo", "refSections": [{"refs": [{"id": "ref-for-requestinfo"}], "title": "3.4.3. Fetch API"}], "external": true};
+window.dfnpanelData['0dcd4ad9'] = {"dfnID": "0dcd4ad9", "url": "https://fetch.spec.whatwg.org/#requestinit", "dfnText": "RequestInit", "refSections": [{"refs": [{"id": "ref-for-requestinit"}], "title": "3.4.3. Fetch API"}], "external": true};
 window.dfnpanelData['82748635'] = {"dfnID": "82748635", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-credentials", "dfnText": "access-control-allow-credentials", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-credentials"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-credentials\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
 window.dfnpanelData['a6a3b229'] = {"dfnID": "a6a3b229", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-methods", "dfnText": "access-control-allow-methods", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-methods"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-methods\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
 window.dfnpanelData['eed8e0e4'] = {"dfnID": "eed8e0e4", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-origin", "dfnText": "access-control-allow-origin", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-origin"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-origin\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
