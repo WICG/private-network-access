@@ -39,3 +39,20 @@ https://private-network-access-test.glitch.me/.
 
 Errors should manifest as CORS errors in the DevTools console, and as "Blocked
 requests" in the DevTools network panel.
+
+## Permission Prompt
+
+PNA permission prompt is available in Chrome desktop starting in version 120.
+
+It can be controlled in a variety of ways:
+* the command-line flag: `--enable-features=PrivateNetworkAccessPermissionPrompt`
+* the `chrome://` flag:
+  `chrome://flags/#private-network-access-permission-prompt`
+* the [origin
+  trial](https://developer.chrome.com/origintrials/#/view_trial/1367968386813788161)
+
+You can then test your own web app, or use a test page like
+https://private-network-access-permission-test.glitch.me/.
+
+
+See the [explainer](/permission_prompt/explainer.md) and [walk through doc](https://docs.google.com/document/d/1W70cFFaBGWd0EeOOMxJh9zkmxZ903vKUaGjyF-w7HcY/edit#heading=h.qof2sn5s8r89) for more details.
