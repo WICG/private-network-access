@@ -2,7 +2,7 @@
 
 - **Author**: lyf@google.com
 - **Created**: 2022-06-22
-- **Last Updated**: 2022-10-20
+- **Last Updated**: 2023-11-02
 
 ## Introduction
 
@@ -70,6 +70,8 @@ fetch("http://router.local/ping", {
 
 This would instruct the browser to allow the fetch even though the scheme is non-secure and obtain a connection to the target server. This ensures the feature cannot be abused to bypass mixed content in general.
 
+The `targetAddressSpace` should be either `private` or `local`.
+
 If the remote IP address does not belong to the IP address space specified as the `targetAddressSpace` option value, then the request is failed.
 
 ### Preflight
@@ -78,7 +80,7 @@ If it does belong, then a CORS preflight request is sent as specified today. The
 
 ```
 Private-Network-Access-Name: <some human-readable device self-identification>
-Private-Network-Access-ID: <some unique and stable machine-readable ID, such as a MAC address>
+Private-Network-Access-ID: <the device's MAC address>
 ```
 
 For example:
@@ -88,6 +90,10 @@ Private-Network-Access-Name: "My Smart Toothbrush"
 Private-Network-Access-ID: "01:23:45:67:89:0A"
 ```
 
+The `-name` header should be a string that matches the [ECMAScript](https://tc39.es/ecma262/multipage/) regexp /^[a-z0-9_-.]+$/. The maximum length of the `-name` is 248 UTF-8 code units.
+
+The `-ID` header should be the MAC address of the device, which is a 48-bit value presented as a string with 6 hexadecimal bytes separated by colons.
+
 ### Gaining permission
 
 A prompt is then shown to the user asking for permission to access the target device. Something like:
@@ -96,12 +102,20 @@ A prompt is then shown to the user asking for permission to access the target de
 
 The `-Name` header is used to present a friendly string to the user instead of, or in addition to, an origin (often a raw IP literal).
 
-The `-ID` header is used to key the permission and recognize the device across IP addresses. Indeed, widespread use of DHCP means that devices are likely to change IP addresses regularly, and we would like to avoid both cross-device confusion and permission fatigue. However, we are still open with opinions for how to recognize the device, see more
-options in `identify the target differently` section under `What are the alternatives`.
+The `-ID` header is used to key the permission and recognize the device across IP addresses. Indeed, widespread use of DHCP means that devices are likely to change IP addresses regularly, and we would like to avoid both cross-device confusion and permission fatigue. We currently restrict the `-ID` to a MAC address-like string.
+
+> We are still open with opinions for how to recognize the device, see more
+> options in `identify the target differently` section under `What are the alternatives`.
 
 If the user decides to grant the permission, then the fetch continues. If not, it fails.
 
 The permission is then persisted. The next document belonging to the same initiator origin that declares its intent to access the same server (perhaps at a different origin, if using a raw IP address) does not trigger a permission prompt. The initial CORS preflight response carries the same ID, and the browser recognizes that the document already has permission to access the server.
+
+#### Ephemeral permission
+
+Alternatively, if the device doesn't provide any `-ID` or `-name` in the preflight response, the permission prompt will still be shown. However, the permission will be ephemeral. It will only persist until the current window is closed.
+
+This might result in permission fatigue for services such as Plex, where the same target is accessed repeatedly. We strongly recommand that any private/local devices provide their name and ID in the preflight response.
 
 ## What are the alternatives?
 ### Blanket permission prompt
@@ -127,23 +141,19 @@ Instead of having the target provide a unique ID, we could use:
 * a public key: complex, would need to design a new protocol to make use of the key later
 * the `-ID` and the IP address: in case that multiple devices might accidentally choose the same `-ID`.
 
-### Ephemeral permission
-
-Removes the need of an ID and the permission only lasts as long as the document that requested it. This would result in permission fatigue for services such as Plex, where the same target is accessed repeatedly.
-
-Alternatively, the permission only lasts shortly for a certain origin, similarly to the life cycle of a login session.
-
 ### Automatically deny similar requests
 
 To prevent abuse of the permission prompt, we might also want to automatically deny permission in some cases. Here we propose some alternatives:
 
-* Show `cancel` and `allow` instead of `block` and `allow` on the first time the prompt shows and add a “Do not show this again.” check box on the second prompt.
+* Add a “Do not show this again.” check box on the second prompt.
 * Automatically deny the request to the same local device in the current document.
 * Automatically deny the request to the same local device for the specific public website for a while.
 
 ### IDs
 
-The preflight request sent with plaintext HTTP can be hijacked which means that the `-ID` provided by the local device can be leaked to third-party attackers. However, this also means that the attacker is already in the private network. In this case, it doesn't matter whether the public page is allowed to make requests on the private network  since the attacker can make the request themselves.
+The preflight request sent with plaintext HTTP can be hijacked which means that the `-ID` provided by the local device can be leaked to third-party attackers.
+
+However, this also means that the attacker is already in the private network. In this case, it doesn't matter whether the public page is allowed to make requests on the private network  since the attacker can make the request themselves.
 
 ### Behavior of `targetAddressSpace` and fetch
 
