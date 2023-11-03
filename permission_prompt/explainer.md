@@ -92,7 +92,7 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
 
 The `-name` header should be a string that matches the [ECMAScript](https://tc39.es/ecma262/multipage/) regexp /^[a-z0-9_-.]+$/. The maximum number of the name is 248 UTF-8 code units.
 
-The `-ID` header should be the MAC address of the device, which is a 48-bit value presented as 6 hexadecimal bytes.
+The `-ID` header should be the MAC address of the device, which is a 48-bit value presented as a string with 6 hexadecimal bytes separated by colons.
 
 ### Gaining permission
 
