@@ -629,6 +629,12 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
     Private-Network-Access-ID: "01:23:45:67:89:0A"
   </pre>
 
+  |Private-Network-Access-ID| should be a 48-bit value presented as 6
+  hexadecimal bytes.
+  |Private-Network-Access-Name| should be a valid name is a string that matches
+  the [ECMAScript] regexp /^[a-z0-9_-.]+$/. 248 is the maximum number of UTF-8
+  code units in the name.
+
   A prompt is then shown to the user asking for permission to access the target
   device. The `-Name` header is used to present a friendly string to the user
   instead of, or in addition to, an origin (often a raw IP literal). The `-ID`
@@ -701,9 +707,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   The [=Should fetching request be blocked as mixed content?=] is amended to add
   the following condition to one of the **allowed** conditions:
 
-  1.  |request|'s [=request/URL=]'s [=url/scheme=] is `http`, and |request|'s
-      [=request/target IP address space=] is [=IP address space/private=] or
-      [=IP address space/local=].
+  1.  |request|'s [=request/origin=] is a [=potentially trustworthy origin=],
+      and |request|'s [=request/target IP address space=] is [=IP address
+      space/private=] or [=IP address space/local=].
 
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
@@ -755,6 +761,10 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   1.  [=Request=] objects are given a new <dfn for="request" export>target IP
       address space</dfn> property, initially null.
+  
+  1.  When fetching [=Request=] go through [[MIXED-CONTENT-2]] check, return
+      allow if [=target IP address space=] is [=IP address space/private=] or
+      [=IP address space/local=].
 
   1.  [=Response=] objects are given a new
       <dfn export for="response">IP address space</dfn> property, whose value is
@@ -778,7 +788,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
           [=request/policy container=] accordingly, or to directly set
           |request|'s [=request/policy container=] to a non-null value.
 
-      1.  If |request|'s [=request/target IP address space=] is not null, then:
+      1.  If |request|'s [=request/origin=] is a [=potentially trustworthy
+          origin=] and |request|'s [=request/target IP address space=] is not
+          null, then:
 
           1.  [=Assert=]: |request|'s [=request/target IP address space=] is not
               [=IP address space/public=].
@@ -787,7 +799,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
               then |request|'s [=request/target IP address space=], then return
               a [=network error=].
 
-          1.  Return null.
+          1.  Return |error|.
 
       1.  If |connection|'s [=connection/IP address space=] is
           [=IP address space/less public=] than |request|'s [=request/policy
@@ -945,15 +957,11 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   - Append an optional [=map/entry=] to {{RequestInfo}}, whose [=map/key=] is
     <dfn export>targetAddressSpace</dfn>, and [=map/value=] is a
-    {{RequestTargetAddressSpace}}.
+    {{IPAddressSpace}}.
       <pre class="idl">
         partial dictionary RequestInit {
-          RequestTargetAddressSpace targetAddressSpace;
+          IPAddressSpace targetAddressSpace;
         };
-      </pre>
-  - Define {{RequestTargetAddressSpace}} as follows.
-      <pre class="idl">
-        enum RequestTargetAddressSpace { "private", "local" };
       </pre>
   - The <a constructor for=Request lt="Request(input, init)"><code>new
     Request(<var ignore=''>input</var>, |init|)</code></a> is
