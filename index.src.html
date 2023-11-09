@@ -629,6 +629,12 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
     Private-Network-Access-ID: "01:23:45:67:89:0A"
   </pre>
 
+  <a http-header>`Private-Network-Access-ID`</a> should be a 48-bit value presented as 6
+  hexadecimal bytes separated by colons.
+  <a http-header>`Private-Network-Access-Name`</a> should be a valid name which is a string that matches
+  the [ECMAScript] regexp /^[a-z0-9_-.]+$/. 248 is the maximum number of UTF-8
+  code units in the name.
+
   A prompt is then shown to the user asking for permission to access the target
   device. The `-Name` header is used to present a friendly string to the user
   instead of, or in addition to, an origin (often a raw IP literal). The `-ID`
@@ -644,6 +650,11 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   permission prompt. The initial CORS preflight response carries the same ID,
   and the browser recognizes that the document already has permission to access
   the server.
+
+  If there's no existing `-Name` or `-ID`, the prompt is shown only with the IP
+  address. If the user decides to grant the permission, then the fetch continues.
+  The permission stores as an ephemeral permission and only persists for the
+  current window process.
 
 </section>
 
@@ -701,9 +712,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   The [=Should fetching request be blocked as mixed content?=] is amended to add
   the following condition to one of the **allowed** conditions:
 
-  1.  |request|'s [=request/URL=]'s [=url/scheme=] is `http`, and |request|'s
-      [=request/target IP address space=] is [=IP address space/private=] or
-      [=IP address space/local=].
+  1.  |request|'s [=request/origin=] is not a [=potentially trustworthy origin=],
+      and |request|'s [=request/target IP address space=] is [=IP address
+      space/private=] or [=IP address space/local=].
 
   <h3 id="integration-fetch">Integration with Fetch</h3>
 
@@ -896,19 +907,25 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
                     blocked as mixed content
                   </a> returns **allowed**, return null.
 
+              1.  If <a http-header>`Private-Network-Access-ID`</a> or
+                  <a http-header>`Private-Network-Access-Name`</a> is null or
+                  empty, let |targetId| be |request|'s [=request/target IP
+                  address space=]. Store the permission as an ephemeral
+                  permission, then return null.
+  
               1.  Let |targetId| be the result of [=extracting header list
                   values=] given
                   "<a http-header>`Private-Network-Access-ID`</a>" and
                   |response|'s [=response/header list=].
 
-              1.  if |targetId| is null or empty, return a [=network error=].
+              1.  if |targetId| is invalid, return a [=network error=].
 
               1.  Let |targetName| be the result of [=extracting header list
                   values=] given
                   "<a http-header>`Private-Network-Access-Name`</a>" and
                   |response|'s [=response/header list=].
 
-              1.  if |targetName| is null or empty, return a [=network error=].
+              1.  if |targetName| is invalid, return a [=network error=].
 
               1.  Let |state| be the result of [=requesting permission to use=]
                   the following descriptor:
@@ -943,17 +960,17 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   The Fetch API needs to be adjusted as well.
 
+  - Define {{IPAddressSpace}} as follows.
+      <pre class="idl">
+        enum IPAddressSpace { "public","private", "local" };
+      </pre>
   - Append an optional [=map/entry=] to {{RequestInfo}}, whose [=map/key=] is
     <dfn export>targetAddressSpace</dfn>, and [=map/value=] is a
-    {{RequestTargetAddressSpace}}.
+    {{IPAddressSpace}}.
       <pre class="idl">
         partial dictionary RequestInit {
-          RequestTargetAddressSpace targetAddressSpace;
+          IPAddressSpace targetAddressSpace;
         };
-      </pre>
-  - Define {{RequestTargetAddressSpace}} as follows.
-      <pre class="idl">
-        enum RequestTargetAddressSpace { "private", "local" };
       </pre>
   - The <a constructor for=Request lt="Request(input, init)"><code>new
     Request(<var ignore=''>input</var>, |init|)</code></a> is
