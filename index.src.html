@@ -651,6 +651,11 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
   and the browser recognizes that the document already has permission to access
   the server.
 
+  If there's no existing `-Name` or `-ID`, the prompt is shown only with the IP
+  address. If the user decides to grant the permission, then the fetch continues.
+  The permission stores as an ephemeral permission and only persists for the
+  current window process.
+
 </section>
 
 <!-- Big Text: Integrations -->
@@ -902,19 +907,25 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
                     blocked as mixed content
                   </a> returns **allowed**, return null.
 
+              1.  If <a http-header>`Private-Network-Access-ID`</a> or
+                  <a http-header>`Private-Network-Access-Name`</a> is null or
+                  empty, let |targetId| be |request|'s [=request/target IP
+                  address space=]. Store the permission as an ephemeral
+                  permission, then return null.
+  
               1.  Let |targetId| be the result of [=extracting header list
                   values=] given
                   "<a http-header>`Private-Network-Access-ID`</a>" and
                   |response|'s [=response/header list=].
 
-              1.  if |targetId| is null or empty, return a [=network error=].
+              1.  if |targetId| is invalid, return a [=network error=].
 
               1.  Let |targetName| be the result of [=extracting header list
                   values=] given
                   "<a http-header>`Private-Network-Access-Name`</a>" and
                   |response|'s [=response/header list=].
 
-              1.  if |targetName| is null or empty, return a [=network error=].
+              1.  if |targetName| is invalid, return a [=network error=].
 
               1.  Let |state| be the result of [=requesting permission to use=]
                   the following descriptor:
@@ -951,7 +962,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   - Define {{IPAddressSpace}} as follows.
       <pre class="idl">
-        enum IPAddressSpace { "private", "local" };
+        enum IPAddressSpace { "public","private", "local" };
       </pre>
   - Append an optional [=map/entry=] to {{RequestInfo}}, whose [=map/key=] is
     <dfn export>targetAddressSpace</dfn>, and [=map/value=] is a
