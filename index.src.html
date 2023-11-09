@@ -339,6 +339,11 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   <h3 id="ip-address-space-heading">IP Address Space</h3>
 
+  Define {{IPAddressSpace}} as follows:
+  <pre class="idl">
+    enum IPAddressSpace { "public","private", "local" };
+  </pre>
+
   Every IP address belongs to an
   <dfn export local-lt="address space">IP address space</dfn>, which can be one
   of three different values:
@@ -963,10 +968,6 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   The Fetch API needs to be adjusted as well.
 
-  - Define {{IPAddressSpace}} as follows.
-      <pre class="idl">
-        enum IPAddressSpace { "public","private", "local" };
-      </pre>
   - Append an optional [=map/entry=] to {{RequestInfo}}, whose [=map/key=] is
     <dfn export>targetAddressSpace</dfn>, and [=map/value=] is a
     {{IPAddressSpace}}.
@@ -975,17 +976,25 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
           IPAddressSpace targetAddressSpace;
         };
       </pre>
+
+  - Define a new {=targetAddressSpace=} representing the
+    above in [=request=].
+      <pre class="idl">
+        partial interface Request {
+          readonly attribute IPAddressSpace targetAddressSpace;
+        };
+      </pre>
+
   - The <a constructor for=Request lt="Request(input, init)"><code>new
     Request(<var ignore=''>input</var>, |init|)</code></a> is
     appended with the following step right before setting [=this=]'s [=request=]
     to |request|:
-    1.  If |init|["{{RequestInit/targetAddressSpace}}"] [=map/exists=], and
-        |request|'s [=request/client=] is a [=secure context=], then switch on
-        |init|["{{RequestInit/targetAddressSpace}}"]:
+    1.  If |init|["{{RequestInit/targetAddressSpace}}"] [=map/exists=], then
+        switch on |init|["{{RequestInit/targetAddressSpace}}"]:
         <dl class=switch>
           <dt>public
-          <dd>Set |request|'s [=target IP address space=] to [=IP address
-            space/public=]
+            <dd>Ignore it and keep |request|'s [=target IP address space=] as
+              null.
 
           <dt>private
           <dd>Set |request|'s [=target IP address space=] to [=IP address
@@ -993,7 +1002,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
           <dt>local
           <dd>Set |request|'s [=target IP address space=] to [=IP address
-            space/local=]
+            space/local=].
         </dl>
 
   <h4 id="forbidden-header-names">Forbidden header names</h4>
