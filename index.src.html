@@ -918,7 +918,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
                   "<a http-header>`Private-Network-Access-ID`</a>" and
                   |response|'s [=response/header list=].
 
-              1.  if |targetId| does not a string of 6 hexadecimal bytes
+              1.  if |targetId| is not a string of 6 hexadecimal bytes
                   separated by colons, return a [=network error=].
 
               1.  Let |targetName| be the result of [=extracting header list
@@ -989,7 +989,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
           <dt>private
           <dd>Set |request|'s [=target IP address space=] to [=IP address
-            space/private=]
+            space/private=].
 
           <dt>local
           <dd>Set |request|'s [=target IP address space=] to [=IP address
