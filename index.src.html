@@ -341,7 +341,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   Define {{IPAddressSpace}} as follows:
   <pre class="idl">
-    enum IPAddressSpace { "public","private", "local" };
+    enum IPAddressSpace { "public", "private", "local" };
   </pre>
 
   Every IP address belongs to an
@@ -993,8 +993,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
         switch on |init|["{{RequestInit/targetAddressSpace}}"]:
         <dl class=switch>
           <dt>public
-            <dd>Ignore it and keep |request|'s [=target IP address space=] as
-              null.
+            <dd>Do nothing.
 
           <dt>private
           <dd>Set |request|'s [=target IP address space=] to [=IP address
