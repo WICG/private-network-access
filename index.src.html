@@ -846,10 +846,18 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       is still null after handling the fetch via service workers, and amend
       those slightly as follows:
 
-      1.  At the very start:
+      1.  Replace the "If <var ignore>makeCORSPreflight</var> is true and ..."
+          with:
 
-          1.  If |request|'s [=request/target IP address space=] is not null,
-              then set <var ignore>makeCORSPreflight</var> to true.
+          1.  If one of the following is true:
+              * <var ignore>makeCORSPreflight</var> is true.
+              * |request|'s [=request/target IP address space=] is not null.
+
+              and ...
+
+      1.  Replace "running [=CORS-preflight fetch=] given |request|" with
+          "running [=CORS-preflight fetch=] given |request| and
+          |makeCORSPreflight|"
 
       1.  Immediately after running [=CORS-preflight fetch=]:
 
@@ -878,8 +886,14 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       Note: Because |request|'s [=request/target IP address space=] is set to a
       non-null value when recursing, this recursion can go at most 1 level deep.
 
-  1.  The [=CORS-preflight fetch=] algorithm is adjusted to handle the
-      new headers:
+  1.  The [=CORS-preflight fetch=] algorithm is adjusted to take a new parameter
+      |makeCORSPreflight| (default true), and handle the new headers as follows:
+
+      1.  Only append \``Accept`\`,
+          \`<a http-header>`Access-Control-Request-Method`</a>\`, and
+          \`<a http-header>`Access-Control-Request-Headers`</a>\` to
+          <var ignore>preflight</var>'s [=request/header list=] if
+          |makeCORSPreflight| is true.
 
       1.  Immediately before running [$HTTP-network-or-cache fetch$]:
 
@@ -890,6 +904,8 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
                   "<a http-header>`Access-Control-Request-Private-Network`</a>"
                   to "`true`" in <var ignore>preflight</var>'s
                   [=request/header list=].
+
+      1.  Only run the [=CORS check=] if |makeCORSPreflight| is true.
 
       1.  Immediately after the [=CORS check=]:
 
