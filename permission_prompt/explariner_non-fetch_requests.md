@@ -12,7 +12,11 @@ To mitigate this threat, we have been working on the Private Network Access (PNA
 
 This means that public pages served on HTTP that embed resources from the private network need to upgrade to HTTPS. However, there is currently no good solution for encryption on the private network, meaning that many of those subresources are served over HTTP and cannot upgrade to HTTPS. They cannot be embedded in an HTTPS page due to mixed contents checks.
 
-To solve this issue, we have introduced a permission prompt to relax mixed contents checks when fetching resources from the private network. However, it only covers subresources but not iframes. We want to extend this mechanism to navigation.
+To solve this issue, we have introduced a permission prompt to relax mixed contents checks when fetching resources from the private network. For more details, please check [Private Network Access Permission to relax mixed content](/explainer.md).
+
+While the above solution effectively addresses fetch requests, it doesn't handle iframes or HTML src attributes due to the requirement of manual `targetAddressSpace` setting in fetch options. To provide a comprehensive solution, we need a mechanism that extends this control to non-fetch requests as well.
+
+> Notes: Top-level navigation is exempt from permission prompts as it doesn't trigger mixed content warnings.
 
 ## Deprecated solutions
 ### Service worker
@@ -84,7 +88,7 @@ Same as above, the report only mode would only report invalid CSPs but not wheth
 
 ## Furthermore
 
-"This new CSP can be used not only for navigations but also for a variety of use
+This new CSP can be used not only for navigations but also for a variety of use
 cases. Examples include HTML image tags and even as an alternative to fetch
 requests. If the target address space is already defined in the Content
 Security Policy, the targetAddressSpace fetch option will no longer be
