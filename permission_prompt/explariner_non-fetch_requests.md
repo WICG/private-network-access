@@ -92,4 +92,4 @@ This new CSP can be used not only for navigations but also for a variety of use
 cases. Examples include HTML image tags and even as an alternative to fetch
 requests. If the target address space is already defined in the Content
 Security Policy, the targetAddressSpace fetch option will no longer be
-necessary."
+necessary.
