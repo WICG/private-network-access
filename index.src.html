@@ -841,15 +841,48 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
           1.  If |privateNetworkAccessCheckResult| is a [=network error=], return
               |privateNetworkAccessCheckResult|.
 
+  1.  Define a new algorithm to <dfn>determine the preflight mode</dfn>, given a
+      [=request=] |request| and a boolean |makeCORSPreflight|:
+
+      1.  If |makeCORSPreflight| is true and one of these conditions is true:
+
+          *   There is no method cache entry match for |request|'s
+              [=request/method=] using |request|, and either |request|'s
+              [=request/method=] is not a [=CORS-safelisted method=] or
+              |request|'s [=request/use-CORS-preflight flag=] is set.
+
+          *   There is at least one [=list/item=] in the CORS-unsafe
+              request-header names with |request|'s [=request/header list=] for
+              which there is no header-name cache entry match using |request|.
+
+          Then:
+
+              1.  If |request|'s [=request/target IP address space=] is not
+                  null, then return "cors+pna".
+
+              1.  Otherwise, return "cors".
+
+      1.  If |request|'s [=request/target IP address space=] is not null, then
+          return "pna".
+
+      1.  Otherwise, return "none".
+
   1.  Define a new algorithm called <dfn>HTTP-no-service-worker fetch</dfn>
       based on the existing steps in [=HTTP fetch=] that are run if |response|
       is still null after handling the fetch via service workers, and amend
       those slightly as follows:
 
-      1.  At the very start:
+      1.  Let |preflightMode| be the result of invoking [=determine the
+          preflight mode=] given |request| and |makeCORSPreflight|.
 
-          1.  If |request|'s [=request/target IP address space=] is not null,
-              then set <var ignore>makeCORSPreflight</var> to true.
+      1.  Replace the entire condition "If <var ignore>makeCORSPreflight</var>
+          is true and ..., Then:" with:
+
+          1.  If |preflightMode| is not "none", then:
+
+      1.  Replace "running [=CORS-preflight fetch=] given |request|" with
+          "running [=CORS-preflight fetch=] given |request| and
+          |preflightMode|"
 
       1.  Immediately after running [=CORS-preflight fetch=]:
 
@@ -878,8 +911,13 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
       Note: Because |request|'s [=request/target IP address space=] is set to a
       non-null value when recursing, this recursion can go at most 1 level deep.
 
-  1.  The [=CORS-preflight fetch=] algorithm is adjusted to handle the
-      new headers:
+  1.  The [=CORS-preflight fetch=] algorithm is adjusted to take a new parameter
+      |preflightMode| (default "cors"), and handle the new headers as follows:
+
+      1.  Only append \``Accept`\` and
+          \`<a http-header>`Access-Control-Request-Headers`</a>\` to
+          <var ignore>preflight</var>'s [=request/header list=] if
+          |preflightMode| is true.
 
       1.  Immediately before running [$HTTP-network-or-cache fetch$]:
 
@@ -893,8 +931,10 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
       1.  Immediately after the [=CORS check=]:
 
-          1.  If |request|'s [=request/target IP address space=] is not null,
-              then:
+          1.  If |preflightMode| is "pna" or "cors+pna",
+
+              1.  [=Assert=]: |request|'s [=request/target IP address space=] is
+                  not null.
 
               1.  Let |allow| be the result of [=extracting header list values=]
                   given
@@ -917,7 +957,7 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
                   empty, let |targetId| be |request|'s [=request/target IP
                   address space=]. Store the permission as an ephemeral
                   permission, then return null.
-  
+
               1.  Let |targetId| be the result of [=extracting header list
                   values=] given
                   "<a http-header>`Private-Network-Access-ID`</a>" and
