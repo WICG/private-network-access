@@ -4,7 +4,7 @@
 - **Created**: 2023-11-24
 - **Last Updated**: 2024-01-26
 
-## A problem
+## Problem
 
 Currently, any public page can make a request as if they were the user's machine. This allows a malicious attacker to use a public web page to attack network endpoints on a user's private network. These endpoints (router, printer, IoT devices, ...) are often badly protected because they do not expect to receive requests from the web at large.
 
@@ -21,7 +21,7 @@ In the [previous discussion](https://github.com/WICG/private-network-access/issu
 workers, so that it can be used for non-fetch requests. However, the mixed 
 content check actually happens before service workers, which means it won't work.
 
-## A solution
+## Solution
 
 In this case, we would like to introduce a new [Content Security Policy](https://www.w3.org/TR/CSP3/) to let 
 all documents declare their IP address space.
@@ -41,10 +41,11 @@ space can be declared as either a HTTP header or a HTML `<meta>` element.
 
 #### HTTP header
 
-To declare private IP addresses:
+To declare one or more private IP addresses:
 
 ```text
-Content-Security-Policy: private-address-space private_hosts
+Content-Security-Policy: private-address-space <private_host>
+Content-Security-Policy: private-address-space <private_host> <private_host>
 ```
 
 Example:
@@ -52,10 +53,11 @@ Example:
 Content-Security-Policy: private-address-space example.com *.example.com
 ```
 
-To declare local IP addresses:
+To declare one or more local IP addresses:
 
 ```text
-Content-Security-Policy: local-address-space local_hosts
+Content-Security-Policy: local-address-space <local_host>
+Content-Security-Policy: local-address-space <local_host> <local_host>
 ```
 
 Example:
@@ -66,7 +68,7 @@ Content-Security-Policy: local-address-space localhost
 #### <meta> element
 
 ```text
-<meta http-equiv="Content-Security-Policy" content="private-address-space example.com local-address-space localhost">
+<meta http-equiv="Content-Security-Policy" content="private-address-space example.com; local-address-space localhost">
 ```
 
 ### Reporting
@@ -82,8 +84,8 @@ Same as above, the report only mode would only report invalid CSPs but not wheth
 
 ## Furthermore
 
-This new CSP can be used not only for navigations but also for various of use 
-cases, for example, HTML image tags, and even to use as an alternative for fetch
-request. In this way, if the target address space is already defined in Content
-Security Policy, then the `targetAddressSpace` fetch option won't be required 
-anymore.
+"This new CSP can be used not only for navigations but also for a variety of use
+cases. Examples include HTML image tags and even as an alternative to fetch
+requests. If the target address space is already defined in the Content
+Security Policy, the targetAddressSpace fetch option will no longer be
+necessary."
