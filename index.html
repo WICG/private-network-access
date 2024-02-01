@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 82ce88815, updated Thu Sep 7 16:33:55 2023 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="203a26ba99faae0eb46651b30990fcb77f94850f" name="document-revision">
+  <meta content="e36babbafa21c006f6d4642492031231cd167240" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -675,7 +675,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-11-10">10 November 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-02-01">1 February 2024</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -690,7 +690,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2023 the Contributors to the Private Network Access Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2024 the Contributors to the Private Network Access Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -1333,18 +1333,50 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
         <p>If <var>privateNetworkAccessCheckResult</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error③">network error</a>, return <var>privateNetworkAccessCheckResult</var>.</p>
       </ol>
      <li data-md>
+      <p>Define a new algorithm to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="determine-the-preflight-mode">determine the preflight mode</dfn>, given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑤">request</a> <var>request</var> and a boolean <var>makeCORSPreflight</var>:</p>
+      <ol>
+       <li data-md>
+        <p>If <var>makeCORSPreflight</var> is true and one of these conditions is true:</p>
+        <ul>
+         <li data-md>
+          <p>There is no method cache entry match for <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-method" id="ref-for-concept-request-method">method</a> using <var>request</var>, and either <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-method" id="ref-for-concept-request-method①">method</a> is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-safelisted-method" id="ref-for-cors-safelisted-method①">CORS-safelisted method</a> or <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#use-cors-preflight-flag" id="ref-for-use-cors-preflight-flag">use-CORS-preflight flag</a> is set.</p>
+         <li data-md>
+          <p>There is at least one <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-item" id="ref-for-list-item">item</a> in the CORS-unsafe
+  request-header names with <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list">header list</a> for
+  which there is no header-name cache entry match using <var>request</var>.</p>
+        </ul>
+        <p>Then:</p>
+        <ol>
+         <li data-md>
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑤">target IP address space</a> is not
+  null, then return "cors+pna".</p>
+         <li data-md>
+          <p>Otherwise, return "cors".</p>
+        </ol>
+       <li data-md>
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑥">target IP address space</a> is not null, then
+  return "pna".</p>
+       <li data-md>
+        <p>Otherwise, return "none".</p>
+      </ol>
+     <li data-md>
       <p>Define a new algorithm called <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="http-no-service-worker-fetch">HTTP-no-service-worker fetch</dfn> based on the existing steps in <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch" id="ref-for-concept-http-fetch①">HTTP fetch</a> that are run if <var>response</var> is still null after handling the fetch via service workers, and amend
   those slightly as follows:</p>
       <ol>
        <li data-md>
-        <p>At the very start:</p>
+        <p>Let <var>preflightMode</var> be the result of invoking <a data-link-type="dfn" href="#determine-the-preflight-mode" id="ref-for-determine-the-preflight-mode">determine the
+  preflight mode</a> given <var>request</var> and <var>makeCORSPreflight</var>.</p>
+       <li data-md>
+        <p>Replace the entire condition "If <var>makeCORSPreflight</var> is true and ..., Then:" with:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑤">target IP address space</a> is not null,
-  then set <var>makeCORSPreflight</var> to true.</p>
+          <p>If <var>preflightMode</var> is not "none", then:</p>
         </ol>
        <li data-md>
-        <p>Immediately after running <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0①">CORS-preflight fetch</a>:</p>
+        <p>Replace "running <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0①">CORS-preflight fetch</a> given <var>request</var>" with
+  "running <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0②">CORS-preflight fetch</a> given <var>request</var> and <var>preflightMode</var>"</p>
+       <li data-md>
+        <p>Immediately after running <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0③">CORS-preflight fetch</a>:</p>
         <ol>
          <li data-md>
           <p>If <var>preflightResponse</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error④">network error</a>:</p>
@@ -1353,7 +1385,7 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
             <p>If <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space③">IP address space</a> is
   null, return <var>preflightResponse</var>.</p>
            <li data-md>
-            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑥">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space④">IP address space</a>.</p>
+            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑦">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space④">IP address space</a>.</p>
            <li data-md>
             <p>Return the result of running <a data-link-type="dfn" href="#http-no-service-worker-fetch" id="ref-for-http-no-service-worker-fetch">HTTP-no-service-worker fetch</a> given <var>fetchParams</var>.</p>
           </ol>
@@ -1365,37 +1397,41 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
           <p>If <var>response</var> is a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑤">network error</a> and <var>response</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑤">IP address space</a> is non-null, then:</p>
           <ol>
            <li data-md>
-            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑦">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑥">IP address space</a>.</p>
+            <p>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑧">target IP address space</a> to <var>preflightResponse</var>’s <a data-link-type="dfn" href="#response-ip-address-space" id="ref-for-response-ip-address-space⑥">IP address space</a>.</p>
            <li data-md>
             <p>Return the result of running <a data-link-type="dfn" href="#http-no-service-worker-fetch" id="ref-for-http-no-service-worker-fetch①">HTTP-no-service-worker fetch</a> given <var>fetchParams</var>.</p>
           </ol>
         </ol>
       </ol>
-      <p class="note" role="note"><span class="marker">Note:</span> Because <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑧">target IP address space</a> is set to a
+      <p class="note" role="note"><span class="marker">Note:</span> Because <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑨">target IP address space</a> is set to a
   non-null value when recursing, this recursion can go at most 1 level deep.</p>
      <li data-md>
-      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0②">CORS-preflight fetch</a> algorithm is adjusted to handle the
-  new headers:</p>
+      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-preflight-fetch-0" id="ref-for-cors-preflight-fetch-0④">CORS-preflight fetch</a> algorithm is adjusted to take a new parameter <var>preflightMode</var> (default "cors"), and handle the new headers as follows:</p>
       <ol>
+       <li data-md>
+        <p>Only append `<code>Accept</code>` and
+  `<a data-link-type="http-header" href="https://fetch.spec.whatwg.org/#http-access-control-request-headers" id="ref-for-http-access-control-request-headers"><code>Access-Control-Request-Headers</code></a>` to <var>preflight</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list①">header list</a> if <var>preflightMode</var> is true.</p>
        <li data-md>
         <p>Immediately before running <a data-link-type="abstract-op" href="https://fetch.spec.whatwg.org/#concept-http-network-or-cache-fetch" id="ref-for-concept-http-network-or-cache-fetch①">HTTP-network-or-cache fetch</a>:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space⑨">target IP address space</a> is not null,
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①⓪">target IP address space</a> is not null,
   then:</p>
           <ol>
            <li data-md>
             <p><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-header-list-set" id="ref-for-concept-header-list-set">Set</a> "<a data-link-type="http-header" href="#http-headerdef-access-control-request-private-network" id="ref-for-http-headerdef-access-control-request-private-network②"><code>Access-Control-Request-Private-Network</code></a>"
-  to "<code>true</code>" in <var>preflight</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list">header list</a>.</p>
+  to "<code>true</code>" in <var>preflight</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list②">header list</a>.</p>
           </ol>
         </ol>
        <li data-md>
         <p>Immediately after the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cors-check" id="ref-for-concept-cors-check">CORS check</a>:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①⓪">target IP address space</a> is not null,
-  then:</p>
+          <p>If <var>preflightMode</var> is "pna" or "cors+pna",</p>
           <ol>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①">Assert</a>: <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①①">target IP address space</a> is
+  not null.</p>
            <li data-md>
             <p>Let <var>allow</var> be the result of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#extract-header-list-values" id="ref-for-extract-header-list-values">extracting header list values</a> given
   "<a data-link-type="http-header" href="#http-headerdef-access-control-allow-private-network" id="ref-for-http-headerdef-access-control-allow-private-network③"><code>Access-Control-Allow-Private-Network</code></a>"
@@ -1403,13 +1439,13 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
            <li data-md>
             <p>If <var>allow</var> is not "<code>true</code>", return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑥">network error</a>.</p>
            <li data-md>
-            <p>Let <var>requestWithoutTargetIpAddressSpace</var> be a copy of <var>request</var> but set its <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①①">target IP address space</a> to be null.</p>
+            <p>Let <var>requestWithoutTargetIpAddressSpace</var> be a copy of <var>request</var> but set its <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①②">target IP address space</a> to be null.</p>
            <li data-md>
             <p>If <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#should-block-fetch" id="ref-for-should-block-fetch①"> should fetching <var>requestWithoutTargetIpAddressSpace</var> be
     blocked as mixed content </a> returns <strong>allowed</strong>, return null.</p>
            <li data-md>
             <p>If <a data-link-type="http-header" href="#http-headerdef-private-network-access-id" id="ref-for-http-headerdef-private-network-access-id①"><code>Private-Network-Access-ID</code></a> or <a data-link-type="http-header" href="#http-headerdef-private-network-access-name" id="ref-for-http-headerdef-private-network-access-name①"><code>Private-Network-Access-Name</code></a> is null or
-  empty, let <var>targetId</var> be <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①②">target IP
+  empty, let <var>targetId</var> be <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①③">target IP
   address space</a>. Store the permission as an ephemeral
   permission, then return null.</p>
            <li data-md>
@@ -1449,13 +1485,13 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
         <p>A new <dfn class="dfn-paneled" data-dfn-for="cache entry" data-dfn-type="dfn" data-export id="cache-entry-ip-address-space">IP address space</dfn> property
   (null or an <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①③">IP address space</a>) is added to each <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cache-entry" id="ref-for-cache-entry">cache entry</a>.</p>
        <li data-md>
-        <p>This new property is initialized by the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-create-entry" id="ref-for-concept-cache-create-entry">create a new cache entry</a> algorithm from <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①③">target IP address space</a>.</p>
+        <p>This new property is initialized by the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-create-entry" id="ref-for-concept-cache-create-entry">create a new cache entry</a> algorithm from <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①④">target IP address space</a>.</p>
        <li data-md>
         <p>This new property is checked by the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-cache-match" id="ref-for-concept-cache-match">cache entry match</a> algorithm:</p>
         <ol>
          <li data-md>
           <p><var>entry</var>’s <a data-link-type="dfn" href="#cache-entry-ip-address-space" id="ref-for-cache-entry-ip-address-space">IP address space</a> is
-  equal to <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①④">target IP address space</a>.</p>
+  equal to <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①⑤">target IP address space</a>.</p>
         </ol>
       </ol>
     </ol>
@@ -1470,7 +1506,7 @@ Private-Network-Access-ID: "01:23:45:67:89:0A"
 </pre>
      <li data-md>
       <p>Define a new {=targetAddressSpace=} representing the
-above in <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑤">request</a>.</p>
+above in <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑥">request</a>.</p>
 <pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://fetch.spec.whatwg.org/#request" id="ref-for-request"><c- g>Request</c-></a> {
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-ipaddressspace" id="ref-for-enumdef-ipaddressspace③"><c- n>IPAddressSpace</c-></a> <dfn class="idl-code" data-dfn-for="Request" data-dfn-type="attribute" data-export data-readonly data-type="IPAddressSpace" id="dom-request-targetaddressspace"><code><c- g>targetAddressSpace</c-></code><a class="self-link" href="#dom-request-targetaddressspace"></a></dfn>;
 };
@@ -1478,7 +1514,7 @@ above in <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-para
      <li data-md>
       <p>The <a class="idl-code" data-link-type="constructor" href="https://fetch.spec.whatwg.org/#dom-request" id="ref-for-dom-request"><code>new
 Request(<var>input</var>, <var>init</var>)</code></a> is
-appended with the following step right before setting <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>'s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑥">request</a> to <var>request</var>:</p>
+appended with the following step right before setting <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>'s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑦">request</a> to <var>request</var>:</p>
       <ol>
        <li data-md>
         <p>If <var>init</var>["<code class="idl"><a data-link-type="idl" href="#dom-requestinit-targetaddressspace" id="ref-for-dom-requestinit-targetaddressspace">targetAddressSpace</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a>, then
@@ -1487,9 +1523,9 @@ appended with the following step right before setting <a data-link-type="dfn" hr
          <dt>public 
          <dd>Do nothing. 
          <dt>private 
-         <dd>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①⑤">target IP address space</a> to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑦">private</a>. 
+         <dd>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①⑥">target IP address space</a> to <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑦">private</a>. 
          <dt>local 
-         <dd>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①⑥">target IP address space</a> to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑦">local</a>. 
+         <dd>Set <var>request</var>’s <a data-link-type="dfn" href="#request-target-ip-address-space" id="ref-for-request-target-ip-address-space①⑦">target IP address space</a> to <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑦">local</a>. 
         </dl>
       </ol>
     </ul>
@@ -1544,7 +1580,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
     <div class="example" id="example-9722f9da">
      <a class="self-link" href="#example-9722f9da"></a> Assuming that <code>example.com</code> resolves to a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address⑥">public address</a> (say, <code>123.123.123.123</code>), then a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope" id="ref-for-workerglobalscope②">WorkerGlobalScope</a></code> created by fetching a
     script from <code>https://example.com/worker.js</code> will have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-policy-container" id="ref-for-concept-workerglobalscope-policy-container①">policy container</a>'s <a data-link-type="dfn" href="#policy-container-ip-address-space" id="ref-for-policy-container-ip-address-space⑨">IP address space</a> property set to <a data-link-type="dfn" href="#ip-address-space-public" id="ref-for-ip-address-space-public①④">public</a>. 
-     <p>Any fetch <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑦">request</a> initiated by this worker that <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain②">obtains a connection</a> to an IP address in the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑧">private</a> or <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑨">local</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑤">address spaces</a> would then be a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request⑤">private network request</a>.</p>
+     <p>Any fetch <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#fetch-params-request" id="ref-for-fetch-params-request⑧">request</a> initiated by this worker that <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-connection-obtain" id="ref-for-concept-connection-obtain②">obtains a connection</a> to an IP address in the <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑧">private</a> or <a data-link-type="dfn" href="#ip-address-space-local" id="ref-for-ip-address-space-local⑨">local</a> <a data-link-type="dfn" href="#ip-address-space" id="ref-for-ip-address-space①⑤">address spaces</a> would then be a <a data-link-type="dfn" href="#private-network-request" id="ref-for-private-network-request⑤">private network request</a>.</p>
     </div>
     <p class="issue" id="issue-62b6d083"><a class="self-link" href="#issue-62b6d083"></a> The <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#dfn-service-worker" id="ref-for-dfn-service-worker">Service Worker</a> <a data-link-type="dfn" href="https://w3c.github.io/ServiceWorker/#soft-update" id="ref-for-soft-update">soft update</a> algorithm unfortunately sets a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client④">request client</a> of <code>"null"</code> when <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch⑤">fetching</a> an updated script. This causes all sorts of issues, and
   interferes with the <a data-link-type="dfn" href="#private-network-access-check" id="ref-for-private-network-access-check①">private network access check</a> algorithm laid out above.
@@ -1759,6 +1795,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
    <li><a href="#http-headerdef-access-control-request-private-network">Access-Control-Request-Private-Network</a><span>, in § 2.3</span>
    <li><a href="#ip-address-space">address space</a><span>, in § 2.1</span>
    <li><a href="#determine-the-ip-address-space">determine the IP address space</a><span>, in § 2.1</span>
+   <li><a href="#determine-the-preflight-mode">determine the preflight mode</a><span>, in § 3.4.2</span>
    <li><a href="#http-no-service-worker-fetch">HTTP-no-service-worker fetch</a><span>, in § 3.4.2</span>
    <li><a href="#dom-privatenetworkaccesspermissiondescriptor-id">id</a><span>, in § 3.2</span>
    <li>
@@ -1822,6 +1859,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
      <li><span class="dfn-paneled" id="82748635">access-control-allow-credentials</span>
      <li><span class="dfn-paneled" id="a6a3b229">access-control-allow-methods</span>
      <li><span class="dfn-paneled" id="eed8e0e4">access-control-allow-origin</span>
+     <li><span class="dfn-paneled" id="3a277ff5">access-control-request-headers</span>
      <li><span class="dfn-paneled" id="8db43a5c">access-control-request-method</span>
      <li><span class="dfn-paneled" id="dbbacb0c">cache entry</span>
      <li><span class="dfn-paneled" id="a4ff76ba">cache entry match</span>
@@ -1842,6 +1880,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
      <li><span class="dfn-paneled" id="6ee0eab1">header list <small>(for request)</small></span>
      <li><span class="dfn-paneled" id="f7b00a8b">header list <small>(for response)</small></span>
      <li><span class="dfn-paneled" id="2aaa2f42">http fetch</span>
+     <li><span class="dfn-paneled" id="50b05fad">method</span>
      <li><span class="dfn-paneled" id="eb1b1af3">network error</span>
      <li><span class="dfn-paneled" id="7cf440ca">network partition key</span>
      <li><span class="dfn-paneled" id="8e1fb11c">obtain a connection</span>
@@ -1850,6 +1889,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
      <li><span class="dfn-paneled" id="5695c146">request</span>
      <li><span class="dfn-paneled" id="ee7bba09">response</span>
      <li><span class="dfn-paneled" id="d9f4dab1">set</span>
+     <li><span class="dfn-paneled" id="4884f74b">use-cors-preflight flag</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
@@ -1876,6 +1916,7 @@ appended with the following step right before setting <a data-link-type="dfn" hr
      <li><span class="dfn-paneled" id="77b4c09a">assert</span>
      <li><span class="dfn-paneled" id="8958b003">entry</span>
      <li><span class="dfn-paneled" id="1243a891">exist</span>
+     <li><span class="dfn-paneled" id="5afbefcd">item</span>
      <li><span class="dfn-paneled" id="d14a6f26">key</span>
      <li><span class="dfn-paneled" id="984221ca">struct</span>
      <li><span class="dfn-paneled" id="802b0fdd">value</span>
@@ -2366,6 +2407,7 @@ window.dfnpanelData['0dcd4ad9'] = {"dfnID": "0dcd4ad9", "url": "https://fetch.sp
 window.dfnpanelData['82748635'] = {"dfnID": "82748635", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-credentials", "dfnText": "access-control-allow-credentials", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-credentials"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-credentials\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
 window.dfnpanelData['a6a3b229'] = {"dfnID": "a6a3b229", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-methods", "dfnText": "access-control-allow-methods", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-methods"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-methods\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
 window.dfnpanelData['eed8e0e4'] = {"dfnID": "eed8e0e4", "url": "https://fetch.spec.whatwg.org/#http-access-control-allow-origin", "dfnText": "access-control-allow-origin", "refSections": [{"refs": [{"id": "ref-for-http-access-control-allow-origin"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-http-access-control-allow-origin\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
+window.dfnpanelData['3a277ff5'] = {"dfnID": "3a277ff5", "url": "https://fetch.spec.whatwg.org/#http-access-control-request-headers", "dfnText": "access-control-request-headers", "refSections": [{"refs": [{"id": "ref-for-http-access-control-request-headers"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['8db43a5c'] = {"dfnID": "8db43a5c", "url": "https://fetch.spec.whatwg.org/#http-access-control-request-method", "dfnText": "access-control-request-method", "refSections": [{"refs": [{"id": "ref-for-http-access-control-request-method"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-http-access-control-request-method\u2460"}], "title": "1.2.3. Navigation"}], "external": true};
 window.dfnpanelData['dbbacb0c'] = {"dfnID": "dbbacb0c", "url": "https://fetch.spec.whatwg.org/#cache-entry", "dfnText": "cache entry", "refSections": [{"refs": [{"id": "ref-for-cache-entry"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-cache-entry\u2460"}], "title": "5.6.1. Applying checks to subresources"}], "external": true};
 window.dfnpanelData['a4ff76ba'] = {"dfnID": "a4ff76ba", "url": "https://fetch.spec.whatwg.org/#concept-cache-match", "dfnText": "cache entry match", "refSections": [{"refs": [{"id": "ref-for-concept-cache-match"}], "title": "3.4.2. Fetching"}], "external": true};
@@ -2374,26 +2416,28 @@ window.dfnpanelData['697965b2'] = {"dfnID": "697965b2", "url": "https://fetch.sp
 window.dfnpanelData['f9649676'] = {"dfnID": "f9649676", "url": "https://fetch.spec.whatwg.org/#concept-connection-pool", "dfnText": "connection pool", "refSections": [{"refs": [{"id": "ref-for-concept-connection-pool"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['fdb35d97'] = {"dfnID": "fdb35d97", "url": "https://fetch.spec.whatwg.org/#concept-cors-check", "dfnText": "cors check", "refSections": [{"refs": [{"id": "ref-for-concept-cors-check"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['e119682f'] = {"dfnID": "e119682f", "url": "https://fetch.spec.whatwg.org/#concept-cache", "dfnText": "cors-preflight cache", "refSections": [{"refs": [{"id": "ref-for-concept-cache"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-concept-cache\u2460"}], "title": "5.3. DNS Rebinding"}], "external": true};
-window.dfnpanelData['0105c79c'] = {"dfnID": "0105c79c", "url": "https://fetch.spec.whatwg.org/#cors-preflight-fetch-0", "dfnText": "cors-preflight fetch", "refSections": [{"refs": [{"id": "ref-for-cors-preflight-fetch-0"}], "title": "3.4.1. CORS preflight"}, {"refs": [{"id": "ref-for-cors-preflight-fetch-0\u2460"}, {"id": "ref-for-cors-preflight-fetch-0\u2461"}], "title": "3.4.2. Fetching"}], "external": true};
+window.dfnpanelData['0105c79c'] = {"dfnID": "0105c79c", "url": "https://fetch.spec.whatwg.org/#cors-preflight-fetch-0", "dfnText": "cors-preflight fetch", "refSections": [{"refs": [{"id": "ref-for-cors-preflight-fetch-0"}], "title": "3.4.1. CORS preflight"}, {"refs": [{"id": "ref-for-cors-preflight-fetch-0\u2460"}, {"id": "ref-for-cors-preflight-fetch-0\u2461"}, {"id": "ref-for-cors-preflight-fetch-0\u2462"}, {"id": "ref-for-cors-preflight-fetch-0\u2463"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['4d7b724c'] = {"dfnID": "4d7b724c", "url": "https://fetch.spec.whatwg.org/#cors-preflight-request", "dfnText": "cors-preflight request", "refSections": [{"refs": [{"id": "ref-for-cors-preflight-request"}, {"id": "ref-for-cors-preflight-request\u2460"}], "title": "1.2.1. Secure by Default"}, {"refs": [{"id": "ref-for-cors-preflight-request\u2461"}, {"id": "ref-for-cors-preflight-request\u2462"}], "title": "1.2.2. Opting-In"}, {"refs": [{"id": "ref-for-cors-preflight-request\u2463"}], "title": "1.2.3. Navigation"}, {"refs": [{"id": "ref-for-cors-preflight-request\u2464"}], "title": "3.4. Integration with Fetch"}], "external": true};
-window.dfnpanelData['98f9d698'] = {"dfnID": "98f9d698", "url": "https://fetch.spec.whatwg.org/#cors-safelisted-method", "dfnText": "cors-safelisted method", "refSections": [{"refs": [{"id": "ref-for-cors-safelisted-method"}], "title": "1.1. Goals"}], "external": true};
+window.dfnpanelData['98f9d698'] = {"dfnID": "98f9d698", "url": "https://fetch.spec.whatwg.org/#cors-safelisted-method", "dfnText": "cors-safelisted method", "refSections": [{"refs": [{"id": "ref-for-cors-safelisted-method"}], "title": "1.1. Goals"}, {"refs": [{"id": "ref-for-cors-safelisted-method\u2460"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['99f492fd'] = {"dfnID": "99f492fd", "url": "https://fetch.spec.whatwg.org/#cors-safelisted-request-header", "dfnText": "cors-safelisted request-header", "refSections": [{"refs": [{"id": "ref-for-cors-safelisted-request-header"}], "title": "1.1. Goals"}], "external": true};
 window.dfnpanelData['585e7a08'] = {"dfnID": "585e7a08", "url": "https://fetch.spec.whatwg.org/#concept-cache-create-entry", "dfnText": "create a new cache entry", "refSections": [{"refs": [{"id": "ref-for-concept-cache-create-entry"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['3f2ca4de'] = {"dfnID": "3f2ca4de", "url": "https://fetch.spec.whatwg.org/#concept-request-current-url", "dfnText": "current url", "refSections": [{"refs": [{"id": "ref-for-concept-request-current-url"}, {"id": "ref-for-concept-request-current-url\u2460"}], "title": "2.2. Private Network Request"}, {"refs": [{"id": "ref-for-concept-request-current-url\u2461"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['3be1d4ac'] = {"dfnID": "3be1d4ac", "url": "https://fetch.spec.whatwg.org/#extract-header-list-values", "dfnText": "extracting header list values", "refSections": [{"refs": [{"id": "ref-for-extract-header-list-values"}, {"id": "ref-for-extract-header-list-values\u2460"}, {"id": "ref-for-extract-header-list-values\u2461"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['a33db89a'] = {"dfnID": "a33db89a", "url": "https://fetch.spec.whatwg.org/#concept-fetch", "dfnText": "fetch", "refSections": [{"refs": [{"id": "ref-for-concept-fetch"}], "title": "3.4. Integration with Fetch"}, {"refs": [{"id": "ref-for-concept-fetch\u2460"}, {"id": "ref-for-concept-fetch\u2461"}, {"id": "ref-for-concept-fetch\u2462"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-concept-fetch\u2463"}], "title": "3.5. Integration with WebSockets"}, {"refs": [{"id": "ref-for-concept-fetch\u2464"}, {"id": "ref-for-concept-fetch\u2465"}], "title": "3.7. Workers"}], "external": true};
 window.dfnpanelData['ad6ec3ab'] = {"dfnID": "ad6ec3ab", "url": "https://fetch.spec.whatwg.org/#forbidden-request-header", "dfnText": "forbidden request-header", "refSections": [{"refs": [{"id": "ref-for-forbidden-request-header"}], "title": "3.4.4. Forbidden header names"}], "external": true};
-window.dfnpanelData['6ee0eab1'] = {"dfnID": "6ee0eab1", "url": "https://fetch.spec.whatwg.org/#concept-request-header-list", "dfnText": "header list (for request)", "refSections": [{"refs": [{"id": "ref-for-concept-request-header-list"}], "title": "3.4.2. Fetching"}], "external": true};
+window.dfnpanelData['6ee0eab1'] = {"dfnID": "6ee0eab1", "url": "https://fetch.spec.whatwg.org/#concept-request-header-list", "dfnText": "header list (for request)", "refSections": [{"refs": [{"id": "ref-for-concept-request-header-list"}, {"id": "ref-for-concept-request-header-list\u2460"}, {"id": "ref-for-concept-request-header-list\u2461"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['f7b00a8b'] = {"dfnID": "f7b00a8b", "url": "https://fetch.spec.whatwg.org/#concept-response-header-list", "dfnText": "header list (for response)", "refSections": [{"refs": [{"id": "ref-for-concept-response-header-list"}, {"id": "ref-for-concept-response-header-list\u2460"}, {"id": "ref-for-concept-response-header-list\u2461"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['2aaa2f42'] = {"dfnID": "2aaa2f42", "url": "https://fetch.spec.whatwg.org/#concept-http-fetch", "dfnText": "http fetch", "refSections": [{"refs": [{"id": "ref-for-concept-http-fetch"}], "title": "3.4.1. CORS preflight"}, {"refs": [{"id": "ref-for-concept-http-fetch\u2460"}], "title": "3.4.2. Fetching"}], "external": true};
+window.dfnpanelData['50b05fad'] = {"dfnID": "50b05fad", "url": "https://fetch.spec.whatwg.org/#concept-request-method", "dfnText": "method", "refSections": [{"refs": [{"id": "ref-for-concept-request-method"}, {"id": "ref-for-concept-request-method\u2460"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['eb1b1af3'] = {"dfnID": "eb1b1af3", "url": "https://fetch.spec.whatwg.org/#concept-network-error", "dfnText": "network error", "refSections": [{"refs": [{"id": "ref-for-concept-network-error"}, {"id": "ref-for-concept-network-error\u2460"}, {"id": "ref-for-concept-network-error\u2461"}, {"id": "ref-for-concept-network-error\u2462"}, {"id": "ref-for-concept-network-error\u2463"}, {"id": "ref-for-concept-network-error\u2464"}, {"id": "ref-for-concept-network-error\u2465"}, {"id": "ref-for-concept-network-error\u2466"}, {"id": "ref-for-concept-network-error\u2467"}, {"id": "ref-for-concept-network-error\u2468"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['7cf440ca'] = {"dfnID": "7cf440ca", "url": "https://fetch.spec.whatwg.org/#network-partition-key", "dfnText": "network partition key", "refSections": [{"refs": [{"id": "ref-for-network-partition-key"}], "title": "5.6.1. Applying checks to subresources"}], "external": true};
 window.dfnpanelData['8e1fb11c'] = {"dfnID": "8e1fb11c", "url": "https://fetch.spec.whatwg.org/#concept-connection-obtain", "dfnText": "obtain a connection", "refSections": [{"refs": [{"id": "ref-for-concept-connection-obtain"}], "title": "3.4. Integration with Fetch"}, {"refs": [{"id": "ref-for-concept-connection-obtain\u2460"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-concept-connection-obtain\u2461"}], "title": "3.7. Workers"}], "external": true};
 window.dfnpanelData['f78d5b5c'] = {"dfnID": "f78d5b5c", "url": "https://fetch.spec.whatwg.org/#concept-request-origin", "dfnText": "origin", "refSections": [{"refs": [{"id": "ref-for-concept-request-origin"}], "title": "3.3. Integration with Mixed Content"}, {"refs": [{"id": "ref-for-concept-request-origin\u2460"}, {"id": "ref-for-concept-request-origin\u2461"}, {"id": "ref-for-concept-request-origin\u2462"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['86efadaf'] = {"dfnID": "86efadaf", "url": "https://fetch.spec.whatwg.org/#concept-request-policy-container", "dfnText": "policy container", "refSections": [{"refs": [{"id": "ref-for-concept-request-policy-container"}], "title": "2.2. Private Network Request"}, {"refs": [{"id": "ref-for-concept-request-policy-container\u2460"}, {"id": "ref-for-concept-request-policy-container\u2461"}, {"id": "ref-for-concept-request-policy-container\u2462"}, {"id": "ref-for-concept-request-policy-container\u2463"}, {"id": "ref-for-concept-request-policy-container\u2464"}, {"id": "ref-for-concept-request-policy-container\u2465"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-concept-request-policy-container\u2466"}], "title": "3.7. Workers"}], "external": true};
-window.dfnpanelData['5695c146'] = {"dfnID": "5695c146", "url": "https://fetch.spec.whatwg.org/#fetch-params-request", "dfnText": "request", "refSections": [{"refs": [{"id": "ref-for-fetch-params-request"}], "title": "2.2. Private Network Request"}, {"refs": [{"id": "ref-for-fetch-params-request\u2460"}], "title": "2.3. Additional CORS Headers"}, {"refs": [{"id": "ref-for-fetch-params-request\u2461"}, {"id": "ref-for-fetch-params-request\u2462"}, {"id": "ref-for-fetch-params-request\u2463"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-fetch-params-request\u2464"}, {"id": "ref-for-fetch-params-request\u2465"}], "title": "3.4.3. Fetch API"}, {"refs": [{"id": "ref-for-fetch-params-request\u2466"}], "title": "3.7. Workers"}], "external": true};
+window.dfnpanelData['5695c146'] = {"dfnID": "5695c146", "url": "https://fetch.spec.whatwg.org/#fetch-params-request", "dfnText": "request", "refSections": [{"refs": [{"id": "ref-for-fetch-params-request"}], "title": "2.2. Private Network Request"}, {"refs": [{"id": "ref-for-fetch-params-request\u2460"}], "title": "2.3. Additional CORS Headers"}, {"refs": [{"id": "ref-for-fetch-params-request\u2461"}, {"id": "ref-for-fetch-params-request\u2462"}, {"id": "ref-for-fetch-params-request\u2463"}, {"id": "ref-for-fetch-params-request\u2464"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-fetch-params-request\u2465"}, {"id": "ref-for-fetch-params-request\u2466"}], "title": "3.4.3. Fetch API"}, {"refs": [{"id": "ref-for-fetch-params-request\u2467"}], "title": "3.7. Workers"}], "external": true};
 window.dfnpanelData['ee7bba09'] = {"dfnID": "ee7bba09", "url": "https://fetch.spec.whatwg.org/#concept-response", "dfnText": "response", "refSections": [{"refs": [{"id": "ref-for-concept-response"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-concept-response\u2460"}, {"id": "ref-for-concept-response\u2461"}], "title": "4.3.1. Main resources"}], "external": true};
 window.dfnpanelData['d9f4dab1'] = {"dfnID": "d9f4dab1", "url": "https://fetch.spec.whatwg.org/#concept-header-list-set", "dfnText": "set", "refSections": [{"refs": [{"id": "ref-for-concept-header-list-set"}], "title": "3.4.2. Fetching"}], "external": true};
+window.dfnpanelData['4884f74b'] = {"dfnID": "4884f74b", "url": "https://fetch.spec.whatwg.org/#use-cors-preflight-flag", "dfnText": "use-cors-preflight flag", "refSections": [{"refs": [{"id": "ref-for-use-cors-preflight-flag"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['07cd5a09'] = {"dfnID": "07cd5a09", "url": "https://html.spec.whatwg.org/#document", "dfnText": "Document", "refSections": [{"refs": [{"id": "ref-for-document"}], "title": "2.5. Feature Detection"}, {"refs": [{"id": "ref-for-document\u2460"}, {"id": "ref-for-document\u2461"}, {"id": "ref-for-document\u2462"}, {"id": "ref-for-document\u2463"}], "title": "3.6. Integration with HTML"}, {"refs": [{"id": "ref-for-document\u2464"}, {"id": "ref-for-document\u2465"}, {"id": "ref-for-document\u2466"}], "title": "4.2. Proxies"}], "external": true};
 window.dfnpanelData['83c59a3a'] = {"dfnID": "83c59a3a", "url": "https://html.spec.whatwg.org/multipage/workers.html#workerglobalscope", "dfnText": "WorkerGlobalScope", "refSections": [{"refs": [{"id": "ref-for-workerglobalscope"}], "title": "2.5. Feature Detection"}, {"refs": [{"id": "ref-for-workerglobalscope\u2460"}, {"id": "ref-for-workerglobalscope\u2461"}], "title": "3.7. Workers"}], "external": true};
 window.dfnpanelData['00c57527'] = {"dfnID": "00c57527", "url": "https://html.spec.whatwg.org/multipage/browsers.html#clone-a-policy-container", "dfnText": "clone a policy container", "refSections": [{"refs": [{"id": "ref-for-clone-a-policy-container"}], "title": "3.6. Integration with HTML"}], "external": true};
@@ -2409,9 +2453,10 @@ window.dfnpanelData['432147ee'] = {"dfnID": "432147ee", "url": "https://html.spe
 window.dfnpanelData['bd1db03d'] = {"dfnID": "bd1db03d", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-policy-container", "dfnText": "policy container (for environment settings object)", "refSections": [{"refs": [{"id": "ref-for-concept-settings-object-policy-container"}], "title": "2.4. The treat-as-public-address Content Security Policy Directive"}, {"refs": [{"id": "ref-for-concept-settings-object-policy-container\u2460"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['7393da89'] = {"dfnID": "7393da89", "url": "https://html.spec.whatwg.org/multipage/browsers.html#same-origin", "dfnText": "same origin", "refSections": [{"refs": [{"id": "ref-for-same-origin"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['65181da8'] = {"dfnID": "65181da8", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#secure-context", "dfnText": "secure context", "refSections": [{"refs": [{"id": "ref-for-secure-context"}], "title": "3.1. Secure context restriction"}, {"refs": [{"id": "ref-for-secure-context\u2460"}], "title": "3.4. Integration with Fetch"}, {"refs": [{"id": "ref-for-secure-context\u2461"}], "title": "3.4.1. CORS preflight"}, {"refs": [{"id": "ref-for-secure-context\u2462"}], "title": "3.4.2. Fetching"}], "external": true};
-window.dfnpanelData['77b4c09a'] = {"dfnID": "77b4c09a", "url": "https://infra.spec.whatwg.org/#assert", "dfnText": "assert", "refSections": [{"refs": [{"id": "ref-for-assert"}], "title": "3.4.2. Fetching"}], "external": true};
+window.dfnpanelData['77b4c09a'] = {"dfnID": "77b4c09a", "url": "https://infra.spec.whatwg.org/#assert", "dfnText": "assert", "refSections": [{"refs": [{"id": "ref-for-assert"}, {"id": "ref-for-assert\u2460"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['8958b003'] = {"dfnID": "8958b003", "url": "https://infra.spec.whatwg.org/#map-entry", "dfnText": "entry", "refSections": [{"refs": [{"id": "ref-for-map-entry"}], "title": "3.4.3. Fetch API"}], "external": true};
 window.dfnpanelData['1243a891'] = {"dfnID": "1243a891", "url": "https://infra.spec.whatwg.org/#map-exists", "dfnText": "exist", "refSections": [{"refs": [{"id": "ref-for-map-exists"}], "title": "3.4.3. Fetch API"}], "external": true};
+window.dfnpanelData['5afbefcd'] = {"dfnID": "5afbefcd", "url": "https://infra.spec.whatwg.org/#list-item", "dfnText": "item", "refSections": [{"refs": [{"id": "ref-for-list-item"}], "title": "3.4.2. Fetching"}], "external": true};
 window.dfnpanelData['d14a6f26'] = {"dfnID": "d14a6f26", "url": "https://infra.spec.whatwg.org/#map-key", "dfnText": "key", "refSections": [{"refs": [{"id": "ref-for-map-key"}], "title": "3.4.3. Fetch API"}], "external": true};
 window.dfnpanelData['984221ca'] = {"dfnID": "984221ca", "url": "https://infra.spec.whatwg.org/#struct", "dfnText": "struct", "refSections": [{"refs": [{"id": "ref-for-struct"}], "title": "3.6. Integration with HTML"}], "external": true};
 window.dfnpanelData['802b0fdd'] = {"dfnID": "802b0fdd", "url": "https://infra.spec.whatwg.org/#map-value", "dfnText": "value", "refSections": [{"refs": [{"id": "ref-for-map-value"}], "title": "3.4.3. Fetch API"}], "external": true};
@@ -2449,9 +2494,10 @@ window.dfnpanelData['treat-as-public-address'] = {"dfnID": "treat-as-public-addr
 window.dfnpanelData['permissiondef-private-network-access'] = {"dfnID": "permissiondef-private-network-access", "url": "#permissiondef-private-network-access", "dfnText": "\"private-network-access\"", "refSections": [{"refs": [{"id": "ref-for-permissiondef-private-network-access"}], "title": "3.2. Integration with Permissions "}, {"refs": [{"id": "ref-for-permissiondef-private-network-access\u2460"}], "title": "3.4.2. Fetching"}], "external": false};
 window.dfnpanelData['dictdef-privatenetworkaccesspermissiondescriptor'] = {"dfnID": "dictdef-privatenetworkaccesspermissiondescriptor", "url": "#dictdef-privatenetworkaccesspermissiondescriptor", "dfnText": "PrivateNetworkAccessPermissionDescriptor", "refSections": [{"refs": [{"id": "ref-for-dictdef-privatenetworkaccesspermissiondescriptor"}], "title": "2.3. Additional CORS Headers"}], "external": false};
 window.dfnpanelData['connection-ip-address-space'] = {"dfnID": "connection-ip-address-space", "url": "#connection-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-connection-ip-address-space"}, {"id": "ref-for-connection-ip-address-space\u2460"}, {"id": "ref-for-connection-ip-address-space\u2461"}, {"id": "ref-for-connection-ip-address-space\u2462"}, {"id": "ref-for-connection-ip-address-space\u2463"}], "title": "3.4.2. Fetching"}], "external": false};
-window.dfnpanelData['request-target-ip-address-space'] = {"dfnID": "request-target-ip-address-space", "url": "#request-target-ip-address-space", "dfnText": "target IP\n  address space", "refSections": [{"refs": [{"id": "ref-for-request-target-ip-address-space"}], "title": "3.3. Integration with Mixed Content"}, {"refs": [{"id": "ref-for-request-target-ip-address-space\u2460"}, {"id": "ref-for-request-target-ip-address-space\u2461"}, {"id": "ref-for-request-target-ip-address-space\u2462"}, {"id": "ref-for-request-target-ip-address-space\u2463"}, {"id": "ref-for-request-target-ip-address-space\u2464"}, {"id": "ref-for-request-target-ip-address-space\u2465"}, {"id": "ref-for-request-target-ip-address-space\u2466"}, {"id": "ref-for-request-target-ip-address-space\u2467"}, {"id": "ref-for-request-target-ip-address-space\u2468"}, {"id": "ref-for-request-target-ip-address-space\u2460\u24ea"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2460"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2461"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2462"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2463"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-request-target-ip-address-space\u2460\u2464"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2465"}], "title": "3.4.3. Fetch API"}], "external": false};
+window.dfnpanelData['request-target-ip-address-space'] = {"dfnID": "request-target-ip-address-space", "url": "#request-target-ip-address-space", "dfnText": "target IP\n  address space", "refSections": [{"refs": [{"id": "ref-for-request-target-ip-address-space"}], "title": "3.3. Integration with Mixed Content"}, {"refs": [{"id": "ref-for-request-target-ip-address-space\u2460"}, {"id": "ref-for-request-target-ip-address-space\u2461"}, {"id": "ref-for-request-target-ip-address-space\u2462"}, {"id": "ref-for-request-target-ip-address-space\u2463"}, {"id": "ref-for-request-target-ip-address-space\u2464"}, {"id": "ref-for-request-target-ip-address-space\u2465"}, {"id": "ref-for-request-target-ip-address-space\u2466"}, {"id": "ref-for-request-target-ip-address-space\u2467"}, {"id": "ref-for-request-target-ip-address-space\u2468"}, {"id": "ref-for-request-target-ip-address-space\u2460\u24ea"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2460"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2461"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2462"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2463"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2464"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-request-target-ip-address-space\u2460\u2465"}, {"id": "ref-for-request-target-ip-address-space\u2460\u2466"}], "title": "3.4.3. Fetch API"}], "external": false};
 window.dfnpanelData['response-ip-address-space'] = {"dfnID": "response-ip-address-space", "url": "#response-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-response-ip-address-space"}], "title": "3.4.1. CORS preflight"}, {"refs": [{"id": "ref-for-response-ip-address-space\u2460"}, {"id": "ref-for-response-ip-address-space\u2461"}, {"id": "ref-for-response-ip-address-space\u2462"}, {"id": "ref-for-response-ip-address-space\u2463"}, {"id": "ref-for-response-ip-address-space\u2464"}, {"id": "ref-for-response-ip-address-space\u2465"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-response-ip-address-space\u2466"}], "title": "3.6. Integration with HTML"}], "external": false};
 window.dfnpanelData['private-network-access-check'] = {"dfnID": "private-network-access-check", "url": "#private-network-access-check", "dfnText": "Private Network Access check", "refSections": [{"refs": [{"id": "ref-for-private-network-access-check"}], "title": "3.4.2. Fetching"}, {"refs": [{"id": "ref-for-private-network-access-check\u2460"}], "title": "3.7. Workers"}, {"refs": [{"id": "ref-for-private-network-access-check\u2461"}], "title": "4.3.2. Subresources"}, {"refs": [{"id": "ref-for-private-network-access-check\u2462"}], "title": "5.6.1. Applying checks to subresources"}], "external": false};
+window.dfnpanelData['determine-the-preflight-mode'] = {"dfnID": "determine-the-preflight-mode", "url": "#determine-the-preflight-mode", "dfnText": "determine the preflight mode", "refSections": [{"refs": [{"id": "ref-for-determine-the-preflight-mode"}], "title": "3.4.2. Fetching"}], "external": false};
 window.dfnpanelData['http-no-service-worker-fetch'] = {"dfnID": "http-no-service-worker-fetch", "url": "#http-no-service-worker-fetch", "dfnText": "HTTP-no-service-worker fetch", "refSections": [{"refs": [{"id": "ref-for-http-no-service-worker-fetch"}, {"id": "ref-for-http-no-service-worker-fetch\u2460"}], "title": "3.4.2. Fetching"}], "external": false};
 window.dfnpanelData['cache-entry-ip-address-space'] = {"dfnID": "cache-entry-ip-address-space", "url": "#cache-entry-ip-address-space", "dfnText": "IP address space", "refSections": [{"refs": [{"id": "ref-for-cache-entry-ip-address-space"}], "title": "3.4.2. Fetching"}], "external": false};
 window.dfnpanelData['dom-requestinit-targetaddressspace'] = {"dfnID": "dom-requestinit-targetaddressspace", "url": "#dom-requestinit-targetaddressspace", "dfnText": "targetAddressSpace", "refSections": [{"refs": [{"id": "ref-for-dom-requestinit-targetaddressspace"}, {"id": "ref-for-dom-requestinit-targetaddressspace\u2460"}], "title": "3.4.3. Fetch API"}], "external": false};
