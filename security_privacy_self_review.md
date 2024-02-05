@@ -23,6 +23,9 @@ laid out.
 
 See #41 for a discussion of these points.
 
+Also, in the prelights we send the initiator's `Origin`.  This was necessary to give servers in the private network enough information
+to decide whether they should allow the requests from public.
+
 ## 2. Is this specification exposing the minimum amount of information necessary to power the feature?
 
 Yes, apart from the above.
