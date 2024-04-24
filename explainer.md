@@ -135,7 +135,8 @@ Private network requests are handled differently than others, like so:
   blocked. 
 - Otherwise, the original request is preceded by a
   [CORS pre-flight request](https://fetch.spec.whatwg.org/#cors-preflight-request).
-  - There are no exceptions for CORS safelisting.
+  - CORS safelisting checks are skipped if the CORS preflight is only sent for PNA.
+    (i.e. it would not have been sent without PNA)
   - The pre-flight request carries an additional
     `Access-Control-Request-Private-Network: true` header.
   - The response must carry an additional

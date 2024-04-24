@@ -1,4 +1,4 @@
-# Private Network Access Permission to relax mixed content for non-fetch requests
+# Content Security Policy for Private Network Access Permission to relax mixed content
 
 - **Author**: lyf@google.com
 - **Created**: 2023-11-24
