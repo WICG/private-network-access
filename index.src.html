@@ -332,6 +332,52 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
     The navigation will proceed normally, but `mail.mega.corp` won't be
     considered CORS-same-origin with the response.
   </div>
+
+  <h4 id="example-mixed-content">Mixed Content</h4>
+
+  <div class="example">
+    Some of MegaCorp Inc's devices lack unique origins, preventing them from
+    connecting through secure channels (e.g., HTTPS). However, these devices may
+    still want to communicate with the public websites. They can opt-in to an
+    insecure connection with secure public websites if explicitly allowed by
+    users.
+
+    When a website with a [=potentially trustworthy origin=] on the public
+    internet requests data from the device, the user agent recognizes the
+    requestor as [=IP address space/public=], and the device as
+    [=IP address space/private=] (not a [=potentially trustworthy origin=]).
+    This triggers both a [=CORS-preflight request=] and a permission prompt to
+    the user (after receiving the correct preflight response).
+
+    Website need to explicitly claim the {{IPAddressSpace}} as a `fetch()` API
+    option:
+
+    <pre highlight="js">
+      fetch("http://router.local/ping", {
+        targetAddressSpace: "private",
+      });
+    </pre>
+
+    The device can grant access by explicitly indicating permission and provide
+    a unique device ID and a user-friendly device name in the preflight response
+    headers. An example response to the above request:
+
+    <pre>
+      HTTP/1.1 200 OK
+      ...
+      <a http-header>Access-Control-Allow-Origin</a>: https://mail.mega.corp
+      <a http-header>Access-Control-Allow-Methods</a>: GET
+      <a http-header>Access-Control-Allow-Credentials</a>: true
+      <a http-header>Access-Control-Allow-Private-Network</a>: true
+      <a http-header>Private-Network-Access-ID</a>: 01:23:45:67:89:0A
+      <a http-header>Private-Network-Access-Name</a>: userA's MegaCorp device
+      Content-Length: 0
+      ...
+    </pre>
+
+    A permission prompt will appear, displaying the ID and name from the device
+    header. If the user grants permission, the request will proceed.
+  </div>
 </section>
 
 <section>
