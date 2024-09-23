@@ -558,9 +558,9 @@ spec:websockets; type:dfn; for:/; text:establish a websocket connection
 
   This approach has some flaws:
 
-  - false positives: an intranet server with a [=public address=] might be able
-    to directy issue requests to another server on the same intranet with a
-    [=private address=].
+  - false positives: an intranet server with a [=public address=] might not be
+    able to directy issue requests to another server on the same intranet with
+    a [=private address=].
   - false negatives: a client connected to two different
     [=IP address space/private=] networks, say a home network and a VPN, might
     allow a website served from the VPN to access devices on the home network.
