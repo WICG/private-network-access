@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 82ce88815, updated Thu Sep 7 16:33:55 2023 -0700" name="generator">
   <link href="https://wicg.github.io/private-network-access/" rel="canonical">
-  <meta content="3a62ffbd82eec118d1fecc59374270b23cdb2b93" name="document-revision">
+  <meta content="7be5a645c5c96f4aa4ac4e87cbf6e5ac6b10abec" name="document-revision">
 <style>
   ul.toc ul ul ul {
     margin: 0 0 0 2em;
@@ -675,7 +675,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Private Network Access</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-04-29">29 April 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-09-26">26 September 2024</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1125,8 +1125,9 @@ Content-Length: 0
     <p>This approach has some flaws:</p>
     <ul>
      <li data-md>
-      <p>false positives: an intranet server with a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address③">public address</a> might be able
-to directy issue requests to another server on the same intranet with a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address①">private address</a>.</p>
+      <p>false positives: an intranet server with a <a data-link-type="dfn" href="#public-address" id="ref-for-public-address③">public address</a> might not be
+able to directy issue requests to another server on the same intranet with
+a <a data-link-type="dfn" href="#private-address" id="ref-for-private-address①">private address</a>.</p>
      <li data-md>
       <p>false negatives: a client connected to two different <a data-link-type="dfn" href="#ip-address-space-private" id="ref-for-ip-address-space-private①⑤">private</a> networks, say a home network and a VPN, might
 allow a website served from the VPN to access devices on the home network.
